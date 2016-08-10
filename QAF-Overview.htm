@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>About QMetry Automation Framework</title>
+</head>
+
+<body>
+	<h1>
+		QMetry Automation Framework - <small>Powerful Automation
+			Platform for Test Authoring, Test Execution and Execution Analysis</small>
+	</h1>
+	QMetry Automation Framework provides a powerful and versatile platform to author Test Cases in
+	Behavior Driven, Keyword Driven or Code Driven approach. It helps to
+	significantly reduce costs involved in setting up Test Automation at
+	any organization. It is a right tool for Web Platform, Mobile Platform
+	(Native, Mobile Web, HTML5,etc) and Web Service test automation
+	solution using Selenium and other related technologies. QMetry
+	Automation Framework benefits any QA Team in developing highly
+	maintainable and repeatable tests that utilize reusable test assets,
+	proper modularity and semantic structure. Descriptive Reporting
+	satisfies high-level as well as low-level (debugging) aspects.
+
+
+	<p>
+		QMetry Automation Framework is designed to solve common industry
+		problems related to testing complex web systems. The framework is best
+		suited for writing Automated Web, Mobile Web and Mobile Native
+		Application UI Tests simulate real user activities on the page. <br />
+
+		The framework is built upon java and integrates TestNG,
+		Selenium/Webdriver, Appium and Perfecto. Due to the framework's
+		thorough design, test developer does not need to worry about common
+		tasks such as thread safe browser session for running test in
+		parallel, reporting or to incorporate result with test management
+		tools. The tests run can be configured through standard testing
+		configuration files, the test run filters and behavior can be changed
+		within the config File. <br /> The architecture of the framework
+		ensures a low cost of maintenance while supporting extensibility by:
+	</p>
+	<ul>
+		<li>Abstracting the technical implementation away from the
+			operational components</li>
+		<li>Following accepted design patterns in creating the core
+			functionalities within the framework.</li>
+		<li>Providing an approach to develop highly maintainable and
+			repeatable tests that utilize reusable test assets, proper modularity
+			and semantic structure. Framework has readymade services for
+			assertions, browser, reporting and data. Also, framework concept is
+			based on page services so your page and related actions will be
+			reusable from any test case. There is a good logging functionality
+			and screen shot facility for assertions.</li>
+	</ul>
+	<h2>Features</h2>
+	QMetry Automation Framework supports integrations with Test Management
+	Platform (QMetry, Rally, ApTest, HP ALM, etc), Continuous Integration
+	Systems (Jenkins, Bamboo, etc), Mobile Device Cloud Solutions
+	(SauceLabs, Perfecto Mobile, etc).
+
+	<h3>QMetry Automation Framework Key Features:</h3>
+
+	<big>Test Authoring</big> : Behavior Driven Development (BDD), Keyword
+	Driven and Code Driven Development
+	<br />
+	<big>Test Data Management</big>: Data driven testing with external
+	<a
+		href="./com/infostretch/automation/testng/dataprovider/QAFDataProvider.html">Test
+		Data</a> Support (CSV, JSON, XML, excel, database), locator repository, support for multiple
+	locales and multiple environments 
+	<br />
+	<big>Execution Reporting</big>: Execution Dashboard, Detailed Analysis
+	and Screenshot Capturing, Integrations with Test Management Tools, and more
+	<br />
+
+	<p>Some benefits of using the framework are:</p>
+	<ul type="square">
+		<li>Less maintenance</li>
+		<li>More reusability of code</li>
+		<li>Reduced execution time</li>
+		<li>Data-driven capability</li>
+		<li>Easy configurable parallel execution</li>
+		<li>Descriptive report</li>
+		<li>Utility classes</li>
+		<li>Test Results integration with test management tools like
+			QMetry, Rally.</li>
+		<li>Integration with Perfecto Mobile cloud, Sauce labs, Supports parallel execution</li>
+		<li>Enabling testing across multiple platforms with or without
+			selenium grid</li>
+	</ul>
+	<p>
+		Question over here is how the framework reduces maintenance, execution
+		time and reuses code?<br /> QMetry Automation Framework 
+		provides high level construct to satisfy automation needs. It includes
+		top level interfaces, abstract base classes, service classes and their
+		implementations and custom annotations. Test developer only need to
+		concentrate on writing the tests and not spend time on adjusting the
+		underlying framework.<br /> This framework provides test page concept
+		in a best efficient way by which you can manipulate page navigation
+		same as on actual web application under test. Once page get created
+		page objects/functionalities can be used in any test case, makes code
+		more reusable. The framework takes care of not only launching that
+		page but the entire page hierarchy to reach that specific page.
+		Furthermore it also checks that is page already active in browser? If
+		so then it will continue from there, results in reduced execution
+		time. <br /> When functionality changes only the specific test page
+		file needs to be updated: if there is any change in page/ui of web
+		application under test you need to update just in particular page
+		rather than each and every test case, thus result in less maintenance.
+		<br /> In case of sequential execution it will take advantage of
+		sharing browser sessions between multiple test cases. No special
+		coding or design required to run test in parallel, you just need to
+		set parallel attribute&rsquo;s appropriate value in configuration file
+		(eg. false, Test, methods, classes) and framework will take care for
+		providing thread safe driver sessions with maximum level of sharing
+		driver session between multiple test cases.&nbsp; This will result in
+		reducing time by parallel processing as well as by some level of
+		sharing driver session(depends on configuration). You also can
+		configure to run parallel in different browser (eg. iexplorer,
+		firefox) with or without selenium grid. If you are not planning for
+		physical distributed selenium server then, without selenium grid, you
+		can achieve higher performance by the framework as compare to grid
+		that configured different selenium server instance on the same
+		physical machine. 
+	</p>
+</body>
+</html>

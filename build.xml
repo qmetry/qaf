@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- 
+ QMetry Automation Framework provides a powerful and versatile platform to author 
+Automated Test Cases in Behavior Driven, Keyword Driven or Code Driven approach
+               
+Copyright 2016 Infostretch Corporation
+
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT
+OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE
+
+You should have received a copy of the GNU General Public License along with this program in the name of LICENSE.txt in the root folder of the distribution. If not, see https://opensource.org/licenses/gpl-3.0.html
+
+See the NOTICE.TXT file in root folder of this source files distribution 
+for additional information regarding copyright ownership and licenses
+of other open source software / files used by QMetry Automation Framework.
+
+For any inquiry or need additional information, please contact support-qaf@infostretch.com
+
+-->
+ 
+<project basedir="." default="build" name="SeleniumAutomationFramework"
+	xmlns:ivy="antlib:org.apache.ivy.ant">
+
+
+	<!-- Sets the DSTAMP, TSTAMP, and TODAY properties in the current project -->
+	<tstamp>
+		<format property="build.timestamp" pattern="dd-MMM-yyyy HH:mm:ss" />
+	</tstamp>
+
+	<property name="bin.dir" value="${basedir}/bin" />
+	<property name="src.dir" value="${basedir}/src" />
+	<property name="meta.dir" value="${basedir}/META-INF" />
+
+
+	<property name="debuglevel" value="source,lines,vars" />
+	<property name="target" value="1.6" />
+	<property name="source" value="1.6" />
+	<property file="build.properties" />
+
+	<path id="build.classpath">
+		<fileset dir="${lib.dir}">
+			<include name="*.jar" />
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<!-- IVY -->
+	<target name="download-ivy" unless="skip.download">
+		<mkdir dir="${ivy.jar.dir}" />
+		<!-- download Ivy from web site so that it can be used even without any 
+			special installation -->
+		<echo message="installing ivy..." />
+		<get
+			src="http://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar"
+			dest="${ivy.jar.file}" usetimestamp="true" />
+	</target>
+	<!-- ================================= target: install-ivy this target is 
+		not necessary if you put ivy.jar in your ant lib directory if you already 
+		have ivy in your ant lib, you can simply remove this target and the dependency 
+		the 'go' target has on it ================================= -->
+	<target name="install-ivy" depends="download-ivy" description="--> install ivy">
+		<!-- try to load ivy here from local ivy dir, in case the user has not 
+			already dropped it into ant's lib dir (note that the latter copy will always 
+			take precedence). We will not fail as long as local lib dir exists (it may 
+			be empty) and ivy is in at least one of ant's lib dir or the local lib dir. -->
+		<path id="ivy.lib.path">
+			<fileset dir="${ivy.jar.dir}" includes="*.jar" />
+		</path>
+		<taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant"
+			classpathref="ivy.lib.path" />
+
+	</target>
+	<target name="makepom">
+		<ivy:makepom ivyfile="ivy.xml" pomfile="${basedir}/pom.xml" />
+	</target>
+	<!-- ================================= target: resolve ================================= -->
+	<target name="resolve" description="--> retrieve dependencies with ivy"
+		depends="install-ivy">
+
+
+		<ivy:resolve file="ivy.xml" />
+		<ivy:cachepath pathid="lib.path.id" />
+
+		<ivy:addpath topath="build.classpath">
+			<path refid="lib.path.id" />
+		</ivy:addpath>
+	</target>
+
+	<target name="init" depends="resolve">
+		<mkdir dir="${bin.dir}" />
+		<copy includeemptydirs="false" todir="${bin.dir}">
+			<fileset dir="${src.dir}">
+				<exclude name="**/*.ucls" />
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+	</target>
+	<target name="clean">
+		<delete dir="${bin.dir}" failonerror="false" />
+		<delete file="${dist.dir}/*.jar" failonerror="false" />
+	</target>
+
+
+
+	<target depends="init" name="compile">
+		<taskdef classpathref="build.classpath"
+			resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties" />
+
+		<echo level="info">--- compile (start) ---</echo>
+		<iajc source="${source}" target="${target}" showweaveinfo="true"
+			verbose="true" destdir="${bin.dir}" debug="false">
+			<inpath location="${src.dir}">
+			</inpath>
+			<sourceroots>
+				<pathelement location="${src.dir}" />
+			</sourceroots>
+			<classpath refid="build.classpath">
+			</classpath>
+		</iajc>
+		<echo level="info">--- compile (finished) ---</echo>
+	</target>
+	<!-- ================================= target: build ================================= -->
+	<target name="build" depends="make-jar, build-cucumber-report"
+		description="build framework, generate docs">
+
+
+	</target>
+	<target name="build-cucumber-report" depends="clean, compile"
+		description="build basic version">
+		<mkdir dir="${dist.dir}" />
+		<!-- basic -->
+
+		<jar destfile="${dist.dir}/qaf-cucumber-${version-num}-${build-num}.jar"
+			basedir="${bin.dir}"
+			includes="**/report/**,**/cucumber/**,**/core/**, **/keys/**,**/automation/util/**">
+			<metainf dir="." includes="LICENSE.txt"/>
+			<manifest>
+				<attribute name="Vendor" value="Infostretch Corp." />
+				<attribute name="Built-By" value="${user.name}" />
+
+				<section name="Build-Info">
+					<attribute name="qaf-Build-Time" value="${build.timestamp}" />
+
+					<!-- Information about the program itself -->
+					<attribute name="qaf-Version" value="${version-num}" />
+					<attribute name="qaf-Revision" value="${build-num}" />
+					<attribute name="qaf-Type" value="cucumber-reporting-plugin" />
+				</section>
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="make-jar" depends="clean, compile" description="build basic version">
+
+		<mkdir dir="${dist.dir}" />
+		<!-- All - core + testNG + step -->
+		<jar destfile="${dist.dir}/qaf-${version-num}.${build-num}.jar"
+			basedir="${bin.dir}" excludes="**/test/**,**/step/CommonStep.*"
+			includes="**/*.*">
+			<metainf dir="." includes="LICENSE.txt"/>
+			<manifest>
+				<attribute name="Vendor" value="Infostretch Corp." />
+				<attribute name="Built-By" value="${user.name}" />
+
+				<section name="Build-Info">
+					<attribute name="qaf-Build-Time" value="${build.timestamp}" />
+					<!-- Information about the program itself -->
+					<attribute name="qaf-Version" value="${version-num}" />
+					<attribute name="qaf-Revision" value="${build-num}" />
+					<attribute name="qaf-Type" value="Pro" />
+				</section>
+			</manifest>
+			<metainf dir="${src.dir}" includes="**/aop.xml" />
+			<service type="org.testng.ITestNGListener">
+				<provider
+					classname="com.infostretch.automation.testng.pro.QAFAnnotationTransformer2" />
+
+				<provider
+					classname="com.infostretch.automation.testng.pro.QAFInvokedMethodListener2" />
+
+				<provider
+					classname="com.infostretch.automation.testng.pro.QAFMethodInterceptor" />
+
+				<provider classname="com.infostretch.automation.testng.pro.QAFResultListener" />
+				<provider classname="com.infostretch.automation.testng.pro.QAFSuiteListener" />
+			</service>
+		</jar>
+		<jar destfile="${dist.dir}/qaf-support-${version-num}.${build-num}.jar"
+			basedir="${bin.dir}" excludes="**/test/**" includes="**/step/CommonStep.*">
+			<metainf dir="." includes="LICENSE.txt"/>
+			<manifest>
+				<attribute name="Vendor" value="Infostretch Corp." />
+				<attribute name="Built-By" value="${user.name}" />
+
+				<section name="Build-Info">
+					<attribute name="qaf-Build-Time" value="${build.timestamp}" />
+					<!-- Information about the program itself -->
+					<attribute name="qaf-Version" value="${version-num}" />
+					<attribute name="qaf-Revision" value="${build-num}" />
+					<attribute name="qaf-Type" value="Pro" />
+				</section>
+			</manifest>
+		</jar>
+	</target>
+	<target name="gendoc" depends="init">
+		<delete dir="${dist.dir}/docs" />
+
+		<mkdir dir="${dist.dir}/docs" />
+		<javadoc access="protected" sourcepath="${src.dir}"
+			packagenames="com.infostretch.**.*" destdir="${dist.dir}/docs"
+			verbose="true" author="true" version="true" use="true"
+			windowtitle="QMetry Automation Framework - ${version-num}.${build-num}"
+			overview="${basedir}/QAF-Overview.htm">
+			<doctitle>
+				<![CDATA[<h1>QMetry Automation Framework - ${version-num}.${build-num}</h1>]]></doctitle>
+			<bottom>
+			<![CDATA[<i>Copyright &#169; 2000 Infostretch Corp.</i>]]></bottom>
+			<classpath refid="build.classpath" />
+			<tag name="todo" scope="all" description="To do:" />
+			<group title="qaf Properties" packages="com.infostretch.automation.keys*" />
+			<group title="qaf Web Driver" packages="com.infostretch.automation.ui.*" />
+			<group title="qaf Web Service" packages="com.infostretch.automation.ws.*" />
+			<group title="qaf Test-Step" packages="com.infostretch.automation.step.*" />
+
+
+		</javadoc>
+
+		<zip destfile="${dist.dir}/qaf-api-doc.zip" basedir="${dist.dir}/docs">
+		</zip>
+		<!--<delete dir="${dist.dir}/docs"> </delete> -->
+	</target>
+	<target name="source" description="Generate Source">
+		<jar destfile="${dist.dir}/qaf-${version-num}.${build-num}-sources.jar"
+			basedir="${src.dir}">
+			<metainf dir="." includes="LICENSE.txt"/>
+			<manifest>
+				<attribute name="Vendor" value="Infostretch Corp." />
+				<attribute name="Built-By" value="${user.name}" />
+
+				<section name="Build-Info">
+					<attribute name="qaf-Build-Time" value="${build.timestamp}" />
+					<!-- Information about the program itself -->
+					<attribute name="qaf-Version" value="${version-num}" />
+					<attribute name="qaf-Revision" value="${build-num}" />
+					<attribute name="qaf-Type" value="Pro" />
+				</section>
+			</manifest>
+
+		</jar>
+	</target>
+
+</project>
