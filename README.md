@@ -1,9 +1,9 @@
 # QMetry Automation Framework
   for web, mobileweb, mobile native and rest web-service functional test automation
   
-  <a href="https://infostretch.github.io/qaf/docs.html">Online documentation</a>
+  <a href="https://infostretch.github.io/qaf/docs.html" target="_blank">Online documentation</a>
 
-QMetry Automation Framework source code is made available under the <a href="https://opensource.org/licenses/gpl-3.0.html"> GNU General Public License, version 3 (GPL-3.0)</a>.
+QMetry Automation Framework source code is made available under the <a href="https://opensource.org/licenses/gpl-3.0.html" target="_blank"> GNU General Public License, version 3 (GPL-3.0)</a>.
 
 <h3>Powerful Automation Platform for Test Authoring, Test Execution and Execution Analysis</h3>
 
