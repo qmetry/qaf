@@ -34,7 +34,7 @@ import org.testng.collections.Lists;
 import org.testng.collections.Maps;
 import org.testng.collections.Sets;
 
-import com.infostretch.automation.step.client.Scenario;
+import com.qmetry.qaf.automation.step.client.Scenario;
 
 /**
  * Helper class to keep track of dependencies.

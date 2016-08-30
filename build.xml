@@ -168,19 +168,19 @@ artifactId=qaf
 					<!-- Information about the program itself -->
 					<attribute name="qaf-Version" value="${version-num}" />
 					<attribute name="qaf-Revision" value="${build-num}" />
-					<attribute name="qaf-Type" value="Pro" />
+					<attribute name="qaf-Type" value="core" />
 				</section>
 			</manifest>
 			<metainf dir="${src.dir}" includes="**/aop.xml" />
 			<service type="org.testng.ITestNGListener">
-				<provider classname="com.infostretch.automation.testng.pro.QAFAnnotationTransformer2" />
+				<provider classname="com.qmetry.qaf.automation.testng.pro.QAFAnnotationTransformer2" />
 
-				<provider classname="com.infostretch.automation.testng.pro.QAFInvokedMethodListener2" />
+				<provider classname="com.qmetry.qaf.automation.testng.pro.QAFInvokedMethodListener2" />
 
-				<provider classname="com.infostretch.automation.testng.pro.QAFMethodInterceptor" />
+				<provider classname="com.qmetry.qaf.automation.testng.pro.QAFMethodInterceptor" />
 
-				<provider classname="com.infostretch.automation.testng.pro.QAFResultListener" />
-				<provider classname="com.infostretch.automation.testng.pro.QAFSuiteListener" />
+				<provider classname="com.qmetry.qaf.automation.testng.pro.QAFResultListener" />
+				<provider classname="com.qmetry.qaf.automation.testng.pro.QAFSuiteListener" />
 			</service>
 		</jar>
 		<jar destfile="${dist.dir}/qaf-support-${version-num}.${build-num}.jar" basedir="${bin.dir}" excludes="**/test/**" includes="**/step/CommonStep.*">
@@ -210,10 +210,10 @@ artifactId=qaf
 			<![CDATA[<i>Copyright &#169; 2000 Infostretch Corp.</i>]]></bottom>
 	<classpath refid="build.classpath" />
 	<tag name="todo" scope="all" description="To do:" />
-	<group title="qaf Properties" packages="com.infostretch.automation.keys*" />
-	<group title="qaf Web Driver" packages="com.infostretch.automation.ui.*" />
-	<group title="qaf Web Service" packages="com.infostretch.automation.ws.*" />
-	<group title="qaf Test-Step" packages="com.infostretch.automation.step.*" />
+	<group title="qaf Properties" packages="com.qmetry.qaf.automation.keys*" />
+	<group title="qaf Web Driver" packages="com.qmetry.qaf.automation.ui.*" />
+	<group title="qaf Web Service" packages="com.qmetry.qaf.automation.ws.*" />
+	<group title="qaf Test-Step" packages="com.qmetry.qaf.automation.step.*" />
 
 
 </javadoc>

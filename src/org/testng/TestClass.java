@@ -37,7 +37,7 @@ import org.testng.internal.annotations.IAnnotationFinder;
 import org.testng.xml.XmlClass;
 import org.testng.xml.XmlTest;
 
-import com.infostretch.automation.step.client.TestNGScenario;
+import com.qmetry.qaf.automation.step.client.TestNGScenario;
 
 /**
  * This class represents a test class: - The test methods - The configuration
