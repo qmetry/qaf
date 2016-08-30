@@ -1,0 +1,363 @@
+/*******************************************************************************
+ * QMetry Automation Framework provides a powerful and versatile platform to author 
+ * Automated Test Cases in Behavior Driven, Keyword Driven or Code Driven approach
+ *                
+ * Copyright 2016 Infostretch Corporation
+ *
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ *
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT
+ * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE
+ *
+ * You should have received a copy of the GNU General Public License along with this program in the name of LICENSE.txt in the root folder of the distribution. If not, see https://opensource.org/licenses/gpl-3.0.html
+ *
+ * See the NOTICE.TXT file in root folder of this source files distribution 
+ * for additional information regarding copyright ownership and licenses
+ * of other open source software / files used by QMetry Automation Framework.
+ *
+ * For any inquiry or need additional information, please contact support-qaf@infostretch.com
+ *******************************************************************************/
+
+
+package com.qmetry.qaf.automation.data;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+
+import com.qmetry.qaf.automation.core.AutomationError;
+import com.qmetry.qaf.automation.ui.annotations.UiElement;
+import com.qmetry.qaf.automation.ui.annotations.UiElement.Type;
+import com.qmetry.qaf.automation.util.ClassUtil;
+import com.qmetry.qaf.automation.util.StringUtil;
+
+/**
+ * Base class to create FormDatabean which is kind of Data-bean specifically
+ * design to interact with UI forms. You can map bean properties with UI form
+ * fields by providing {@link UiElement} annotation with property and fill/fetch
+ * data to/from UI form.
+ * 
+ * @see UiElement
+ * @author Chirag Jayswal.
+ */
+public class BaseFormDataBean extends BaseDataBean {
+	private Field[] allFields;
+	protected final ElementInteractor interactor;
+
+	public BaseFormDataBean() {
+		interactor = new ElementInteractor();
+	}
+
+	/**
+	 * it will fill up UI form fields given in argument with the property value
+	 * one by one in order provided by {@link UiElement#order()}. If no argument
+	 * if provided then it will fill all fields except read-only. To provide
+	 * property specific custom implementation create filler method just like
+	 * setter with Object as argument. For example if bean property is "
+	 * <code>String foo</code>" then the filler method would be
+	 * <code>fillFoo(){}</code>.
+	 * 
+	 * @see UiElement
+	 * @param fieldLocs
+	 *            optional field locators
+	 */
+	public void fillUiElements(String... fieldLocs) {
+		List<String> includeLst = null;
+		if ((fieldLocs != null) && (fieldLocs.length > 0)) {
+			includeLst = Arrays.asList(fieldLocs);
+		}
+		for (Field field : getFields()) {
+			if (field.isAnnotationPresent(UiElement.class)
+					&& ((includeLst == null) || includeLst.contains(field.getName())
+							|| includeLst.contains(field.getAnnotation(UiElement.class).fieldLoc()))) {
+				fillUiData(field);
+			}
+		}
+	}
+
+	public void fillUiRequiredElements() {
+		for (Field field : getFields()) {
+			if ((field.isAnnotationPresent(UiElement.class) && field.getAnnotation(UiElement.class).required())) {
+				fillUiData(field);
+			}
+		}
+	}
+
+	final public void fetchUiElements(String... fieldLocs) {
+		Field[] flds = getFields();// this.getClass().getDeclaredFields();
+		List<String> includeLst = null;
+		if ((fieldLocs != null) && (fieldLocs.length > 0)) {
+			includeLst = Arrays.asList(fieldLocs);
+		}
+		for (Field fld : flds) {
+			fld.setAccessible(true);
+			if (!Modifier.isFinal(fld.getModifiers()) && fld.isAnnotationPresent(UiElement.class)) {
+				UiElement map = fld.getAnnotation(UiElement.class);
+				if ((includeLst == null) || includeLst.contains(fld.getName()) || includeLst.contains(map.fieldLoc())) {
+					Object val = fetchUiData(fld);
+					setField(fld, String.valueOf(val));
+				}
+			}
+		}
+	}
+
+	final public boolean verifyUiElements(String... fieldmapnames) {
+		Field[] flds = this.getClass().getDeclaredFields();
+		List<String> includeLst = null;
+		boolean outcome = true;
+		if ((fieldmapnames != null) && (fieldmapnames.length > 0)) {
+			includeLst = Arrays.asList(fieldmapnames);
+		}
+		for (Field fld : flds) {
+			fld.setAccessible(true);
+			if (fld.isAnnotationPresent(UiElement.class)) {
+				UiElement map = fld.getAnnotation(UiElement.class);
+				String mapName = StringUtil.isNotBlank(map.viewLoc()) ? map.viewLoc() : fld.getName();
+				if ((includeLst == null) || includeLst.contains(mapName)) {
+					outcome = outcome && verifyUiData(fld);
+				}
+			}
+		}
+		return outcome;
+	}
+
+	final public boolean verifyUiVaules(String... fieldmapnames) {
+		Field[] flds = this.getClass().getDeclaredFields();
+		List<String> includeLst = null;
+		boolean outcome = true;
+		if ((fieldmapnames != null) && (fieldmapnames.length > 0)) {
+			includeLst = Arrays.asList(fieldmapnames);
+		}
+		for (Field fld : flds) {
+			fld.setAccessible(true);
+			if (fld.isAnnotationPresent(UiElement.class)) {
+				UiElement map = fld.getAnnotation(UiElement.class);
+				String mapName = StringUtil.isNotBlank(map.viewLoc()) ? map.viewLoc() : fld.getName();
+				if ((includeLst == null) || includeLst.contains(mapName)) {
+					outcome = outcome && verifyUiData(fld);
+				}
+			}
+		}
+		return outcome;
+	}
+
+	final public <T> boolean setBeanData(String propNameOrMapping, T data) {
+		Field fld = getField(propNameOrMapping);
+		try {
+			setField(fld, String.valueOf(data));
+			return true;
+		} catch (Exception e) {
+			logger.error("Error while geting field " + fld.getName() + "  data", e);
+		}
+		return false;
+	}
+
+	@SuppressWarnings("unchecked")
+	final public <T> T getBeanData(String propNameOrMapping) {
+		Field fld = getField(propNameOrMapping);
+		try {
+			fld.setAccessible(true);
+			return (T) fld.get(this);
+		} catch (Exception e) {
+			logger.error("Error while geting field " + fld.getName() + "  data", e);
+		}
+		return null;
+	}
+
+	/**
+	 * finds bean property with given name or filedLoc or viewLoc
+	 * 
+	 * @param nameOrLoc
+	 * @return field or throws runtime exception.
+	 */
+	protected Field getField(String nameOrLoc) {
+		Field[] flds = getFields();// this.getClass().getDeclaredFields();
+
+		for (Field fld : flds) {
+			if (fld.getName().equalsIgnoreCase(nameOrLoc)) {
+				return fld;
+			}
+			UiElement element = fld.getAnnotation(UiElement.class);
+			if ((null != element) && (element.fieldLoc().equalsIgnoreCase(nameOrLoc)
+					|| element.viewLoc().equalsIgnoreCase(nameOrLoc))) {
+				return fld;
+			}
+		}
+		throw new RuntimeException("No property found to map with " + nameOrLoc);
+	}
+
+	protected String getMappedFieldLoc(Field fld) {
+		if (fld.isAnnotationPresent(UiElement.class)) {
+			UiElement map = fld.getAnnotation(UiElement.class);
+
+			return map.fieldLoc();
+		}
+		return "";
+	}
+
+	protected String getMappedViewLoc(Field fld) {
+		if (fld.isAnnotationPresent(UiElement.class)) {
+			UiElement map = fld.getAnnotation(UiElement.class);
+			return map.viewLoc();
+		}
+		return "";
+	}
+
+	protected boolean checkParent(String parent, String depVal) {
+		String parentval = String.valueOf(getBeanData(parent));
+		if (depVal.equalsIgnoreCase(parentval) || (isExpr(depVal) && resolveExpr(depVal))) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * returns ordered fields array. Order can be defined by
+	 * {@link UiElement#order()}
+	 */
+	@Override
+	protected Field[] getFields() {
+		if (null == allFields) {
+			allFields = ClassUtil.getAllFields(this.getClass(), BaseFormDataBean.class);
+			Arrays.sort(allFields, new FieldsComparator());
+		}
+		return allFields;
+	}
+
+	private static boolean isExpr(String str) {
+		Pattern p = Pattern.compile("\\$\\{(\\w+)\\}", Pattern.MULTILINE);
+		Matcher m = p.matcher(str);
+		return m.find();
+	}
+
+	private Boolean resolveExpr(String strExpr) {
+		// the pattern we want to search for
+		Pattern p = Pattern.compile("\\$\\{(\\w+)\\}", Pattern.MULTILINE);
+		Matcher m = p.matcher(strExpr);
+		logger.info("Evaluating expr: " + strExpr);
+
+		// print all the matches that we find
+		while (m.find()) {
+			String param = m.group(1);
+			String paramVal = getBeanData(m.group(1));
+			logger.info("parameter " + param + ": " + paramVal);
+			strExpr = strExpr.replaceAll("\\$\\{" + param + "\\}", String.valueOf(paramVal));
+		}
+
+		ScriptEngineManager engineManager = new ScriptEngineManager();
+		ScriptEngine jsEngine = engineManager.getEngineByName("JavaScript");
+		try {
+			return (Boolean) jsEngine.eval(strExpr);
+		} catch (ScriptException e) {
+			logger.error("Unable to evaluate dependency condition: " + strExpr, e);
+			throw new AutomationError("Unable to evaluate dependency condition: " + strExpr, e);
+		}
+	}
+
+	private Object fetchUiData(Field field) {
+		try {
+			Method m = this.getClass().getDeclaredMethod("fetch" + StringUtil.getTitleCase(field.getName()));
+			m.setAccessible(true);
+			logger.debug("invoking custom fetch method for field " + field.getName());
+			return m.invoke(this);
+
+		} catch (Exception e) {
+		}
+		UiElement map = field.getAnnotation(UiElement.class);
+		if ((null == map)) {
+			return null;
+		}
+		Type type = map.fieldType();
+		String loc = map.fieldLoc();
+		return interactor.fetchValue(loc, type);
+	}
+
+	private void fillUiData(Field fld) {
+		UiElement params = fld.getAnnotation(UiElement.class);
+		if ((null == params) || params.readonly()) {
+			return;
+		}
+		Type type = params.fieldType();
+		String loc = params.fieldLoc();
+		String val = params.defaultValue();
+		String depends = params.dependsOnField();
+		String depVal = params.dependingValue();
+		boolean includePageWait = params.pagewait();
+
+		try {
+			fld.setAccessible(true);
+			Object o = fld.get(this);
+			logger.debug("value " + o + " for" + fld.getName());
+
+			val = (null == o ? null : String.valueOf(o));
+		} catch (NullPointerException e) {
+			val = null;
+		} catch (Exception e) {
+			logger.error("Unable to get data from bean for " + fld.getName(), e);
+
+		}
+
+		if ((val != null)
+				&& (StringUtil.isBlank(depends) || StringUtil.isBlank(depVal) || checkParent(depends, depVal))) {
+			try {
+				Method m = ClassUtil.getMethod(this.getClass(), "fill" + StringUtil.getTitleCase(fld.getName()));
+				m.setAccessible(true);
+				logger.debug("invoking custom fill method for field " + fld.getName());
+
+				m.invoke(this);
+
+			} catch (NoSuchMethodException nse) {
+				interactor.fillValue(loc, val, type, includePageWait);
+			} catch (Exception e) {
+				logger.error("Unable to invoke custom fill method for field " + fld.getName(), e);
+				throw new AutomationError("Unable to invoke custom fill method for field " + fld.getName(), e);
+			}
+		}
+	}
+
+	private boolean verifyUiData(Field fld) {
+		UiElement map = fld.getAnnotation(UiElement.class);
+		Type type = map.fieldType();
+		String loc = map.fieldLoc();
+		String depends = map.dependsOnField();
+		String depVal = map.dependingValue();
+		try {
+			if (StringUtil.isBlank(depends) || checkParent(depends, depVal)) {
+				return interactor.verifyValue(loc, String.valueOf(getBeanData(loc)), type);
+			}
+		} catch (Exception e1) {
+			e1.printStackTrace();
+			return false;
+		}
+		// Skipped so just return success
+		return true;
+
+	}
+
+	private class FieldsComparator implements Comparator<Field> {
+
+		@Override
+		public int compare(Field o1, Field o2) {
+			return getOrder(o1) - getOrder(o2);
+		}
+
+		private int getOrder(Field f) {
+			return f.isAnnotationPresent(UiElement.class) ? f.getAnnotation(UiElement.class).order()
+					: Integer.MAX_VALUE;
+		}
+
+	}
+
+}
