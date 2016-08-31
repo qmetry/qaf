@@ -107,8 +107,6 @@
 		<dependency org="com.jayway.jsonpath" name="json-path" rev="0.8.1" />
 		<dependency org="com.jayway.jsonpath" name="json-path-assert"
 			rev="0.8.1" />
-		<dependency org="com.jayway.jsonpath" name="json-path-parent"
-			rev="0.8.1" />
 
 		<dependency org="org.codehaus.groovy" name="groovy-all"
 			rev="2.1.9" />
