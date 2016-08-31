@@ -23,6 +23,5 @@
 <aspectj>
 	<aspects>
 		<aspect name="com.qmetry.qaf.automation.step.JavaStepReporter" />
-		<aspect name="com.qmetry.qaf.automation.ui.perfecto.PerfectoLogger" />
 	</aspects>
 </aspectj>
