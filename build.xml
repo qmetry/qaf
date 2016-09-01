@@ -231,9 +231,9 @@ For any inquiry or need additional information, please contact support-qaf@infos
 <!-- Publish the local repo. Defaults to ~/.ivy2/local -->
 <ivy:publish resolver="local-m2-publish" forcedeliver="true" publishivy="true" pubrevision="${release.num}" overwrite="true">
 	<artifacts pattern="${dist.dir}/[artifact].[ext]" />
-	<artifact name="qaf" pattern="${dist.dir}/[artifact].[ext]" ext="pom" type="pom" />
-	<artifact name="qaf-sources" pattern="${dist.dir}/[artifact]-[type].[ext]" ext="jar" type="source" />
-	<artifact name="qaf-javadoc" pattern="${dist.dir}/[artifact]-[type].[ext]" ext="jar" type="javadoc" />
+	<artifact name="qaf" pattern="${dist.dir}/[artifact].[ext]" ext="pom" type="pom" version="${release.num}" />
+	<artifact name="qaf-sources" pattern="${dist.dir}/[artifact].[ext]" ext="jar" classifier="sources" type="sources" version="${release.num}" />
+	<artifact name="qaf-javadoc" pattern="${dist.dir}/[artifact].[ext]" ext="jar" classifier="javadoc" type="javadoc" version="${release.num}" />
 </ivy:publish>
 </target>
 
