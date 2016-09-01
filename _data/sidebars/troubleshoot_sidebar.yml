@@ -1,0 +1,39 @@
+# This is your sidebar TOC. The sidebar code loops through sections here and provides the appropriate formatting.
+
+entries:
+- title: sidebar
+  product: QAF Troubleshooting
+  version: 2.1.7
+  folders:
+
+  - title:
+    output: pdf
+    type: frontmatter
+    folderitems:
+    - title:
+      url: /titlepage
+      output: pdf
+      type: frontmatter
+    - title:
+      url: /tocpage
+      output: pdf
+      type: frontmatter
+
+  - title: Windows
+    output: web, pdf
+    folderitems:
+
+    - title: Maven With TestNG Suite Not Working For Java Test
+      url: /maven_with_testng_java.html
+      output: web, pdf
+    - title: Problem - Reflection Error
+      url: /problem_reflection_error.html
+      output: web, pdf
+
+  - title: Mac
+    output: web, pdf
+    folderitems:
+
+    - title: The Project Was Not Built Since Its Build Path Is Incomplete
+      url: /incomplete_build_path.html
+      output: web, pdf

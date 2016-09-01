@@ -1,0 +1,9 @@
+
+
+# placed here for translation purposes
+search_placeholder_text: search...
+search_no_results_text: No results found.
+version: 2.1.8
+latest_version: 2.1.8
+qaf_repository: "https://infostretch.github.io/qaf/dist"
+blank_project_zip_url: "https://github.com/infostretch/qaf-blank-project"

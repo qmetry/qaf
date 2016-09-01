@@ -1,0 +1,334 @@
+{
+  "seleniumLog": [
+    {
+      "commandName": "launchApplication",
+      "args": [
+        "[]"
+      ],
+      "result": "success",
+      "subLogs": [],
+      "duration": -1
+    },
+    {
+      "commandName": "openAddContactScreen",
+      "args": [
+        "[]"
+      ],
+      "result": "success",
+      "subLogs": [
+        {
+          "commandName": "getCurrentWindowHandle",
+          "args": [
+            "{}"
+          ],
+          "result": "null",
+          "subLogs": [],
+          "duration": -1
+        },
+        {
+          "commandName": "getCurrentWindowHandle",
+          "args": [
+            "{}"
+          ],
+          "result": "null",
+          "subLogs": [],
+          "duration": -1
+        },
+        {
+          "commandName": "findElements",
+          "args": [
+            "{value=Add Contact, using=name}"
+          ],
+          "result": "[id: 7]",
+          "subLogs": [],
+          "duration": 203
+        },
+        {
+          "commandName": "findElement",
+          "args": [
+            "{value=Add Contact, using=name}"
+          ],
+          "result": "id: 8",
+          "subLogs": [],
+          "duration": 78
+        },
+        {
+          "commandName": "clickElement",
+          "args": [
+            "By.name: Add Contact",
+            "{\"id\":\"8\"}"
+          ],
+          "result": "clickElement:true",
+          "subLogs": [],
+          "duration": 3177
+        },
+        {
+          "commandName": "getCurrentWindowHandle",
+          "args": [
+            "{}"
+          ],
+          "result": "null",
+          "subLogs": [],
+          "duration": -1
+        }
+      ],
+      "duration": -1
+    },
+    {
+      "commandName": "generateRandomContactData",
+      "args": [
+        "[]"
+      ],
+      "result": "success",
+      "subLogs": [],
+      "duration": -1
+    },
+    {
+      "commandName": "storeLastStepResultInto",
+      "args": [
+        "[new.contact]"
+      ],
+      "result": "success",
+      "subLogs": [],
+      "duration": -1
+    },
+    {
+      "commandName": "fillContactDetailsForm",
+      "args": [
+        "[${new.contact}]"
+      ],
+      "result": "success",
+      "subLogs": [
+        {
+          "commandName": "getCurrentWindowHandle",
+          "args": [
+            "{}"
+          ],
+          "result": "null",
+          "subLogs": [],
+          "duration": -1
+        },
+        {
+          "commandName": "findElement",
+          "args": [
+            "{value=//*[@resource-id='com.example.android.contactmanager:id/contactNameEditText'], using=xpath}"
+          ],
+          "result": "id: 9",
+          "subLogs": [],
+          "duration": 224
+        },
+        {
+          "commandName": "sendKeysToElement",
+          "args": [
+            "By.xpath: //*[@resource-id='com.example.android.contactmanager:id/contactNameEditText']",
+            "{\"id\":\"9\",\"value\":[\"5C0JB7\"]}"
+          ],
+          "result": "sendKeysToElement:true",
+          "subLogs": [],
+          "duration": 5967
+        },
+        {
+          "commandName": "findElement",
+          "args": [
+            "{value=//*[@resource-id='com.example.android.contactmanager:id/contactPhoneEditText'], using=xpath}"
+          ],
+          "result": "id: 10",
+          "subLogs": [],
+          "duration": 713
+        },
+        {
+          "commandName": "sendKeysToElement",
+          "args": [
+            "By.xpath: //*[@resource-id='com.example.android.contactmanager:id/contactPhoneEditText']",
+            "{\"id\":\"10\",\"value\":[\"(272) 452 6376\"]}"
+          ],
+          "result": "sendKeysToElement:true",
+          "subLogs": [],
+          "duration": 6141
+        },
+        {
+          "commandName": "findElement",
+          "args": [
+            "{value=//*[@resource-id=\"com.example.android.contactmanager:id/contactEmailEditText\"], using=xpath}"
+          ],
+          "result": "id: 11",
+          "subLogs": [],
+          "duration": 725
+        },
+        {
+          "commandName": "sendKeysToElement",
+          "args": [
+            "By.xpath: //*[@resource-id=\"com.example.android.contactmanager:id/contactEmailEditText\"]",
+            "{\"id\":\"11\",\"value\":[\"cYuCC@infostretch.com\"]}"
+          ],
+          "result": "sendKeysToElement:true",
+          "subLogs": [],
+          "duration": 7761
+        }
+      ],
+      "duration": -1
+    },
+    {
+      "commandName": "click",
+      "args": [
+        "[save button]"
+      ],
+      "result": "success",
+      "subLogs": [
+        {
+          "commandName": "findElement",
+          "args": [
+            "{value=Save, using=name}"
+          ],
+          "result": "id: 12",
+          "subLogs": [],
+          "duration": 750
+        },
+        {
+          "commandName": "clickElement",
+          "args": [
+            "By.name: Save",
+            "{\"id\":\"12\"}"
+          ],
+          "result": "clickElement:true",
+          "subLogs": [],
+          "duration": 438
+        }
+      ],
+      "duration": -1
+    },
+    {
+      "commandName": "verifyContactFromBean",
+      "args": [
+        "[${new.contact}]"
+      ],
+      "result": "success",
+      "subLogs": [
+        {
+          "commandName": "verifyContact",
+          "args": [
+            "[5C0JB7]"
+          ],
+          "result": "success",
+          "subLogs": [
+            {
+              "commandName": "getCurrentWindowHandle",
+              "args": [
+                "{}"
+              ],
+              "result": "null",
+              "subLogs": [],
+              "duration": -1
+            },
+            {
+              "commandName": "findElements",
+              "args": [
+                "{value=//android.widget.ListView//android.widget.LinearLayout, using=xpath}"
+              ],
+              "result": "[id: 13, id: 14]",
+              "subLogs": [],
+              "duration": 125
+            },
+            {
+              "commandName": "findElement",
+              "args": [
+                "{value=//android.widget.LinearLayout[2]/android.widget.TextView[1], using=xpath}"
+              ],
+              "result": "id: 15",
+              "subLogs": [],
+              "duration": 140
+            },
+            {
+              "commandName": "findElement",
+              "args": [
+                "{value=//android.widget.LinearLayout[1]/android.widget.TextView[1], using=xpath}"
+              ],
+              "result": "id: 16",
+              "subLogs": [],
+              "duration": 156
+            },
+            {
+              "commandName": "findElements",
+              "args": [
+                "{value=//android.widget.TextView[contains(@text,'5C0JB7')], using=xpath}"
+              ],
+              "result": "[id: 17]",
+              "subLogs": [],
+              "duration": 94
+            }
+          ],
+          "duration": -1
+        }
+      ],
+      "duration": -1
+    }
+  ],
+  "checkPoints": [
+    {
+      "message": "Given user opens contact manager",
+      "type": "TestStepPass",
+      "duration": 0,
+      "threshold": 0,
+      "subCheckPoints": []
+    },
+    {
+      "message": "And open add contact screen",
+      "type": "TestStepPass",
+      "duration": 10614,
+      "threshold": 0,
+      "subCheckPoints": []
+    },
+    {
+      "message": "And generate random contact data",
+      "type": "TestStepPass",
+      "duration": 0,
+      "threshold": 0,
+      "subCheckPoints": []
+    },
+    {
+      "message": "And store into 'new.contact'",
+      "type": "TestStepPass",
+      "duration": 16,
+      "threshold": 0,
+      "subCheckPoints": []
+    },
+    {
+      "message": "When fill contact details form with '[email : cYuCC@infostretch.com,name : 5C0JB7,phone : (272) 452 6376]'",
+      "type": "TestStepPass",
+      "duration": 25568,
+      "threshold": 0,
+      "subCheckPoints": []
+    },
+    {
+      "message": "And click on 'save button'",
+      "type": "TestStepPass",
+      "duration": 1203,
+      "threshold": 0,
+      "subCheckPoints": []
+    },
+    {
+      "message": "Then verify contact '[email : cYuCC@infostretch.com,name : 5C0JB7,phone : (272) 452 6376]' is displayed in list",
+      "type": "TestStepPass",
+      "duration": 4754,
+      "threshold": 0,
+      "subCheckPoints": [
+        {
+          "message": "verify contact with name '5C0JB7' is displayed in list",
+          "type": "TestStepPass",
+          "duration": 4738,
+          "threshold": 0,
+          "subCheckPoints": [
+            {
+              "message": "Contact with name : 5C0JB7 should be displayed\nExpected: &lt;true&gt;\n     Actual: was &lt;true&gt;",
+              "type": "Pass",
+              "screenshot": "../img/Add New Contact_2hutz3h4n42p35575.png",
+              "duration": 0,
+              "threshold": 0,
+              "subCheckPoints": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

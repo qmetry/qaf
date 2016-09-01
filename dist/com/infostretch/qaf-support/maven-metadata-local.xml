@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>com.qmetry.qaf</groupId>
+  <artifactId>qaf-support</artifactId>
+  <latest>2.1.7b</latest>
+  <release>2.1.7b</release>
+  <versioning>
+    <release>2.1.7b</release>
+    <versions>
+      <version>2.1.7b</version>
+    </versions>
+    <lastUpdated>20160722114809</lastUpdated>
+  </versioning>
+</metadata>

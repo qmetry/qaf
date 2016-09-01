@@ -1,0 +1,89 @@
+# This is your sidebar TOC. The sidebar code loops through sections here and provides the appropriate formatting.
+
+entries:
+- title: FAQ
+  product: QAF FAQ
+  version: 
+  folders:
+
+  - title:
+    output: pdf
+    type: frontmatter
+    folderitems:
+    - title:
+      url: /titlepage
+      output: pdf
+      type: frontmatter
+    - title:
+      url: /tocpage
+      output: pdf
+      type: frontmatter
+
+  - title: FAQ
+    output: web, pdf
+    folderitems:
+
+    
+    - title: What are the features provided by QAF?
+      url: /what_are_the_features_provided_by_qas.html
+      output: web, pdf
+    - title: What are the use cases of listeners?
+      url: /what_is_the_use_of_listeners.html
+      output: web, pdf
+    - title: How can I create component?
+      url: /how_can_i_create_custom_component.html
+      output: web, pdf
+    - title: How can I implement dynamic page flow?
+      url: /how_can_i_implement_dynamic_page_flow.html
+      output: web, pdf
+    - title: How can I make testcase data driven?
+      url: /maketest_data_driven_in_qas.html
+      output: web, pdf
+    - title: How can I provide desired capabilites when using QAF?
+      url: /how_can_i_provide_desired_capabilities_when_using_qas.html
+      output: web, pdf
+    - title: How can I switch to other driver in single testcase?
+      url: /how_can_i_switch_to_another_driver.html
+      output: web, pdf
+    - title: How can I use already started driver session?
+      url: /how_can_i_use_existing_driver_session.html
+      output: web, pdf
+    - title: How can I use selenium grid with QAF?
+      url: /how_can_i_use_selenium_grid_with_qas.html
+      output: web, pdf
+    - title: How multiple parents are supported in page hierarchy?
+      url: /how_multiple_parents_supported_in_page_hierarchy.html
+      output: web, pdf
+    - title: How to configure BDD for execution?
+      url: /how_to_configure_bdd_for_execution.html
+      output: web, pdf
+    - title: How to configure kwd for execution?
+      url: /how_to_configure_kwd_for_execution.html
+      output: web, pdf
+    - title: How to automate/execute mobile web app testcases on desktop browser?
+      url: /how_to_run_mobile_web_app_on_desktop_browser.html
+      output: web, pdf
+    - title: How to run testcases created with appium on perfecto?
+      url: /how_to_run_appium_testcases_on_perfecto.html
+      output: web, pdf
+    - title: How to automate/execute mobile web app testcases on android real device?
+      url: /how_to_run_mweb_on_android.html
+      output: web, pdf
+    - title: How to automate/execute native app testcases using appium?
+      url: /how_to_run_on_native_app_on_appium.html
+      output: web, pdf
+    - title: How to run test on sauce labs?
+      url: /how_to_run_test_on_suace_lab.html
+      output: web, pdf
+    - title: Is any logging system used by QAF?
+      url: /is_any_logging_system_used_in_qas.html
+      output: web, pdf
+    - title: How to integrate testcases with QMetry Test Management tool?
+      url: /qmetry_integration_with_qas.html
+      output: web, pdf
+    - title: How to achieve Sauce on demand integration?
+      url: /sauce_on_demand_integration.html
+      output: web, pdf
+    - title: How to use driver?
+      url: /how_to_use_driver.html
+      output: web, pdf

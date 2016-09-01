@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<head>
+    {% include head.html %}
+    
+    
+    <link rel="stylesheet" type="text/css" href="wp-content/themes/supernova/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="wp-content/themes/supernova/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="wp-content/themes/supernova/css/bootstrap-responsive.css">
+    <link rel="stylesheet" type="text/css" href="wp-content/themes/supernova/css/flexslider.css">
+    <link rel="stylesheet" type="text/css" href="wp-content/themes/supernova/css/isotope.css">
+    <link rel="stylesheet" type="text/css" href="wp-content/themes/supernova/css/entypo-social.css">
+    <link rel="stylesheet" type="text/css" href="wp-content/themes/supernova/css/custom.css">
+    <link rel="stylesheet" type="text/css" href="wp-content/themes/supernova/css/newdesign.css">
+    <link rel="stylesheet" type="text/css" href="wp-content/themes/supernova/css/grid.css">
+    <link rel="stylesheet" type="text/css" href="wp-content/themes/supernova/css/popup_leaders.css" id="customPopup" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="wp-content/themes/supernova/css/print.css">
+
+    <link rel="stylesheet" href="css/newdesign.css">
+    <link rel="stylesheet" href="css/custom.css">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800,300italic,400italic,600italic,700italic,800italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,100,100italic,300,300italic,400italic,700,700italic,900italic,900' rel='stylesheet' type='text/css'>
+   <title>Automated Testing Tools | QMetry Automation Framework | Infostretch</title>    
+
+    <script>
+        $(document).ready(function() {
+            // Initialize navgoco with default options
+            $("#mysidebar").navgoco({
+                caretHtml: '',
+                accordion: true,
+                openClass: 'active', // open
+                save: false, // leave false or nav highlighting doesn't work right
+                cookie: {
+                    name: 'navgoco',
+                    expires: false,
+                    path: '/'
+                },
+                slide: {
+                    duration: 400,
+                    easing: 'swing'
+                }
+            });
+
+            $("#collapseAll").click(function(e) {
+                e.preventDefault();
+                $("#mysidebar").navgoco('toggle', false);
+            });
+
+            $("#expandAll").click(function(e) {
+                e.preventDefault();
+                $("#mysidebar").navgoco('toggle', true);
+            });
+
+        });
+
+    </script>
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+    {% if page.datatable == true %}
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.5/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.5/js/jquery.dataTables.js"></script>
+    <script>
+        $(document).ready(function(){
+
+            $('table.datatable').DataTable( {
+                        paging: false,
+                        stateSave: true
+                    }
+            );
+    </script>
+    {% endif %}
+
+</head>
+<body>
+
+{% include topnav_home.html %}
+<!-- Page Content -->
+        {{content}}
+<!-- /.container -->
+<!-- {% include footer.html %} -->
+</body>
+{% if site.google_analytics %}
+{% include google_analytics.html %}
+{% endif %}
+</html>
