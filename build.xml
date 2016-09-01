@@ -91,14 +91,15 @@ For any inquiry or need additional information, please contact support-qaf@infos
 			</fileset>
 		</copy>
 	</target>
+
+
 	<target name="clean">
 		<delete dir="${bin.dir}" failonerror="false" />
 		<delete dir="${dist.dir}" failonerror="false" />
 	</target>
 
 
-
-	<target depends="init" name="compile">
+	<target name="compile" depends="init">
 		<taskdef classpathref="build.classpath" resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties" />
 
 		<echo level="info">--- compile (start) ---</echo>
@@ -119,27 +120,7 @@ For any inquiry or need additional information, please contact support-qaf@infos
 
 	</target>
 
-	<target name="build-cucumber-report" depends="clean, compile" description="build basic version">
-		<mkdir dir="${dist.dir}" />
-		<!-- basic -->
 
-		<jar destfile="${dist.dir}/qaf-cucumber-${version-num}.${build-num}.jar" basedir="${bin.dir}" includes="**/report/**,**/cucumber/**,**/core/**, **/keys/**,**/automation/util/**">
-			<metainf dir="." includes="LICENSE.txt,NOTICE.txt" />
-			<manifest>
-				<attribute name="Vendor" value="Infostretch Corp." />
-				<attribute name="Built-By" value="${user.name}" />
-
-				<section name="Build-Info">
-					<attribute name="qaf-Build-Time" value="${build.timestamp}" />
-
-					<!-- Information about the program itself -->
-					<attribute name="qaf-Version" value="${version-num}" />
-					<attribute name="qaf-Revision" value="${build-num}" />
-					<attribute name="qaf-Type" value="cucumber-reporting-plugin" />
-				</section>
-			</manifest>
-		</jar>
-	</target>
 
 	<target name="make-jar" depends="clean, compile" description="build basic version">
 
@@ -173,58 +154,33 @@ For any inquiry or need additional information, please contact support-qaf@infos
 		</jar>
 
 	</target>
-	<target name="publish" depends="init">
-		<!-- Determine build number from previously published revisions -->
-		<ivy:buildnumber resolver="local-m2-publish" organisation="${ivy.organisation}" module="${ivy.module}" revision="${release.num}" />
 
-		<!-- Resolve ivy dependencies and create a Maven POM file -->
-		<ivy:deliver deliverpattern="${dist.dir}/ivy.xml" pubrevision="${release.num}" status="release" />
-		<ivy:makepom ivyfile="${dist.dir}/ivy.xml" pomfile="${dist.dir}/qaf.pom">
-			<mapping conf="*,default" scope="compile" />
-		</ivy:makepom>
-
-		<!-- Publish the local repo. Defaults to ~/.ivy2/local -->
-		<ivy:publish resolver="local-m2-publish" forcedeliver="true" publishivy="true" pubrevision="${release.num}" overwrite="true">
-			<artifacts pattern="${dist.dir}/[artifact].[ext]" />
-			<artifact name="qaf" pattern="${dist.dir}/[artifact].[ext]" ext="pom" type="pom" />
-			<artifact name="qaf-sources" pattern="${dist.dir}/[artifact].[ext]" ext="jar" type="source" />
-			<artifact name="qaf-javadoc" pattern="${dist.dir}/[artifact].[ext]" ext="zip" type="javadoc" />
-		</ivy:publish>
-	</target>
-
-	<target name="ivy-publish-share" depends="make-jar" description="publish jar/source to maven repo mounted at ~/repo">
-		<ivy:publish resolver="share-m2" forcedeliver="true" overwrite="true" publishivy="false">
-			<artifacts pattern="${dist.dir}/[artifact].[ext]" />
-		</ivy:publish>
-	</target>
 
 	<target name="gendoc" depends="init" description="generate documentation">
 		<delete dir="${dist.dir}/docs" />
 
 		<mkdir dir="${dist.dir}/docs" />
 		<javadoc access="protected" sourcepath="${src.dir}" packagenames="com.qmetry.**.*" destdir="${dist.dir}/docs" verbose="true" author="true" version="true" use="true" windowtitle="QMetry Automation Framework - ${version-num}.${build-num}" overview="${basedir}/QAF-Overview.htm">
-			<doctitle>
-				<![CDATA[<h1>QMetry Automation Framework - ${version-num}.${build-num}</h1>]]></doctitle>
-		<bottom>
-			<![CDATA[<i>Copyright &#169; 2000 Infostretch Corp.</i>]]></bottom>
-	<classpath refid="build.classpath" />
-	<tag name="todo" scope="all" description="To do:" />
-	<group title="qaf Properties" packages="com.qmetry.qaf.automation.keys*" />
-	<group title="qaf Web Driver" packages="com.qmetry.qaf.automation.ui.*" />
-	<group title="qaf Web Service" packages="com.qmetry.qaf.automation.ws.*" />
-	<group title="qaf Test-Step" packages="com.qmetry.qaf.automation.step.*" />
-
-
-</javadoc>
-
-
-<zip destfile="${dist.dir}/qaf-javadoc.zip" basedir="${dist.dir}/docs">
-</zip>
-<delete dir="${dist.dir}/docs">
-</delete>
-</target>
+				<doctitle>
+					<![CDATA[<h1>QMetry Automation Framework - ${version-num}.${build-num}</h1>]]>
+				</doctitle>
+			<bottom>
+				<![CDATA[<i>Copyright &#169; 2000 Infostretch Corp.</i>]]>
+			</bottom>
+			<classpath refid="build.classpath" />
+			<tag name="todo" scope="all" description="To do:" />
+			<group title="qaf Properties" packages="com.qmetry.qaf.automation.keys*" />
+			<group title="qaf Web Driver" packages="com.qmetry.qaf.automation.ui.*" />
+			<group title="qaf Web Service" packages="com.qmetry.qaf.automation.ws.*" />
+			<group title="qaf Test-Step" packages="com.qmetry.qaf.automation.step.*" />
+		</javadoc>
+		<zip destfile="${dist.dir}/qaf-javadoc.zip" basedir="${dist.dir}/docs">
+		</zip>
+		<delete dir="${dist.dir}/docs">
+		</delete>
+	</target>
 <target name="gensource" description="Generate Source" depends="init">
-<jar destfile="${dist.dir}/qaf-sources.jar" basedir="${src.dir}">
+<jar destfile="${dist.dir}/qaf-source.jar" basedir="${src.dir}">
 	<metainf dir="." includes="LICENSE" />
 	<manifest>
 		<attribute name="Vendor" value="Infostretch Corp." />
@@ -240,5 +196,49 @@ For any inquiry or need additional information, please contact support-qaf@infos
 	</manifest>
 </jar>
 </target>
+<target name="build-cucumber-report" depends="clean, compile" description="build basic version">
+<mkdir dir="${dist.dir}" />
+<!-- basic -->
 
+<jar destfile="${dist.dir}/qaf-cucumber-${version-num}.${build-num}.jar" basedir="${bin.dir}" includes="**/report/**,**/cucumber/**,**/core/**, **/keys/**,**/automation/util/**">
+	<metainf dir="." includes="LICENSE.txt,NOTICE.txt" />
+	<manifest>
+		<attribute name="Vendor" value="Infostretch Corp." />
+		<attribute name="Built-By" value="${user.name}" />
+
+		<section name="Build-Info">
+			<attribute name="qaf-Build-Time" value="${build.timestamp}" />
+
+			<!-- Information about the program itself -->
+			<attribute name="qaf-Version" value="${version-num}" />
+			<attribute name="qaf-Revision" value="${build-num}" />
+			<attribute name="qaf-Type" value="cucumber-reporting-plugin" />
+		</section>
+	</manifest>
+</jar>
+</target>
+<target name="publish" depends="init">
+<!-- Determine build number from previously published revisions -->
+<ivy:buildnumber resolver="local-m2-publish" organisation="${ivy.organisation}" module="${ivy.module}" revision="${release.num}" />
+
+<!-- Resolve ivy dependencies and create a Maven POM file -->
+<ivy:deliver deliverpattern="${dist.dir}/ivy.xml" pubrevision="${release.num}" status="release" />
+<ivy:makepom ivyfile="${dist.dir}/ivy.xml" pomfile="${dist.dir}/qaf.pom">
+	<mapping conf="*,default" scope="compile" />
+</ivy:makepom>
+
+<!-- Publish the local repo. Defaults to ~/.ivy2/local -->
+<ivy:publish resolver="local-m2-publish" forcedeliver="true" publishivy="true" pubrevision="${release.num}" overwrite="true">
+	<artifacts pattern="${dist.dir}/[artifact].[ext]" />
+	<artifact name="qaf" pattern="${dist.dir}/[artifact].[ext]" ext="pom" type="pom" />
+	<artifact name="qaf-source" pattern="${dist.dir}/[artifact]-[type].[ext]" ext="jar" type="source" />
+	<artifact name="qaf-javadoc" pattern="${dist.dir}/[artifact]-[type].[ext]" ext="zip" type="javadoc" />
+</ivy:publish>
+</target>
+
+<target name="ivy-publish-share" depends="make-jar" description="publish jar/source to maven repo mounted at ~/repo">
+<ivy:publish resolver="share-m2" forcedeliver="true" overwrite="true" publishivy="false">
+	<artifacts pattern="${dist.dir}/[artifact].[ext]" />
+</ivy:publish>
+</target>
 </project>

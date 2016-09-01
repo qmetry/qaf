@@ -21,7 +21,7 @@
 				
 		</chain>
 		<filesystem name="local-m2-publish" m2compatible="true">
-      		<artifact pattern="${basedir}/repository/[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]"/>
+      		<artifact pattern="${basedir}/repository/[organisation]/[module]/[revision]/[artifact](-[classifier])-[revision].[ext]"/>
     	</filesystem>
 	</resolvers>
 </ivysettings>
