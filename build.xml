@@ -161,26 +161,27 @@ For any inquiry or need additional information, please contact support-qaf@infos
 
 		<mkdir dir="${dist.dir}/docs" />
 		<javadoc access="protected" sourcepath="${src.dir}" packagenames="com.qmetry.**.*" destdir="${dist.dir}/docs" verbose="true" author="true" version="true" use="true" windowtitle="QMetry Automation Framework - ${version-num}.${build-num}" overview="${basedir}/QAF-Overview.htm">
-				<doctitle>
-					<![CDATA[<h1>QMetry Automation Framework - ${version-num}.${build-num}</h1>]]>
+			<doctitle>
+				<![CDATA[<h1>QMetry Automation Framework - ${version-num}.${build-num}</h1>]]>
 				</doctitle>
-			<bottom>
-				<![CDATA[<i>Copyright &#169; 2000 Infostretch Corp.</i>]]>
+		<bottom>
+			<![CDATA[<i>Copyright &#169; 2000 Infostretch Corp.</i>]]>
 			</bottom>
-			<classpath refid="build.classpath" />
-			<tag name="todo" scope="all" description="To do:" />
-			<group title="qaf Properties" packages="com.qmetry.qaf.automation.keys*" />
-			<group title="qaf Web Driver" packages="com.qmetry.qaf.automation.ui.*" />
-			<group title="qaf Web Service" packages="com.qmetry.qaf.automation.ws.*" />
-			<group title="qaf Test-Step" packages="com.qmetry.qaf.automation.step.*" />
-		</javadoc>
-		<zip destfile="${dist.dir}/qaf-javadoc.zip" basedir="${dist.dir}/docs">
-		</zip>
-		<delete dir="${dist.dir}/docs">
-		</delete>
-	</target>
+	<classpath refid="build.classpath" />
+	<tag name="todo" scope="all" description="To do:" />
+	<group title="qaf Properties" packages="com.qmetry.qaf.automation.keys*" />
+	<group title="qaf Web Driver" packages="com.qmetry.qaf.automation.ui.*" />
+	<group title="qaf Web Service" packages="com.qmetry.qaf.automation.ws.*" />
+	<group title="qaf Test-Step" packages="com.qmetry.qaf.automation.step.*" />
+</javadoc>
+<!--<zip destfile="${dist.dir}/qaf-javadoc.jar" basedir="${dist.dir}/docs">
+</zip>-->
+<jar compress="true" destfile="${dist.dir}/qaf-javadoc.jar" basedir="${dist.dir}/docs" />
+<delete dir="${dist.dir}/docs">
+</delete>
+</target>
 <target name="gensource" description="Generate Source" depends="init">
-<jar destfile="${dist.dir}/qaf-source.jar" basedir="${src.dir}">
+<jar destfile="${dist.dir}/qaf-sources.jar" basedir="${src.dir}">
 	<metainf dir="." includes="LICENSE" />
 	<manifest>
 		<attribute name="Vendor" value="Infostretch Corp." />
@@ -231,8 +232,8 @@ For any inquiry or need additional information, please contact support-qaf@infos
 <ivy:publish resolver="local-m2-publish" forcedeliver="true" publishivy="true" pubrevision="${release.num}" overwrite="true">
 	<artifacts pattern="${dist.dir}/[artifact].[ext]" />
 	<artifact name="qaf" pattern="${dist.dir}/[artifact].[ext]" ext="pom" type="pom" />
-	<artifact name="qaf-source" pattern="${dist.dir}/[artifact]-[type].[ext]" ext="jar" type="source" />
-	<artifact name="qaf-javadoc" pattern="${dist.dir}/[artifact]-[type].[ext]" ext="zip" type="javadoc" />
+	<artifact name="qaf-sources" pattern="${dist.dir}/[artifact]-[type].[ext]" ext="jar" type="source" />
+	<artifact name="qaf-javadoc" pattern="${dist.dir}/[artifact]-[type].[ext]" ext="jar" type="javadoc" />
 </ivy:publish>
 </target>
 
