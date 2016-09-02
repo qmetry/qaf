@@ -2,7 +2,7 @@
 title: Testing Mobile web in desktop Browser with modify header
 sidebar: qaf_2_1_7b_sidebar
 permalink: qaf-2.1.7b/testing_mobile_web_in_desktop_browser.html
-folder: qaf_2_1_7b
+folder: qaf-2.1.7b
 ---
 
 ## Using Firefox

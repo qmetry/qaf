@@ -2,7 +2,7 @@
 title: Creating test cases
 sidebar: qaf_2_1_8_sidebar
 permalink: qaf-2.1.8/Creating_test_cases.html
-folder: qaf_2_1_8
+folder: qaf-2.1.8
 ---
 
 

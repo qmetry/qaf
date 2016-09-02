@@ -2,7 +2,7 @@
 title: The Project Was Not Built Since Its Build Path Is Incomplete.
 sidebar: troubleshoot_sidebar
 permalink: qaf-2.1.7b/incomplete_build_path.html
-folder: qaf_2_1_7b
+folder: qaf-2.1.7b
 ---
 It is require to delete and add IVY dependency management library.You can delete and add IVY dependency management library by using following steps: 
 

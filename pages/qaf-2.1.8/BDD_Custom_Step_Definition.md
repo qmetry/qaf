@@ -2,7 +2,7 @@
 title: BDD Custom Step Definition
 sidebar: qaf_2_1_8_sidebar
 permalink: qaf-2.1.8/BDD_Custom_Step_Definition.html
-folder: qaf_2_1_8
+folder: qaf-2.1.8
 tags: [bdd,scenario]
 ---
 

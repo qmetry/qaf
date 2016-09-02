@@ -2,7 +2,7 @@
 title: Keyword Driven Define Test Suite
 sidebar: qaf_2_1_7b_sidebar
 permalink: qaf-2.1.7b/keyword_driven_define_test_suite.html
-folder: qaf_2_1_7b
+folder: qaf-2.1.7b
 ---
 
 Keyword driven test suite consist of one or more Scenarios. Each scenario represents one test case.

@@ -2,7 +2,7 @@
 title: BDD Keyword Synonyms
 sidebar: qaf_2_1_8_sidebar
 permalink: qaf-2.1.8/BDD_Keywords_Synonyms.html
-folder: qaf_2_1_8
+folder: qaf-2.1.8
 tags: [bdd]
 ---
 

@@ -2,7 +2,7 @@
 title: QMetry Integration
 sidebar: qaf_2_1_7b_sidebar
 permalink: qaf-2.1.7b/QMetry_Integration.html
-folder: qaf_2_1_7b
+folder: qaf-2.1.7b
 ---
 
 

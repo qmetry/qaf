@@ -2,7 +2,7 @@
 title: Product license has been expired…
 sidebar: faq_sidebar
 permalink: qaf-2.1.7b/product_license_has been_expired.html
-folder: qaf_2_1_7b
+folder: qaf-2.1.7b
 ---
 
 **Follow below steps to resolve.**

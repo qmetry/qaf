@@ -2,7 +2,7 @@
 title: QAF-2.1.7b Release Notes
 sidebar: qaf_2_1_7b_sidebar
 permalink: qaf-2.1.7b/release_notes2_1_7.html
-folder: qaf_2_1_7b
+folder: qaf-2.1.7b
 ---
 
 ## New Features

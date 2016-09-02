@@ -2,7 +2,7 @@
 title: How can I use existing driver session?
 sidebar: faq_sidebar
 permalink: qaf-2.1.7b/how_can_i_use_existing_driver_session.html
-folder: qaf_2_1_7b
+folder: qaf-2.1.7b
 ---
 
 **Following are the steps:**

@@ -2,7 +2,7 @@
 title: Custom Retry Analyzer
 sidebar: qaf_2_1_8_sidebar
 permalink: qaf-2.1.8/custom_retry_analyzer.html
-folder: qaf_2_1_8
+folder: qaf-2.1.8
 ---
 
 ## Custom Retry Analyzer

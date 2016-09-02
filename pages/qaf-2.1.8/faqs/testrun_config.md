@@ -2,7 +2,7 @@
 title: testrun_config.xml
 sidebar: faq_sidebar
 permalink: qaf-2.1.8/testrun_config.html
-folder: qaf_2_1_7b
+folder: qaf-2.1.8
 ---
 
 ``` xml

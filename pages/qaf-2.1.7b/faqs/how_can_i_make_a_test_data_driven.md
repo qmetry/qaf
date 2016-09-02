@@ -2,7 +2,7 @@
 title: How can I make a test Data driven?
 sidebar: faq_sidebar
 permalink: qaf-2.1.7b/how_can_i_make_a_test_data_driven.html
-folder: qaf_2_1_7b
+folder: qaf-2.1.7b
 ---
 
 

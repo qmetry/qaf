@@ -3,7 +3,7 @@ title: Scenario
 sidebar: qaf_2_1_7b_sidebar
 permalink: qaf-2.1.7b/scenario.html
 summary: "Scenario consist of meta-data and sequence of steps to represents a single test case. Each step can be started with standard BDD keywords [Given | When | Then | And | Having]. Refer list of available keywords."
-folder: qaf_2_1_7b
+folder: qaf-2.1.7b
 tags: [bdd,scenario]
 ---
 

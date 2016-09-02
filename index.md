@@ -1,6 +1,8 @@
 ---
 title: Home
-layout: home       
+layout: home
+summary: Automation Framework from QMetry
+tags: Selenium,WebDriver,Infostretch,QMetry,QAF,Automation,Framework,TestNg,Testing,QA,Cucumber,BDD,KWD
 ---
 <div class="static_banner qas noparallax" style="margin-top:0px;background-position:40%">
   <div class="nodesktop feather"></div>

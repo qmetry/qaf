@@ -2,7 +2,7 @@
 title: Different ways of providing properties
 sidebar: qaf_2_1_8_sidebar
 permalink: qaf-2.1.8/different_ways_of_providing_prop.html
-folder: qaf_2_1_8
+folder: qaf-2.1.8
 ---
 
 

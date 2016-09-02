@@ -2,7 +2,7 @@
 title: Locating Elements
 sidebar: qaf_2_1_7b_sidebar
 permalink: qaf-2.1.7b/locating_elements.html
-folder: qaf_2_1_7b
+folder: qaf-2.1.7b
 tags: [Selenium,locator,java]
 ---
 You can observe that @FindBy annotation is used from QAF. It has one string parameter locator that's value can be provided either by direct locator in selenium 1 locator format or a self descriptive locator.

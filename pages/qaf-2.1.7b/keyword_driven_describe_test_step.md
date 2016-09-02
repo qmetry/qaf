@@ -2,7 +2,7 @@
 title: Keyword driven describe test step
 sidebar: qaf_2_1_7b_sidebar
 permalink: qaf-2.1.7b/keyword_driven_describe_test_step.html
-folder: qaf_2_1_7b
+folder: qaf-2.1.7b
 ---
 
 Test step can be defined in .java or .kwl files. It consists of stepname, description and step metadata.

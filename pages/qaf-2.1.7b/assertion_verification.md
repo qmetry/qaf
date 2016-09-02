@@ -2,7 +2,7 @@
 title: Assertion/Verification
 sidebar: qaf_2_1_7b_sidebar
 permalink: qaf-2.1.7b/assertion_verification.html
-folder: qaf_2_1_7b
+folder: qaf-2.1.7b
 tags: [java,checkpoint]
 ---
 

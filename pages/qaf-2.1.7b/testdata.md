@@ -2,7 +2,7 @@
 title: Test Data
 sidebar: qaf_2_1_7b_sidebar
 permalink: qaf-2.1.7b/testdata.html
-folder: qaf_2_1_7b
+folder: qaf-2.1.7b
 tags: [scenario,test data]
 ---
 

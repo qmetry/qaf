@@ -2,7 +2,7 @@
 title: How can I provide desired capabilities when using Qmetry Automation Framework?
 sidebar: faq_sidebar
 permalink: qaf-2.1.7b/how_can_i_provide_desired_capabilities_when_using_qas.html
-folder: qaf_2_1_7b
+folder: qaf-2.1.7b
 ---
 
 For all driver set property 

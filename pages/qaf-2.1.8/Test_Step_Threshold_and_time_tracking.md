@@ -2,7 +2,7 @@
 title: Test Step Threshold and time tracking
 sidebar: qaf_2_1_8_sidebar
 permalink: qaf-2.1.8/Test_Step_Threshold_and_time_tracking.html
-folder: qaf_2_1_8
+folder: qaf-2.1.8
 tags: [bdd,scenario,java,kwd]
 ---
 

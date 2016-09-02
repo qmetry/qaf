@@ -2,7 +2,7 @@
 title: Describe Test Step
 sidebar: qaf_2_1_8_sidebar
 permalink: qaf-2.1.8/Describe_Test_Step.html
-folder: qaf_2_1_8
+folder: qaf-2.1.8
 tags: [bdd,scenario,bdl,java]
 ---
 

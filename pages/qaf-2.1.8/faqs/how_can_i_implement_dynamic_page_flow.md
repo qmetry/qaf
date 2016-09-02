@@ -2,7 +2,7 @@
 title: How can I implement dynamic page flow using page hierarchy design?
 sidebar: faq_sidebar
 permalink: qaf-2.1.8/how_can_i_implement_dynamic_page_flow.html
-folder: qaf_2_1_7b
+folder: qaf-2.1.8
 ---
 
 Consider the following case where page flow is configurable in AUT.

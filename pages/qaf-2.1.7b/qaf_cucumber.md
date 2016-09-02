@@ -2,7 +2,7 @@
 title: QAF cucumber
 sidebar: qaf_2_1_7b_sidebar
 permalink: qaf-2.1.7b/qaf_cucumber.html
-folder: qaf_2_1_7b
+folder: qaf-2.1.7b
 ---
 
 A cucumber QAF Formatter is provided to use with cucumber JVM.

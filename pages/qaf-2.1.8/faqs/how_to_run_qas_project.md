@@ -2,7 +2,7 @@
 title: How to Run QAS Project
 sidebar: faq_sidebar
 permalink: qaf-2.1.8/how_to_run_qas_project.html
-folder: qaf_2_1_7b
+folder: qaf-2.1.8
 ---
 
 

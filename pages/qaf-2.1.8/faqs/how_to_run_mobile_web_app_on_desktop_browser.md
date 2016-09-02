@@ -2,7 +2,7 @@
 title: How to run mobile web app on desktop browser?
 sidebar: faq_sidebar
 permalink: qaf-2.1.8/how_to_run_mobile_web_app_on_desktop_browser.html
-folder: qaf_2_1_7b
+folder: qaf-2.1.8
 ---
 
 You can run your mobile web app on Firefox as well as on chrome with modify header.

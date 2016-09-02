@@ -2,7 +2,7 @@
 title: appication.properties 
 sidebar: faq_sidebar
 permalink: qaf-2.1.8/appication_properties.html
-folder: qaf_2_1_7b
+folder: qaf-2.1.8
 ---
 
 ```properties

@@ -2,7 +2,7 @@
 title: License
 sidebar: qaf_2_1_7b_sidebar
 permalink: qaf-2.1.7b/license.html
-folder: qaf_2_1_7b
+folder: qaf-2.1.7b
 ---
                     GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007

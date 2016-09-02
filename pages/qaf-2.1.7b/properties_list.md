@@ -2,7 +2,7 @@
 title: Property List
 sidebar: qaf_2_1_7b_sidebar
 permalink: qaf-2.1.7b/properties_list.html
-folder: qaf_2_1_7b
+folder: qaf-2.1.7b
 tags: [getting_started]
 ---
 

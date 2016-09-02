@@ -2,7 +2,7 @@
 title: Resource management
 sidebar: qaf_2_1_7b_sidebar
 permalink: qaf-2.1.7b/resource_management.html
-folder: qaf_2_1_7b
+folder: qaf-2.1.7b
 ---
 
 ## Resource management

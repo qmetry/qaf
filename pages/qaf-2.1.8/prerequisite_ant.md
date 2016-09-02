@@ -2,7 +2,7 @@
 title: ANT
 sidebar: qaf_2_1_8_sidebar
 permalink: qaf-2.1.8/prerequisite_ant.html
-folder: qaf_2_1_8
+folder: qaf-2.1.8
 tags: [getting_started]
 ---
 

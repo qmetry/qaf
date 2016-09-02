@@ -2,7 +2,7 @@
 title: Using running Driver Session
 sidebar: qaf_2_1_8_sidebar
 permalink: qaf-2.1.8/using_running_driver_session.html
-folder: qaf_2_1_8
+folder: qaf-2.1.8
 ---
 One of the useful features of QAF, while testing the code, is using running webdriver session. Following are the steps:
 

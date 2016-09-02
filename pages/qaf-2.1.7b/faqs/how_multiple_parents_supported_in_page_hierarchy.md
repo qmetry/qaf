@@ -2,7 +2,7 @@
 title: How multiple parents supported in page hierarchy?
 sidebar: faq_sidebar
 permalink: qaf-2.1.7b/how_multiple_parents_supported_in_page_hierarchy.html
-folder: qaf_2_1_7b
+folder: qaf-2.1.7b
 ---
 
 
