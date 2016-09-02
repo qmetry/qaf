@@ -15,7 +15,7 @@
 		<chain name="qaf">
 			<ibiblio name="central" m2compatible="true" />
 			<ibiblio name="QAF" m2compatible="true"
-				root="https://infostretch.github.io/qaf/dist" />
+				root="https://qmetry.github.io/qaf/dist" />
 			<ibiblio name="jai" m2compatible="true"
 				root="https://repository.jboss.org/nexus/content/repositories/thirdparty-releases" />
 				
