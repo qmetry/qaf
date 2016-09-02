@@ -1,6 +1,6 @@
 ---
 title: Resource management
-sidebar: qaf_2_1_8_sidebar
+sidebar: qaf_2_1_8-sidebar
 permalink: qaf-2.1.8/resource_management.html
 folder: qaf-2.1.8
 ---

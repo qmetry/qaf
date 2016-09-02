@@ -1,6 +1,6 @@
 ---
 title: Introduction
-sidebar: qaf_2_1_8_sidebar
+sidebar: qaf_2_1_8-sidebar
 permalink: qaf-2.1.8/qaf_2_1_7b_introduction.html
 folder: qaf-2.1.8
 ---

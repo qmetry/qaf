@@ -1,6 +1,6 @@
 ---
 title: QAF KWD Reference
-sidebar: qaf_2_1_7b_sidebar
+sidebar: qaf_2_1_7b-sidebar
 permalink: qaf-2.1.7b/qaf_kwd_reference.html
 folder: qaf-2.1.7b
 ---

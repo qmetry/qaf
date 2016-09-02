@@ -1,6 +1,6 @@
 ---
 title: Test Step Metadata
-sidebar: qaf_2_1_7b_sidebar
+sidebar: qaf_2_1_7b-sidebar
 permalink: qaf-2.1.7b/Test_Step_Metadata.html
 folder: qaf-2.1.7b
 tags: [bdd,scenario,java,kwd]

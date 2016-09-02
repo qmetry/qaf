@@ -1,6 +1,6 @@
 ---
 title: Custom component
-sidebar: qaf_2_1_7b_sidebar
+sidebar: qaf_2_1_7b-sidebar
 permalink: qaf-2.1.7b/custom_component.html
 folder: qaf-2.1.7b
 tags: [java,component,locator,test data]

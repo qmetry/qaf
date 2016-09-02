@@ -1,6 +1,6 @@
 ---
 title: Using running Driver Session
-sidebar: qaf_2_1_7b_sidebar
+sidebar: qaf_2_1_7b-sidebar
 permalink: qaf-2.1.7b/using_running_driver_session.html
 folder: qaf-2.1.7b
 ---

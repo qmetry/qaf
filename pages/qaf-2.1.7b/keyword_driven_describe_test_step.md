@@ -1,6 +1,6 @@
 ---
 title: Keyword driven describe test step
-sidebar: qaf_2_1_7b_sidebar
+sidebar: qaf_2_1_7b-sidebar
 permalink: qaf-2.1.7b/keyword_driven_describe_test_step.html
 folder: qaf-2.1.7b
 ---

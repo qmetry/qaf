@@ -5,11 +5,12 @@
   {% for page in site.pages %}
     {% for tag in page.tags %}
         {% if tag == thisTag %}
-
-        <tr><td><a href="{{ page.url | remove: "/" }}">{{page.title}}</a></td>
+        {% if page.folder == "latest" %}
+        <tr><td><a href="{{ page.url | remove: "latest_tag/" }}">{{page.title}}</a></td>
             <td><span class="label label-default">Page</span></td>
           <td>{% if page.summary %} {{ page.summary | strip_html | strip_newlines | truncate: 160 }} {% else %} {{ page.content | truncatewords: 50 | strip_html }} {% endif %}</td>
         </tr>
+        {% endif %}
         {% endif %}
      {% endfor %}
    {% endfor %}

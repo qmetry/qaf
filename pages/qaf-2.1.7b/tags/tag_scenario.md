@@ -3,7 +3,7 @@ title: "Scenario Related Pages"
 tagName: scenario
 search: exclude
 permalink: qaf-2.1.7b/tag_scenario.html
-sidebar: qaf_2_1_7b_sidebar
+sidebar: qaf_2_1_7b-sidebar
 folder: tags
 ---
 {% include taglogic.html %}

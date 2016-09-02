@@ -1,6 +1,6 @@
 ---
 title: Managing Locales
-sidebar: qaf_2_1_7b_sidebar
+sidebar: qaf_2_1_7b-sidebar
 permalink: qaf-2.1.7b/managing_locales.html
 folder: qaf-2.1.7b
 ---

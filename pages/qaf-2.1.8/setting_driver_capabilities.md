@@ -1,6 +1,6 @@
 ---
 title: Setting driver capabilities
-sidebar: qaf_2_1_8_sidebar
+sidebar: qaf_2_1_8-sidebar
 permalink: qaf-2.1.8/setting_driver_capabilities.html
 folder: qaf-2.1.8
 ---

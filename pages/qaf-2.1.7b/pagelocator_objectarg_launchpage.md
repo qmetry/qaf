@@ -1,6 +1,6 @@
 ---
 title: Page Locator and Object arguments in Launch page
-sidebar: qaf_2_1_7b_sidebar
+sidebar: qaf_2_1_7b-sidebar
 permalink: qaf-2.1.7b/pagelocator_objectarg_launchpage.html
 folder: qaf-2.1.7b
 tags: [page,java,Selenium,locator]

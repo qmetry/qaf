@@ -1,6 +1,6 @@
 ---
 title: Creating Test Project
-sidebar: qaf_2_1_7b_sidebar
+sidebar: qaf_2_1_7b-sidebar
 permalink: qaf-2.1.7b/create_test_project.html
 folder: qaf-2.1.7b
 tags: [getting_started]

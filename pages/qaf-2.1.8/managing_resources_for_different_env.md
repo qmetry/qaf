@@ -1,6 +1,6 @@
 ---
 title: Managing resources for Different Environments
-sidebar: qaf_2_1_8_sidebar
+sidebar: qaf_2_1_8-sidebar
 permalink: qaf-2.1.8/managing_resources_for_different_env.html
 folder: qaf-2.1.8
 ---

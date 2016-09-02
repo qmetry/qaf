@@ -1,6 +1,6 @@
 ---
 title: Development with QAF
-sidebar: qaf_2_1_8_sidebar
+sidebar: qaf_2_1_8-sidebar
 permalink: qaf-2.1.8/development_overview.html
 folder: qaf-2.1.8
 next: Creating_test_cases.html

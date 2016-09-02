@@ -4,12 +4,15 @@ published: true
 permalink: qaf-public-release.html
 summary: "QAF public release"
 tags: [news]
-sidebar: qaf_2_1_7b_sidebar
+sidebar: qaf_latest-sidebar
 ---
 
 
 ## QAF public release 
 
-You can obtain QAF jar from http://qas.qmetry.com/releases/QAF/stable/. If you are using IVY or Maven you can specify dependency as below.
+
+You can download QAF jar from [here]({{site.data.strings.qaf_repository}}/com/qmetry/qaf/{{site.data.strings.version}}/qaf-{{site.data.strings.version}}.jar).
+
+If you are using IVY or Maven you can specify dependency as below.
 
 {% include links.html %}

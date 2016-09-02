@@ -1,6 +1,6 @@
 ---
 title: Wait Service
-sidebar: qaf_2_1_8_sidebar
+sidebar: qaf_2_1_8-sidebar
 permalink: qaf-2.1.8/wait_service.html
 folder: qaf-2.1.8
 tags: [java,WebElement,WebDriver]

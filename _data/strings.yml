@@ -4,6 +4,7 @@
 search_placeholder_text: search...
 search_no_results_text: No results found.
 version: 2.1.8
-latest_version: 2.1.8
+# latest_version needs to map with direcotry in root as well as in pages directory. i.e. qaf-2.1.7b, qaf-2.1.8 or latest
+latest_version: latest
 qaf_repository: "https://qmetry.github.io/qaf/dist"
 blank_project_zip_url: "https://github.com/qmetry/qaf-blank-project"

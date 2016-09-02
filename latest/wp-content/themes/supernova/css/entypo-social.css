@@ -1,0 +1,68 @@
+@font-face {
+	font-family: 'entypo-social';
+	src:url('http://www.infostretch.com/wp-content/themes/supernova/font/entypo-social.eot');
+	src:url('http://www.infostretch.com/wp-content/themes/supernova/font/entypo-social.eot?#iefix') format('embedded-opentype'),
+		url('http://www.infostretch.com/wp-content/themes/supernova/font/entypo-social.woff') format('woff'),
+		url('http://www.infostretch.com/wp-content/themes/supernova/font/entypo-social.ttf') format('truetype'),
+		url('http://www.infostretch.com/wp-content/themes/supernova/font/entypo-social.svg#entypo-social') format('svg');
+	font-weight: normal;
+	font-style: normal;
+	}
+
+[class*="entypo-"] {
+	font-family: 'entypo-social', sans-serif;
+	content: '';
+	speak: none;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	}
+
+.entypo-github:before {content: "\e0ef";}
+.entypo-flickr:before {content: "\e0f0";}
+.entypo-flickr-2:before {content: "\e0f1";}
+.entypo-vimeo:before {content: "\e0f2";}
+.entypo-vimeo-2:before {content: "\e0f3";}
+.entypo-twitter:before {content: "\e0f4";}
+.entypo-twitter-2:before {content: "\e0f5";}
+.entypo-facebook:before {content: "\e0f6";}
+.entypo-facebook-2:before {content: "\e0f7";}
+.entypo-facebook-3:before {content: "\e0f8";}
+.entypo-googleplus:before {content: "\e0f9";}
+.entypo-googleplus-2:before {content: "\e0fa";}
+.entypo-pinterest:before {content: "\e0fb";}
+.entypo-pinterest-2:before {content: "\e0fc";}
+.entypo-tumblr:before {content: "\e0fd";}
+.entypo-tumblr-2:before {content: "\e0fe";}
+.entypo-linkedin:before {content: "\e0ff";}
+.entypo-linkedin-2:before {content: "\e100";}
+.entypo-dribbble:before {content: "\e101";}
+.entypo-dribbble-2:before {content: "\e102";}
+.entypo-stumbleupon:before {content: "\e103";}
+.entypo-stumbleupon-2:before {content: "\e104";}
+.entypo-lastfm:before {content: "\e105";}
+.entypo-lastfm-2:before {content: "\e106";}
+.entypo-rdio:before {content: "\e107";}
+.entypo-rdio-2:before {content: "\e108";}
+.entypo-spotify:before {content: "\e109";}
+.entypo-spotify-2:before {content: "\e10a";}
+.entypo-qq:before {content: "\e10b";}
+.entypo-instagram:before {content: "\e10c";}
+.entypo-dropbox:before {content: "\e10d";}
+.entypo-evernote:before {content: "\e10e";}
+.entypo-flattr:before {content: "\e10f";}
+.entypo-skype:before {content: "\e110";}
+.entypo-skype-2:before {content: "\e111";}
+.entypo-renren:before {content: "\e112";}
+.entypo-sina-weibo:before {content: "\e113";}
+.entypo-paypal:before {content: "\e114";}
+.entypo-picasa:before {content: "\e115";}
+.entypo-soundcloud:before {content: "\e116";}
+.entypo-mixi:before {content: "\e117";}
+.entypo-behance:before {content: "\e118";}
+.entypo-circles:before {content: "\e119";}
+.entypo-vk:before {content: "\e11a";}
+.entypo-smashing:before {content: "\e11b";}
+.entypo-github-2:before {content: "\e0ee";}

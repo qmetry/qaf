@@ -1,6 +1,6 @@
 ---
 title: Release Notes
-sidebar: qaf_2_1_7b_sidebar
+sidebar: qaf_2_1_8-sidebar
 permalink: qaf-2.1.8/release_notes.html
 folder: qaf-2.1.8
 ---

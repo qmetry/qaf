@@ -10,8 +10,8 @@ tags: Selenium,WebDriver,Infostretch,QMetry,QAF,Automation,Framework,TestNg,Test
       <div class="desc">
             <h2>Rapid Test Automation</h2>
             <p>An open source testing automation framework made available under the GNU General Public License, version 3 (GPL-3.0) to create, maintain and manage test case libraries</p>
-            <div class="row text-center"><a title="" class="anim lnk skyblue" style="text-decoration:none; margin-bottom:10px;" href="qaf-{{site.data.strings.latest_version}}/docs.html">Documentation</a>
-            <a title="" style="text-decoration:none;margin-left:20px; margin-bottom:10px;" class="anim lnk skyblue" href="qaf-{{site.data.strings.latest_version}}/download.html">Download</a>
+            <div class="row text-center"><a title="" class="anim lnk skyblue" style="text-decoration:none; margin-bottom:10px;" href="{{site.data.strings.latest_version}}/docs.html">Documentation</a>
+            <a title="" style="text-decoration:none;margin-left:20px; margin-bottom:10px;" class="anim lnk skyblue" href="{{site.data.strings.latest_version}}/download.html">Download</a>
             <a title="" style="text-decoration:none;margin-left:20px; margin-bottom:10px;" class="anim lnk skyblue" href="https://github.com/qmetry/qaf">GitHub Repo</a></div>
         </div>
   </div>

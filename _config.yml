@@ -90,7 +90,7 @@ defaults:
 # these are defaults used for the frontmatter for these file types
 
 sidebars:
-- qaf_2_1_7b_sidebar
+- qaf_2_1_8-sidebar
 - faq_sidebar
 - troubleshoot_sidebar
 

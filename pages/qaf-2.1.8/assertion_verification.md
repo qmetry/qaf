@@ -1,6 +1,6 @@
 ---
 title: Assertion/Verification
-sidebar: qaf_2_1_8_sidebar
+sidebar: qaf_2_1_8-sidebar
 permalink: qaf-2.1.8/assertion_verification.html
 folder: qaf-2.1.8
 tags: [java,checkpoint]

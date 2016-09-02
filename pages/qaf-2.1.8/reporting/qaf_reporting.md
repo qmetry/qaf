@@ -1,6 +1,6 @@
 ---
 title: QAF Reporting
-sidebar: qaf_2_1_7b_sidebar
+sidebar: qaf_2_1_8-sidebar
 permalink: qaf-2.1.8/qaf_reporting.html
 folder: qaf-2.1.8
 ---

@@ -1,7 +1,7 @@
 ---
 title: QMetry Automation Framework
 tags: [getting_started]
-sidebar: qaf_2_1_7b_sidebar
+sidebar: qaf_2_1_7b-sidebar
 permalink: docs.html
 ---
 ## Overview

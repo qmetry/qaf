@@ -1,6 +1,6 @@
 ---
 title: Page Design Concepts
-sidebar: qaf_2_1_8_sidebar
+sidebar: qaf_2_1_8-sidebar
 permalink: qaf-2.1.8/page_design_concepts.html
 folder: qaf-2.1.8
 tags: [page,java,locator,testng]

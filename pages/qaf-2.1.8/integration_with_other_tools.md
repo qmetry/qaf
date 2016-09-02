@@ -1,6 +1,6 @@
 ---
 title: Integration
-sidebar: qaf_2_1_8_sidebar
+sidebar: qaf_2_1_8-sidebar
 permalink: qaf-2.1.8/integration_with_other_tools.html
 folder: qaf-2.1.8
 ---

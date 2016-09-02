@@ -3,7 +3,7 @@ title: "Web Driver Related Pages"
 tagName: WebDriver
 search: exclude
 permalink: qaf-2.1.8/tag_webdriver.html
-sidebar: qaf_2_1_7b_sidebar
+sidebar: qaf_2_1_8-sidebar
 folder: tags
 ---
 {% include taglogic.html %}
