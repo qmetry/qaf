@@ -1,6 +1,6 @@
 ---
 title: Download
-sidebar: qaf_latest-sidebar
+sidebar: download_sidebar
 permalink: latest/download.html
 folder: latest
 ---

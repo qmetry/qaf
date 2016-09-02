@@ -20,7 +20,7 @@ allowed-tags:
   - scenario
   - test data
   - checkpoint
-  - Selenium
+  - selenium
   - locator
   - page
   - component
