@@ -27,7 +27,7 @@ tags: Selenium,WebDriver,Infostretch,QMetry,QAF,Automation,Framework,TestNg,Test
           <h4>Selenium-driven Automated Testing</h4>
           <ul>
             <li><span>Web and mobile test automation</span></li>
-            <li><span>Run locally or in cloude</span></li>
+            <li><span>Run locally or in cloud</span></li>
             <li><span>Automation support for multilingual applications </span></li>
           </ul>
         </div>
