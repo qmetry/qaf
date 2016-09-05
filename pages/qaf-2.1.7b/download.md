@@ -26,12 +26,12 @@ You can use QAF as a Maven Artifact. Users would need to add this to their pom.x
 
 ```xml
 <dependency>
-    <groupId>com.qmetry</groupId>
+    <groupId>com.infostretch</groupId>
     <artifactId>qaf</artifactId>
     <version>2.1.7b</version>
 </dependency>
 <dependency>
-    <groupId>com.qmetry</groupId>
+    <groupId>com.infostretch</groupId>
     <artifactId>qaf-support</artifactId>
     <version>2.1.7b</version>
 </dependency>
@@ -59,8 +59,8 @@ Create or update ivysettings.xml file to add new repository. Alternately you can
 **IVY Dependency Entry**
 
 ```xml
-<dependency org="com.qmetry" name="qaf" rev="2.1.7b" />
-<dependency org="com.qmetry" name="qaf-support" rev="2.1.7b" />
+<dependency org="com.infostretch" name="qaf" rev="2.1.7b" />
+<dependency org="com.infostretch" name="qaf-support" rev="2.1.7b" />
 ```
 
 ## Direct Download
