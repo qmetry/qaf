@@ -28,7 +28,7 @@ import org.testng.SkipException;
 
 /**
  * To indicate automation error,not an AUT failure so that the test case can be
- * in skip state instead of fail com.infostretch.automation.AutomationError.java
+ * in skip state instead of fail com.qmetry.qaf.automation.AutomationError.java
  * 
  * @author chirag
  */

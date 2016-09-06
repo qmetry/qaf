@@ -40,7 +40,7 @@ import com.sun.jersey.api.client.ClientResponse.Status;
 import com.sun.jersey.core.util.ReaderWriter;
 
 /**
- * com.infostretch.ws.rest.client.Response.java
+ * com.qmetry.qaf.ws.rest.client.Response.java
  * 
  * @author chirag
  */

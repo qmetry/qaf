@@ -43,7 +43,7 @@ public class HtmlCommandLogFormatter implements CommandLogFormatter {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @seecom.infostretch.automation.selenium.CommandLogFormatter#getLog(com.
+	 * @seecom.qmetry.qaf.automation.selenium.CommandLogFormatter#getLog(com.
 	 * infostretch.automation.selenium.LoggingBean[])
 	 */
 	@Override

@@ -50,7 +50,7 @@ import com.qmetry.qaf.automation.step.client.text.BDDDefinitionHelper;
 import com.qmetry.qaf.automation.step.client.text.BDDDefinitionHelper.ParamType;
 
 /**
- * com.infostretch.automation.exceltest.CustomStep.java
+ * com.qmetry.qaf.automation.exceltest.CustomStep.java
  * 
  * @author chirag.jayswal
  */

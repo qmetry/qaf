@@ -32,7 +32,7 @@ import com.qmetry.qaf.automation.ui.selenium.webdriver.QAFWebDriverCommandProces
 import com.qmetry.qaf.automation.ui.webdriver.QAFExtendedWebDriver;
 
 /**
- * com.infostretch.automation.SeleniumTestBase.java
+ * com.qmetry.qaf.automation.SeleniumTestBase.java
  * 
  * @author chirag
  */

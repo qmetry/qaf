@@ -131,14 +131,14 @@ public class QAFTestNGListener {
 
 	public void onConfigurationSkip(ITestResult itr) {
 		if (!itr.getMethod().getConstructorOrMethod().getDeclaringClass().getPackage().getName()
-				.startsWith("com.infostretch.automation")) {
+				.startsWith("com.qmetry.qaf.automation")) {
 			report(itr);
 		}
 	}
 
 	public void onConfigurationSuccess(ITestResult itr) {
 		if (!itr.getMethod().getConstructorOrMethod().getDeclaringClass().getPackage().getName()
-				.startsWith("com.infostretch.automation")) {
+				.startsWith("com.qmetry.qaf.automation")) {
 			report(itr);
 		}
 	}

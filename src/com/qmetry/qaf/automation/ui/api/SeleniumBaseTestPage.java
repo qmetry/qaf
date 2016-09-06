@@ -29,7 +29,7 @@ import com.qmetry.qaf.automation.ui.SeleniumTestBase;
 import com.qmetry.qaf.automation.ui.selenium.IsSelenium;
 
 /**
- * com.infostretch.automation.api.BaseTestPage2.java
+ * com.qmetry.qaf.automation.api.BaseTestPage2.java
  * 
  * @author chirag
  */

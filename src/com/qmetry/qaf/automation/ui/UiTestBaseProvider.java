@@ -30,7 +30,7 @@ import java.util.Vector;
 import com.qmetry.qaf.automation.ui.api.UiTestBase;
 
 /**
- * com.infostretch.automation.api.TestBaseProvider.java
+ * com.qmetry.qaf.automation.api.TestBaseProvider.java
  * 
  * @author chirag
  */

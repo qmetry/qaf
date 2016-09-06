@@ -47,6 +47,7 @@ import com.qmetry.qaf.automation.core.CheckpointResultBean;
 import com.qmetry.qaf.automation.core.LoggingBean;
 import com.qmetry.qaf.automation.core.QAFTestBase;
 import com.qmetry.qaf.automation.core.TestBaseProvider;
+import com.qmetry.qaf.automation.cucumber.QAFCucumberFormatter;
 import com.qmetry.qaf.automation.integration.ResultUpdator;
 import com.qmetry.qaf.automation.integration.TestCaseResultUpdator;
 import com.qmetry.qaf.automation.integration.TestCaseRunResult;
@@ -82,12 +83,16 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 
 	@Override
 	public void onStart(final ISuite suite) {
+		if (skipReporting())
+			return;
 		super.onStart(suite);
 		ReporterUtil.createMetaInfo(suite);
 	}
 
 	@Override
 	public void onFinish(ISuite suite) {
+		if (skipReporting())
+			return;
 		super.onFinish(suite);
 		logger.debug("onFinish: start");
 		ReporterUtil.createMetaInfo(suite);
@@ -97,6 +102,9 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 
 	@Override
 	public void onFinish(ITestContext testContext) {
+		if (skipReporting())
+			return;
+		
 		super.onFinish(testContext);
 		ReporterUtil.updateOverview(testContext, null);
 	}
@@ -165,7 +173,7 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 	@Override
 	protected void report(ITestResult tr) {
 		super.report(tr);
-		if (getBundle().containsKey("cucumber.run.mode"))
+		if (skipReporting())
 			return;
 		QAFTestBase stb = TestBaseProvider.instance().get();
 		final List<CheckpointResultBean> checkpoints = new ArrayList<CheckpointResultBean>(stb.getCheckPointResults());
@@ -213,4 +221,7 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 
 	}
 
+	private boolean skipReporting(){
+		return getBundle().getBoolean("disable.qaf.testng.reporter",false) || getBundle().getBoolean("cucumber.run.mode",true);
+	}
 }

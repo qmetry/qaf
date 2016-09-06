@@ -110,7 +110,7 @@ public class JarFinderUtil {
 	public static void main(String[] args) {
 		try {
 			JarFinderUtil finderUtil = new JarFinderUtil("./dist/selenium-automation-framework.jar");
-			Collection<String> lst = finderUtil.getClasses("com.infostretch.automation");
+			Collection<String> lst = finderUtil.getClasses("com.qmetry.qaf.automation");
 			for (Object element : lst) {
 				System.out.println((String) element);
 
