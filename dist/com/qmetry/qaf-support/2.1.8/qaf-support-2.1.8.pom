@@ -17,13 +17,19 @@
       <groupId>com.qmetry</groupId>
       <artifactId>qaf</artifactId>
       <version>2.1.8</version>
-      <optional>true</optional>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjtools</artifactId>
       <version>1.8.5</version>
-      <optional>true</optional>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>ant-contrib</groupId>
+      <artifactId>ant-contrib</artifactId>
+      <version>1.0b3</version>
+      <scope>compile</scope>
     </dependency>
   </dependencies>
 </project>
