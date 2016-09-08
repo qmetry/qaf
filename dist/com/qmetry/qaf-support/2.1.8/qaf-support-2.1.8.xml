@@ -10,7 +10,7 @@
 	OF ANY KIND, either express or implied. See the License for the specific 
 	language governing permissions and limitations under the License. -->
 <ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
-	<info organisation="com.qmetry" module="qaf-support" revision="2.1.8" status="integration" publication="20160908203452">
+	<info organisation="com.qmetry" module="qaf-support" revision="2.1.8" status="integration" publication="20160908204304">
 	</info>
 
 	<dependencies>
