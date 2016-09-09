@@ -29,6 +29,7 @@ import static com.qmetry.qaf.automation.testng.dataprovider.DataProviderFactory.
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -208,7 +209,7 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 					TestCaseResultUpdator updatorObj = (TestCaseResultUpdator) updatorCls.newInstance();
 
 					TestNGScenario scenario = (TestNGScenario) tr.getMethod();
-					Map<String, Object> params = scenario.getMetaData();
+					Map<String, Object> params = new HashMap<String, Object>(scenario.getMetaData());
 					params.put("duration", tr.getEndMillis() - tr.getStartMillis());
 					ResultUpdator.updateResult(result, stb.getHTMLFormattedLog() + stb.getAssertionsLog(), updatorObj,
 							params);
