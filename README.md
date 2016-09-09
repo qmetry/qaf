@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/qmetry/qaf.svg?branch=master)](https://travis-ci.org/qmetry/qaf)
+
 # QMetry Automation Framework
   for web, mobileweb, mobile native and rest web-service functional test automation
   
