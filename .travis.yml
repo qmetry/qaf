@@ -1,6 +1,6 @@
 language: java
 before_install:
-  - ant sudo download-ivy
+  - sudo ant download-ivy
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
 install: ant resolve
