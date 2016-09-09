@@ -30,7 +30,9 @@ import static com.qmetry.qaf.automation.testng.dataprovider.DataProviderFactory.
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.LogFactoryImpl;
@@ -47,7 +49,6 @@ import com.qmetry.qaf.automation.core.CheckpointResultBean;
 import com.qmetry.qaf.automation.core.LoggingBean;
 import com.qmetry.qaf.automation.core.QAFTestBase;
 import com.qmetry.qaf.automation.core.TestBaseProvider;
-import com.qmetry.qaf.automation.cucumber.QAFCucumberFormatter;
 import com.qmetry.qaf.automation.integration.ResultUpdator;
 import com.qmetry.qaf.automation.integration.TestCaseResultUpdator;
 import com.qmetry.qaf.automation.integration.TestCaseRunResult;
@@ -207,9 +208,11 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 					Class<?> updatorCls = Class.forName(updator);
 
 					TestCaseResultUpdator updatorObj = (TestCaseResultUpdator) updatorCls.newInstance();
-
+				    
 					TestNGScenario scenario = (TestNGScenario) tr.getMethod();
-
+					Map<String, Object> params = new HashMap<String, Object>(scenario.getMetaData());
+					params.put("duration", tr.getEndMillis() - tr.getStartMillis());
+						    
 					ResultUpdator.updateResult(result, stb.getHTMLFormattedLog() + stb.getAssertionsLog(), updatorObj,
 							scenario.getMetaData());
 				}
