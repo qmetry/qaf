@@ -21,7 +21,6 @@
  * For any inquiry or need additional information, please contact support-qaf@infostretch.com
  *******************************************************************************/
 
-
 package com.qmetry.qaf.automation.step;
 
 import static com.qmetry.qaf.automation.core.ConfigurationManager.getBundle;
@@ -76,7 +75,7 @@ public final class JavaStepFinder {
 				new SubTypesScanner(false));
 		Reflections reflections = new Reflections(configurationBuilder);
 		Set<Class<? extends Object>> classes = reflections.getSubTypesOf(Object.class);
-		classes.add(CommonStep.class);
+		// classes.add(CommonStep.class);
 		Set<Method> steps = new LinkedHashSet<Method>();
 		steps.addAll(reflections.getMethodsAnnotatedWith(QAFTestStep.class));
 		steps.addAll(getAllMethodsWithAnnotation(classes, QAFTestStep.class));
