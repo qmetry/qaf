@@ -1,31 +1,26 @@
 /*******************************************************************************
- * QMetry Automation Framework provides a powerful and versatile platform to
- * author
- * Automated Test Cases in Behavior Driven, Keyword Driven or Code Driven
- * approach
+ * QMetry Automation Framework provides a powerful and versatile platform to author 
+ * Automated Test Cases in Behavior Driven, Keyword Driven or Code Driven approach
+ *                
  * Copyright 2016 Infostretch Corporation
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or any later version.
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
- * DAMAGES OR
- * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- * FROM, OUT
- * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE
- * You should have received a copy of the GNU General Public License along with
- * this program in the name of LICENSE.txt in the root folder of the
- * distribution. If not, see https://opensource.org/licenses/gpl-3.0.html
- * See the NOTICE.TXT file in root folder of this source files distribution
+ *
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ *
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT
+ * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE
+ *
+ * You should have received a copy of the GNU General Public License along with this program in the name of LICENSE.txt in the root folder of the distribution. If not, see https://opensource.org/licenses/gpl-3.0.html
+ *
+ * See the NOTICE.TXT file in root folder of this source files distribution 
  * for additional information regarding copyright ownership and licenses
  * of other open source software / files used by QMetry Automation Framework.
- * For any inquiry or need additional information, please contact
- * support-qaf@infostretch.com
+ *
+ * For any inquiry or need additional information, please contact support-qaf@infostretch.com
  *******************************************************************************/
+
 
 package com.qmetry.qaf.automation.testng.pro;
 
@@ -110,18 +105,16 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 	public void onFinish(ITestContext testContext) {
 		if (skipReporting())
 			return;
-
+		
 		super.onFinish(testContext);
 		ReporterUtil.updateOverview(testContext, null);
 	}
 
 	@SuppressWarnings("rawtypes")
-	public void transform(ITestAnnotation testAnnotation, Class clazz, Constructor arg2,
-			Method method) {
+	public void transform(ITestAnnotation testAnnotation, Class clazz, Constructor arg2, Method method) {
 		try {
-			if ((method.getAnnotation(QAFDataProvider.class) != null)
-					&& (null != method.getParameterTypes()) && (null != method)
-					&& (method.getParameterTypes().length > 0)) {
+			if ((method.getAnnotation(QAFDataProvider.class) != null) && (null != method.getParameterTypes())
+					&& (null != method) && (method.getParameterTypes().length > 0)) {
 				String dp = getDataProvider(method);
 				if (StringUtil.isNotBlank(dp)) {
 					testAnnotation.setDataProvider(dp);
@@ -139,10 +132,8 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 				}
 				if (getBundle().getBoolean("report.javadoc.link", false)) {
 					String linkRelPath = String.format("%s%s.html#%s",
-							getBundle().getString("javadoc.folderpath",
-									"../../../docs/tests/"),
-							method.getDeclaringClass().getCanonicalName()
-									.replaceAll("\\.", "/"),
+							getBundle().getString("javadoc.folderpath", "../../../docs/tests/"),
+							method.getDeclaringClass().getCanonicalName().replaceAll("\\.", "/"),
 							ClassUtil.getMethodSignture(method, false));
 
 					String desc = String.format(
@@ -151,12 +142,10 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 							testAnnotation.getDescription(), linkRelPath);
 					testAnnotation.setDescription(desc);
 				}
-				testAnnotation.setDescription(getBundle().getSubstitutor()
-						.replace(testAnnotation.getDescription()));
+				testAnnotation.setDescription(getBundle().getSubstitutor().replace(testAnnotation.getDescription()));
 
-				testAnnotation.setRetryAnalyzer(
-						Class.forName(ApplicationProperties.RETRY_ANALYZER
-								.getStringVal(RetryAnalyzer.class.getName())));
+				testAnnotation.setRetryAnalyzer(Class
+						.forName(ApplicationProperties.RETRY_ANALYZER.getStringVal(RetryAnalyzer.class.getName())));
 
 			}
 		} catch (Exception e) {
@@ -165,8 +154,7 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 	}
 
 	@Override
-	public void afterInvocation(final IInvokedMethod method, final ITestResult tr,
-			final ITestContext context) {
+	public void afterInvocation(final IInvokedMethod method, final ITestResult tr, final ITestContext context) {
 		super.afterInvocation(method, tr, context);
 		// pro
 		if (method.isTestMethod() && !shouldRetry(tr)) {
@@ -189,8 +177,7 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 		if (skipReporting())
 			return;
 		QAFTestBase stb = TestBaseProvider.instance().get();
-		final List<CheckpointResultBean> checkpoints =
-				new ArrayList<CheckpointResultBean>(stb.getCheckPointResults());
+		final List<CheckpointResultBean> checkpoints = new ArrayList<CheckpointResultBean>(stb.getCheckPointResults());
 
 		// pro
 		final List<LoggingBean> logs = new ArrayList<LoggingBean>(stb.getLog());
@@ -205,17 +192,14 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 		QAFTestBase stb = TestBaseProvider.instance().get();
 
 		try {
-			if ((tr.getMethod() instanceof TestNGScenario)
-					&& ((tr.getStatus() == ITestResult.FAILURE)
-							|| (tr.getStatus() == ITestResult.SUCCESS
-									|| tr.getStatus() == ITestResult.SKIP))) {
+			if ((tr.getMethod() instanceof TestNGScenario) && ((tr.getStatus() == ITestResult.FAILURE)
+					|| (tr.getStatus() == ITestResult.SUCCESS || tr.getStatus() == ITestResult.SKIP))) {
 
 				ConstructorOrMethod testCase = tr.getMethod().getConstructorOrMethod();
 
 				testCase.getMethod().getAnnotation(Test.class);
-				TestCaseRunResult result = tr.getStatus() == ITestResult.SUCCESS
-						? TestCaseRunResult.PASS : tr.getStatus() == ITestResult.FAILURE
-								? TestCaseRunResult.FAIL : TestCaseRunResult.SKIPPED;
+				TestCaseRunResult result = tr.getStatus() == ITestResult.SUCCESS ? TestCaseRunResult.PASS
+						: tr.getStatus() == ITestResult.FAILURE ? TestCaseRunResult.FAIL : TestCaseRunResult.SKIPPED;
 
 				// String method = testCase.getName();
 				String updator = getBundle().getString("result.updator");
@@ -223,16 +207,14 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 				if (StringUtil.isNotBlank(updator)) {
 					Class<?> updatorCls = Class.forName(updator);
 
-					TestCaseResultUpdator updatorObj =
-							(TestCaseResultUpdator) updatorCls.newInstance();
-
+					TestCaseResultUpdator updatorObj = (TestCaseResultUpdator) updatorCls.newInstance();
+				    
 					TestNGScenario scenario = (TestNGScenario) tr.getMethod();
-					Map<String, Object> params =
-							new HashMap<String, Object>(scenario.getMetaData());
+					Map<String, Object> params = new HashMap<String, Object>(scenario.getMetaData());
 					params.put("duration", tr.getEndMillis() - tr.getStartMillis());
-					ResultUpdator.updateResult(result,
-							stb.getHTMLFormattedLog() + stb.getAssertionsLog(),
-							updatorObj, params);
+						    
+					ResultUpdator.updateResult(result, stb.getHTMLFormattedLog() + stb.getAssertionsLog(), updatorObj,
+							scenario.getMetaData());
 				}
 
 			}
@@ -242,8 +224,7 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 
 	}
 
-	private boolean skipReporting() {
-		return getBundle().getBoolean("disable.qaf.testng.reporter", false)
-				|| getBundle().getBoolean("cucumber.run.mode", true);
+	private boolean skipReporting(){
+		return getBundle().getBoolean("disable.qaf.testng.reporter",false) || getBundle().getBoolean("cucumber.run.mode",true);
 	}
 }
