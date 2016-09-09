@@ -242,4 +242,7 @@ For any inquiry or need additional information, please contact support-qaf@infos
 	<artifacts pattern="${dist.dir}/[artifact].[ext]" />
 </ivy:publish>
 </target>
+	
+<target name="test" depends="make-jar">
+</target>
 </project>
