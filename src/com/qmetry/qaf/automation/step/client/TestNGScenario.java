@@ -29,6 +29,7 @@ import static com.qmetry.qaf.automation.data.MetaDataScanner.getMetadata;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.testng.internal.TestNGMethod;
 import org.testng.internal.annotations.IAnnotationFinder;
@@ -97,7 +98,7 @@ public class TestNGScenario extends TestNGMethod {
 
 	// useful to correct invocation count in case of retry
 	public int decAndgetCurrentInvocationCount() {
-		m_currentInvocationCount = ThreadUtil.createAtomicInteger(getCurrentInvocationCount() - 1);
+		m_currentInvocationCount = new AtomicInteger(getCurrentInvocationCount() - 1);
 		return super.getCurrentInvocationCount();
 	}
 
