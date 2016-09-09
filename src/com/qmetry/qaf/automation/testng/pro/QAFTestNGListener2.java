@@ -21,7 +21,6 @@
  * For any inquiry or need additional information, please contact support-qaf@infostretch.com
  *******************************************************************************/
 
-
 package com.qmetry.qaf.automation.testng.pro;
 
 import static com.qmetry.qaf.automation.core.ConfigurationManager.getBundle;
@@ -31,6 +30,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.LogFactoryImpl;
@@ -47,7 +47,6 @@ import com.qmetry.qaf.automation.core.CheckpointResultBean;
 import com.qmetry.qaf.automation.core.LoggingBean;
 import com.qmetry.qaf.automation.core.QAFTestBase;
 import com.qmetry.qaf.automation.core.TestBaseProvider;
-import com.qmetry.qaf.automation.cucumber.QAFCucumberFormatter;
 import com.qmetry.qaf.automation.integration.ResultUpdator;
 import com.qmetry.qaf.automation.integration.TestCaseResultUpdator;
 import com.qmetry.qaf.automation.integration.TestCaseRunResult;
@@ -104,7 +103,7 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 	public void onFinish(ITestContext testContext) {
 		if (skipReporting())
 			return;
-		
+
 		super.onFinish(testContext);
 		ReporterUtil.updateOverview(testContext, null);
 	}
@@ -209,9 +208,10 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 					TestCaseResultUpdator updatorObj = (TestCaseResultUpdator) updatorCls.newInstance();
 
 					TestNGScenario scenario = (TestNGScenario) tr.getMethod();
-
+					Map<String, Object> params = scenario.getMetaData();
+					params.put("duration", tr.getEndMillis() - tr.getStartMillis());
 					ResultUpdator.updateResult(result, stb.getHTMLFormattedLog() + stb.getAssertionsLog(), updatorObj,
-							scenario.getMetaData());
+							params);
 				}
 
 			}
@@ -221,7 +221,8 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 
 	}
 
-	private boolean skipReporting(){
-		return getBundle().getBoolean("disable.qaf.testng.reporter",false) || getBundle().getBoolean("cucumber.run.mode",true);
+	private boolean skipReporting() {
+		return getBundle().getBoolean("disable.qaf.testng.reporter", false)
+				|| getBundle().getBoolean("cucumber.run.mode", true);
 	}
 }
