@@ -225,6 +225,6 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 	}
 
 	private boolean skipReporting(){
-		return getBundle().getBoolean("disable.qaf.testng.reporter",false) || getBundle().getBoolean("cucumber.run.mode",true);
+		return getBundle().getBoolean("disable.qaf.testng.reporter",false) || getBundle().getBoolean("cucumber.run.mode",false);
 	}
 }
