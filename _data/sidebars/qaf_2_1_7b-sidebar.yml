@@ -32,7 +32,7 @@ entries:
       url: /release_notes.html
       output: web, pdf
     - title: Latest Version Docs
-      url: ..\latest\docs.html
+      url: ../latest\docs.html
       output: web, pdf 
   - title:
     output: pdf

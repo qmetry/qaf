@@ -24,7 +24,7 @@
      - title: QAF Resources
        folderitems:
          - title: QAF 2.1.7b Docs
-           url: ..\qaf-2.1.7b\docs.html
+           url: ../qaf-2.1.7b\docs.html
          - title: Older Version Docs
            url: /older_versions_docs.html
          - title: QAF on Stack Overflow
