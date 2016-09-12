@@ -12,7 +12,7 @@
         "lineNo": 2.0,
         "name": "Verify Add Contact Screen",
         "referece": "scenarios/suite1.bdd",
-        "sign": "scenarios.suite1.bdd.Verify Add Contact Screen()[pri:1000, instance:com.qmetry.qaf.automation.step.client.Scenario@3e8]"
+        "sign": "scenarios.suite1.bdd.Verify Add Contact Screen()[pri:1000, instance:com.infostretch.automation.step.client.Scenario@3e8]"
       },
       "dependsOn": [],
       "startTime": 1469192602833,
@@ -32,7 +32,7 @@
         "lineNo": 12,
         "name": "Add New Contact",
         "referece": "scenarios/suite1.bdd",
-        "sign": "scenarios.suite1.bdd.Add New Contact()[pri:1001, instance:com.qmetry.qaf.automation.step.client.Scenario@3e9]"
+        "sign": "scenarios.suite1.bdd.Add New Contact()[pri:1001, instance:com.infostretch.automation.step.client.Scenario@3e9]"
       },
       "dependsOn": [],
       "startTime": 1469192636617,

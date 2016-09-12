@@ -4,7 +4,7 @@
   "fail": 0,
   "skip": 0,
   "classes": [
-    "com.qmetry.qaf.automation.step.client.Scenario"
+    "com.infostretch.automation.step.client.Scenario"
   ],
   "envInfo": {
     "browser-desired-capabilities": {
