@@ -214,7 +214,7 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 					params.put("duration", tr.getEndMillis() - tr.getStartMillis());
 						    
 					ResultUpdator.updateResult(result, stb.getHTMLFormattedLog() + stb.getAssertionsLog(), updatorObj,
-							scenario.getMetaData());
+							params);
 				}
 
 			}
