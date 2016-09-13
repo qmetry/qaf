@@ -2,7 +2,7 @@
 title: "DataDriven Related Pages"
 tagName: DataDriven
 search: exclude
-permalink: latest_tag/tag_datadriven.html
+permalink: latest/tag_datadriven.html
 sidebar: qaf_latest-sidebar
 
 folder: tags

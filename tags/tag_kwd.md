@@ -1,8 +1,8 @@
 ---
-title: "Test Page Related Pages"
-tagName: testpage
+title: "KWD Related Pages"
+tagName: kwd
 search: exclude
-permalink: latest/tag_page.html
+permalink: latest/tag_kwd.html
 sidebar: qaf_latest-sidebar
 folder: tags
 ---
