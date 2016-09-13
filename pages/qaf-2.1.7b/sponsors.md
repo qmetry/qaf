@@ -1,6 +1,5 @@
 ---
 title: Sponsors
-sidebar: sponsor_sidebar
 permalink: qaf-2.1.7b/sponsors.html
 ---
 

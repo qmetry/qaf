@@ -1,6 +1,5 @@
 ---
 title: Sponsors
-sidebar: sponsor_sidebar
 permalink: latest/sponsors.html
 ---
 
