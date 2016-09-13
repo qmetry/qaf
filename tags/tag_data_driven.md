@@ -1,6 +1,6 @@
 ---
 title: "DataDriven Related Pages"
-tagName: DataDriven
+tagName: daradriven
 search: exclude
 permalink: latest/tag_datadriven.html
 sidebar: qaf_latest-sidebar
