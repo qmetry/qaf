@@ -202,7 +202,7 @@ public void TCtest() throws Exception {
 }
 ```
 
-Following properties must be available in addition to suite_id.
+Following properties must be available.
 
 |Property|Description|
 |-----|-----|
