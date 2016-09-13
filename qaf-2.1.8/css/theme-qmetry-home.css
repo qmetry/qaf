@@ -271,7 +271,7 @@ li.sidebarTitle {
 }
 .navbar-brand {
   float: left;
-  padding: 5px 5px;
+  padding: 15px 15px;
   font-size: 18px;
   line-height: 20px;
 }
@@ -342,7 +342,7 @@ li.sidebarTitle {
 @media (min-width: 768px) {
   .navbar-nav {
     float: left;
-    margin: 0;
+    margin-top: 15px !important;
   }
   .navbar-nav > li {
     float: left;

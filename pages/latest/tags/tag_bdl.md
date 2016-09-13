@@ -4,7 +4,7 @@ tagName: bdl
 search: exclude
 permalink: latest/tag_bdl.html
 sidebar: qaf_latest-sidebar
-folder: tags
+folder: latest
 ---
 {% include taglogic.html %}
 

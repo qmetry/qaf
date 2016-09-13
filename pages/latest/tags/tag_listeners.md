@@ -4,7 +4,7 @@ tagName: listeners
 search: exclude
 permalink: latest/tag_listeners.html
 sidebar: qaf_latest-sidebar
-folder: tags
+folder: latest
 ---
 {% include taglogic.html %}
 

@@ -4,7 +4,7 @@ tagName: single_sourcing
 search: exclude
 permalink: latest/tag_single_sourcing.html
 sidebar: qaf_latest-sidebar
-folder: tags
+folder: latest
 ---
 {% include taglogic.html %}
 

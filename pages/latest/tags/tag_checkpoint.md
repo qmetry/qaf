@@ -4,7 +4,7 @@ tagName: checkpoint
 search: exclude
 permalink: latest/tag_checkpoint.html
 sidebar: qaf_latest-sidebar
-folder: tags
+folder: latest
 ---
 {% include taglogic.html %}
 

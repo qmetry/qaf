@@ -4,7 +4,7 @@ tagName: java
 search: exclude
 permalink: latest/tag_java.html
 sidebar: qaf_latest-sidebar
-folder: tags
+folder: latest
 ---
 {% include taglogic.html %}
 

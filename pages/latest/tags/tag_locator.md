@@ -4,7 +4,7 @@ tagName: locator
 search: exclude
 permalink: latest/tag_locator.html
 sidebar: qaf_latest-sidebar
-folder: tags
+folder: latest
 ---
 {% include taglogic.html %}
 

@@ -342,7 +342,7 @@ li.sidebarTitle {
 @media (min-width: 768px) {
   .navbar-nav {
     float: left;
-    margin: 0;
+    margin-top: 15px !important;
   }
   .navbar-nav > li {
     float: left;

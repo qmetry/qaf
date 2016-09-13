@@ -4,7 +4,7 @@ tagName: special_layouts
 search: exclude
 permalink: latest/tag_special_layouts.html
 sidebar: qaf_latest-sidebar
-folder: tags
+folder: latest
 ---
 
 {% include taglogic.html %}

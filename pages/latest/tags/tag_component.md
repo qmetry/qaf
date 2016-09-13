@@ -4,7 +4,7 @@ tagName: component
 search: exclude
 permalink: latest/tag_component.html
 sidebar: qaf_latest-sidebar
-folder: tags
+folder: latest
 ---
 {% include taglogic.html %}
 
