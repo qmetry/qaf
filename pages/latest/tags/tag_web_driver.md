@@ -1,10 +1,9 @@
 ---
 title: "Web Driver Related Pages"
-tagName: webdriver
+tagName: web driver
 search: exclude
-permalink: latest_tag/tag_web_driver.html
+permalink: latest/tag_web_driver.html
 sidebar: qaf_latest-sidebar
-
 folder: tags
 ---
 {% include taglogic.html %}

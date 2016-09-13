@@ -1,8 +1,8 @@
 ---
-title: "BDL Related Pages"
-tagName: bdl
+title: "KWD Related Pages"
+tagName: kwd
 search: exclude
-permalink: qaf-2.1.8/tag_bdl.html
+permalink: qaf-2.1.8/tag_kwd.html
 sidebar: qaf_2_1_8-sidebar
 folder: tags
 ---

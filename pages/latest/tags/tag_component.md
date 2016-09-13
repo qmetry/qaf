@@ -1,8 +1,8 @@
 ---
-title: "News"
-tagName: news
+title: "Component Related Pages"
+tagName: component
 search: exclude
-permalink: latest/tag_news.html
+permalink: latest/tag_component.html
 sidebar: qaf_latest-sidebar
 folder: tags
 ---
