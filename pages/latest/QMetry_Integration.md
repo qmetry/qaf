@@ -1,8 +1,8 @@
 ---
 title: QMetry Integration
-sidebar: qaf_latest-sidebar
-permalink: latest/QMetry_Integration.html
-folder: latest
+sidebar: qaf_2_1_8-sidebar
+permalink: qaf-2.1.8/QMetry_Integration.html
+folder: qaf-2.1.8
 ---
 
 
@@ -183,6 +183,35 @@ Following properties must be available in addition to suite_id.
 |integration.param.qmetry.release|release_id|
 |integration.param.qmetry.cycle|cycle_id|
 |integration.param.qmetry.suitrunid	|suite_run_id|
+|integration.param.qmetry.build|	build_id|
+|integration.param.qmetry.platform|	platform_id|
+|integration.param.qmetry.drop|	drop_id|
+
+
+<b>Scenario 5:</b>
+
+Given: Do Not Give AnyThing
+
+TC_ID is not given in QMetryTestCase annotation then it will create new test case in qmetry. Provide required property as per below.
+
+```java
+@QmetryTestCase()
+@Test(description = "Sample test")
+public void TCtest() throws Exception {
+    //test code
+}
+```
+
+Following properties must be available in addition to suite_id.
+
+|Property|Description|
+|-----|-----|
+|integration.param.qmetry.service.url|&lt;QMetry server URL&gt;|
+|integration.param.qmetry.user|&lt;username&gt;|
+|integration.param.qmetry.pwd|password|
+|integration.param.qmetry.project|project_id|
+|integration.param.qmetry.release|release_id|
+|integration.param.qmetry.cycle|cycle_id|
 |integration.param.qmetry.build|	build_id|
 |integration.param.qmetry.platform|	platform_id|
 |integration.param.qmetry.drop|	drop_id|
