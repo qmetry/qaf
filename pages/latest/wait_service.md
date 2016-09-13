@@ -3,7 +3,7 @@ title: Wait Service
 sidebar: qaf_latest-sidebar
 permalink: latest/wait_service.html
 folder: latest
-tags: [java,WebElement,WebDriver]
+tags: [java,webelement,webdriver]
 ---
 
 There is a listener that automatically injects wait if required before executing selenium command. However, one can utilize wait service which provides different wait methods. In test case method you can create object of WaitService and utilize different wait methods.

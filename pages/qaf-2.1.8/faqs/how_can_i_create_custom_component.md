@@ -3,7 +3,7 @@ title: How can I create custom component/element?
 sidebar: faq_sidebar
 permalink: qaf-2.1.8/how_can_i_create_custom_component.html
 folder: qaf-2.1.8
-tags: [java,component,locator,test data]
+tags: [java,component,locator,testdata]
 ---
 
 Custom component can be created by extending Component class.

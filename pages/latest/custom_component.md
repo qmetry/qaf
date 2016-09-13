@@ -3,7 +3,7 @@ title: Custom component
 sidebar: qaf_latest-sidebar
 permalink: latest/custom_component.html
 folder: latest
-tags: [java,component,locator,test data]
+tags: [java,component,locator,testdata]
 ---
 
 

@@ -3,7 +3,7 @@ title: Data Beans
 sidebar: qaf_latest-sidebar
 permalink: latest/databeans.html
 folder: latest
-tags: [java,test data]
+tags: [java,testdata]
 ---
 To provide data you can use data beans also. To create data bean you required to extend **BaseDataBean** class. Data bean can be created to provide data to filling forms to communicate data between two or more test case/page and so on. Main advantage of using data beans is
 

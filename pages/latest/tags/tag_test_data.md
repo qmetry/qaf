@@ -1,8 +1,8 @@
 ---
-title: "TestNG Related Pages"
-tagName: testng
+title: "Test Data Related Pages"
+tagName: testdata
 search: exclude
-permalink: latest_tag/tag_testng.html
+permalink: latest_tag/tag_testdata.html
 sidebar: qaf_latest-sidebar
 
 folder: tags

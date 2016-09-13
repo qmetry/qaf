@@ -1,8 +1,8 @@
 ---
-title: "Web Driver Related Pages"
-tagName: webdriver
+title: "TestNG Related Pages"
+tagName: testng
 search: exclude
-permalink: latest_tag/tag_web_driver.html
+permalink: latest_tag/tag_testdata.html
 sidebar: qaf_latest-sidebar
 
 folder: tags

@@ -3,7 +3,7 @@ title: Test Data
 sidebar: qaf_latest-sidebar
 permalink: latest/testdata.html
 folder: latest
-tags: [scenario,test data]
+tags: [scenario,testdata]
 ---
 
 {% include inline_image.html

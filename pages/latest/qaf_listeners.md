@@ -3,7 +3,7 @@ title: QAF listeners
 sidebar: qaf_latest-sidebar
 permalink: latest/qaf_listeners.html
 folder: latest
-tags: [WebElement,WebDriver,java]
+tags: [webelement,webdriver,java]
 ---
 
 QAF provides command listener support for both Selenium 1 and 2 API.

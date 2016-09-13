@@ -2,7 +2,7 @@
 title: Make Tests Data driven
 sidebar: qaf_latest-sidebar
 permalink: latest/maketest_data_driven.html
-tags: [getting_started,data driven]
+tags: [getting_started,datadriven]
 folder: latest
 ---
 

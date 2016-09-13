@@ -3,7 +3,7 @@ title: Test Data
 sidebar: qaf_2_1_7b-sidebar
 permalink: qaf-2.1.7b/testdata.html
 folder: qaf-2.1.7b
-tags: [scenario,test data]
+tags: [scenario,testdata]
 ---
 
 {% include inline_image.html
