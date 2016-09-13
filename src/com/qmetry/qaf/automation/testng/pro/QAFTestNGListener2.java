@@ -183,7 +183,7 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 		final List<LoggingBean> logs = new ArrayList<LoggingBean>(stb.getLog());
 		ITestContext testContext = (ITestContext) tr.getAttribute("context");
 		ReporterUtil.createMethodResult(testContext, tr, logs, checkpoints);
-		if (tr.getStatus() != ITestResult.FAILURE) {
+		if (tr.getStatus() != ITestResult.SKIP) {
 			getBundle().clearProperty(RetryAnalyzer.RETRY_INVOCATION_COUNT);
 		}
 	}
