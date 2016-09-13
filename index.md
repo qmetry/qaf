@@ -171,3 +171,16 @@ tags: Selenium,WebDriver,Infostretch,QMetry,QAF,Automation,Framework,TestNg,Test
     <p class="text-center" style="font-size:14px;margin-top:20px;">QMetry Automation Framework source code is made available under the <a href="https://opensource.org/licenses/gpl-3.0.html" target="_blank">GNU General Public License, version 3 (GPL-3.0)</a>.</p>
   </div>
 </div>
+<script type="text/javascript">
+var links = document.links;
+for (var i = 0; i < links.length; i++) {
+    if (!links[i].target) {
+        if (
+            links[i].hostname !== window.location.hostname || 
+            /\.(?!html?)([a-z]{0,3}|[a-zt]{0,4})$/.test(links[i].pathname)
+        ) {
+            links[i].target = '_blank';
+        } 
+    }
+}
+</script>
