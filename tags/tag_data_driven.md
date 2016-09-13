@@ -1,9 +1,10 @@
 ---
-title: "Test Data Related Pages"
-tagName: testdata
+title: "DataDriven Related Pages"
+tagName: DataDriven
 search: exclude
-permalink: latest/tag_testdata.html
+permalink: latest_tag/tag_datadriven.html
 sidebar: qaf_latest-sidebar
+
 folder: tags
 ---
 {% include taglogic.html %}
