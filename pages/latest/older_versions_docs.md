@@ -1,6 +1,5 @@
 ---
 title: Older Version Documentation
-sidebar: qaf_latest-sidebar
 permalink: latest/older_versions_docs.html
 folder: latest
 ---
