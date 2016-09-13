@@ -1,6 +1,6 @@
 ---
 title: "Test Page Related Pages"
-tagName: testpage
+tagName: page
 search: exclude
 permalink: latest/tag_page.html
 sidebar: qaf_latest-sidebar
