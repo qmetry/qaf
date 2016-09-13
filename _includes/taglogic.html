@@ -6,7 +6,7 @@
     {% for tag in page.tags %}
         {% if tag == thisTag %}
         {% if page.folder == "latest" %}
-        <tr><td><a href="{{ page.url | remove: "latest_tag/" }}">{{page.title}}</a></td>
+        <tr><td><a href="/qaf{{ page.url }}">{{page.title}}</a></td>
             <td><span class="label label-default">Page</span></td>
           <td>{% if page.summary %} {{ page.summary | strip_html | strip_newlines | truncate: 160 }} {% else %} {{ page.content | truncatewords: 50 | strip_html }} {% endif %}</td>
         </tr>
