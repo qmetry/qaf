@@ -24,6 +24,9 @@ entries:
     folderitems:
 
     
+    - title: How to migrate from older version to latest version?
+      url: how_to_migrate_from_older_version_to_latest_version.html
+      output: web, pdf
     - title: What are the features provided by QAF?
       url: what_are_the_features_provided_by_qas.html
       output: web, pdf
