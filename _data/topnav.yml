@@ -23,7 +23,7 @@
  topnav_dropdowns:
  - title: Topnav dropdowns
    folders:
-     - title: QAF Resources
+     - title: Resources
        folderitems:
          - title: QAF 2.1.7b Docs
            url: ../qaf-2.1.7b/docs.html
