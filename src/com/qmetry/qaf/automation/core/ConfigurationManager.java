@@ -170,8 +170,10 @@ public class ConfigurationManager {
 
 				} else {
 					try {
-						if (fileOrDir.endsWith(".properties")) {
-							p.load(new File[] { resourceFile });
+						if (fileOrDir.endsWith(".properties")
+								|| fileOrDir.endsWith(".xml")
+								|| fileOrDir.endsWith(".loc")) {
+							p.load(new File[]{resourceFile});
 						}
 					} catch (Exception e) {
 						log.error("Unable to load " + resourceFile.getAbsolutePath() + "!", e);
