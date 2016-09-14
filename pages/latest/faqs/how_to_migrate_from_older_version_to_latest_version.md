@@ -1,7 +1,7 @@
 ---
 title: How to migrate from older version to latest version
 sidebar: faq_sidebar
-permalink: latest/how_to_migrate_from_older_version_to_latest_version.html
+permalink: latest/how_to_migrate_from_older_version.html
 folder: latest
 ---
 
