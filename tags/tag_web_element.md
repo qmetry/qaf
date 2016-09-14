@@ -4,7 +4,7 @@ tagName: web element
 search: exclude
 permalink: latest/tag_web_element.html
 sidebar: qaf_latest-sidebar
-folder: tags
+folder: latest
 ---
 {% include taglogic.html %}
 

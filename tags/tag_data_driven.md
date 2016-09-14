@@ -5,7 +5,7 @@ search: exclude
 permalink: latest/tag_datadriven.html
 sidebar: qaf_latest-sidebar
 
-folder: tags
+folder: latest
 ---
 {% include taglogic.html %}
 

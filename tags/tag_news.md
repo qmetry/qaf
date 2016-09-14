@@ -4,7 +4,7 @@ tagName: news
 search: exclude
 permalink: latest/tag_news.html
 sidebar: qaf_latest-sidebar
-folder: tags
+folder: latest
 ---
 {% include taglogic.html %}
 

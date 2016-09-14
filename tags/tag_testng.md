@@ -4,7 +4,7 @@ tagName: testng
 search: exclude
 permalink: latest/tag_testng.html
 sidebar: qaf_latest-sidebar
-folder: tags
+folder: latest
 ---
 {% include taglogic.html %}
 
