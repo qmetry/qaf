@@ -1,0 +1,8 @@
+com.infostretch.automation.core
+com.infostretch.automation.data
+com.infostretch.automation.keys
+com.infostretch.automation.step
+com.infostretch.automation.ui
+com.infostretch.automation.ui.api
+com.infostretch.automation.ui.webdriver
+com.infostretch.automation.util

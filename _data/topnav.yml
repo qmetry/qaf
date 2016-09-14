@@ -9,6 +9,8 @@
        url: /download.html
      - title: FAQ
        url: /faq.html
+     - title: Java Doc
+       url: javadoc\index.html
      - title: Github Repo
        external_url: https://github.com/qmetry/
      - title: Sponsors
