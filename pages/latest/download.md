@@ -66,3 +66,5 @@ Create or update ivysettings.xml file to add new repository. Alternately you can
 ## Direct Download
 
 You can download QAF jar from [here]({{site.data.strings.qaf_repository}}/com/qmetry/qaf/{{site.data.strings.version}}/qaf-{{site.data.strings.version}}.jar).
+
+You can download QAF Support jar from [here]({{site.data.strings.qaf_repository}}/com/qmetry/qaf-support/{{site.data.strings.version}}/qaf-support-{{site.data.strings.version}}.jar).

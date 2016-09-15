@@ -1,6 +1,6 @@
 ---
 title: Download
-sidebar: download_sidebar
+sidebar: download_sidebar_2.1.7b
 permalink: qaf-2.1.7b/download.html
 folder: qaf-2.1.7b
 ---
@@ -66,3 +66,5 @@ Create or update ivysettings.xml file to add new repository. Alternately you can
 ## Direct Download
 
 You can download QAF jar from [here]({{site.data.strings.qaf_repository}}/com/infostretch/qaf/2.1.7b/qaf-2.1.7b.jar).
+
+You can download QAF Support jar from [here]({{site.data.strings.qaf_repository}}/com/infostretch/qaf-support/2.1.7b/qaf-support-2.1.7b.jar).

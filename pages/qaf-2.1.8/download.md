@@ -59,10 +59,12 @@ Create or update ivysettings.xml file to add new repository. Alternately you can
 **IVY Dependency Entry**
 
 ```xml
-<dependency org="com.qmetry" name="qaf" rev="{{site.data.strings.latest_version}}" />
-<dependency org="com.qmetry" name="qaf-support" rev="{{site.data.strings.latest_version}}" />
+<dependency org="com.qmetry" name="qaf" rev="{{site.data.strings.version}}" />
+<dependency org="com.qmetry" name="qaf-support" rev="{{site.data.strings.version}}" />
 ```
 
 ## Direct Download
 
-You can download QAF jar from [here]({{site.data.strings.qaf_repository}}/com/qmetry/qaf/{{site.data.strings.latest_version}}/qaf-{{site.data.strings.latest_version}}.jar).
+You can download QAF jar from [here]({{site.data.strings.qaf_repository}}/com/qmetry/qaf/{{site.data.strings.version}}/qaf-{{site.data.strings.version}}.jar).
+
+You can download QAF Support jar from [here]({{site.data.strings.qaf_repository}}/com/qmetry/qaf-support/{{site.data.strings.version}}/qaf-support-{{site.data.strings.version}}.jar).

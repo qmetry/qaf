@@ -9,6 +9,10 @@
 {% assign sidebar = site.data.sidebars.qaf_latest-sidebar.entries %}
 <script type="text/javascript">$("nav a[href='download.html']").parent('li').addClass("active");</script>
 
+{% elsif page.sidebar == "download_sidebar_2.1.7b" %}
+{% assign sidebar = site.data.sidebars.qaf_2_1_7b-sidebar.entries %}
+<script type="text/javascript">$("nav a[href='download.html']").parent('li').addClass("active");</script>
+
 
 
 {% elsif page.sidebar == "qaf_latest-sidebar" %}
