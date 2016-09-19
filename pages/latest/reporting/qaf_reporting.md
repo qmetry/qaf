@@ -5,7 +5,7 @@ sidebar: qaf_latest-sidebar
 permalink: latest/qaf_reporting.html
 folder: latest
 ---
-<div style="position: fixed;border: 3px solid #73AD21;"><a href="dashboard.htm" target="_blank">Live Demo</a></div>
+<div style="position: fixed;border: 3px solid #73AD21;float:right;"><a href="dashboard.htm" target="_blank">Live Demo</a></div>
 ## Summary
 
 * QAF reporting is a powerful and customizable reporting engine ensures that you have access to all relevant test data like test results,check points,test case time, test step time and environment information.Use powerful filters to slice and dice the data to drill down to exact result you seek.
