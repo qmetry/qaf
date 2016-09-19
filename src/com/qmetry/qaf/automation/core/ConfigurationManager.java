@@ -340,7 +340,6 @@ public class ConfigurationManager {
 					TestBaseProvider.instance().get().tearDown();
 				}
 				String[] bundles = null;
-				// Resource loading
 
 				// Resource loading
 				if (key.equalsIgnoreCase("env.resources")) {
@@ -360,7 +359,14 @@ public class ConfigurationManager {
 						}
 					}
 				}
-
+				// Locale loading
+				if (key.equalsIgnoreCase(ApplicationProperties.DEFAULT_LOCALE.key)) {
+					String[] resources = getBundle().getStringArray("env.resources", "resources");
+					for (String resource : resources) {
+						String fileOrDir = getBundle().getSubstitutor().replace(resource);
+						addLocal(getBundle(), (String) event.getPropertyValue(), fileOrDir);
+					}
+				}
 				// step provider package re-load
 				if (key.equalsIgnoreCase(ApplicationProperties.STEP_PROVIDER_PKG.key)) {
 
