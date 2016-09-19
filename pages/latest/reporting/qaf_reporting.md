@@ -5,7 +5,7 @@ sidebar: qaf_latest-sidebar
 permalink: latest/qaf_reporting.html
 folder: latest
 ---
-<div style="position: fixed;border: 3px solid #73AD21;right:5px;top:100px"><a href="dashboard.htm" target="_blank">Live Demo</a></div>
+
 ## Summary
 
 * QAF reporting is a powerful and customizable reporting engine ensures that you have access to all relevant test data like test results,check points,test case time, test step time and environment information.Use powerful filters to slice and dice the data to drill down to exact result you seek.
@@ -102,6 +102,7 @@ It shows the trends of all execution respect to all execution and number of test
 ## Live Reporting
 
 Live Reporting can be useful to show result automatically as test results created. Enable live reporting by click on Auto Refresh icon.
+<div style="position: fixed;border: 3px solid #73AD21;right:5px;top:100px"><a href="dashboard.htm" target="_blank">Live Demo</a></div>
 
 {% include inline_image.html file="AutoRefreshButton.png" alt="Auto Refresh "  %}
 
