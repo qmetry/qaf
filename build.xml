@@ -23,7 +23,7 @@ For any inquiry or need additional information, please contact support-qaf@infos
 
 -->
 
-<project basedir="." default="build" name="QMetryAutomationFramework" xmlns:ivy="antlib:org.apache.ivy.ant">
+<project basedir="." default="test" name="QMetryAutomationFramework" xmlns:ivy="antlib:org.apache.ivy.ant">
 
 
 	<!-- Sets the DSTAMP, TSTAMP, and TODAY properties in the current project -->
@@ -268,7 +268,7 @@ For any inquiry or need additional information, please contact support-qaf@infos
 </target>
 <target name="test" depends="make-jar, test-compile">
 	<taskdef resource="testngtasks" classpathref="test.classpath"/>
-	<testng classpathref="test.classpath" workingDir="${test.dir}" outputDir="${test.dir}/test-results">
+	<testng classpathref="test.classpath" workingDir="${test.dir}" outputDir="${test.dir}/test-results" haltOnFailure="true" verbose="2">
 		<classpath location="${bin.dir}" />
 		<xmlfileset dir="${test.dir}/config" includes="testrun_config.xml"/>
 		<sysproperty key="log4j.configuration" value="file:///${test.dir}/log4j.properties" />
