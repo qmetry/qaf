@@ -37,6 +37,7 @@ import org.apache.commons.logging.impl.LogFactoryImpl;
 import org.testng.annotations.DataProvider;
 
 import com.qmetry.qaf.automation.core.ConfigurationManager;
+import com.qmetry.qaf.automation.testng.DataProviderException;
 import com.qmetry.qaf.automation.testng.dataprovider.DataProviderFactory;
 import com.qmetry.qaf.automation.testng.dataprovider.QAFDataProvider.params;
 import com.qmetry.qaf.automation.util.CSVUtil;
@@ -268,6 +269,11 @@ public class DataProviderUtil extends DataProviderFactory {
 	public static List<Object[]> getDataSetAsMap(String key) {
 		Configuration config = ConfigurationManager.getBundle().subset(key);
 		ArrayList<Object[]> dataset = new ArrayList<Object[]>();
+		if(config.isEmpty()){
+			logger.error("Missing data with key [" + key
+					+ "]. ");
+			throw new DataProviderException("Not test data found with key:" + key);
+		}
 		int size = config.getList(config.getKeys().next().toString()).size();
 		for (int i = 0; i < size; i++) {
 			Map<String, String> map = new LinkedHashMap<String, String>();

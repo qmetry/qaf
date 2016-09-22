@@ -33,6 +33,8 @@ For any inquiry or need additional information, please contact support-qaf@infos
 
 	<property name="bin.dir" value="${basedir}/bin" />
 	<property name="src.dir" value="${basedir}/src" />
+	<property name="test.dir" value="${basedir}/test" />
+	<property name="test.src.dir" value="${test.dir}/src" />
 	<property name="meta.dir" value="${basedir}/META-INF" />
 	<property name="debuglevel" value="source,lines,vars" />
 	<property name="target" value="1.6" />
@@ -44,6 +46,13 @@ For any inquiry or need additional information, please contact support-qaf@infos
 			<include name="*.jar" />
 			<include name="**/*.jar" />
 		</fileset>
+	</path>
+	<path id="test.classpath">
+		<fileset dir="${dist.dir}">
+			<include name="*.jar" />
+			<include name="**/*.jar" />
+		</fileset>
+		<path refid="build.classpath" />
 	</path>
 
 	<!-- IVY -->
@@ -86,7 +95,6 @@ For any inquiry or need additional information, please contact support-qaf@infos
 		<mkdir dir="${bin.dir}" />
 		<copy includeemptydirs="false" todir="${bin.dir}">
 			<fileset dir="${src.dir}">
-				<exclude name="**/*.ucls" />
 				<exclude name="**/*.java" />
 			</fileset>
 		</copy>
@@ -242,7 +250,30 @@ For any inquiry or need additional information, please contact support-qaf@infos
 	<artifacts pattern="${dist.dir}/[artifact].[ext]" />
 </ivy:publish>
 </target>
-	
-<target name="test" depends="make-jar">
+
+<target name="test-compile" depends="init">
+<taskdef classpathref="test.classpath" resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties" />
+
+<echo level="info">--- test compile (start) ---</echo>
+<iajc source="${source}" target="${target}" showweaveinfo="true" verbose="true" destdir="${bin.dir}" debug="false">
+	<inpath location="${src.dir}">
+	</inpath>
+	<sourceroots>
+		<pathelement location="${test.src.dir}" />
+	</sourceroots>
+	<classpath refid="test.classpath">
+	</classpath>
+</iajc>
+<echo level="info">--- test compile (finished) ---</echo>
+</target>
+<target name="test" depends="make-jar, test-compile">
+	<taskdef resource="testngtasks" classpathref="test.classpath"/>
+	<testng classpathref="test.classpath" workingDir="${test.dir}" outputDir="${test.dir}/test-results">
+		<classpath location="${bin.dir}" />
+		<xmlfileset dir="${test.dir}/config" includes="testrun_config.xml"/>
+		<sysproperty key="log4j.configuration" value="file:///${test.dir}/log4j.properties" />
+		<sysproperty key="outputDir" value="test-results" />
+
+	</testng>
 </target>
 </project>

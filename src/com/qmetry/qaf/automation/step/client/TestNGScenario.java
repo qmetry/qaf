@@ -33,7 +33,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.testng.internal.TestNGMethod;
 import org.testng.internal.annotations.IAnnotationFinder;
-import org.testng.internal.thread.ThreadUtil;
 import org.testng.xml.XmlTest;
 
 /**

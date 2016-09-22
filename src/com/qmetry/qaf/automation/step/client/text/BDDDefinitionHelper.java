@@ -221,7 +221,7 @@ public class BDDDefinitionHelper {
 		String origDef = def;
 		def = def.replaceAll(ParamType.getParamDefRegx(), ParamType.getParamValueRegx().replaceAll("\\\\", "\\\\\\\\"));
 		// System.out.println(def);
-		if (!StringMatcher.likeIgnoringCase("(((" + BDDKeyword.getAllKeyWords() + ")\\s)?" + def + ")").match(call)) {
+		if (!StringMatcher.likeIgnoringCase("(((" + BDDKeyword.getKeyWordRegEx() + ")\\s)?" + def + ")").match(call)) {
 			return false;
 		} else {
 			List<String[]> argsa = getArgsFromCall(origDef, call);

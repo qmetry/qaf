@@ -32,7 +32,7 @@
 		<!-- hamcrest -->
 		<dependency org="org.hamcrest" name="hamcrest-core" rev="1.3" />
 
-		<dependency org="junit" name="junit" rev="4.11" />
+		<!-- <dependency org="junit" name="junit" rev="4.11" /> -->
 
 		<!-- jai -->
 		<dependency org="javax.media" name="jai-core" rev="1.1.3">
@@ -58,14 +58,14 @@
 		<dependency org="sshtools" name="j2ssh-core" rev="0.2.9" />
 
 		<!-- aspectj -->
-		<dependency org="org.aspectj" name="aspectjrt" rev="1.7.2">
+		<dependency org="org.aspectj" name="aspectjrt" rev="1.8.9">
 			<artifact name="aspectjrt" type="jar"></artifact>
 		</dependency>
 
-		<dependency org="org.aspectj" name="aspectjweaver" rev="1.7.2">
+		<dependency org="org.aspectj" name="aspectjweaver" rev="1.8.9">
 			<artifact name="aspectjweaver" type="jar"></artifact>
 		</dependency>
-		<dependency org="org.aspectj" name="aspectjtools" rev="1.7.2">
+		<dependency org="org.aspectj" name="aspectjtools" rev="1.8.9">
 			<artifact name="aspectjtools" type="jar"></artifact>
 		</dependency>
 

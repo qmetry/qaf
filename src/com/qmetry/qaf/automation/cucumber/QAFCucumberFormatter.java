@@ -256,7 +256,7 @@ public class QAFCucumberFormatter implements Formatter, Reporter {
 		com.qmetry.qaf.automation.util.Reporter.log(message, type);
 	}
 
-	private void logStepResult(Result result, MethodResult methodResult) {
+	protected void logStepResult(Result result, MethodResult methodResult) {
 		Match match = (Match) getTestBase().getContext().getObject(STEP_MATCH);
 		QAFTestBase testBase = getTestBase();
 		MethodInfo methodInfo = getMethodInfo();
@@ -306,6 +306,7 @@ public class QAFCucumberFormatter implements Formatter, Reporter {
 		stepCommandLog.setDuration(duration);
 
 		methodResult.getSeleniumLog().add(stepCommandLog);
+		testBase.claerAssertionsLog();
 
 		if (getSteps().isEmpty()) {
 			methodInfo.setDuration(System.currentTimeMillis() - methodInfo.getStartTime());
@@ -316,7 +317,6 @@ public class QAFCucumberFormatter implements Formatter, Reporter {
 				updateMetaInfo();// re-stamp suite status
 				// clean up
 				getTestBase().getContext().configurationAt(CUCUMBER_REPORT).clear();
-				testBase.claerAssertionsLog();
 			}
 
 		} else {
@@ -380,6 +380,7 @@ public class QAFCucumberFormatter implements Formatter, Reporter {
 	}
 
 	private void init() {
+		getBundle().setProperty("cucumber.run.mode", "true");
 		getTestBase().getContext().setProperty(ApplicationProperties.JSON_REPORT_DIR.key, JSON_REPORT_DIR);
 		FileUtil.checkCreateDir(ApplicationProperties.JSON_REPORT_ROOT_DIR.getStringVal("test-results"));
 		FileUtil.checkCreateDir(JSON_REPORT_DIR);
@@ -485,7 +486,7 @@ public class QAFCucumberFormatter implements Formatter, Reporter {
 		}
 	}
 
-	private void writeMethodResult(MethodInfo methodInfo, MethodResult methodResult) {
+	protected void writeMethodResult(MethodInfo methodInfo, MethodResult methodResult) {
 
 		String dir = getTestResultDir() + "/" + getTestBase().getContext().getString(URI) + "/";
 
@@ -626,7 +627,7 @@ public class QAFCucumberFormatter implements Formatter, Reporter {
 		testBase.claerAssertionsLog();
 	}
 
-	private static MethodInfo getMethodInfo() {
+	protected static MethodInfo getMethodInfo() {
 		MethodInfo methodInfo = (MethodInfo) getTestBase().getContext().getObject(METHOD_INFO);
 		if (null == methodInfo) {
 			methodInfo = new MethodInfo();
@@ -644,7 +645,7 @@ public class QAFCucumberFormatter implements Formatter, Reporter {
 		}
 	}
 
-	private static MethodResult getMethodResult() {
+	protected static MethodResult getMethodResult() {
 		MethodResult methodResult = (MethodResult) getTestBase().getContext().getObject(METHOD_RESULT);
 		if (null == methodResult) {
 			methodResult = new MethodResult();
