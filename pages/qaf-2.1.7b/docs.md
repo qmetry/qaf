@@ -47,7 +47,7 @@ Some benefits of using the framework are:
  * Enabling testing across multiple platforms with or without selenium grid
 
 Question over here is how the framework reduces maintenance, execution time and reuses code?
-Infostretch test automation framework provides high level construct to satisfy automation needs. It includes top level interfaces, abstract base classes, service classes and their implementations and custom annotations. Test developer only need to concentrate on writing the tests and not spend time on adjusting the underlying framework.
+QMetry Automation Framework provides high level construct to satisfy automation needs. It includes top level interfaces, abstract base classes, service classes and their implementations and custom annotations. Test developer only need to concentrate on writing the tests and not spend time on adjusting the underlying framework.
 This framework provides test page concept in a best efficient way by which you can manipulate page navigation same as on actual web application under test. Once page get created page objects/functionalities can be used in any test case, makes code more reusable. The framework takes care of not only launching that page but the entire page hierarchy to reach that specific page. Furthermore it also checks that is page already active in browser? If so then it will continue from there, results in reduced execution time.
 When functionality changes only the specific test page file needs to be updated: if there is any change in page/ui of web application under test you need to update just in particular page rather than each and every test case, thus result in less maintenance.
 
