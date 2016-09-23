@@ -5,7 +5,7 @@
 completion, feature outline, grammar validation and hyperlink
 to corresponding Java annotated classes.
    </description>
-   <feature url="features/com.qmetry.qaf.bdd.feature_1.0.0.201609231326.jar" id="com.qmetry.qaf.bdd.feature" version="1.0.0.201609231326">
+   <feature url="features/com.qmetry.qaf.bdd.feature_1.0.2.201609231350.jar" id="com.qmetry.qaf.bdd.feature" version="1.0.2.201609231350">
       <category name="com.qmetry.qaf"/>
    </feature>
    <category-def name="com.qmetry.qaf" label="QAF Editors">
