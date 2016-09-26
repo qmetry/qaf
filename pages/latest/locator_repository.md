@@ -39,7 +39,8 @@ Page Class:
 ```
 
 **BDD**
-```javascript
+
+```javaScript
   assert 'login.username.txt' is present
   sendKeys 'myusername' into 'login.username.txt'
 ```
