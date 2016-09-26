@@ -13,11 +13,11 @@ In order to locate element QAF provides selenium-1 style syntax. This approach h
 ### Element locator syntax
 
 ```
-<locator strategy>=<value>
+<locator strategy>=<locator value>
 ```
-Where <locator strategy> is any of the strategy supported by underlying web-driver. 
+Where <locator strategy> is any of the strategy supported by underlying web-driver and <locator value> is locator in that strategy. 
 
-Webdriver: id, name, xpath, css, link, partialLink, className, tagName
+Webdriver supported strategies: id, name, xpath, css, link, partialLink, className, tagName
 
 ###### Examples:
 
@@ -61,15 +61,23 @@ accessibility id=<accessibilityId for element>
 ## Self-descriptive locator
 Self-descriptive locator holds locator for element along with description of the element. Description will be used by the framework in assertion/verification messages for the element.
 
+### Self-descriptive locator syntax
 Self-descriptive locator expects JSON string with following keys:
 
   * locator: actual locator of element
-  * desc: description of the locator
-  * cacheable: flag to indicate is element is cashable or not
+  * desc: description of the locator (optinal)
+  * cacheable: flag to indicate is element is cashable or not (optional)
+
+
+```
+{'locator':'<locator strategy>=<locator value>','desc':'Description of element'}
+```
+Where <locator strategy> is any of the strategy supported by underlying web-driver and <locator value> is locator in that strategy. 
 
 **Example:**
 
 ```java
+{'locator':'css=.header';'desc':'Header of Page'}
 @FindBy(locator = "{'locator':'css=.header';'desc':'Header of Page'}")
 ```
 
@@ -84,6 +92,14 @@ public interface HomePageLocators {
     static final String SEARCH_BUTTON_LOC = "{'locator':'css=.search_bg a';'desc':'Search Button'}";
 }
 ```
+
+You also can take advantage of self-descriptive locator to provide additional custom meta-data with element locator. For example:
+
+```
+{"locator":"xpath=//*[@name='Result']","desc":"Input box","context":"WEBVIEW"}
+```
+In above locator "context" is custom meta-data which can be accessed in code by element.getMetadata().
+
 
 ## Alternate Locator
 
