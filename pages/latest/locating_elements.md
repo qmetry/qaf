@@ -78,7 +78,7 @@ Where <locator strategy> is any of the strategy supported by underlying web-driv
 
 ```java
 {'locator':'css=.header';'desc':'Header of Page'}
-@FindBy(locator = "{'locator':'css=.header';'desc':'Header of Page'}")
+{"locator":"xpath=//*[@name='Result']","desc":"Input box"}
 ```
 
 Below interface holds locators that are used in "HomePage". Here locators are self descriptive locators.
