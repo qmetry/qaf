@@ -30,7 +30,7 @@ You can create Locator repository with property file with extension ‘. propert
 **Java Code:**
 
 ```java
-  QAFWebElement dateOfBirhth = new QAFExtendedWebElement("login.username.txt");
+  QAFWebElement txtUserName = new QAFExtendedWebElement("login.username.txt");
 ```
 
 Page Class:
