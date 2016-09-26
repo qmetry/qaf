@@ -8,7 +8,7 @@ tags: [Selenium, locator, java, webdriver, webelement]
 
 ## Locating Elements
 
-In order to locate element QAF provides selenium-1 style syntax. This approach has two benefits: First of all you don't need to hardcode or fix strategy for locator in code (for example By.xpath(myxpath)) with qaf locator strategy you can easily switch form one locator to anoter locator eiter strategy or locator value. Secondly you can seperate out locator outside your code by using locator repository, where you can maintain locator without code change.
+In order to locate element QAF provides selenium-1 style syntax. This approach has two benefits: First of all you don't need to hardcode or fix strategy for locator in code (for example By.xpath(myxpath)) with qaf locator strategy you can easily switch form one locator to anoter locator either strategy or locator value. Secondly you can seperate out locator outside your code by using locator repository, where you can maintain locator without code change.
 
 ### Element locator syntax
 
@@ -27,7 +27,7 @@ xpath=<xpath locator for element>
 
 ```
 
-In order to use other custom locator strategy supported by the underlying driver(s), you need to use strategy name as locator strategy. For example, Appium provides MobileBy.AccessibilityId, MobileBy.AndroidUIAutomator, MobileBy.IosUIAutomation. The strategy name used by appium for these additional selectors is accessibility id, -android uiautomator and -ios uiautomation respectivly [refer](https://github.com/appium/java-client/blob/master/src/main/java/io/appium/java_client/MobileSelector.java).
+In order to use other custom locator strategy supported by the underlying driver(s), you need to use strategy name as locator strategy. For example, Appium provides MobileBy.AccessibilityId, MobileBy.AndroidUIAutomator, MobileBy.IosUIAutomation. The strategy name used by appium for these additional selectors is accessibility id, -android uiautomator and -ios uiautomation respectively [refer](https://github.com/appium/java-client/blob/master/src/main/java/io/appium/java_client/MobileSelector.java).
 
 ###### Examples:
 
