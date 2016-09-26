@@ -146,8 +146,8 @@ entries:
       url: locating_elements.html
       output: web, pdf
 
-    - title: Object Repository
-      url: object_repository.html
+    - title: Locator Repository
+      url: locator_repository.html
       output: web, pdf
 
     - title: Web Services Testing
