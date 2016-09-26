@@ -3,29 +3,47 @@ title: Locating Elements
 sidebar: qaf_latest-sidebar
 permalink: latest/locating_elements.html
 folder: latest
-tags: [Selenium,locator,java]
+tags: [Selenium, locator, java, webdriver, webelement]
 ---
-You can observe that @FindBy annotation is used from QAF. It has one string parameter locator that's value can be provided either by direct locator in selenium 1 locator format or a self descriptive locator.
 
-Following are different possible way to provide locator value:
+## Locating Elements
 
+Inorder to locate element QAF provides selenium-1 style syntex. This approach has two benifits: first you don't need to hardcode or fix stretegy for locator in code (for example By.xpath(myxpath)) with qaf locator stretegy you can easyly switch form one locator to anoter locator eiter stretegy or locator value. Secondly you can seperate out locator outside your code by using locator repository, where you can maintain locator without code change.
 
-## Id or name or value
-
-Example: 
-
-```java
-@FindBy(locator = "elementID")
-```
-
-
-## Selenium 1 style
+### Elemenet locator syntex
 
 ```
 <locator strategy>=<value>
 ```
+Where <locator stretegy> is any of the stretegy supported by underlaying web-driver. 
 
-```java
+Webdriver: id, name, xpath, css, link, partialLink, className, tagName
+
+###### Examples:
+
+```
+css=<css locator for element>
+xpath=<xpath locator for element>
+
+```
+
+In order to use other custome locator stretegy supported by the underlaying driver(s), you need to use stretegy name as locator stretegy. For example, Appium provides MobileBy.AccessibilityId, MobileBy.AndroidUIAutomator, MobileBy.IosUIAutomation. The stretegy name used by appium for these additional selectors is accessibility id, -android uiautomator and -ios uiautomation respectivly [refer](https://github.com/appium/java-client/blob/master/src/main/java/io/appium/java_client/MobileSelector.java).
+
+###### Examples:
+
+```
+accessibility id=<accessibilityId for element>
+-android uiautomator=<uiautomatorText for element>
+-ios uiautomation=<iOSAutomationText for element>
+-ios predicate string=<predicate string for element>
+-windows uiautomation=<uiautomationText for element>
+
+```
+
+
+## Using @FindBy
+```
+@FindBy(locator = "<Element Locator>")
 @FindBy(locator = "css=<css locator>")
 @FindBy(locator = "xpath=<xpath locator>")
 @FindBy(locator = "id=<element id>")
@@ -36,6 +54,8 @@ Example:
 @FindBy(locator = "tagName=<tagName>")
 @FindBy(locator = "<attribute-name>=<attribute-value>")
 @FindBy(locator = "key=<property that holds actual locator>")
+@FindBy(locator = "property that holds actual locator")
+
 ```
 
 ## Self-descriptive locator
