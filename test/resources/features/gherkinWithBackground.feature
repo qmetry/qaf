@@ -27,7 +27,6 @@ Examples:
  | Selenium ISFW | Infostretch Test Automation Framework | 20 |
 
 Scenario Outline: Search Keyword using data from file
- Given I am on Google Search Page
  When I search for "<searchKey>"
  Then I get at least <number> results
  Then it should have "<searchResult>" in search results
