@@ -157,7 +157,7 @@ public class BDDDefinitionHelper {
 		}
 	}
 
-	private static List<String[]> getArgs(String call, String def, List<String> argsInDef) {
+	public static List<String[]> getArgs(String call, String def, List<String> argsInDef) {
 
 		List<String[]> rlst = new ArrayList<String[]>();
 		String wcopy = def;
@@ -196,8 +196,11 @@ public class BDDDefinitionHelper {
 	 * @return
 	 */
 	public static List<String[]> getArgsFromCall(String def, String call) {
+		return getArgsFromCall(def,call,getArgNames(def));
+	}
+
+	public static List<String[]> getArgsFromCall(String def, String call,List<String> defArgPos) {
 		List<String[]> argsToreturn = new ArrayList<String[]>();
-		List<String> defArgPos = getArgNames(def);
 		List<String[]> args = getArgs(call, def, defArgPos);
 
 		Pattern num = Pattern.compile(ParamType.LONG.getRegx());
@@ -216,7 +219,7 @@ public class BDDDefinitionHelper {
 
 		return argsToreturn;
 	}
-
+	
 	public static boolean matches(String def, String call) {
 		String origDef = def;
 		def = def.replaceAll(ParamType.getParamDefRegx(), ParamType.getParamValueRegx().replaceAll("\\\\", "\\\\\\\\"));

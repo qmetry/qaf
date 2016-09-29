@@ -80,6 +80,10 @@ public class DataProviderFactory {
 		}
 
 		if (dataproviderName.equalsIgnoreCase(dataproviders.isfw_json.name())) {
+			
+			if(param.containsKey(params.JSON_DATA_TABLE)){
+				return JSONUtil.getJsonArrayOfMaps(param.get(params.JSON_DATA_TABLE.name()));
+			}
 			@SuppressWarnings("unchecked")
 			List<Map<String, Object>> mapData = JSONUtil.getJsonObjectFromFile(param.get(params.DATAFILE.name()),
 					List.class);
@@ -93,6 +97,9 @@ public class DataProviderFactory {
 	public static final String getDataProvider(Map<String, String> map) {
 		if ((null == map) || map.isEmpty()) {
 			return "";
+		}
+		if(map.containsKey(params.JSON_DATA_TABLE.name())){
+			return dataproviders.isfw_json.name();
 		}
 		String f = map.get(params.DATAFILE.name());
 

@@ -327,6 +327,10 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 		}
 	}
 
+	@Override
+	public void onInitializationFailure(Capabilities desiredCapabilities, Throwable t) {
+		
+	}
 	private void registerListeners(String className) {
 		try {
 			QAFWebDriverCommandListener cls = (QAFWebDriverCommandListener) Class.forName(className).newInstance();
@@ -524,4 +528,6 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 
 		return execute(DriverCommand.EXECUTE_ASYNC_SCRIPT, params).getValue();
 	}
+
+
 }

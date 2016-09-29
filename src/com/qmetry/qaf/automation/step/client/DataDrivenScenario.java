@@ -121,9 +121,10 @@ public class DataDrivenScenario extends Scenario {
 		}
 
 		if (dataproviderName.equalsIgnoreCase(dataproviders.isfw_json.name())) {
-
+			if(param.containsKey(params.JSON_DATA_TABLE.name()))
+				return JSONUtil.getJsonArrayOfMaps(param.get(params.JSON_DATA_TABLE.name()));
+			
 			return JSONUtil.getJsonArrayOfMaps(param.get(params.DATAFILE.name()));
-
 		}
 		throw new RuntimeException("No data provider found");
 	}
@@ -133,7 +134,7 @@ public class DataDrivenScenario extends Scenario {
 		int stepIndex = 0;
 		for (TestStep testStep : steps) {
 
-			StringTestStep proxy = new StringTestStep(testStep.getName(), testStep.getActualArgs());
+			StringTestStep proxy = new StringTestStep(testStep.getName(), context, testStep.getActualArgs());
 			proxy.initStep();
 			proxy.setLineNumber(testStep.getLineNumber());
 			proxy.setFileName(testStep.getFileName());

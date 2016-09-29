@@ -21,16 +21,36 @@
 
 <suite name="QAF Tests" verbose="0">
 
-	<test name="Scenario">
-		<packages>
-			<package name="com.qmetry.qaf.automation.scenario" />
-		</packages>
-	</test>
 	<test name="TestStep">
 		<packages>
 			<package name="com.qmetry.qaf.automation.step" />
 		</packages>
 	</test>
+	<test name="Gherkin-QAF-CucumberSTEP">
+		<parameter name="step.provider.pkg"
+			value="com.qmetry.qaf.automation.impl.step.cucumber" />
+		<parameter name="scenario.file.loc" value="resources/features" />
+		<classes>
+			<class
+				name="com.qmetry.qaf.automation.step.client.gherkin.GherkinScenarioFactory" />
+		</classes>
+	</test>
+	<test name="Gherkin-QAF-QAFSTEP">
+		<parameter name="step.provider.pkg" value="com.qmetry.qaf.automation.impl.step.qaf" />
+		<parameter name="scenario.file.loc" value="resources/features" />
+
+		<classes>
+			<class
+				name="com.qmetry.qaf.automation.step.client.gherkin.GherkinScenarioFactory" />
+		</classes>
+	</test>
+
+	<test name="Scenario">
+		<packages>
+			<package name="com.qmetry.qaf.automation.scenario" />
+		</packages>
+	</test>
+
 	<test name="Utils">
 		<packages>
 			<package name="com.qmetry.qaf.automation.utils" />

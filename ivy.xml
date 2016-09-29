@@ -110,7 +110,7 @@
 
 		<dependency org="org.codehaus.groovy" name="groovy-all"
 			rev="2.1.9" />
-		<dependency org="info.cukes" name="cucumber-java" rev="1.2.4" />
+		<dependency org="info.cukes" name="cucumber-java" rev="1.2.4"/>
 		<!-- <dependency org="info.cukes" name="cucumber-testng" rev="1.2.4" /> -->
 
 		<dependency org="org.json" name="json" rev="20131018" />

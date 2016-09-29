@@ -234,8 +234,11 @@ public class DataProviderUtil extends DataProviderFactory {
 	 */
 	@DataProvider(name = "isfw_json")
 	public static final Object[][] getJsonData(Method method) {
-
-		return JSONUtil.getJsonArrayOfMaps(getParameters(method).get(params.DATAFILE.name()));
+		Map<String, String> methodParams = getParameters(method);
+		if(methodParams.containsKey(params.JSON_DATA_TABLE.name())){
+			return JSONUtil.getJsonArrayOfMaps(methodParams.get(params.JSON_DATA_TABLE.name()));
+		}
+		return JSONUtil.getJsonArrayOfMaps(methodParams.get(params.DATAFILE.name()));
 	}
 
 	/*

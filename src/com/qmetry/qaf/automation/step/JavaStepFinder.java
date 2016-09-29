@@ -78,7 +78,9 @@ public final class JavaStepFinder {
 		// classes.add(CommonStep.class);
 		Set<Method> steps = new LinkedHashSet<Method>();
 		steps.addAll(reflections.getMethodsAnnotatedWith(QAFTestStep.class));
+		
 		steps.addAll(getAllMethodsWithAnnotation(classes, QAFTestStep.class));
+
 
 		Set<Class<?>> stepProviders = reflections.getTypesAnnotatedWith(QAFTestStepProvider.class);
 

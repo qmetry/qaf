@@ -68,4 +68,7 @@ public interface QAFWebDriverCommandListener {
 	 * @param driver
 	 */
 	public void onInitialize(QAFExtendedWebDriver driver);
+	
+	public void onInitializationFailure(Capabilities desiredCapabilities, Throwable t);
+
 }

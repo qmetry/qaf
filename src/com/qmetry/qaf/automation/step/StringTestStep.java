@@ -28,10 +28,10 @@ import static com.qmetry.qaf.automation.core.ConfigurationManager.getStepMapping
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.qmetry.qaf.automation.step.client.text.BDDDefinitionHelper;
 import com.qmetry.qaf.automation.step.client.text.BDDDefinitionHelper.BDDKeyword;
 import com.qmetry.qaf.automation.util.StringUtil;
 
@@ -45,6 +45,7 @@ import com.qmetry.qaf.automation.util.StringUtil;
 public class StringTestStep extends BaseTestStep {
 
 	private String resultParameterName;
+	private Map<String, Object> context;
 
 	private TestStep step;
 
@@ -52,6 +53,12 @@ public class StringTestStep extends BaseTestStep {
 		this.name = name;
 		description = name;
 		setActualArgs(actualArgs);
+		context = new HashMap<String, Object>();
+	}
+	
+	public StringTestStep(String name,  Map<String, Object> context, Object... actualArgs) {
+		this(name, actualArgs);
+		this.context=context;
 	}
 
 	public void initStep() {
@@ -152,6 +159,7 @@ public class StringTestStep extends BaseTestStep {
 		clone.setFileName(fileName);
 		clone.setLineNumber(lineNumber);
 		clone.resultParameterName = resultParameterName;
+		clone.context=context;
 		return clone;
 	}
 
@@ -165,10 +173,10 @@ public class StringTestStep extends BaseTestStep {
 		} else if (getBundle().getBoolean("step.natural.lang.support", true)) {
 			Collection<TestStep> set = getStepMapping().values();
 			for (TestStep stepName : set) {
-
-				if (BDDDefinitionHelper.matches(stepName.getDescription(), nameWithoutPrefix)) {
-					List<String[]> parameters = BDDDefinitionHelper.getArgsFromCall(stepName.getDescription(),
-							nameWithoutPrefix);
+				BDDStepMatcher matcher = BDDStepMatcherFactory.getStepMatcher(stepName);
+				if (matcher.matches(stepName.getDescription(), nameWithoutPrefix,context)) {
+					List<String[]> parameters = matcher.getArgsFromCall(stepName.getDescription(),
+							nameWithoutPrefix,context);
 					Object[] params = new Object[parameters.size()];
 					for (int i = 0; i < parameters.size(); i++) {
 						params[i] = parameters.get(i)[0];

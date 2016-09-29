@@ -41,6 +41,8 @@ public class StringMatcherSuite {
 		Assert.assertEquals(exact("a?a").match("a1a"), false);
 		Assert.assertEquals(exact("a*a").match("a1a"), false);
 		Assert.assertEquals(exact("a*a").match("aaaa"), false);
+		Assert.assertEquals(exact("a*a").match("a*a"), true);
+
 	}
 
 	@Test
@@ -51,6 +53,8 @@ public class StringMatcherSuite {
 		Assert.assertEquals(exactIgnoringCase("a?a").match("a1a"), false);
 		Assert.assertEquals(exactIgnoringCase("a*a").match("a1a"), false);
 		Assert.assertEquals(exactIgnoringCase("a*a").match("aaaa"), false);
+		Assert.assertEquals(exactIgnoringCase("a*a").match("A*a"), true);
+
 	}
 
 	@Test
@@ -64,6 +68,8 @@ public class StringMatcherSuite {
 		Assert.assertEquals(contains("a?a").match("a1a"), false);
 		Assert.assertEquals(contains("a*a").match("a1a"), false);
 		Assert.assertEquals(contains("a*a").match("aaaa"), false);
+		Assert.assertEquals(contains("a*a").match("aa*a"), true);
+
 	}
 
 	@Test
@@ -77,6 +83,8 @@ public class StringMatcherSuite {
 		Assert.assertEquals(containsIgnoringCase("a?a").match("a1a"), false);
 		Assert.assertEquals(containsIgnoringCase("a*a").match("a1a"), false);
 		Assert.assertEquals(containsIgnoringCase("a*a").match("aaaa"), false);
+		Assert.assertEquals(containsIgnoringCase("a*a").match("aA*a"), true);
+
 	}
 
 	@Test

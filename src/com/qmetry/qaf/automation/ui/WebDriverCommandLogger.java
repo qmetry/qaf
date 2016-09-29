@@ -226,4 +226,10 @@ public class WebDriverCommandLogger extends SeleniumCommandLogger
 
 	}
 
+	@Override
+	public void onInitializationFailure(Capabilities desiredCapabilities, Throwable t) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

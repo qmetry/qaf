@@ -66,4 +66,10 @@ public abstract class QAFWebDriverCommandAdapter implements QAFWebDriverCommandL
 	public void beforeInitialize(Capabilities desiredCapabilities) {
 
 	}
+	
+	@Override
+	public void onInitializationFailure(Capabilities desiredCapabilities,
+			Throwable t) {
+		
+	}
 }

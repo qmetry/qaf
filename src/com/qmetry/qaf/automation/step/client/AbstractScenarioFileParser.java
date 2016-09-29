@@ -213,7 +213,7 @@ public abstract class AbstractScenarioFileParser implements ScenarioFileParser {
 	}
 
 	@SuppressWarnings("unchecked")
-	private int parseScenario(Object[][] statements, int statementIndex, String referece, List<Scenario> scenarios) {
+	protected int parseScenario(Object[][] statements, int statementIndex, String referece, List<Scenario> scenarios) {
 
 		String description = statements[statementIndex].length > 2 ? (String) statements[statementIndex][2] : "";
 		String stepName = statements[statementIndex].length > 1 ? ((String) statements[statementIndex][1]).trim() : "";
