@@ -5,6 +5,8 @@ permalink: latest/qaf-public-release.html
 summary: "QAF public release"
 tags: [news]
 sidebar: qaf_latest-sidebar
+folder: latest
+
 ---
 
 
