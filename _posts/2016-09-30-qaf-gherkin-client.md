@@ -1,7 +1,7 @@
 ---
 title:  "QAF Gherkin Client"
 published: true
-permalink: qaf-gherkin-client.html
+permalink: qaf/qaf-gherkin-client.html
 summary: "QAF Gherkin Client"
 tags: [news]
 sidebar: qaf_latest-sidebar
