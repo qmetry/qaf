@@ -1,6 +1,8 @@
 ---
 title: Sponsors
 permalink: latest/sponsors.html
+folder: latest
+
 ---
 
 
