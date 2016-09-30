@@ -35,18 +35,18 @@ It will enable migration from cucumber to QAF as with this feature you can conti
 
 3.	Use `com.qmetry.qaf.automation.step.client.gherkin.GherkinScenarioFactory` Factory class for run configuration XML
 
-> ``` xml
-> 
-> <test name="Gherkin-QAF-Test">
->    <parameter name="step.provider.pkg" value="com.qmetry.qaf.automation.impl.step.qaf" />
->    <parameter name="scenario.file.loc" value="resources/features" />
->    <classes>
->       <class name="com.qmetry.qaf.automation.step.client.gherkin.GherkinScenarioFactory" />
->    </classes>
-> </test>
-> 
-> ```
-> 
+	> ``` xml
+	> 
+	> <test name="Gherkin-QAF-Test">
+	>    <parameter name="step.provider.pkg" value="com.qmetry.qaf.automation.impl.step.qaf" />
+	>    <parameter name="scenario.file.loc" value="resources/features" />
+	>    <classes>
+	>       <class name="com.qmetry.qaf.automation.step.client.gherkin.GherkinScenarioFactory" />
+	>    </classes>
+	> </test>
+	> 
+	> ```
+	> 
 
 4.	Provide  `step.provider.pkg` to configure package from where your step implementation need to be loaded
 5.	Provide `scenario.file.loc` to configure feature file(s) or directory 
