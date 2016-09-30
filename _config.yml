@@ -94,7 +94,7 @@ sidebars:
 - faq_sidebar
 - troubleshoot_sidebar
 
-description: "Intended as a documentation for QMetry Automation Framework"
+description: "QMetry Automation Framework - for web, mobileweb, mobile native and rest web-service functional test automation"
 # the description is used in the feed.xml file
 
 # needed for sitemap.xml file only
