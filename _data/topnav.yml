@@ -25,6 +25,8 @@
    folders:
      - title: Resources
        folderitems:
+         - title: Docs
+           url: ../news.html
          - title: QAF 2.1.7b Docs
            url: ../qaf-2.1.7b/docs.html
          - title: Older Version Docs
