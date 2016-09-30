@@ -1,26 +1,31 @@
 /*******************************************************************************
- * QMetry Automation Framework provides a powerful and versatile platform to author 
- * Automated Test Cases in Behavior Driven, Keyword Driven or Code Driven approach
- *                
+ * QMetry Automation Framework provides a powerful and versatile platform to
+ * author
+ * Automated Test Cases in Behavior Driven, Keyword Driven or Code Driven
+ * approach
  * Copyright 2016 Infostretch Corporation
- *
- * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- *
- * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
- * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT
- * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE
- *
- * You should have received a copy of the GNU General Public License along with this program in the name of LICENSE.txt in the root folder of the distribution. If not, see https://opensource.org/licenses/gpl-3.0.html
- *
- * See the NOTICE.TXT file in root folder of this source files distribution 
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or any later version.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR
+ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT
+ * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE
+ * You should have received a copy of the GNU General Public License along with
+ * this program in the name of LICENSE.txt in the root folder of the
+ * distribution. If not, see https://opensource.org/licenses/gpl-3.0.html
+ * See the NOTICE.TXT file in root folder of this source files distribution
  * for additional information regarding copyright ownership and licenses
  * of other open source software / files used by QMetry Automation Framework.
- *
- * For any inquiry or need additional information, please contact support-qaf@infostretch.com
+ * For any inquiry or need additional information, please contact
+ * support-qaf@infostretch.com
  *******************************************************************************/
-
 
 package com.qmetry.qaf.automation.util;
 
@@ -31,6 +36,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.LogFactoryImpl;
@@ -67,6 +74,20 @@ public class JSONUtil {
 			return false;
 		}
 
+	}
+
+	public static void main(String[] args) {
+		String input =
+				"a book with the title 'One good book', written by 'Anonymous', published in 14 March 2013";
+
+		Matcher matcher = Pattern
+				.compile(
+						".+book with the title '(.+)', written by '(.+)', published in (.+)")
+				.matcher(input);
+		while (matcher.find()) {
+			for (int i = 1; i <= matcher.groupCount(); i++)
+				System.out.println(matcher.group(i));
+		}
 	}
 
 	/**
@@ -118,19 +139,21 @@ public class JSONUtil {
 		}
 	}
 
-	public static <T> void writeJsonObjectToFile(final String file, final T obj) {
+	public synchronized static <T> void writeJsonObjectToFile(final String file,
+			final T obj) {
 
 		File f = new File(file);
 		try {
-			Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
+			Gson gson =
+					new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
 			String jsonStr = gson.toJson(obj, obj.getClass());
 
 			FileUtil.writeStringToFile(f, jsonStr, "UTF-8");
 		} catch (Throwable e) {
-			System.err.println("Unable to write : " + obj.getClass().getCanonicalName() + " in file: " + file + " :"
-					+ e.getMessage());
-			logger.error("Unable to write : " + obj.getClass().getCanonicalName() + " in file: " + file + " :"
-					+ e.getMessage());
+			System.err.println("Unable to write : " + obj.getClass().getCanonicalName()
+					+ " in file: " + file + " :" + e.getMessage());
+			logger.error("Unable to write : " + obj.getClass().getCanonicalName()
+					+ " in file: " + file + " :" + e.getMessage());
 		}
 	}
 
@@ -165,7 +188,8 @@ public class JSONUtil {
 		} catch (IOException e) {
 			json = defVal;
 		} catch (Throwable e) {
-			logger.error("unable to load [" + cls.getName() + "] from file[ " + file + "] - " + e.getMessage());
+			logger.error("unable to load [" + cls.getName() + "] from file[ " + file
+					+ "] - " + e.getMessage());
 			json = defVal;
 		}
 		Gson gson = new GsonBuilder().disableHtmlEscaping().create();
