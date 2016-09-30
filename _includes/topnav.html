@@ -19,15 +19,10 @@
                 <li><a href="{{item.external_url}}" target="_blank">{{item.title}}</a></li>
                 {% elsif page.url contains item.url %}
                 <li class="active"><a href="{{item.url | remove: "/"}}">{{item.title}}</a></li>
-                {% elsif item.url contains "news"%}
+                {% elsif item.url contains "news.html"%}
                 <li><a href="{{item.url | remove: "/"}}">{{item.title}}</a></li>
                 {% elsif page.url contains "news"%}
                 <li><a href="latest/{{item.url | remove: "/"}}">{{item.title}}</a></li>
-                {% elsif page.url contains "news"%}
- {% if item.url contains "javadoc" %}
-                <li><a href="latest/{{item.url}}">{{item.title}}</a></li>
-                                {% endif %}
-
                 {% else %}
                 <li><a href="{{item.url | remove: "/"}}">{{item.title}}</a></li>
                 {% endif %}
@@ -45,6 +40,10 @@
                         <li><a href="{{folderitem.external_url}}" target="_blank">{{folderitem.title}}</a></li>
                         {% elsif page.url contains folderitem.url %}
                         <li class="dropdownActive"><a href="{{folderitem.url}}">{{folderitem.title}}</a></li>
+                        {% elsif page.url contains "news"%}
+                            {% if folderitem.url contains "javadoc" %}
+                            <li><a href="latest/{{folderitem.url}}">{{folderitem.title}}</a>    </li>
+                            {% endif %}
                         {% else %}
                         <li><a href="{{folderitem.url}}">{{folderitem.title}}</a></li>
                         {% endif %}
