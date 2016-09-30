@@ -9,8 +9,8 @@
        url: /download.html
      - title: FAQ
        url: /faq.html
-     - title: JavaDoc
-       url: javadoc\index.html
+     - title: News
+       url: ../news.html
      - title: Github Repo
        external_url: https://github.com/qmetry/
      - title: Sponsors
@@ -25,8 +25,8 @@
    folders:
      - title: Resources
        folderitems:
-         - title: News
-           url: ../news.html
+         - title: JavaDoc
+           url: javadoc\index.html
          - title: QAF 2.1.7b Docs
            url: ../qaf-2.1.7b/docs.html
          - title: Older Version Docs
