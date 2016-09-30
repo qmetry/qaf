@@ -10,7 +10,7 @@
      - title: FAQ
        url: /faq.html
      - title: News
-       url: ..\qaf\news.html
+       url: ..\news.html
      - title: Github Repo
        external_url: https://github.com/qmetry/
      - title: Sponsors
