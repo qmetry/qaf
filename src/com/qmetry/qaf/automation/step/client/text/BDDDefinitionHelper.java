@@ -157,6 +157,25 @@ public class BDDDefinitionHelper {
 		}
 	}
 
+	public static String quoteParams(String call) {
+		String exp = "(\\s|^)\\$\\{[\\w\\.]*}(\\s|$)";
+		Pattern p = Pattern.compile(exp);
+		Matcher matcher = p.matcher(call);
+		String resultString = new String(call);
+		while (matcher.find()) {
+			for (int i = 0; i <= matcher.groupCount(); i++) {
+				String unQuatedparam = (matcher.group(i));
+				if (StringUtil.isNotBlank(unQuatedparam)) {
+					String quatedparam =
+							unQuatedparam.replace("${", "'${").replace("}", "}'");
+					resultString = new String(StringUtil.replace(new String(resultString),
+							unQuatedparam, quatedparam));
+				}
+			}
+		}
+		return resultString;
+	}
+
 	public static List<String[]> getArgs(String call, String def, List<String> argsInDef) {
 
 		List<String[]> rlst = new ArrayList<String[]>();

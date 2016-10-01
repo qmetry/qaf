@@ -38,13 +38,13 @@ import com.qmetry.qaf.automation.step.QAFTestStep;
 public class QAFTestStepImpl {
 	@QAFTestStep(description = "I am on Google Search Page")
 	public void step1() {
-		System.err.println("I am on Google Search Page");
+		System.out.println("I am on Google Search Page");
 
 	}
 
 	@QAFTestStep(description = "I search for {0}")
 	public void iSearchFor(String s) {
-		System.err.println("I search for " + s);
+		System.out.println("I search for " + s);
 
 	}
 
@@ -56,13 +56,13 @@ public class QAFTestStepImpl {
 
 	@QAFTestStep(description="it should have {0} in search results")
 	public void itShouldHave_inSearchResults(String s) {
-		System.err.printf("it should have %s in search results\n", s);
+		System.out.printf("it should have %s in search results\n", s);
 
 	}
 
 	@QAFTestStep(description="I get at least {num} results")
 	public void iGet_inSearchResults(int n) {
-		System.err.printf("I get at least %d results\n", n);
+		System.out.printf("I get at least %d results\n", n);
 
 	}
 }
