@@ -1,7 +1,11 @@
 [![Build Status](https://travis-ci.org/qmetry/qaf.svg?branch=master)](https://travis-ci.org/qmetry/qaf)
 [![License](https://img.shields.io/github/license/qmetry/qaf.svg)](https://opensource.org/licenses/gpl-3.0.html)
 [![Release](https://img.shields.io/github/release/qmetry/qaf.svg?maxAge=2592000)]()
-[![StackExchange]( https://img.shields.io/badge/questions-Stack_Overflow-green.svg )](http://stackoverflow.com/questions/tagged/qaf)
+[![Issue Stats](https://img.shields.io/issuestats/p/github/strongloop/express.svg?maxAge=2592000)]()
+[![StackExchange]( https://img.shields.io/badge/questions-Stack_Overflow-lightgray.svg )](http://stackoverflow.com/questions/tagged/qaf)
+[![Help]( https://img.shields.io/badge/help-Documentation-blue.svg )](https://qmetry.github.io/qaf/)
+
+[![StackExchange](https://img.shields.io/stackexchange/stackoverflow/t/qaf.svg)]()
 
 # QMetry Automation Framework
   for web, mobileweb, mobile native and rest web-service functional test automation
