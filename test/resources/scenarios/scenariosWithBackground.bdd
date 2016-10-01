@@ -1,0 +1,24 @@
+Feature: google search
+
+Background:
+Given I am on Google Search Page
+
+
+Scenario: Search InfoStrech
+META-DATA: {}
+When I search for "git qmetry"
+Then I get at least 5 results
+And it should have "QMetry Automation Framework" in search results
+
+
+Scenario: Search InfoStrech with results
+META-DATA: {}
+ When I search for "QAFWebElement"
+ Then it should have following search results:['QMetry Automation Framework','Custom component']
+
+Scenario: Search Keyword
+META-DATA: {"dataFile":"resources/testdata.txt"}
+ When I search for "${searchKey}"
+ Then I get at least ${number} results
+ Then it should have "${searchResult}" in search results
+ 
