@@ -1,8 +1,7 @@
 [![Build Status](https://travis-ci.org/qmetry/qaf.svg?branch=master)](https://travis-ci.org/qmetry/qaf)
 [![License](https://img.shields.io/github/license/qmetry/qaf.svg)](https://opensource.org/licenses/gpl-3.0.html)
 [![Release](https://img.shields.io/github/release/qmetry/qaf.svg?maxAge=2592000)]()
-[![GitHub tag](https://img.shields.io/github/tag/strongloop/express.svg?maxAge=2592000)]()
-[![Issue Stats](https://img.shields.io/issuestats/p/github/strongloop/express.svg?maxAge=2592000)]()
+[![GitHub tag](https://img.shields.io/github/tag/qmetry/qaf.svg?maxAge=2592000)]()
 [![StackExchange]( https://img.shields.io/badge/questions-Stack_Overflow-lightgray.svg )](http://stackoverflow.com/questions/tagged/qaf)
 [![Help]( https://img.shields.io/badge/help-Documentation-blue.svg )](https://qmetry.github.io/qaf/)
 
