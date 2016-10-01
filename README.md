@@ -5,7 +5,7 @@
 [![StackExchange]( https://img.shields.io/badge/questions-Stack_Overflow-lightgray.svg )](http://stackoverflow.com/questions/tagged/qaf)
 [![Help]( https://img.shields.io/badge/help-Documentation-blue.svg )](https://qmetry.github.io/qaf/)
 
-[![StackExchange](https://img.shields.io/stackexchange/stackoverflow/t/qaf.svg)]()
+[![StackExchange](https://img.shields.io/stackexchange/stackoverflow/t/qaf.svg)](http://stackoverflow.com/questions/tagged/qaf)
 
 # QMetry Automation Framework
   for web, mobileweb, mobile native and rest web-service functional test automation
