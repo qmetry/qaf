@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
    <description name="QAF BDD Editor" url="https://qmetry.github.io/qaf/editor/bdd/eclipse/">
-      QAF Bdd file editor providing syntax highlighting, auto
-completion, feature outline, grammar validation and hyperlink
+      QAF BDD/Gherkin file editor providing syntax highlighting, auto
+completion, feature outline, syntax validation and hyperlink
 to corresponding Java annotated classes.
    </description>
-   <feature url="features/com.qmetry.qaf.bdd.feature_1.0.2.201609231350.jar" id="com.qmetry.qaf.bdd.feature" version="1.0.2.201609231350">
+   <feature url="features/com.qmetry.qaf.bdd.feature_1.0.3.201610031445.jar" id="com.qmetry.qaf.bdd.feature" version="1.0.3.201610031445">
+      <category name="com.qmetry.qaf"/>
+   </feature>
+   <feature url="features/com.qmetry.qaf.gherkin.feature_1.0.3.201610031445.jar" id="com.qmetry.qaf.gherkin.feature" version="1.0.3.201610031445">
       <category name="com.qmetry.qaf"/>
    </feature>
    <category-def name="com.qmetry.qaf" label="QAF Editors">
