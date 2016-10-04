@@ -1,3 +1,4 @@
+
 Feature: google search
 
 Background:
@@ -21,4 +22,3 @@ META-DATA: {"dataFile":"resources/testdata.txt"}
  When I search for "${searchKey}"
  Then I get at least ${number} results
  Then it should have "${searchResult}" in search results
- 

@@ -279,8 +279,8 @@ public class JavaStep extends BaseTestStep {
 			if (null == obj) {
 				obj = cls.newInstance();
 				getBundle().setProperty(cls.getName(), obj);
-				return obj;
 			}
+			return obj;
 		}
 		return cls.newInstance();
 	}

@@ -131,7 +131,7 @@ public class ReporterUtil {
 		}
 	}
 
-	public static void updateOverview(ITestContext context, ITestResult result) {
+	public static synchronized void updateOverview(ITestContext context, ITestResult result) {
 		try {
 			String file = ApplicationProperties.JSON_REPORT_DIR.getStringVal() + "/" + getTestName(context)
 					+ "/overview.json";
@@ -262,7 +262,7 @@ public class ReporterUtil {
 	 * @param context
 	 * @param result
 	 */
-	private static void updateClassMetaInfo(ITestContext context, ITestResult result, String methodfname) {
+	private static synchronized void updateClassMetaInfo(ITestContext context, ITestResult result, String methodfname) {
 		String dir = getClassDir(context, result);
 		String file = dir + "/meta-info.json";
 		FileUtil.checkCreateDir(dir);
