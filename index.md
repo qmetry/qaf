@@ -1,8 +1,9 @@
 ---
 title: Home
 layout: home
-summary: QMetry Automation Framework
-tags: Selenium,WebDriver,Infostretch,QMetry,QAF,Automation,Framework,TestNg,Testing,QA,Cucumber,BDD,KWD
+summary: QMetry Automation Framework is a right tool for Web, Mobile and Web Service test automation using Selenium and other related technologies. It provides a powerful and versatile platform to author Test Cases in BDD or Keyword Driven or Coded way.
+
+tags: Selenium, WebDriver, Infostretch, QMetry, QAF, Automation, Framework,TestNg,Testing,QA,Cucumber,BDD,KWD,ISFW
 ---
 <div class="static_banner qas noparallax" style="margin-top:0px;background-position:40%">
   <div class="nodesktop feather"></div>
