@@ -5,10 +5,10 @@
 completion, feature outline, syntax validation and hyperlink
 to corresponding Java annotated classes.
    </description>
-   <feature url="features/com.qmetry.qaf.bdd.feature_1.0.3.201610041216.jar" id="com.qmetry.qaf.bdd.feature" version="1.0.3.201610041216">
+   <feature url="features/com.qmetry.qaf.bdd.feature_1.0.3.201610042058.jar" id="com.qmetry.qaf.bdd.feature" version="1.0.3.201610042058">
       <category name="com.qmetry.qaf"/>
    </feature>
-   <feature url="features/com.qmetry.qaf.gherkin.feature_1.0.3.201610041216.jar" id="com.qmetry.qaf.gherkin.feature" version="1.0.3.201610041216">
+   <feature url="features/com.qmetry.qaf.gherkin.feature_1.0.3.201610042058.jar" id="com.qmetry.qaf.gherkin.feature" version="1.0.3.201610042058">
       <category name="com.qmetry.qaf"/>
    </feature>
    <category-def name="com.qmetry.qaf" label="QAF Editors">
