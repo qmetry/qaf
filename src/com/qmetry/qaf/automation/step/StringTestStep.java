@@ -1,24 +1,30 @@
 /*******************************************************************************
- * QMetry Automation Framework provides a powerful and versatile platform to author 
- * Automated Test Cases in Behavior Driven, Keyword Driven or Code Driven approach
- *                
+ * QMetry Automation Framework provides a powerful and versatile platform to
+ * author
+ * Automated Test Cases in Behavior Driven, Keyword Driven or Code Driven
+ * approach
  * Copyright 2016 Infostretch Corporation
- *
- * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- *
- * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
- * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT
- * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE
- *
- * You should have received a copy of the GNU General Public License along with this program in the name of LICENSE.txt in the root folder of the distribution. If not, see https://opensource.org/licenses/gpl-3.0.html
- *
- * See the NOTICE.TXT file in root folder of this source files distribution 
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or any later version.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR
+ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT
+ * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE
+ * You should have received a copy of the GNU General Public License along with
+ * this program in the name of LICENSE.txt in the root folder of the
+ * distribution. If not, see https://opensource.org/licenses/gpl-3.0.html
+ * See the NOTICE.TXT file in root folder of this source files distribution
  * for additional information regarding copyright ownership and licenses
  * of other open source software / files used by QMetry Automation Framework.
- *
- * For any inquiry or need additional information, please contact support-qaf@infostretch.com
+ * For any inquiry or need additional information, please contact
+ * support-qaf@infostretch.com
  *******************************************************************************/
 
 package com.qmetry.qaf.automation.step;
@@ -27,12 +33,17 @@ import static com.qmetry.qaf.automation.core.ConfigurationManager.getBundle;
 import static com.qmetry.qaf.automation.core.ConfigurationManager.getStepMapping;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import com.qmetry.qaf.automation.step.client.text.BDDDefinitionHelper;
 import com.qmetry.qaf.automation.step.client.text.BDDDefinitionHelper.BDDKeyword;
+import com.qmetry.qaf.automation.step.client.text.BDDDefinitionHelper.ParamType;
 import com.qmetry.qaf.automation.util.StringUtil;
 
 /**
@@ -46,6 +57,7 @@ public class StringTestStep extends BaseTestStep {
 
 	private String resultParameterName;
 	private Map<String, Object> context;
+	private String codeSnippet;
 
 	private TestStep step;
 
@@ -55,10 +67,11 @@ public class StringTestStep extends BaseTestStep {
 		setActualArgs(actualArgs);
 		context = new HashMap<String, Object>();
 	}
-	
-	public StringTestStep(String name,  Map<String, Object> context, Object... actualArgs) {
+
+	public StringTestStep(String name, Map<String, Object> context,
+			Object... actualArgs) {
 		this(name, actualArgs);
-		this.context=context;
+		this.context = context;
 	}
 
 	public void initStep() {
@@ -66,7 +79,8 @@ public class StringTestStep extends BaseTestStep {
 			step = getTestStep();
 			if (null != step) {
 				step.setActualArgs(actualArgs);
-				step.getStepExecutionTracker().setContext(getStepExecutionTracker().getContext());
+				step.getStepExecutionTracker()
+						.setContext(getStepExecutionTracker().getContext());
 			}
 		}
 	}
@@ -130,16 +144,16 @@ public class StringTestStep extends BaseTestStep {
 				throw ae;
 			} catch (Throwable e) {
 				StepInvocationException se = new StepInvocationException(this, e);
-				RuntimeException re = (RuntimeException.class.isAssignableFrom(e.getClass()) ? (RuntimeException) e
-						: new RuntimeException(e));
+				RuntimeException re =
+						(RuntimeException.class.isAssignableFrom(e.getClass())
+								? (RuntimeException) e : new RuntimeException(e));
 				re.setStackTrace(se.getStackTrace());
 				throw re;
 			}
 			return retVal;
 		}
-		StepInvocationException stepInvocationException = new StepInvocationException(
-				"Teststep  not found - " + getSignature(), true);
-		throw stepInvocationException;
+
+		throw new StepNotFoundException(this);
 	}
 
 	@Override
@@ -155,11 +169,12 @@ public class StringTestStep extends BaseTestStep {
 
 	@Override
 	public TestStep clone() {
-		StringTestStep clone = new StringTestStep(name, (null != actualArgs ? actualArgs.clone() : null));
+		StringTestStep clone = new StringTestStep(name,
+				(null != actualArgs ? actualArgs.clone() : null));
 		clone.setFileName(fileName);
 		clone.setLineNumber(lineNumber);
 		clone.resultParameterName = resultParameterName;
-		clone.context=context;
+		clone.context = context;
 		return clone;
 	}
 
@@ -174,9 +189,10 @@ public class StringTestStep extends BaseTestStep {
 			Collection<TestStep> set = getStepMapping().values();
 			for (TestStep stepName : set) {
 				BDDStepMatcher matcher = BDDStepMatcherFactory.getStepMatcher(stepName);
-				if (matcher.matches(stepName.getDescription(), nameWithoutPrefix,context)) {
-					List<String[]> parameters = matcher.getArgsFromCall(stepName.getDescription(),
-							nameWithoutPrefix,context);
+				if (matcher.matches(stepName.getDescription(), nameWithoutPrefix,
+						context)) {
+					List<String[]> parameters = matcher.getArgsFromCall(
+							stepName.getDescription(), nameWithoutPrefix, context);
 					Object[] params = new Object[parameters.size()];
 					for (int i = 0; i < parameters.size(); i++) {
 						params[i] = parameters.get(i)[0];
@@ -208,6 +224,66 @@ public class StringTestStep extends BaseTestStep {
 	@Override
 	public StepExecutionTracker getStepExecutionTracker() {
 		return step != null ? step.getStepExecutionTracker() : null;
+	}
+
+	public String getCodeSnippet() {
+		if(StringUtil.isBlank(codeSnippet)){
+			generateCodeSnippet();
+		}
+		return codeSnippet;
+	}
+
+	private void generateCodeSnippet() {
+		absractArgsAandSetDesciption();
+
+		StringBuilder snippet = new StringBuilder(
+				"\n/**\n* Auto-generated code snippet by QMetry Automation Framework.\n*/");
+		snippet.append("\n@QAFTestStep(description=\"" + description + "\")");
+
+		snippet.append("\npublic void " + name + "(");
+
+		for (int i = 0; i < actualArgs.length; i++) {
+			String arg = ((String) actualArgs[i]).trim();
+			if (arg.equalsIgnoreCase("true") || arg.equalsIgnoreCase("false")) {
+				snippet.append("Boolean b" + i);
+			} else {
+				ParamType type = BDDDefinitionHelper.ParamType.getType(arg);
+				snippet.append(type.getArgString() + i);
+			}
+			if (i < actualArgs.length - 1)
+				snippet.append(',');
+		}
+		snippet.append("){");
+		snippet.append(
+				"\n\t//TODO: remove NotYetImplementedException and call test steps");
+		snippet.append("\n\tthrow new NotYetImplementedException();\n}");
+
+		codeSnippet = snippet.toString();
+	}
+	private void absractArgsAandSetDesciption() {
+		String prefix = BDDKeyword.getKeywordFrom(name);
+		if (actualArgs == null || actualArgs.length == 0) {
+			final String REGEX = ParamType.getParamValueRegx();
+			List<String> arguments = new ArrayList<String>();
+
+			description = removePrefix(prefix, name);
+
+			Pattern p = Pattern.compile(REGEX);
+			Matcher m = p.matcher(description); // get a matcher object
+			int count = 0;
+
+			while (m.find()) {
+				String arg = description.substring(m.start(), m.end());
+				arguments.add(arg);
+				count++;
+			}
+			for (int i = 0; i < count; i++) {
+				description = description.replace(arguments.get(i), "{" + i + "}");
+			}
+			actualArgs = arguments.toArray(new String[]{});
+		}
+		name = StringUtil
+				.toCamelCaseIdentifier(description.length() > 0 ? description : name);
 	}
 
 }

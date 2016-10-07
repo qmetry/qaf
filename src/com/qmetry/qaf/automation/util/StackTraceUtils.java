@@ -23,6 +23,13 @@
 
 package com.qmetry.qaf.automation.util;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+
+import com.qmetry.qaf.automation.step.JavaStep;
+import com.qmetry.qaf.automation.step.TestStep;
+
 public final class StackTraceUtils {
 
 	public static final String LINE_NUMBER_SEPARATOR = "#";
@@ -123,5 +130,31 @@ public final class StackTraceUtils {
 			}
 		}
 		return result;
+	}
+	
+	public static StackTraceElement[] getStackTrace(Throwable t, TestStep step) {
+		String filePath = StringUtil.isBlank(step.getFileName()) ? ""
+				: FileUtil.getRelativePath(step.getFileName(), "./");
+		String declaringClass = "";
+		if (step instanceof JavaStep) {
+			JavaStep javaStep = (JavaStep) step;
+			declaringClass = javaStep.getMethod().getDeclaringClass().getCanonicalName();
+		}
+		StackTraceElement stackTraceElement = new StackTraceElement(declaringClass, step.getName(), filePath,
+				step.getLineNumber());
+		ArrayList<StackTraceElement> l = t != null ? new ArrayList<StackTraceElement>(Arrays.asList(t.getStackTrace()))
+				: new ArrayList<StackTraceElement>();
+		l.add(0, stackTraceElement);
+
+		Iterator<StackTraceElement> eles = l.iterator();
+		while (eles.hasNext()) {
+			StackTraceElement ele = eles.next();
+			if (StringUtil.isNotBlank(ele.getClassName())
+					&& StringMatcher.like(".*(\\.reflect\\.|AjcClosure|org\\.testng\\.).*").match(ele.getClassName())) {
+				eles.remove();
+			}
+		}
+
+		return l.toArray(new StackTraceElement[] {});
 	}
 }
