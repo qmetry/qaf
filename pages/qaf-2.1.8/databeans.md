@@ -90,6 +90,7 @@ Sample of xml data to be filled in bean
     <sample>
         <data>
             <name>xmldata</name>
+            <age>30</age>
             <email>xmldata@malinator.com</email>
             <pwd>xmldata123#</pwd>
             <ssn>252-06-0029</ssn>
@@ -108,7 +109,7 @@ Populating bean using above xml data. Assumed that the xml file is under resourc
 Consider the example below UserBean and sample xml test data:
 
 ```java
-Class UserBean extends BaseDataBean {
+class UserBean extends BaseDataBean {
     String fname;
     String lname;
     int age;
@@ -220,7 +221,7 @@ public int numChild;
 public int chield1Age = "1";
 @Randomizer(minval=1, maxval=17)
 @UiElement(fieldLoc = CHLD2_AGE_LOC, fieldType = Type.selectbox, dependsOnField = "numChild", dependingValue = "${numChild}>1",order=15)
-public int chield2Age = "1";
+public int child2Age = "1";
 ```
 
 
