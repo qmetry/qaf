@@ -28,6 +28,8 @@
  *******************************************************************************/
 package com.qmetry.qaf.automation.step;
 
+import static com.qmetry.qaf.automation.core.ConfigurationManager.getBundle;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -56,22 +58,23 @@ public class BDDStepMatcherFactory {
 
 		@Override
 		public boolean matches(String stepDescription, String stepCall, Map<String, Object> context) {
-			stepCall = StrSubstitutor.replace(stepCall, context);
+			stepCall = BDDDefinitionHelper.quoteParams(stepCall);
 			return BDDDefinitionHelper.matches(stepDescription, stepCall);
 		}
 
 		@Override
 		public List<String[]> getArgsFromCall(String stepDescription, String stepCall,Map<String, Object> context) {
-			stepCall = StrSubstitutor.replace(stepCall, context);
+			stepCall = BDDDefinitionHelper.quoteParams(stepCall);
 			return BDDDefinitionHelper.getArgsFromCall(stepDescription, stepCall);
 		}
+		
 
 	}
 
 	public static class GherkinStepMatcher implements BDDStepMatcher {
 		@Override
 		public boolean matches(String stepDescription, String stepCall, Map<String, Object> context) {
-			stepCall = StrSubstitutor.replace(stepCall, context);
+			stepCall = replaceParams(stepCall, context);
 			Pattern p = getPattern(stepDescription);
 			return p.matcher(stepCall).matches();
 		}
@@ -79,8 +82,7 @@ public class BDDStepMatcherFactory {
 		@Override
 		public List<String[]> getArgsFromCall(String stepDescription, String stepCall, Map<String, Object> context) {
 			List<String[]> args = new ArrayList<String[]>();
-			stepCall = StrSubstitutor.replace(stepCall, context);
-
+			stepCall = replaceParams(stepCall, context);
 			  Matcher matcher = getPattern(stepDescription)
 					    .matcher(stepCall);
 					  while (matcher.find()) {
@@ -91,6 +93,12 @@ public class BDDStepMatcherFactory {
 					  
 					 }
 					 return args;
+		}
+		
+		private String replaceParams(String stepCall , Map<String, Object> context){
+			stepCall = StrSubstitutor.replace(stepCall, context);
+			stepCall = getBundle().getSubstitutor().replace(stepCall);
+			return stepCall;
 		}
 
 		private Pattern getPattern(String stepDescription) {

@@ -110,13 +110,14 @@ public class BDDDefinitionHelper {
 
 		STRING(
 				// "('[^(\\\\')*]*((\\\\')*(\\*|\\!|\\(|\\))*[^(\\\\')*]*)*')|(\"[^(\\\\\")*]*((\\\\\")*(\\*|\\!|\\(|\\))*[^(\\\\\")*]*)*\")"),
-				"('([^\\\\']|\\\\\\\\|\\\\')*')|(\"([^\\\\\"]|\\\\\\\\|\\\\\")*\")"), MAP("(\\{.*})"), LIST(
-						"(\\[.*])"), LONG("([-+]?\\d+)"), DOUBLE("([-+]?\\d+(\\.\\d+)?)"), ANY("(.*)");
+				"('([^\\\\']|\\\\\\\\|\\\\')*')|(\"([^\\\\\"]|\\\\\\\\|\\\\\")*\")","String str"), MAP("(\\{.*})","Map<Object,Object> mapObj"), LIST(
+						"(\\[.*])","Object[] objArray"), LONG("([-+]?\\d+)","long l"), DOUBLE("([-+]?\\d+(\\.\\d+)?)","double d"), ANY("(.*)","Object anyObj");
 
 		private String regx;
-
-		ParamType(String regx) {
+		String argString;
+		ParamType(String regx, String argString) {
 			this.regx = regx;
+			this.argString=argString;
 		}
 
 		public static ParamType getType(String value) {
@@ -133,6 +134,9 @@ public class BDDDefinitionHelper {
 			return regx;
 		}
 
+		public String getArgString() {
+			return argString;
+		}
 		public static String getParamValueRegx() {
 			StringBuilder sb = new StringBuilder("(");
 
@@ -155,6 +159,25 @@ public class BDDDefinitionHelper {
 		public static String getParamDefRegx() {
 			return "\\{([^\\}]).*?}";
 		}
+	}
+
+	public static String quoteParams(String call) {
+		String exp = "(\\s|^)\\$\\{[\\w\\.]*}(\\s|$)";
+		Pattern p = Pattern.compile(exp);
+		Matcher matcher = p.matcher(call);
+		String resultString = new String(call);
+		while (matcher.find()) {
+			for (int i = 0; i <= matcher.groupCount(); i++) {
+				String unQuatedparam = (matcher.group(i));
+				if (StringUtil.isNotBlank(unQuatedparam)) {
+					String quatedparam =
+							unQuatedparam.replace("${", "'${").replace("}", "}'");
+					resultString = new String(StringUtil.replace(new String(resultString),
+							unQuatedparam, quatedparam));
+				}
+			}
+		}
+		return resultString;
 	}
 
 	public static List<String[]> getArgs(String call, String def, List<String> argsInDef) {

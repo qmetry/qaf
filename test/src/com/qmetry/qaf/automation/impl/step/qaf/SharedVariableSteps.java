@@ -28,41 +28,29 @@
  *******************************************************************************/
 package com.qmetry.qaf.automation.impl.step.qaf;
 
-import java.util.List;
+import org.testng.Assert;
 
 import com.qmetry.qaf.automation.step.QAFTestStep;
 
 /**
- * @author chiragj.ayswal
+ * @author chirag.jayswal
+ *
  */
-public class QAFTestStepImpl {
-	@QAFTestStep(description = "I am on Google Search Page")
-	public void step1() {
-		System.out.println("I am on Google Search Page");
-
+public class SharedVariableSteps {
+	private int i;
+	
+	@QAFTestStep(description="i have {0} rupees")
+	public void i_have_rupees(int i){
+		this.i=i;
 	}
-
-	@QAFTestStep(description = "I search for {0}")
-	public void iSearchFor(String s) {
-		System.out.println("I search for " + s);
-
+	
+	@QAFTestStep(description="i add {0} rupees")
+	public void i_add_rupees(int i){
+		this.i=this.i+i;
 	}
-
-	@QAFTestStep(description="it should have following search results:{0}")
-	public void itShouldHaveAllSearchResults(List<String> s) {
-		System.out.printf("List: %s\n", s);
-
-	}
-
-	@QAFTestStep(description="it should have {0} in search results")
-	public void itShouldHave_inSearchResults(String s) {
-		System.out.printf("it should have %s in search results\n", s);
-
-	}
-
-	@QAFTestStep(description="I get at least {num} results")
-	public void iGet_inSearchResults(int n) {
-		System.out.printf("I get at least %d results\n", n);
-
+	
+	@QAFTestStep(description="i should have {0} rupees")
+	public void i_should_have_rupees(int i){
+		Assert.assertEquals(i, this.i);
 	}
 }

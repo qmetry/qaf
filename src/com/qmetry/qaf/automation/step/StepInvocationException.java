@@ -24,14 +24,9 @@
 
 package com.qmetry.qaf.automation.step;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-
 import org.testng.SkipException;
 
-import com.qmetry.qaf.automation.util.FileUtil;
-import com.qmetry.qaf.automation.util.StringMatcher;
+import com.qmetry.qaf.automation.util.StackTraceUtils;
 import com.qmetry.qaf.automation.util.StringUtil;
 
 /**
@@ -60,7 +55,7 @@ public class StepInvocationException extends SkipException {
 	public StepInvocationException(TestStep step, String message, boolean isSkip) {
 		super(message);
 		this.isSkip = isSkip;
-		setStackTrace(getStackTrace(null, step));
+		setStackTrace(StackTraceUtils.getStackTrace(null, step));
 	}
 
 	@Override
@@ -81,7 +76,7 @@ public class StepInvocationException extends SkipException {
 
 	public StepInvocationException(TestStep step, Throwable cause, boolean isSkip) {
 		super(getMessageFromCause(cause), cause);
-		setStackTrace(getStackTrace(cause, step));
+		setStackTrace(StackTraceUtils.getStackTrace(cause, step));
 		this.isSkip = isSkip;
 	}
 
@@ -93,30 +88,5 @@ public class StepInvocationException extends SkipException {
 				: cause.toString().replaceAll(StepInvocationException.class.getCanonicalName() + ": ", "");
 	}
 
-	private StackTraceElement[] getStackTrace(Throwable t, TestStep step) {
-		String filePath = StringUtil.isBlank(step.getFileName()) ? ""
-				: FileUtil.getRelativePath(step.getFileName(), "./");
-		String declaringClass = "";
-		if (step instanceof JavaStep) {
-			JavaStep javaStep = (JavaStep) step;
-			declaringClass = javaStep.getMethod().getDeclaringClass().getCanonicalName();
-		}
-		StackTraceElement stackTraceElement = new StackTraceElement(declaringClass, step.getName(), filePath,
-				step.getLineNumber());
-		ArrayList<StackTraceElement> l = t != null ? new ArrayList<StackTraceElement>(Arrays.asList(t.getStackTrace()))
-				: new ArrayList<StackTraceElement>();
-		l.add(0, stackTraceElement);
-
-		Iterator<StackTraceElement> eles = l.iterator();
-		while (eles.hasNext()) {
-			StackTraceElement ele = eles.next();
-			if (StringUtil.isNotBlank(ele.getClassName())
-					&& StringMatcher.like(".*(\\.reflect\\.|AjcClosure|org\\.testng\\.).*").match(ele.getClassName())) {
-				eles.remove();
-			}
-		}
-
-		return l.toArray(new StackTraceElement[] {});
-	}
 
 }

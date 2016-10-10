@@ -26,43 +26,20 @@
  * For any inquiry or need additional information, please contact
  * support-qaf@infostretch.com
  *******************************************************************************/
-package com.qmetry.qaf.automation.impl.step.qaf;
+package com.qmetry.qaf.automation.step;
 
-import java.util.List;
-
-import com.qmetry.qaf.automation.step.QAFTestStep;
+import org.testng.annotations.Test;
 
 /**
- * @author chiragj.ayswal
+ * @author chirag.jayswal
  */
-public class QAFTestStepImpl {
-	@QAFTestStep(description = "I am on Google Search Page")
-	public void step1() {
-		System.out.println("I am on Google Search Page");
+public class StepSharedClassInstanceTest {
 
+	@Test
+	public void test() {
+		StringTestStep.execute("i have 10 rupees");
+		StringTestStep.execute("i add 5 rupees");
+		StringTestStep.execute("i should have 15 rupees");
 	}
 
-	@QAFTestStep(description = "I search for {0}")
-	public void iSearchFor(String s) {
-		System.out.println("I search for " + s);
-
-	}
-
-	@QAFTestStep(description="it should have following search results:{0}")
-	public void itShouldHaveAllSearchResults(List<String> s) {
-		System.out.printf("List: %s\n", s);
-
-	}
-
-	@QAFTestStep(description="it should have {0} in search results")
-	public void itShouldHave_inSearchResults(String s) {
-		System.out.printf("it should have %s in search results\n", s);
-
-	}
-
-	@QAFTestStep(description="I get at least {num} results")
-	public void iGet_inSearchResults(int n) {
-		System.out.printf("I get at least %d results\n", n);
-
-	}
 }

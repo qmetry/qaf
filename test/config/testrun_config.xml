@@ -21,6 +21,22 @@
 
 <suite name="QAF Tests" verbose="0">
 
+	<test name="QAF-BDD">
+		<parameter name="step.provider.pkg" value="com.qmetry.qaf.automation.impl.step.qaf" />
+		<parameter name="scenario.file.loc" value="resources/scenarios" />
+
+		<classes>
+			<class name="com.qmetry.qaf.automation.step.client.text.BDDTestFactory" />
+		</classes>
+	</test>
+	<test name="QAF-BDD-regexstep">
+		<parameter name="step.provider.pkg" value="com.qmetry.qaf.automation.impl.step.cucumber" />
+		<parameter name="scenario.file.loc" value="resources/scenarios" />
+
+		<classes>
+			<class name="com.qmetry.qaf.automation.step.client.text.BDDTestFactory" />
+		</classes>
+	</test>
 	<test name="TestStep">
 		<packages>
 			<package name="com.qmetry.qaf.automation.step" />
@@ -45,6 +61,7 @@
 		</classes>
 	</test>
 
+
 	<test name="Scenario">
 		<packages>
 			<package name="com.qmetry.qaf.automation.scenario" />
@@ -61,5 +78,5 @@
 			<package name="com.qmetry.qaf.automation.data" />
 		</packages>
 	</test>
-
+<!--  -->
 </suite>

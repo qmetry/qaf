@@ -40,7 +40,7 @@ import com.qmetry.qaf.automation.core.MessageTypes;
 import com.qmetry.qaf.automation.core.QAFTestBase;
 import com.qmetry.qaf.automation.core.TestBaseProvider;
 import com.qmetry.qaf.automation.step.StepExecutionTracker;
-import com.qmetry.qaf.automation.step.StepInvocationException;
+import com.qmetry.qaf.automation.step.StepNotFoundException;
 import com.qmetry.qaf.automation.step.StringTestStep;
 import com.qmetry.qaf.automation.step.TestStep;
 import com.qmetry.qaf.automation.step.TestStepCompositer;
@@ -142,10 +142,7 @@ public class Scenario extends WebDriverTestCase implements QAFTestNGTest, TestSt
 							new String[] { Arrays.toString(currTestStep.getActualArgs()) }, "Error: Step Not Found");
 					stb.getLog().add(comLoggingBean);
 
-					throw new StepInvocationException(currTestStep,
-							"Test Step (" + currTestStep.getDescription()
-									+ ") Not Found.\n Please provide implementation or check 'step.provider.pkg' property value points to appropriate package.",
-							true);
+					throw new StepNotFoundException((StringTestStep) currTestStep);
 				}
 
 				currTestStep.execute();
