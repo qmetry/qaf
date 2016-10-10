@@ -1,0 +1,734 @@
+<!doctype html>
+<html>
+	<head>
+
+		<meta charset="utf-8">
+
+		<title>QMetry Automation Studio Reporter</title>
+		<link href="./dashboard/css/style.css" rel="stylesheet" />
+
+		<link rel="stylesheet"
+		href="./dashboard/jquery/jqplot/jquery.jqplot.min.css" />
+
+		<link rel="stylesheet"
+		href="./dashboard/jquery/ui/css/smoothness/jquery-ui-1.9.0.custom.min.css" />
+
+		<link rel="stylesheet"
+		href="./dashboard/jquery/layout/layout-default-latest.css" />
+		<link rel="stylesheet" type="text/css"
+		href="./dashboard/jquery/jqplot/examples.min.css" />
+		<link type="text/css" rel="stylesheet"
+		href="./dashboard/jquery/jqplot/syntaxhighlighter/styles/shCoreDefault.min.css" />
+		<link type="text/css" rel="stylesheet"
+		href="./dashboard/jquery/jqplot/syntaxhighlighter/styles/shThemejqPlot.min.css" />
+
+		<link href="./dashboard/css/stylesheet_master.css" media="screen"
+		rel="stylesheet" type="text/css">
+		<link href="./dashboard/css/sunburst.css" media="screen"
+		rel="stylesheet" type="text/css">
+
+		<script src="./dashboard/jquery/jquery-1.8.2.min.js"></script>
+		<script src="./dashboard/jquery/jquery.tinysort.min.js"></script>
+		<script src="./dashboard/jquery/prettify.js"></script>
+		<script src="./dashboard/jquery/jquery.timer.js"></script>
+
+		<script src="./dashboard/jquery/ui/jquery-ui-1.9.0.custom.min.js"></script>
+
+		<script type="text/javascript"
+		src="./dashboard/jquery/tmpl/jquery.tmpl.min.js"></script>
+		<script type="text/javascript"
+		src="./dashboard/jquery/tmpl/jquery.tmplPlus.min.js"></script>
+		<script src="./dashboard/jquery/layout/jquery.layout-latest.min.js"></script>
+
+		<script src="./dashboard/jquery/jqplot/jquery.jqplot.min.js"></script>
+		<script
+		src="./dashboard/jquery/jqplot/plugins/jqplot.pieRenderer.min.js"></script>
+		<script
+		src="./dashboard/jquery/jqplot/plugins/jqplot.donutRenderer.min.js"></script>
+		<script type="text/javascript"
+		src="./dashboard/jquery/jqplot/plugins/jqplot.barRenderer.min.js"></script>
+		<script type="text/javascript"
+		src="./dashboard/jquery/jqplot/plugins/jqplot.categoryAxisRenderer.min.js"></script>
+		<script type="text/javascript"
+		src="./dashboard/jquery/jqplot/plugins/jqplot.canvasAxisTickRenderer.min.js"></script>
+		<script type="text/javascript"
+		src="./dashboard/jquery/jqplot/plugins/jqplot.enhancedLegendRenderer.min.js"></script>
+		<script type="text/javascript"
+		src="./dashboard/jquery/jqplot/plugins/jqplot.canvasAxisLabelRenderer.min.js"></script>
+		<script type="text/javascript"
+		src="./dashboard/jquery/jqplot/plugins/jqplot.cursor.min.js"></script>
+		<script type="text/javascript"
+		src="./dashboard/jquery/jqplot/plugins/jqplot.canvasTextRenderer.min.js"></script>
+		<script type="text/javascript"
+		src="./dashboard/jquery/jqplot/plugins/jqplot.highlighter.min.js"></script>
+
+		<script type="text/javascript"
+		src="./dashboard/jquery/jqplot/syntaxhighlighter/scripts/shCore.min.js"></script>
+		<script type="text/javascript"
+		src="./dashboard/jquery/jqplot/syntaxhighlighter/scripts/shBrushJScript.min.js"></script>
+		<script type="text/javascript"
+		src="./dashboard/jquery/jqplot/syntaxhighlighter/scripts/shBrushXml.min.js"></script>
+
+		<!--[if lt IE 9]><script language="javascript" type="text/javascript" src="./jquery/jqplot/excanvas.min.js"></script><![endif]-->
+
+		<!--<link href="./css/jquery.clearable.css" rel="stylesheet" />
+		<script src="./js/jquery.clearable.js"></script>
+		-->
+
+		<script src="./dashboard/jquery/qaf_dashboard.js"></script>
+
+		<link href="./dashboard/css/jquery.mCustomScrollbar.css"
+		rel="stylesheet" />
+
+		<script src="./dashboard/jquery/jqueryFileTree/jquery.easing.js"></script>
+		<script src="./dashboard/jquery/jquery.mCustomScrollbar.concat.min.js"></script>
+		<script id="listTemplate" type="text/x-jquery-tmpl">
+			<a href="#${anchor_id}" title="${name}" id="job_${anchor_id}">
+			<li class="active" dir="${dir}" title="${name}">
+			<span class="jobid ${jobid}">${jobid}</span>
+			<p>${name}</p>
+			<span>${msToFormatedDateStr(startTime, 'dd-MM-yy HH:MM')}</span>
+			</li>
+			</a>
+		</script>
+
+		<script id="overview-template" type="text/x-jquery-tmpl">
+			<div class="title_bg">${name}</div>
+			<div class="cont_data">
+			<div id="overview-sec">
+			<div class="top_area">
+			<div class="left_area" id="pichart"
+			style="width: 429px; height: 217px;"></div>
+			<div class="right_area">
+			<div class="colum colum_one_mrgin">
+			<ul>
+			<li class="title">&nbsp;</li>
+			<li class="title"><a dir="all" href="#" style="padding:2px;font-size:0.8em;color: #DE7C00 !important;" onclick="loadListAll();">View all results</a></li>
+			<li class="result">Passed</li>
+			<li class="green_bg">${pass}</li>
+			</ul>
+
+			</div>
+			<div class="colum colum_two_mrgin">
+			<ul>
+			<li class="title">Duration</li>
+			<li class="number"
+			title="[${msToFormatedDateStr(startTime, 'dd-MM-yy HH:MM')} - ${msToFormatedDateStr(endTime, 'dd-MM-yy HH:MM')}]">${getDuration(endTime-startTime)}</li>
+			<li class="result">Skiped</li>
+			<li class="yellow_bg">${skip}</li>
+			</ul>
+
+			</div>
+			<div class="colum colum_three_mrgin">
+			<ul>
+			<li class="title">Total</li>
+			<li class="number">${total}</li>
+			<li class="result">Failed</li>
+			<li class="red_bg">${fail}</li>
+			</ul>
+
+			</div>
+			</div>
+			</div>
+			<div class="clear"></div>
+			<div class="bottom_area">
+			<table border="0" cellspacing="0" cellpadding="0"
+			id="test_report">
+			<thead>
+			<tr>
+			<th scope="col" width=20%>Test</th>
+			<th scope="col" width=10%>Duration</th>
+			<th scope="col" width=10%>Passed</th>
+			<th scope="col" width=10%>Skipped</th>
+			<th scope="col" width=10%>Failed</th>
+			<th scope="col" width=10%>Total</th>
+			<th scope="col" width=10%>Pass Rate</th>
+			</tr>
+			</thead>
+			<tbody id="tests">
+			</tbody>
+			</table>
+			</div>
+
+			<!-- end overview--->
+			</div>
+			</div>
+
+		</script>
+
+		<script id="test-overview-template" type="text/x-jquery-tmpl">
+			<tr>
+			<td class="test_col"><a href="${window.location.href}#${name}" id="result_${name}" onclick="loaResult('${name}');" class="reportlink">${name}</a></td>
+			<td title="[${msToFormatedDateStr(startTime, 'dd-MM-yy HH:MM')} - ${msToFormatedDateStr(endTime, 'dd-MM-yy HH:MM')}]">${getDuration(endTime-startTime)}</td>
+			<td>${pass}</td>
+			<td>${skip}</td>
+			<td>${fail}</td>
+			<td>${total}</td>
+			<td><div class="passrate_col"><span style="width:${calcPassRate(pass,fail,skip)}%;">${calcPassRate(pass,fail,skip)}%</span></div></td>
+			</tr>
+		</script>
+
+		<script id="method-header-Template" type="text/x-jquery-tmpl">
+			<div class="mehod ${result} ${type}" id="${result}_cont">
+			<div class="mehodheader" onclick="mehodheaderClick(this)">
+			<span class="statusicon ${result}"> &nbsp;<span class="status" style="display:none">${result}</span></span>
+			<b class="ui-icon-text">{{if (typeof metaData != 'undefined') }} {{each(i,v) metaData}} {{if (i == 'name')}}${v} {{/if}}{{/each}} {{else}} ${name} {{/if}}</b>
+			{{if ((typeof args != 'undefined') && args.length>0)}}
+			<span class="mehod-args"> ${args[0]['tcId']} ${args[0]['recId']}</span>
+			{{/if}}
+			<span style="float: right; ">
+			{{if typeof retryCount != 'undefined' && retryCount>0}}<span class='rerunCount' title="Retried Failed Execution">${retryCount}</span>{{/if}}
+			${getDuration(duration)}<span class="ui-icon time_icon oexecution" style="float: right;" title="Duration">${startTime}</span>
+			</span>
+			</div>
+			<div class="details data_cont" data-file="${datafile}" style="display:none;"></div>
+			<div class="meta-info tab-content" style="display:none;padding:0px;width:100%;">
+			<table cellspacing="1" cellpadding="0" border="0" style="display:block;">
+			<tbody>
+
+			{{if ((typeof args != 'undefined') && args.length>0)}}
+			<tr>
+			<th>Test Data:</th>
+			<td colspan="3">${parseArray(args)}</td>
+			</tr>
+			{{/if}}
+
+			{{if (typeof metaData != 'undefined') }}
+			{{each(i,v) getMetaDataToDisplay(metaData)}}
+			{{if (v!= 'undefined' && v.length>0)}}
+			<tr>
+			<th>${i.capitalizeFirstLetter()}:</th>
+			<td>
+			{{html displayMetaData(v)}}
+			</td>
+			</tr>
+			{{/if}}
+			{{/each}}
+			{{/if}}
+
+			{{if dependsOn.length>0}}
+			<tr>
+			<th>Depends On:</th>
+			<td colspan="3">{{each dependsOn}}
+			<span class="group">${$value}</span>
+			{{/each}}</td>
+			</tr>
+			{{/if}}
+			<tr>
+			<th>Start Time:</th>
+			<td>${msToDateStr( startTime)}</td>
+			</tr>
+			<tr>
+			<th>End&nbsp;Time:</th>
+			<td>${msToDateStr(startTime+duration)}</td>
+			</tr>
+			<tr id="totalTime" style="display:none;">
+			<th>Actual&nbsp;Time:</th>
+			<td></td>
+			</tr>
+			<tr><th valign="top" >Check Points:</th>
+			<td class="check-points-details" style="word-wrap: break-word;">
+			</td>
+			</tr>
+			</tbody>
+			</table>
+			</div>
+			</div>
+		</script>
+		<script id="method-details-Template" type="text/x-jquery-tmpl">
+			<span class="toolbar" >
+			{{if errorTrace}}
+			<span class="ui-icon ui-icon-alert error-trace action" style="float: right; margin-right: .3em;" title="Error trace"></span>
+			{{/if}}
+			{{if seleniumLog.length>0}}
+			<span class="ui-icon ui-icon-document selenium-log action" style="float: right; margin-right: .3em;" title="Command log"></span>
+			{{/if}}
+			{{if (checkPoints.length>0 && checkPoints[0].duration)}}
+			<span class="ui-icon ui-icon-chart step-analysis action" style="float: right; margin-right: .3em;" title="Step Time Analysis"></span>
+			{{/if}}
+			<span class="ui-icon ui-icon-clipboard meta-info-check-points  action" style="float: right; margin-right: .3em;" title="Check Points" ></span>
+			</span>
+
+			<div class="detailsContainer">
+			<div class="check-points tab-content" style="display:none;word-wrap: break-word;">
+			{{tmpl(checkPoints) "#checkpoint-template"}}
+			</div>
+
+			<div class="selenium-log tab-content " style="display:none;padding-top:5px;"><table width="100%"><tbody>
+			{{tmpl(seleniumLog) "#selenium-log-template"}}</tbody></table></div>
+			{{if errorTrace}}
+			<div class="error-trace tab-content" style="display:none;margin-top:15px;">
+			<pre>{{html errorTrace}}</pre>
+			</div>
+			{{/if}}
+			{{if (checkPoints.length>0 && checkPoints[0].duration)}}
+			<div class="step-analysis tab-content" style="position:relative;margin-left:20px;margin-top:20px;margin-bottom:40px;margin-right:20px;height:300px;display:none;" data="${getStepTimes(checkPoints)}"
+			</div>
+			{{/if}}
+			</div>
+
+		</script>
+
+		<script id="checkpoint-template" type="text/x-jquery-tmpl">
+			<div class="checkpoint ${getContainerClass(type)}" style="border:none;" >
+			<div {{if subCheckPoints}}onclick="$(this).closest('.checkpoint').children('.subcheckpoints').toggle();$(this).children('span').toggleClass('ui-icon-triangle-1-e ui-icon-triangle-1-s');"{{/if}}>
+			<span class="ui-icon {{if subCheckPoints.length > 0}} ui-icon-triangle-1-e {{else}} ${getIcon(type)} {{/if}}" style="float:left;margin-top:0.0em;margin-left:5px;" title="${type}"></span>
+			<span style="vertical-align:top;margin-left:25px;display:block;word-wrap: break-word;">{{html message}}
+			{{if screenshot}}<a class="screenshot" href="${screenshot}" style="width:auto;margin-top:0.0em;vertical-align:middle;" title="Screenshot"></a>
+			{{/if}}
+			{{if duration}}
+			[{{if threshold}}
+			{{if (threshold>0) && (threshold*1000<duration)}}<span class="step-threshold" style="color:#484747" title="threshold: ${threshold}s&#13;exceeded: ${duration/1000.0 - threshold}s">${duration/1000.0}s</span>{{else}}
+			<span class="step-threshold" title="threshold: ${threshold}s&#13;outstanding: ${threshold - duration/1000.0}s">${duration/1000.0}s</span>
+			{{/if}}
+			{{else}}${duration/1000.0}s
+			{{/if}}]
+			{{/if}}
+			</span>
+			</div>
+			{{if subCheckPoints}}
+			<div style="display:none;" class="subcheckpoints">
+			{{tmpl(subCheckPoints) "#checkpoint-template"}}
+			</div>
+			{{/if}}
+
+			</div>
+		</script>
+		<script id="error-analysis-template" type="text/x-jquery-tmpl">
+			<div id="error_analysis_chart" style="width:350px; height: 300px;" class="fleft"></div>
+			<div style="min-width: 450px;width: calc(100% - 355px); height: 300px;" class="fleft">
+			{{each(i, item) $data}}
+			<div class="collapse collapsible" style="background-color: #D2D2C2;margin-top:5px;">
+			<div class="accordien_arrow" style="background-color: #484747;float: left;border:5px solid #484747;"></div>
+			<div class="key" style="padding:6px;">${i} <div class="value_count">${item.length}</div></div>
+			</div>
+			<div>
+			<ul style="list-style-type: square; padding-left:15px;" class="ui-state-active ui-widget-content">
+			{{each item}}
+			{{html dspTCLink($value)}}
+			{{/each}}
+			</ul>
+			</div>
+			{{/each}}
+			</div>
+			<div style="clear:left;"></div>
+		</script>
+		<script id="selenium-log-template" type="text/x-jquery-tmpl">
+			<tr>
+			{{if subLogs.length>0}}
+			<td colspan="4" ><div class="selenium-log" style="padding-top:5px;font-size:13px">
+			<table width="100%">
+			<thead onclick="$(this).closest('table').children('tbody').toggle();"  style="border:1px solid #000;">
+			<tr ><th align="left" width="20%">${commandName}</th>
+			<th align="left" width="37%">${args}</th>
+			<th align="left" width="37%">${result}</th>
+			<td width="4%">${getTotalDuration(subLogs)}</td>
+			</tr>
+			</thead>
+			<tbody style="display:none;">
+			{{tmpl(subLogs) "#selenium-log-template"}}</tbody></table></div>
+			</td>
+			{{else}}
+			<td width="19%">${commandName}</td>
+			<td width="37%">${args}</td>
+			<td width="37%"><pre class="prettyprint">${result}</pre></td>
+			{{if duration}}
+			<td width="4%">${duration/1000}</td>
+			{{/if}}
+			{{/if}}
+
+			</tr>
+		</script>
+
+		<script id="env-info-template" type="text/x-jquery-tmpl">
+			<ul>
+			{{each(i, item) $data}}
+			{{if typeof item== 'object'}}
+			<li><span class="key">${i}</span>:${JSON.stringify(item)}</li>
+			{{else}}
+			{{if item.toString().length > 0}}
+			<li><span class="key">${i}</span>:${item}</li>
+			{{/if}}
+			{{/if}}
+			{{/each}}
+			</ul>
+		</script>
+
+		<style type="text/css">
+			.dataloading {
+				margin: 5px;
+				background-image: url(./dashboard/images/progress-dots.gif);
+				background-repeat: no-repeat;
+			}
+
+			#method-results .mehodheader {
+				background-color: #484747;
+				font: large;
+				color: #fff;
+				padding: 3px 3px 3px 0px;
+				height: 25px;
+				vertical-align: middle;
+				cursor: pointer;
+			}
+
+			.mehod.config {
+				display: none;
+			}
+
+			.statusicon {
+				height: 25px;
+				float: left;
+				margin-right: .3em;
+				width: 8px;
+				display: block;
+			}
+
+			.statusicon.pass {
+				background-color: #71eb0a;
+			}
+
+			.statusicon.fail {
+				background-color: #eb0a0a;
+			}
+
+			.statusicon.skip {
+				background-color: #ffd800;
+			}
+
+			.detailsContainer {
+				border: solid 1px #AFAFAF;
+			}
+
+			.detailsContainer .error-trace {
+				color: #cd0000;
+				padding-top: 5px;
+				padding-left: 5px;
+				word-wrap: break-word;
+			}
+
+			.selenium-log, .error-trace {
+				font-family: Arial, Helvetica, sans-serif;
+				font-size: 13px;
+			}
+
+			.selenium-log td, .selenium-log th {
+				word-wrap: break-word;
+			}
+
+			.selenium-log table {
+				table-layout: fixed;
+			}
+
+			.check-points .checkpoint {
+				margin: 0px;
+				padding: 0px;
+				display: block;
+				clear: both;
+				font-size: 14px;
+				font-family: Arial, Helvetica, sans-serif;
+			}
+
+			.checkpoint .checkpoint {
+				margin-left: 20px;
+			}
+
+			.checkpoint {
+				display: block;
+				clear: both;
+				background: none;
+			}
+
+			.ui-state-highlight {
+				color: #666;
+			}
+
+			.detailsContainer .meta-info {
+				margin-right: 80px;
+			}
+
+			.meta-info td, .meta-info th {
+				text-align: left;
+				font-size: 14px;
+				word-wrap: break-word;
+				padding: 3px 5px 3px 15px;
+			}
+
+			.meta-info th {
+				width: 12%;
+				background: #DFDFDF;
+			}
+
+			.meta-info table {
+				background-color: #FFF;
+				padding: 0px;
+				margin: 0px;
+				width: 100%;
+				border-collapse: separate;
+				display: compact; /* safari*/
+			}
+
+			.warn.ui-state-warn .ui-icon {
+				background-image: url(./dashboard/jquery/ui/css/smoothness/images/ui-icons_orange.png);
+			}
+
+			.ui-icon.ui-icon-check, .ui-state-pass .ui-icon, .ui-state-pass-text .ui-icon, .ui-state-teststeppass .ui-icon, .ui-state-pass-teststeppass .ui-icon {
+				background-image: url(./dashboard/jquery/ui/css/smoothness/images/ui-icons_green.png) !important;
+			}
+
+			.ui-state-pass {
+				color: #000;
+			}
+
+			.ui-state-warn {
+				color: #FF8000;
+			}
+
+			.ui-layout-east, .ui-layout-content {
+				padding: 0;
+				overflow: auto !important;
+				/* prevent scrollbars auto-added by Layout */
+			}
+
+			.scrolling-content {
+				height: 100%;
+				padding: 0 15px 10px; /* extra paddingTop being added by scrollpane? */
+				padding-right: 0; /* for pseudo-scrollbar on right */
+			}
+
+			.environment_tab td {
+				text-align: left;
+				vertical-align: top;
+				list-style: none;
+			}
+
+			.environment_tab li {
+				list-style: none;
+				font: small monospace;
+			}
+
+			.hide_loading {
+				display: none;
+			}
+
+			.environment_tab li .key {
+				font-weight: bold;
+				text-transform: uppercase;
+			}
+		</style>
+
+	</head>
+
+	<body>
+
+		<div class="ui-layout-north ">
+			<div class="logo_area">
+				<img src="./dashboard/images/title.png" width="29%" height="29%"
+				alt="">
+			</div>
+		</div>
+
+		<div class="ui-layout-center content" style="margin-left: 1px;">
+			<div class="main_cont ui-layout-center">
+				<section id="data_area">
+
+					<div class="button_area">
+						<div class="auto_refresh_btn">
+							<button class="nav-toggle" title="Auto Refresh" id="refreshBtn"></button>
+						</div>
+
+						<div class="fright">
+							<ul class="tabs">
+
+								<li onclick="showTrendChart(this)">
+									<a href="#"><span
+									class="margin_r_two"><img
+										src="dashboard/images/trands_icon.png" width="25" height="19"
+										alt=""></span><span>Trends</span></a>
+								</li>
+								<li onclick="showOverview(this)" id="overview-tab">
+									<a
+									href="#"><span class="margin_r_two"><img
+										src="dashboard/images/overview_icon.png" width="19"
+										height="23" alt=""></span><span>Overview</span></a>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="data_cont">
+						<div class="container tab_container">
+							<div id="trends-tab-content" class="tab_content">
+								<div class="title_bg">
+									Trend Chart
+								</div>
+								<div class="cont_data">
+									<div id="trends-chart"></div>
+									<center>
+										<div id="trends-chart-loading"></div>
+									</center>
+								</div>
+							</div>
+							<div id="overview-tab-content" class="tab_content"></div>
+
+						</div>
+
+					</div>
+				</section>
+
+				<div id="report_details" style="display: none;width=95%">
+
+					<section class="report">
+						<div class="tool_cont">
+							<div class="tool_title">
+								Tools
+							</div>
+							<div class="filter_cont">
+								<ul>
+									<li class="topic_title">
+										Filter
+									</li>
+									<li class="topic_data">
+										<input name="fpass" type="checkbox"
+										value="pass" id="fpass" onclick="doFilter('pass')"
+										checked="checked" />
+										<label for="fpass">Pass</label>
+										<input
+										name="ffail" type="checkbox" value="fail" id="ffail"
+										checked="checked" onclick="doFilter('fail')" />
+										<label
+										for="ffail">Fail</label>
+										<input name="fskip" id="fskip"
+										type="checkbox" value="skip" onclick="doFilter('skip')"
+										checked="checked" />
+										<label for="fskip">Skip</label>
+										<input
+										name="fconfig" id="fconfig" type="checkbox" value="config"
+										onclick="doFilter('config')" />
+										<label for="fconfig">Configuration</label>
+										<input name="ftest" id="ftest" type="checkbox" value="test"
+										onclick="doFilter('test')" checked="checked" />
+										<label
+										for="ftest">Test</label>
+									</li>
+								</ul>
+							</div>
+							<div class="filter_cont">
+								<ul>
+									<li class="topic_title">
+										Order
+									</li>
+									<li class="topic_data">
+										<input name="order" type="radio"
+										value="pass" id="opass" onclick="doSort('pass')" />
+										<label
+										for="opass">Pass</label>
+										<input name="order" type="radio"
+										value="fail" id="ofail" onclick="doSort('fail')" />
+										<label
+										for="ofail">Fail</label>
+										<input name="order" type="radio"
+										value="skip" id="oskip" onclick="doSort('skip')" />
+										<label
+										for="oskip">Skip</label>
+										<input name="order" type="radio"
+										value="execution" id="oexecution" onclick="doSortE()" />
+										<label
+										for="oexecution">Execution</label>
+										<input name="order"
+										type="radio" value="execution" id="oname"
+										onclick="doSortN(true)" />
+										<label for="oname">Name</label>
+									</li>
+								</ul>
+							</div>
+							<div class="details_cont">
+								<ul>
+									<li class="topic_title">
+										Details <span id="loading-info"> <span id="progress" class="tiny-green"> </span> <span
+											class="tiny-blue"> <button id="stop" style="height: 20px;"></button> </span> </span>
+									</li>
+
+									<li class="topic_data">
+										<input value="true" id="oexpand"
+										name="expandcollapse" onclick="expandCollapseAll(true)"
+										type="radio" />
+										<label for="oexpand">Expand All</label>
+										<input
+										value="false" name="expandcollapse"
+										onclick="expandCollapseAll(false)" type="radio" id="ocollapse" />
+										<label for="ocollapse">Collapse All&nbsp;</label>
+									</li>
+
+								</ul>
+
+							</div>
+						</div>
+					</section>
+					<section class="environment_info">
+						<div id="env_header" class="title_bg collapse">
+							<ul>
+								<li class="info_icon"></li>
+								<li class="txt">
+									Environment Information
+								</li>
+							</ul>
+							<div class="accordien_arrow"></div>
+						</div>
+						<div id="env_details" class="ui-layout-content">
+							<table border="0" cellspacing="0" cellpadding="0"
+							class="back_tab_bg">
+								<tr>
+									<td>
+									<table border="0" cellspacing="1" cellpadding="0"
+									class="environment_tab">
+										<tr>
+											<th>Execution On</th>
+											<th>QAF build</th>
+											<th>Desired Capabilities</th>
+											<th>Actual Capabilities</th>
+											<th>Run Parameters</th>
+										</tr>
+										<tr>
+											<td id="execution_env_info">QAF-Type : Pro</td>
+											<td id="isfw_build_info">QAF-Type : Pro</td>
+											<td id="desired_capabilities">Platform : ANY</td>
+											<td id="actual-capabilities">Platform : XP</td>
+											<td id="run-parameters">default.locale : en</td>
+										</tr>
+									</table></td>
+								</tr>
+							</table>
+						</div>
+						<!--<section class="error_analysis"> -->
+						<div id="error_analysis_header"
+						class="title_bg error_analysis collapse" style="margin-top: 10px;">
+							<ul>
+								<li class="icon"></li>
+								<li class="txt">
+									Error Analysis
+								</li>
+							</ul>
+							<div class="accordien_arrow"></div>
+						</div>
+						<div id="error_analysis_details" class="ui-layout-content"></div>
+
+						<!-- </section> -->
+						<div id="method-results"></div>
+					</section>
+				</div>
+			</div>
+		</div>
+		<div class="ui-layout-west">
+
+			<div id="reportlist_scroll" class="ui-layout-content"
+			style="margin-left: 5px;">
+				<ul id="reportlist"></ul>
+			</div>
+		</div>
+
+		<div id="dialog" title="An Image!">
+			<a id="newwin" href="" target="_blank"> <img id="image" src=""
+			style="width: 100%;" /></a>
+		</div>
+
+	</body>
+</html>
