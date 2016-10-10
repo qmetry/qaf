@@ -24,7 +24,9 @@
 {% elsif page.sidebar == "qaf_2_1_8-sidebar" %}
 {% assign sidebar = site.data.sidebars.qaf_2_1_8-sidebar.entries %}
 <script type="text/javascript">$("nav a[href='docs.html']").parent('li').addClass("active");</script>
-
+{% elsif page.sidebar == "qaf_2_1_9-sidebar" %}
+{% assign sidebar = site.data.sidebars.qaf_2_1_9-sidebar.entries %}
+<script type="text/javascript">$("nav a[href='docs.html']").parent('li').addClass("active");</script>
 
 {% elsif page.sidebar == "sponsor_sidebar" %}
 {% assign sidebar = site.data.sidebars.qaf_latest-sidebar.entries %}
