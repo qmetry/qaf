@@ -77,6 +77,13 @@ folder: qaf-2.1.9
    * selenium.port-->remote.port
 8. removed setup method from WebDriverTestBase class
 9. for Test Step string argument , Single quote (') or Double quote (") is now compulsory
+10. Renamed Attritube to Attribute for following methods
+	* verifyAttritube --> verifyAttribute
+	* verifyNotAttritube --> verifyNotAttribute
+	* waitForNotAttritube -->  waitForNotAttribute
+	* waitForAttritube --> waitForAttribute
+	* assertAttritube --> assertAttribute
+	* assertNotAttritube --> assertNotAttribute
  
 **QAF Reporter:**
 
