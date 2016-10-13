@@ -88,12 +88,12 @@ public enum ApplicationProperties {
 	 */
 	DRIVER_NAME("driver.name"),
 	/**
-	 * <b>key</b>: <code> driver.init.timeout </code><br/>
+	 * <b>key</b>: <code> driver.init.retry.timeout </code><br/>
 	 * <b>value</b>: duration in multiplication of 10 seconds for example 50.
 	 * 
 	 * @since 2.1.9
 	 */
-	DRIVER_INIT_TIMEOUT("driver.init.timeout"),
+	DRIVER_INIT_TIMEOUT("driver.init.retry.timeout"),
 
 	/**
 	 * <b>key</b>: <code> driver.additional.capabilities </code><br/>
