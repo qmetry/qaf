@@ -16,7 +16,7 @@ The predominant benefit is, you can run Gherkin as QAF scenario so it will have 
 ## Why QAF-Gherkin Scenario Factory
 Gherkin is well known behavior driven language that Cucumber understands. However with Cucumber JVM there are few challenges like:
 
--  Lake of run configuration
+-  Lake of run configuration: you need to be dependent on other java unit testing framework JUnit or TestNG just for run configuration. Even if you use TestNG with Cucumber, you can't take full advantage of all features provided by TestNG!
 -  Using test data form outside the feature file (this is quite important when you need to run feature file for 2 different environment, let say staging and test, where test data defers)
 -  running scenario in parallel
 -  Limited hooks (for example you can not have step hook)
