@@ -187,7 +187,7 @@ entries:
               output: web, pdf
               url: KWD_Custom_Step_Definition.html
       
-    - title: Gherkin client
+    - title: Gherkin
       url: gherkin_client.html
       output: web, pdf
               
