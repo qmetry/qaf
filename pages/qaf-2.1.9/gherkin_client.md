@@ -17,7 +17,9 @@ The predominant benefit is, you can run Gherkin as QAF scenario so it will have 
 Gherkin is well known behavior driven language that Cucumber understands. However with Cucumber JVM there are few challenges like lake of run configuration, using test data form outside the feature file (this is quite important when you need to run feature file for 2 different environment, let say staging and test, where test data defers), running scenario in parallel, reuse common steps and hooks across multiple project by having steps and hooks in packaged jar and so on...  
 There are different non standard way people use to overcome with one or other challenges. Another open challenge for web and mobile test automation is, cucumber is unit test testing framework and you have to create your own implementation to support web, mobile web or mobile native support.
 In order to overcome with this challenges, We provided Scenario Factory for Gherkin so Gherkin can be used as QAF test step client in addition to BDD, CSV, Excel, and XML client.  
+
 ### Benefits of using QAF-Gherkin
+
 While you are authoring test in Gherkin format you can provide step implementation using `@QAFTestStep` annotation or Cucumber step annotations (`@Given`, `@When`, `@Then`, `@And`, `@But`). 
 It will support test data outside feature file (all QAF data provider support) using QAF data-provider meta-data with Examples you can separate out data from feature file to **text, csv, xml, excel or json file or DB**
 
@@ -28,7 +30,8 @@ It will enable migration from cucumber to QAF as with this feature you can conti
 
 
 ## How to use it
-1.	Author test cases in gherkin format. Refer [feature files](https://github.com/qmetry/qaf/tree/master/test/resources/features). 
+
+1.	Author test cases in Gherkin format. Refer [feature files](https://github.com/qmetry/qaf/tree/master/test/resources/features). You can use QAF Gherkin editor or standard Cucumber editor for authoring feature file.
 
 2.  Step Implementation
 	1.	You can use in-built QAF steps. 
