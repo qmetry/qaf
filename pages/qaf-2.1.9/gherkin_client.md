@@ -30,7 +30,7 @@ Another open challenge for web and mobile test automation is, cucumber is unit t
 In order to overcome with such challenges, We provided Scenario Factory for Gherkin so Gherkin can be used as QAF test step client in addition to BDD, CSV, Excel, and XML client.  
 
 
-### Benefits of using QAF-Gherkin
+### Benefits of using QAF-Gherkin Scenario Factory
 
 - While you are authoring test in Gherkin format you can provide step implementation using `@QAFTestStep` annotation or Cucumber step annotations (`@Given`, `@When`, `@Then`, `@And`, `@But`). 
 
@@ -76,3 +76,12 @@ In order to overcome with such challenges, We provided Scenario Factory for Gher
 6.	You can use tags as groups in XML configuration file.
 
 ### For Existing cucumber implementation
+Existing project implemented using cucumber can also be run using QAF-Gherkin Scenario Factory.
+
+-  Use GherkinScenarioFactory to run feature files written in **standard gherkin language**
+-  Convert Cucumber hooks to appropriate TestNG listener, for example convert @before implementation to testng method listener's beforeMethod
+-  Place @QAFTestStepProvider annotation at class defining cucumber steps
+-  Use ‘step.provider.pkg’ instead of glue
+-  You can use tags as groups for run-configuration-filter
+
+
