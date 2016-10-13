@@ -186,6 +186,10 @@ entries:
             - title: Custom Step Definition
               output: web, pdf
               url: KWD_Custom_Step_Definition.html
+      
+    - title: Gherkin client
+      url: gherkin_client.html
+      output: web, pdf
               
   - title: Listeners
     output: web, pdf
