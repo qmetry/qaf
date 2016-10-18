@@ -141,6 +141,21 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 		}
 	}
 
+	/**
+	 * Utility method to get capability that will be used by factory to create
+	 * driver object. It will not include any modification done by {@link QAFWebDriverCommandListener#beforeInitialize(Capabilities)}
+	 * 
+	 * @param driverName
+	 * @return
+	 */
+	public static DesiredCapabilities getDesiredCapabilities(String driverName) {
+		for (Browsers browser : Browsers.values()) {
+			if (driverName.contains(browser.name())) {
+				return browser.getDesiredCapabilities();
+			}
+		}
+		return null;
+	}
 	public static String[] checkAndStartServer(String... args) {
 		if (!isServerRequired(args)) {
 			return args;
@@ -201,14 +216,15 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 		return isRunning;
 	}
 
-	private static void beforeInitialize(Capabilities desiredCapabilities, Collection<QAFWebDriverCommandListener> listners) {
+	private static void beforeInitialize(Capabilities desiredCapabilities,
+			Collection<QAFWebDriverCommandListener> listners) {
 		if ((listners != null) && !listners.isEmpty()) {
 			for (QAFWebDriverCommandListener listener : listners) {
 				listener.beforeInitialize(desiredCapabilities);
 			}
 		}
 	}
-	
+
 	private static void onInitializationFailure(DesiredCapabilities desiredCapabilities,
 			Throwable e, Collection<QAFWebDriverCommandListener> listners) {
 		if ((listners != null) && !listners.isEmpty()) {
@@ -216,10 +232,10 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 				listener.onInitializationFailure(desiredCapabilities, e);
 			}
 		}
-		
+
 	}
 
-	private static Collection<QAFWebDriverCommandListener> getDriverListeners(){
+	private static Collection<QAFWebDriverCommandListener> getDriverListeners() {
 		LinkedHashSet<QAFWebDriverCommandListener> listners =
 				new LinkedHashSet<QAFWebDriverCommandListener>();
 		String[] clistners = ConfigurationManager.getBundle()
@@ -418,7 +434,7 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 			DesiredCapabilities desiredCapabilities = getDesiredCapabilities();
 
 			Collection<QAFWebDriverCommandListener> listners = getDriverListeners();
-			beforeInitialize(desiredCapabilities, listners );
+			beforeInitialize(desiredCapabilities, listners);
 			try {
 				if (this.name().equalsIgnoreCase("chrome")) {
 					return new QAFExtendedWebDriver(
@@ -428,21 +444,19 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 				WebDriver driver = getDriverObj(driverCls, desiredCapabilities, urlstr);// driverCls.newInstance();
 				return new QAFExtendedWebDriver(driver, reporter);
 			} catch (Throwable e) {
-				onInitializationFailure(desiredCapabilities, e,listners);
+				onInitializationFailure(desiredCapabilities, e, listners);
 
 				throw new AutomationError("Unable to Create Driver Instance for " + name()
 						+ ": " + e.getMessage(), e);
 			}
 		}
 
-
-
 		private QAFExtendedWebDriver getDriver(String url,
 				WebDriverCommandLogger reporter) {
 			DesiredCapabilities desiredCapabilities = getDesiredCapabilities();
 			Collection<QAFWebDriverCommandListener> listners = getDriverListeners();
 
-			beforeInitialize(desiredCapabilities,listners);
+			beforeInitialize(desiredCapabilities, listners);
 			try {
 				if (StringUtil
 						.isNotBlank(ApplicationProperties.WEBDRIVER_REMOTE_SESSION
@@ -461,11 +475,10 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 				return new QAFExtendedWebDriver(new URL(url), desiredCapabilities,
 						reporter);
 			} catch (Throwable e) {
-				onInitializationFailure(desiredCapabilities, e,listners);
+				onInitializationFailure(desiredCapabilities, e, listners);
 
 				throw new AutomationError(
-						"Unable to Create Driver Instance " + e.getMessage(),
-						e);
+						"Unable to Create Driver Instance " + e.getMessage(), e);
 			}
 		}
 	}

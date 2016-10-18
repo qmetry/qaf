@@ -122,12 +122,17 @@ public class JavaStep extends BaseTestStep {
 					? step.stepName() : method.getName());
 
 		}
-		if (isBlank(description)) {
-			description = (step != null) && isNotBlank(step.description())
-					? step.description() : name;
-		}
 		if (step != null) {
 			threshold = step.threshold();
+			if (isNotBlank(step.description())) {
+				// highest priority to QAFTestStep annotation if multiple step
+				// definition way opted
+				description = step.description();
+				qafStepImpl = true;
+			}
+		}
+		if (isBlank(description)) {
+			description = name;
 		}
 
 	}
@@ -274,7 +279,7 @@ public class JavaStep extends BaseTestStep {
 			throws InstantiationException, IllegalAccessException {
 		Class<?> cls = method.getDeclaringClass();
 		if (getBundle().getBoolean("step.provider.sharedinstance", true)) {
-			// allow class variable sharing among  steps
+			// allow class variable sharing among steps
 			Object obj = getBundle().getObject(cls.getName());
 			if (null == obj) {
 				obj = cls.newInstance();
@@ -303,7 +308,7 @@ public class JavaStep extends BaseTestStep {
 							&& isTestStepAnnotation(annotation)) {
 						description = (String) objVal;
 						qafStepImpl = false;
-						
+
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -311,13 +316,14 @@ public class JavaStep extends BaseTestStep {
 			}
 		}
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	private boolean isTestStepAnnotation(Annotation annotation){
-		List<String> annotationPkgs = getBundle().getList("step.annotation.pkgs",Arrays.asList("cucumber.api.java"));
-		
-		for(String pkg: annotationPkgs){
-			if(annotation.annotationType().getName().indexOf(pkg) >= 0){
+	private boolean isTestStepAnnotation(Annotation annotation) {
+		List<String> annotationPkgs = getBundle().getList("step.annotation.pkgs",
+				Arrays.asList("cucumber.api.java"));
+
+		for (String pkg : annotationPkgs) {
+			if (annotation.annotationType().getName().indexOf(pkg) >= 0) {
 				return true;
 			}
 		}
