@@ -2,9 +2,8 @@
 <metadata>
   <groupId>com.qmetry</groupId>
   <artifactId>qaf-support</artifactId>
-  <latest>2.1.8</latest>
-  <release>2.1.8</release>
   <versioning>
+    <latest>2.1.9-RC2</latest>
     <release>2.1.8</release>
     <versions>
       <version>2.1.8</version>
