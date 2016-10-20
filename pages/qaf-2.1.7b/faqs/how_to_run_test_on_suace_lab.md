@@ -41,11 +41,3 @@ remote.server=http://<username>:<access-key>@ondemand.saucelabs.com:80/wd/hub
 firefox.additional.capabilities={'name':'SampleTestOnFirefox','platform':'Windows 8','version':'40.0'}
 
 ```
-
-Sample of application.properties and testrun_config.xml file is attached here.
-
-[application.properties ](appication_properties.html) 
-
-[testrun_config.xml](testrun_config.html)
-
-

@@ -29,7 +29,3 @@ firefox.additional.capabilities={"version":"28","platform":"windows"}
 
 Now you can run your test case and it will execute on souce Lab VM.
 You can view the execution on Dashboard of Sauce Lab.
-For more information about desired capabilities of SouceLab click here.
-
-[application.properties](appication_properties.html)
-

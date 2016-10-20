@@ -42,10 +42,4 @@ firefox.additional.capabilities={'name':'SampleTestOnFirefox','platform':'Window
 
 ```
 
-Sample of application.properties and testrun_config.xml file is attached here.
-
-[application.properties ](appication_properties.html) 
-
-[testrun_config.xml](testrun_config.html)
-
 
