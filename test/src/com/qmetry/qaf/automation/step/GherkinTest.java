@@ -137,7 +137,4 @@ public class GherkinTest {
 		return data.iterator();
 	}
 
-	public static void main(String[] args) {
-
-	}
 }
