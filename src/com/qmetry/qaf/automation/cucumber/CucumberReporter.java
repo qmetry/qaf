@@ -30,7 +30,9 @@ import com.qmetry.qaf.automation.util.StringUtil;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
-
+/**
+ * @Deprecated
+ */
 public class CucumberReporter {
 
 	private static final String CUCUMBER_SCENARIO = "cucumber.scenario";
