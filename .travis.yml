@@ -6,7 +6,7 @@ before_install:
 script: ant test -Dskip.download=true
 jdk:
   - oraclejdk8
-  - openjdk8
+  #- openjdk8
   - oraclejdk7
   - openjdk7
 
