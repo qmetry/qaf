@@ -98,11 +98,13 @@
 
 		<!-- min rev 2.34.0 -->
 		<dependency org="org.seleniumhq.selenium" name="selenium-remote-driver"
-			rev="3.0.0" />
+			rev="2.53.0" />
 		<dependency org="org.seleniumhq.selenium" name="selenium-java"
-			rev="3.0.0" />
+			rev="2.53.0" />
+		<!--
 		<dependency org="org.seleniumhq.selenium" name="selenium-leg-rc" rev="3.0.0"/>
-<!-- -->
+        	-->
+		<!-- ws -->
 		<!-- ws -->
 		<dependency org="xmlunit" name="xmlunit" rev="1.4" />
 
