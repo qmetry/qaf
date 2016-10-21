@@ -38,7 +38,6 @@ import com.google.common.collect.ImmutableList;
 import com.qmetry.qaf.automation.core.ConfigurationManager;
 import com.qmetry.qaf.automation.ui.selenium.WaitService;
 import com.qmetry.qaf.automation.ui.webdriver.QAFExtendedWebElement;
-import com.thoughtworks.selenium.SeleniumException;
 
 /**
  * A specialization of {@link FluentWait} that uses WebDriver instances.
@@ -101,12 +100,13 @@ public class QAFWebElementWait extends FluentWait<QAFExtendedWebElement> {
 		super(element, clock, sleeper);
 		withTimeout(timeOutInMiliSeconds, TimeUnit.MILLISECONDS);
 		pollingEvery(sleepTimeOut, TimeUnit.MILLISECONDS);
-		ignore(NoSuchElementException.class, StaleElementReferenceException.class, SeleniumException.class);
+		ignore(NoSuchElementException.class, StaleElementReferenceException.class);
 	}
 
 	/**
 	 * @see #ignoreAll(Collection)
 	 */
+	@SuppressWarnings("unchecked")
 	public QAFWebElementWait ignore(Class<? extends RuntimeException>... exceptionType) {
 		return (QAFWebElementWait) this
 				.ignoreAll(ImmutableList.<Class<? extends RuntimeException>> copyOf(exceptionType));

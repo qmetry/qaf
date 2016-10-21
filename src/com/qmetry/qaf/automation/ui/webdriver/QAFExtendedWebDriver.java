@@ -67,7 +67,6 @@ import com.qmetry.qaf.automation.ui.util.QAFWebDriverExpectedConditions;
 import com.qmetry.qaf.automation.ui.util.QAFWebDriverWait;
 import com.qmetry.qaf.automation.ui.webdriver.CommandTracker.Stage;
 import com.qmetry.qaf.automation.util.LocatorUtil;
-import com.thoughtworks.selenium.SeleniumException;
 
 /**
  * com.qmetry.qaf.automation.ui.webdriver.QAFWebDriver.java
@@ -199,7 +198,7 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 			for (QAFExtendedWebElement element : elements) {
 				final By by = element.getBy();
 				element.setId(((QAFExtendedWebElement) new QAFWebDriverWait(this).ignore(NoSuchElementException.class,
-						StaleElementReferenceException.class, SeleniumException.class)
+						StaleElementReferenceException.class, RuntimeException.class)
 						.until(ExpectedConditions.presenceOfElementLocated(by))).getId());
 			}
 		}

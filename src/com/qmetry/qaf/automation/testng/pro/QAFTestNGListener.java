@@ -71,7 +71,6 @@ import com.qmetry.qaf.automation.step.client.Scenario;
 import com.qmetry.qaf.automation.step.client.text.BDDTestFactory;
 import com.qmetry.qaf.automation.testng.MethodPriorityComparator;
 import com.qmetry.qaf.automation.util.StringUtil;
-import com.thoughtworks.selenium.Wait.WaitTimedOutException;
 
 /**
  * All in one Listener for ISFW.
@@ -268,10 +267,11 @@ public class QAFTestNGListener {
 				stb.getCheckPointResults().add(stepResultBean);
 
 			}
-			if ((tr.getThrowable() instanceof WaitTimedOutException)
-					&& (getBundle().getBoolean("selenium.wait.failure.setskip"))) {
-				setSkip(tr, context);
-			}
+// discontinue support for "selenium.wait.failure.setskip". Use QAS listener instead
+//			if ((tr.getThrowable() instanceof WaitTimedOutException)
+//					&& (getBundle().getBoolean("selenium.wait.failure.setskip"))) {
+//				setSkip(tr, context);
+//			}
 		}
 	}
 

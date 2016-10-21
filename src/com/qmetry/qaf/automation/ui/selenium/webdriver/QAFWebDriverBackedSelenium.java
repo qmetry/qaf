@@ -49,7 +49,7 @@ public class QAFWebDriverBackedSelenium extends IsSeleniumImpl implements WrapsD
 	/**
 	 * @param commandProcessor
 	 */
-	public QAFWebDriverBackedSelenium(CommandProcessor commandProcessor) {
+	public QAFWebDriverBackedSelenium(com.thoughtworks.selenium.CommandProcessor commandProcessor) {
 		super(commandProcessor);
 	}
 

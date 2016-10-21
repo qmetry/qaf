@@ -97,6 +97,7 @@ public class GherkinTest {
 				"I am using QMetry Automation Framework", true, new String[]{}});
 		data.add(new Object[]{"^I search for \"([^\"]*)\"$",
 				"I search for \"git qmetry\"", true, new String[]{"git qmetry"}});
+		data.add(new Object[]{"^I search for \"(.*?)\"$","I search for \"git qmetry\"",true, new String[]{"git qmetry"}});
 		data.add(new Object[]{"^I search for a \"([^\"]*)\"$",
 				"I search for \"git qmetry\"", false, new String[]{}});
 		data.add(new Object[]{"^it should have \"([^\"]*)\" in search results$",
