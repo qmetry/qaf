@@ -1,9 +1,9 @@
 language: java
-before_install:
-  - sudo ant download-ivy
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-script: ant test -Dskip.download=true
+#before_install:
+#  - sudo ant download-ivy -Dskip.download=flase
+# - "export DISPLAY=:99.0"
+#  - "sh -e /etc/init.d/xvfb start"
+script: sudo ant test -Dskip.download=false
 jdk:
   - oraclejdk8
   - oraclejdk7
