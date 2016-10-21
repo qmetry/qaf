@@ -5,7 +5,8 @@ before_install:
   - "sh -e /etc/init.d/xvfb start"
 script: ant test -Dskip.download=true
 jdk:
-#  - oraclejdk8
+  - oraclejdk8
+  - openjdk8
   - oraclejdk7
   - openjdk7
 
