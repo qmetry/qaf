@@ -6,6 +6,7 @@
 [![Help]( https://img.shields.io/badge/help-Documentation-blue.svg?maxAge=2592000)](https://qmetry.github.io/qaf/)
 
 
+
 # QMetry Automation Framework
   for web, mobileweb, mobile native and rest web-service functional test automation
   
