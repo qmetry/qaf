@@ -278,7 +278,7 @@ public class JavaStep extends BaseTestStep {
 	private Object getClassInstance()
 			throws InstantiationException, IllegalAccessException {
 		Class<?> cls = method.getDeclaringClass();
-		if (getBundle().getBoolean("step.provider.sharedinstance", true)) {
+		if (getBundle().getBoolean("step.provider.sharedinstance", false)) {
 			// allow class variable sharing among steps
 			Object obj = getBundle().getObject(cls.getName());
 			if (null == obj) {
