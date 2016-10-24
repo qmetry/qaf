@@ -45,11 +45,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.text.StrSubstitutor;
 import org.json.JSONException;
+import org.openqa.selenium.WebElement;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.qmetry.qaf.automation.core.TestBaseProvider;
 import com.qmetry.qaf.automation.data.MetaData;
+import com.qmetry.qaf.automation.ui.api.TestPage;
 import com.qmetry.qaf.automation.ui.webdriver.QAFWebElement;
 import com.qmetry.qaf.automation.util.JSONUtil;
 
@@ -278,7 +280,7 @@ public class JavaStep extends BaseTestStep {
 	private Object getClassInstance()
 			throws InstantiationException, IllegalAccessException {
 		Class<?> cls = method.getDeclaringClass();
-		if (getBundle().getBoolean("step.provider.sharedinstance", false)) {
+		if (getBundle().getBoolean("step.provider.sharedinstance", false) && isSharableInstance(cls)) {
 			// allow class variable sharing among steps
 			Object obj = getBundle().getObject(cls.getName());
 			if (null == obj) {
@@ -288,6 +290,14 @@ public class JavaStep extends BaseTestStep {
 			return obj;
 		}
 		return cls.newInstance();
+	}
+
+	private boolean isSharableInstance(Class<?> cls) {
+
+		if (TestPage.class.isAssignableFrom(cls) || WebElement.class.isAssignableFrom(cls)) {
+			return false;
+		}
+		return true;
 	}
 
 	private void setMetaData() {
