@@ -36,11 +36,13 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -68,47 +70,35 @@ public final class JavaStepFinder {
 		Set<Class<?>> stepProviders = new LinkedHashSet<Class<?>>();;
 		Set<Method> steps = new LinkedHashSet<Method>();
 
-		Collection<URL> urls =
-				ClasspathHelper.forPackage("com.qmetry.qaf.automation.step");
-		FilterBuilder filter = new FilterBuilder();
-		filter.include(FilterBuilder.prefix(STEPS_PACKAGE));
+		List<String> pkgs = new ArrayList<String>();
+		pkgs.add(STEPS_PACKAGE);
+
 		if (getBundle().containsKey(STEP_PROVIDER_PKG.key)) {
-			for (String pkg : getBundle().getStringArray(STEP_PROVIDER_PKG.key)) {
-				System.out.println("pkg: " + pkg);
-				Reflections reflections = new Reflections(pkg,
-						new MethodAnnotationsScanner());
-				Set<Method> types =
-						reflections.getMethodsAnnotatedWith(QAFTestStep.class);
-				steps.addAll(types);
-				reflections = new Reflections(pkg, new TypeAnnotationsScanner(),
-						new SubTypesScanner(false));
-				stepProviders.addAll(
-						reflections.getTypesAnnotatedWith(QAFTestStepProvider.class));
-				urls.addAll(ClasspathHelper.forPackage(pkg,
-						ClassLoader.getSystemClassLoader()));
-				filter.include(FilterBuilder.prefix(pkg));
-			}
+			pkgs.addAll(Arrays.asList(getBundle().getStringArray(STEP_PROVIDER_PKG.key)));
 		}
-
-		// Specify reflector adapter explicitly
-		ConfigurationBuilder configurationBuilder = ConfigurationBuilder.build();
-		configurationBuilder.setUrls(urls).setScanners(
-				new MethodAnnotationsScanner(),
-				new TypeAnnotationsScanner(), new SubTypesScanner(false));
-		Reflections reflections = new Reflections(configurationBuilder);
-		Set<Class<? extends Object>> classes = reflections.getSubTypesOf(Object.class);
-		// classes.add(CommonStep.class);
-		steps.addAll(reflections.getMethodsAnnotatedWith(QAFTestStep.class));
-
-		steps.addAll(getAllMethodsWithAnnotation(classes, QAFTestStep.class));
-
-		stepProviders
-				.addAll(reflections.getTypesAnnotatedWith(QAFTestStepProvider.class));
-
+		for (String pkg : pkgs) {
+			System.out.println("pkg: " + pkg);
+			Reflections reflections = new Reflections(pkg, new TypeAnnotationsScanner(),
+					new org.reflections.scanners.MethodAnnotationsScanner(),
+					new SubTypesScanner(false));
+			
+			steps.addAll(reflections.getMethodsAnnotatedWith(QAFTestStep.class));
+			try {
+				Set<Class<? extends Object>> classes =
+						reflections.getSubTypesOf(Object.class);
+				steps.addAll(getAllMethodsWithAnnotation(classes, QAFTestStep.class));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			stepProviders
+					.addAll(reflections.getTypesAnnotatedWith(QAFTestStepProvider.class));
+		}
 		for (Class<?> stepProvider : stepProviders) {
 			if (QAFWebComponent.class.isAssignableFrom(stepProvider)) {
 
-			} else {
+			} else if (stepProvider.isInterface())
+				continue;
+			else {
 				steps.addAll(Arrays.asList(stepProvider.getMethods()));
 			}
 		}
@@ -122,6 +112,7 @@ public final class JavaStepFinder {
 		}
 
 		return stepMapping;
+
 	}
 
 	private static void add(Map<String, TestStep> stepMapping, TestStep step) {

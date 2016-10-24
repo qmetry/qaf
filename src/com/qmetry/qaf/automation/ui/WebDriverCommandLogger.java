@@ -27,7 +27,11 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.json.JSONObject;
 import org.openqa.selenium.Capabilities;
 
@@ -44,11 +48,20 @@ import com.qmetry.qaf.automation.ui.webdriver.QAFWebDriverCommandListener;
 import com.qmetry.qaf.automation.ui.webdriver.QAFWebElementCommandListener;
 import com.qmetry.qaf.automation.util.StackTraceUtils;
 
-public class WebDriverCommandLogger extends SeleniumCommandLogger
+public class WebDriverCommandLogger 
 		implements QAFWebDriverCommandListener, QAFWebElementCommandListener {
-
+	private ArrayList<LoggingBean> commandLog;
+	private final Log logger = LogFactory.getLog(getClass());
+	private Set<String> excludeCommandsFromLogging;
+	
 	public WebDriverCommandLogger(ArrayList<LoggingBean> commandLog) {
-		super(commandLog);
+		
+		this.commandLog = commandLog;
+		excludeCommandsFromLogging = new HashSet<String>(Arrays.asList(new String[] { "getHtmlSource",
+				"captureEntirePageScreenshotToString", "executeScript", "screenshot" }));
+		excludeCommandsFromLogging
+				.addAll(Arrays.asList(ApplicationProperties.REPORTER_LOG_EXCLUDE_CMD.getStringVal("").split(",")));
+
 		excludeCommandsFromLogging = new HashSet<String>(Arrays.asList(new String[] { "getHtmlSource",
 				"captureEntirePageScreenshotToString", "executeScript", "screenshot" }));
 		excludeCommandsFromLogging
@@ -231,5 +244,13 @@ public class WebDriverCommandLogger extends SeleniumCommandLogger
 		// TODO Auto-generated method stub
 		
 	}
+	
 
+	public List<LoggingBean> getLog() {
+		return commandLog;
+	}
+
+	protected boolean isCommandExcludedFromLogging(final String commandName) {
+		return excludeCommandsFromLogging.contains(commandName);
+	}
 }

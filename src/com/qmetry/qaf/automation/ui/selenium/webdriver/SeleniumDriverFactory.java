@@ -29,12 +29,15 @@
 package com.qmetry.qaf.automation.ui.selenium.webdriver;
 
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
 
 import org.openqa.selenium.remote.CommandExecutor;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import com.qmetry.qaf.automation.core.LoggingBean;
 import com.qmetry.qaf.automation.core.QAFTestBase.STBArgs;
 import com.qmetry.qaf.automation.keys.ApplicationProperties;
+import com.qmetry.qaf.automation.ui.SeleniumCommandLogger;
 import com.qmetry.qaf.automation.ui.UiDriver;
 import com.qmetry.qaf.automation.ui.WebDriverCommandLogger;
 import com.qmetry.qaf.automation.ui.selenium.AutoWaitInjector;
@@ -65,7 +68,7 @@ public class SeleniumDriverFactory {
 
 		commandProcessor.addListener(new SubmitCommandListener());
 
-		commandProcessor.addListener(cmdLogger);
+		commandProcessor.addListener(new SeleniumCommandLogger(new ArrayList<LoggingBean>()));
 		commandProcessor.addListener(new AutoWaitInjector());
 		if (browser.contains("iexproper") || browser.contains("iehta")) {
 			commandProcessor.addListener(new IEScreenCaptureListener());
