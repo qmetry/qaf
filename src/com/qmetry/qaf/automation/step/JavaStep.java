@@ -45,7 +45,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.text.StrSubstitutor;
 import org.json.JSONException;
-import org.openqa.selenium.WebElement;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -280,7 +279,8 @@ public class JavaStep extends BaseTestStep {
 	private Object getClassInstance()
 			throws InstantiationException, IllegalAccessException {
 		Class<?> cls = method.getDeclaringClass();
-		if (getBundle().getBoolean("step.provider.sharedinstance", false) && isSharableInstance(cls)) {
+		if (getBundle().getBoolean("step.provider.sharedinstance", false)
+				&& isSharableInstance(cls)) {
 			// allow class variable sharing among steps
 			Object obj = getBundle().getObject(cls.getName());
 			if (null == obj) {
@@ -294,7 +294,8 @@ public class JavaStep extends BaseTestStep {
 
 	private boolean isSharableInstance(Class<?> cls) {
 
-		if (TestPage.class.isAssignableFrom(cls) || WebElement.class.isAssignableFrom(cls)) {
+		if (TestPage.class.isAssignableFrom(cls)
+				|| QAFWebElement.class.isAssignableFrom(cls)) {
 			return false;
 		}
 		return true;

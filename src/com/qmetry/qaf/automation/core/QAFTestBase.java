@@ -44,7 +44,6 @@ import com.google.common.base.Supplier;
 import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.ui.UiDriver;
 import com.qmetry.qaf.automation.ui.UiDriverFactory;
-import com.qmetry.qaf.automation.ui.WebDriverTestBase;
 import com.qmetry.qaf.automation.ui.util.ExpectedCondition;
 import com.qmetry.qaf.automation.util.FileUtil;
 import com.qmetry.qaf.automation.util.PropertyUtil;
@@ -193,7 +192,7 @@ public class QAFTestBase {
 	}
 
 	public void setMethod(Method method) {
-		ConfigurationManager.getBundle().addProperty("current.testcase.name",
+		ConfigurationManager.getBundle().addProperty(ApplicationProperties.CURRENT_TEST_NAME.key,
 				method.getName());
 	}
 
@@ -351,8 +350,7 @@ public class QAFTestBase {
 	}
 
 	protected String getTestCaseName() {
-		return ConfigurationManager.getBundle().getString("current.testcase.name",
-				"QAFTest");
+		return ApplicationProperties.CURRENT_TEST_NAME.getStringVal("QAFTest");
 	}
 
 	protected void setScreenShotDir(String screenShotDir) {

@@ -1,26 +1,31 @@
 /*******************************************************************************
- * QMetry Automation Framework provides a powerful and versatile platform to author 
- * Automated Test Cases in Behavior Driven, Keyword Driven or Code Driven approach
- *                
+ * QMetry Automation Framework provides a powerful and versatile platform to
+ * author
+ * Automated Test Cases in Behavior Driven, Keyword Driven or Code Driven
+ * approach
  * Copyright 2016 Infostretch Corporation
- *
- * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- *
- * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
- * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT
- * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE
- *
- * You should have received a copy of the GNU General Public License along with this program in the name of LICENSE.txt in the root folder of the distribution. If not, see https://opensource.org/licenses/gpl-3.0.html
- *
- * See the NOTICE.TXT file in root folder of this source files distribution 
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or any later version.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR
+ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT
+ * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE
+ * You should have received a copy of the GNU General Public License along with
+ * this program in the name of LICENSE.txt in the root folder of the
+ * distribution. If not, see https://opensource.org/licenses/gpl-3.0.html
+ * See the NOTICE.TXT file in root folder of this source files distribution
  * for additional information regarding copyright ownership and licenses
  * of other open source software / files used by QMetry Automation Framework.
- *
- * For any inquiry or need additional information, please contact support-qaf@infostretch.com
+ * For any inquiry or need additional information, please contact
+ * support-qaf@infostretch.com
  *******************************************************************************/
-
 
 package com.qmetry.qaf.automation.ui;
 
@@ -48,6 +53,7 @@ import com.qmetry.qaf.automation.core.ConfigurationManager;
 import com.qmetry.qaf.automation.core.MessageTypes;
 import com.qmetry.qaf.automation.core.TestBaseProvider;
 import com.qmetry.qaf.automation.integration.ResultUpdator;
+import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.ui.api.UiTestBase;
 import com.qmetry.qaf.automation.util.PropertyUtil;
 
@@ -76,14 +82,16 @@ public abstract class AbstractTestCase<D, B extends UiTestBase<D>> {
 	@BeforeClass(alwaysRun = true)
 	final public void setup(ITestContext context) {
 
-		ConfigurationManager.getBundle().addProperty("tng.context", context);
+		ConfigurationManager.getBundle()
+				.addProperty(ApplicationProperties.CURRENT_TEST_CONTEXT.key, context);
 		this.context = context;
 	}
 
 	@BeforeSuite(alwaysRun = true)
 	final public void setupSuit(ITestContext context) {
 		this.context = context;
-		ConfigurationManager.getBundle().addProperty("tng.context", context);
+		ConfigurationManager.getBundle()
+				.addProperty(ApplicationProperties.CURRENT_TEST_CONTEXT.key, context);
 		LinkedHashMap<String, String> params = new LinkedHashMap<String, String>(
 				context.getSuite().getXmlSuite().getParameters());
 
@@ -92,7 +100,8 @@ public abstract class AbstractTestCase<D, B extends UiTestBase<D>> {
 
 	@BeforeTest(alwaysRun = true)
 	final public void setupTest(ITestContext context) {
-		ConfigurationManager.getBundle().addProperty("tng.context", context);
+		ConfigurationManager.getBundle()
+				.addProperty(ApplicationProperties.CURRENT_TEST_CONTEXT.key, context);
 		LinkedHashMap<String, String> params = new LinkedHashMap<String, String>(
 				context.getCurrentXmlTest().getAllParameters());
 
@@ -102,7 +111,8 @@ public abstract class AbstractTestCase<D, B extends UiTestBase<D>> {
 
 	@BeforeMethod(alwaysRun = true)
 	final public void setupMethod(Method m, ITestContext context) {
-		ConfigurationManager.getBundle().addProperty("tng.context", context);
+		ConfigurationManager.getBundle()
+				.addProperty(ApplicationProperties.CURRENT_TEST_CONTEXT.key, context);
 		this.context = context;
 	}
 
@@ -128,10 +138,11 @@ public abstract class AbstractTestCase<D, B extends UiTestBase<D>> {
 	}
 
 	private void tearDownPrrallelThreads(ITestContext testContext, String type) {
-		String useSingleSeleniumInstance = ConfigurationManager.getBundle().getString("selenium.singletone", "t");
+		String useSingleSeleniumInstance =
+				ConfigurationManager.getBundle().getString("selenium.singletone", "t");
 		// match with first char only so m or method or methods is fine
-		if (useSingleSeleniumInstance.toUpperCase().startsWith(type.substring(0, 1).toUpperCase())
-				|| type.equalsIgnoreCase("tests")) {
+		if (useSingleSeleniumInstance.toUpperCase().startsWith(
+				type.substring(0, 1).toUpperCase()) || type.equalsIgnoreCase("tests")) {
 			if (getTestBase() != null) {
 				getTestBase().tearDown();
 			}
@@ -144,7 +155,8 @@ public abstract class AbstractTestCase<D, B extends UiTestBase<D>> {
 		ResultUpdator.awaitTermination();
 	}
 
-	public static boolean verifyTrue(boolean condition, String failMessage, String successMsg) {
+	public static boolean verifyTrue(boolean condition, String failMessage,
+			String successMsg) {
 		if (condition) {
 			log(successMsg, MessageTypes.Pass);
 		} else {
@@ -154,7 +166,8 @@ public abstract class AbstractTestCase<D, B extends UiTestBase<D>> {
 
 	}
 
-	public static boolean verifyFalse(boolean condition, String failMessage, String successMsg) {
+	public static boolean verifyFalse(boolean condition, String failMessage,
+			String successMsg) {
 		if (!condition) {
 			log(successMsg, MessageTypes.Pass);
 		} else {
@@ -164,13 +177,15 @@ public abstract class AbstractTestCase<D, B extends UiTestBase<D>> {
 
 	}
 
-	public static void assertTrue(boolean condition, String failMessage, String successMsg) {
+	public static void assertTrue(boolean condition, String failMessage,
+			String successMsg) {
 		if (!verifyTrue(condition, failMessage, successMsg)) {
 			throw new AssertionError(failMessage);
 		}
 	}
 
-	public static void assertFalse(boolean condition, String failMessage, String successMsg) {
+	public static void assertFalse(boolean condition, String failMessage,
+			String successMsg) {
 		if (!verifyFalse(condition, failMessage, successMsg)) {
 			throw new AssertionError(failMessage);
 		}

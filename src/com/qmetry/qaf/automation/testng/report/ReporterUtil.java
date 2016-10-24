@@ -1,26 +1,31 @@
 /*******************************************************************************
- * QMetry Automation Framework provides a powerful and versatile platform to author 
- * Automated Test Cases in Behavior Driven, Keyword Driven or Code Driven approach
- *                
+ * QMetry Automation Framework provides a powerful and versatile platform to
+ * author
+ * Automated Test Cases in Behavior Driven, Keyword Driven or Code Driven
+ * approach
  * Copyright 2016 Infostretch Corporation
- *
- * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- *
- * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
- * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT
- * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE
- *
- * You should have received a copy of the GNU General Public License along with this program in the name of LICENSE.txt in the root folder of the distribution. If not, see https://opensource.org/licenses/gpl-3.0.html
- *
- * See the NOTICE.TXT file in root folder of this source files distribution 
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or any later version.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR
+ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT
+ * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE
+ * You should have received a copy of the GNU General Public License along with
+ * this program in the name of LICENSE.txt in the root folder of the
+ * distribution. If not, see https://opensource.org/licenses/gpl-3.0.html
+ * See the NOTICE.TXT file in root folder of this source files distribution
  * for additional information regarding copyright ownership and licenses
  * of other open source software / files used by QMetry Automation Framework.
- *
- * For any inquiry or need additional information, please contact support-qaf@infostretch.com
+ * For any inquiry or need additional information, please contact
+ * support-qaf@infostretch.com
  *******************************************************************************/
-
 
 package com.qmetry.qaf.automation.testng.report;
 
@@ -92,10 +97,11 @@ public class ReporterUtil {
 
 		if (!getBundle().containsKey("suit.start.ts")) {
 			dir = ApplicationProperties.JSON_REPORT_DIR
-					.getStringVal(ApplicationProperties.JSON_REPORT_ROOT_DIR.getStringVal("test-results") + "/"
-							+ DateUtil.getDate(0, "EdMMMyy_hhmma"));
+					.getStringVal(ApplicationProperties.JSON_REPORT_ROOT_DIR.getStringVal(
+							"test-results") + "/" + DateUtil.getDate(0, "EdMMMyy_hhmma"));
 			getBundle().setProperty(ApplicationProperties.JSON_REPORT_DIR.key, dir);
-			FileUtil.checkCreateDir(ApplicationProperties.JSON_REPORT_ROOT_DIR.getStringVal("test-results"));
+			FileUtil.checkCreateDir(ApplicationProperties.JSON_REPORT_ROOT_DIR
+					.getStringVal("test-results"));
 			FileUtil.checkCreateDir(dir);
 			getBundle().setProperty("suit.start.ts", System.currentTimeMillis());
 		} else {
@@ -131,10 +137,11 @@ public class ReporterUtil {
 		}
 	}
 
-	public static synchronized void updateOverview(ITestContext context, ITestResult result) {
+	public static synchronized void updateOverview(ITestContext context,
+			ITestResult result) {
 		try {
-			String file = ApplicationProperties.JSON_REPORT_DIR.getStringVal() + "/" + getTestName(context)
-					+ "/overview.json";
+			String file = ApplicationProperties.JSON_REPORT_DIR.getStringVal() + "/"
+					+ getTestName(context) + "/overview.json";
 			TestOverview overview = getJsonObjectFromFile(file, TestOverview.class);
 			if (null == result) {
 				Map<String, Object> runPrams = new HashMap<String, Object>(
@@ -148,7 +155,8 @@ public class ReporterUtil {
 				Map<String, Object> envInfo = new HashMap<String, Object>();
 				envInfo.put("isfw-build-info", getBundle().getObject("isfw.build.info"));
 				envInfo.put("run-parameters", runPrams);
-				envInfo.put("browser-desired-capabilities", getBundle().getObject("driver.desiredCapabilities"));
+				envInfo.put("browser-desired-capabilities",
+						getBundle().getObject("driver.desiredCapabilities"));
 				envInfo.put("browser-actual-capabilities", getActualCapabilities());
 
 				overview.setEnvInfo(envInfo);
@@ -159,11 +167,13 @@ public class ReporterUtil {
 				executionEnvInfo.put("os.arch", System.getProperty("os.arch"));
 				executionEnvInfo.put("java.version", System.getProperty("java.version"));
 				executionEnvInfo.put("java.vendor", System.getProperty("java.vendor"));
-				executionEnvInfo.put("java.arch", System.getProperty("sun.arch.data.model"));
+				executionEnvInfo.put("java.arch",
+						System.getProperty("sun.arch.data.model"));
 
 				executionEnvInfo.put("user.name", System.getProperty("user.name"));
 				try {
-					executionEnvInfo.put("host", InetAddress.getLocalHost().getHostName());
+					executionEnvInfo.put("host",
+							InetAddress.getLocalHost().getHostName());
 				} catch (Exception e) {
 					// This code added for MAC to fetch hostname
 					String hostname = execHostName("hostname");
@@ -200,7 +210,8 @@ public class ReporterUtil {
 
 	private static Map<String, String> getActualCapabilities() {
 		@SuppressWarnings("unchecked")
-		Map<String, Object> map = (Map<String, Object>) getBundle().getObject("driver.actualCapabilities");
+		Map<String, Object> map =
+				(Map<String, Object>) getBundle().getObject("driver.actualCapabilities");
 		Map<String, String> newMap = new HashMap<String, String>();
 		if (null != map) {
 			for (String key : map.keySet()) {
@@ -220,8 +231,8 @@ public class ReporterUtil {
 	 * @param context
 	 * @param result
 	 */
-	public static void createMethodResult(ITestContext context, ITestResult result, List<LoggingBean> logs,
-			List<CheckpointResultBean> checkpoints) {
+	public static void createMethodResult(ITestContext context, ITestResult result,
+			List<LoggingBean> logs, List<CheckpointResultBean> checkpoints) {
 
 		try {
 			String dir = getClassDir(context, result);
@@ -262,7 +273,8 @@ public class ReporterUtil {
 	 * @param context
 	 * @param result
 	 */
-	private static synchronized void updateClassMetaInfo(ITestContext context, ITestResult result, String methodfname) {
+	private static synchronized void updateClassMetaInfo(ITestContext context,
+			ITestResult result, String methodfname) {
 		String dir = getClassDir(context, result);
 		String file = dir + "/meta-info.json";
 		FileUtil.checkCreateDir(dir);
@@ -291,20 +303,25 @@ public class ReporterUtil {
 				metadata.put("description", scenario.getDescription());
 				metadata.put("groups", scenario.getGroups());
 			} else {
-				String desc = getBundle().getString("current.testcase.desc", result.getMethod().getDescription());
+				String desc = ApplicationProperties.CURRENT_TEST_DESCRIPTION
+						.getStringVal(result.getMethod().getDescription());
 				metadata = new HashMap<String, Object>();
 				metadata.put("groups", result.getMethod().getGroups());
 				metadata.put("description", desc);
 			}
 			metadata.put("name", getMethodName(result));
 			methodInfo.setMetaData(metadata);
-			getBundle().clearProperty("current.testcase.desc");
+			getBundle().clearProperty(ApplicationProperties.CURRENT_TEST_DESCRIPTION.key);
 
-			Test test = result.getMethod().getConstructorOrMethod().getMethod().getAnnotation(Test.class);
-			if (((test.dependsOnMethods() != null) && (test.dependsOnMethods().length > 0))
-					|| ((test.dependsOnGroups() != null) && (test.dependsOnGroups().length > 0))) {
-				String[] depends = { "Methods: " + Arrays.toString(test.dependsOnMethods()),
-						"Groups: " + Arrays.toString(test.dependsOnGroups()) };
+			Test test = result.getMethod().getConstructorOrMethod().getMethod()
+					.getAnnotation(Test.class);
+			if (((test.dependsOnMethods() != null)
+					&& (test.dependsOnMethods().length > 0))
+					|| ((test.dependsOnGroups() != null)
+							&& (test.dependsOnGroups().length > 0))) {
+				String[] depends =
+						{"Methods: " + Arrays.toString(test.dependsOnMethods()),
+								"Groups: " + Arrays.toString(test.dependsOnGroups())};
 				methodInfo.setDependsOn(depends);
 			}
 			methodInfo.setType("test");
@@ -328,7 +345,8 @@ public class ReporterUtil {
 		}
 
 		if (!classInfo.getMethods().contains(methodInfo)) {
-			logger.debug("method:  result: " + methodInfo.getResult() + " groups: " + methodInfo.getMetaData());
+			logger.debug("method:  result: " + methodInfo.getResult() + " groups: "
+					+ methodInfo.getMetaData());
 			classInfo.getMethods().add(methodInfo);
 			writeJsonObjectToFile(file, classInfo);
 		} else {
@@ -355,7 +373,9 @@ public class ReporterUtil {
 
 	private static void appendMetaInfo(ReportEntry report) {
 
-		String file = ApplicationProperties.JSON_REPORT_ROOT_DIR.getStringVal("test-results") + "/meta-info.json";
+		String file =
+				ApplicationProperties.JSON_REPORT_ROOT_DIR.getStringVal("test-results")
+						+ "/meta-info.json";
 		MetaInfo metaInfo = getJsonObjectFromFile(file, MetaInfo.class);
 		metaInfo.getReports().remove(report);
 		metaInfo.getReports().add(report);
@@ -364,22 +384,23 @@ public class ReporterUtil {
 
 	private static String getResult(int res) {
 		switch (res) {
-		case ITestResult.SUCCESS:
-			return "pass";
-		case ITestResult.FAILURE:
-			return "fail";
-		case ITestResult.SKIP:
-			return "skip";
-		case ITestResult.SUCCESS_PERCENTAGE_FAILURE:
-			return "pass";
-		default:
-			return "";
+			case ITestResult.SUCCESS :
+				return "pass";
+			case ITestResult.FAILURE :
+				return "fail";
+			case ITestResult.SKIP :
+				return "skip";
+			case ITestResult.SUCCESS_PERCENTAGE_FAILURE :
+				return "pass";
+			default :
+				return "";
 		}
 	}
 
 	private static String getTestName(ITestContext context) {
 		if (context == null) {
-			context = (ITestContext) ConfigurationManager.getBundle().getObject("tng.context");
+			context = (ITestContext) ConfigurationManager.getBundle()
+					.getObject(ApplicationProperties.CURRENT_TEST_CONTEXT.key);
 		}
 		return getTestName(context.getName());
 
@@ -399,7 +420,8 @@ public class ReporterUtil {
 		int failCnt = 0;
 
 		if ((context != null) && (context.getFailedTests() != null)) {
-			Collection<ITestNGMethod> allFailedTests = context.getFailedTests().getAllMethods();
+			Collection<ITestNGMethod> allFailedTests =
+					context.getFailedTests().getAllMethods();
 			// get unique failed test methods
 			Set<ITestNGMethod> set = new HashSet<ITestNGMethod>(allFailedTests);
 			if (ApplicationProperties.RETRY_CNT.getIntVal(0) > 0)
@@ -411,7 +433,8 @@ public class ReporterUtil {
 				// get failed invocations (remove duplicate because of retry)
 				// for data driven, in case not data driven test invocations
 				// will be 0
-				Set<Integer> invocationNumbers = new HashSet<Integer>(m.getFailedInvocationNumbers());
+				Set<Integer> invocationNumbers =
+						new HashSet<Integer>(m.getFailedInvocationNumbers());
 				int invocatons = invocationNumbers.size();
 				failCnt += invocatons > 0 ? invocatons : 1;
 			}
@@ -420,9 +443,12 @@ public class ReporterUtil {
 	}
 
 	private static int getFailWithPassPerCnt(ITestContext context) {
-		if ((context != null) && (context.getFailedButWithinSuccessPercentageTests() != null)) {
-			if (context.getFailedButWithinSuccessPercentageTests().getAllResults() != null) {
-				return context.getFailedButWithinSuccessPercentageTests().getAllResults().size();
+		if ((context != null)
+				&& (context.getFailedButWithinSuccessPercentageTests() != null)) {
+			if (context.getFailedButWithinSuccessPercentageTests()
+					.getAllResults() != null) {
+				return context.getFailedButWithinSuccessPercentageTests().getAllResults()
+						.size();
 			}
 			return context.getFailedButWithinSuccessPercentageTests().size();
 		}
@@ -441,12 +467,14 @@ public class ReporterUtil {
 
 	private static int getTotal(ITestContext context) {
 
-		return (context == null) || (null == context.getAllTestMethods()) ? 0 : context.getAllTestMethods().length;
+		return (context == null) || (null == context.getAllTestMethods()) ? 0
+				: context.getAllTestMethods().length;
 
 	}
 
 	private static String getTestName(String testname) {
-		return StringUtil.isBlank(testname) ? "" : testname.replaceAll("[^a-zA-Z0-9_]+", "");
+		return StringUtil.isBlank(testname) ? ""
+				: testname.replaceAll("[^a-zA-Z0-9_]+", "");
 	}
 
 	public static String execHostName(String execCommand) {

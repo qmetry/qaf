@@ -26,6 +26,8 @@ package com.qmetry.qaf.automation.keys;
 
 import org.apache.commons.lang.StringUtils;
 import org.testng.IRetryAnalyzer;
+import org.testng.ITestContext;
+import org.testng.ITestResult;
 
 import com.qmetry.qaf.automation.core.ConfigurationManager;
 import com.qmetry.qaf.automation.data.BaseDataBean;
@@ -79,6 +81,32 @@ public enum ApplicationProperties {
 	 * <b>value</b>: flag to auto shutdown selenium server
 	 */
 	SELENIUM_AUTO_SHUTDOWN("selenium.auto.shutdown"),
+	
+	/**
+	 * <b>key</b>: <code> tng.context </code><br/>
+	 * <b>value</b>: {@link ITestContext} object for current running thread/test-case.
+	 * 
+	 */
+	CURRENT_TEST_CONTEXT("tng.context"),
+	/**
+	 * <b>key</b>: <code> current.testcase.name </code><br/>
+	 * <b>value</b>: name of the current running test case.
+	 * 
+	 */
+	CURRENT_TEST_NAME("current.testcase.name"),
+	/**
+	 * <b>key</b>: <code> current.testcase.desc </code><br/>
+	 * <b>value</b>: description of the current running test case.
+	 * 
+	 */
+	CURRENT_TEST_DESCRIPTION("current.testcase.desc"),
+	/**
+	 * <b>key</b>: <code> current.testcase.result </code><br/>
+	 * <b>value</b>: {@link ITestResult} object for the current running test case.
+	 * 
+	 * @since 2.1.9
+	 */
+	CURRENT_TEST_RESULT("current.testcase.result"),
 	/**
 	 * <b>key</b>: <code> driver.name </code><br/>
 	 * <b>value</b>: driver to be used, for instance firefoxDriver or
@@ -514,5 +542,10 @@ public enum ApplicationProperties {
 			// just ignore
 		}
 		return (null != defaultVal) && (defaultVal.length > 0) && defaultVal[0];
+	}
+	
+	public Object getObject(Object... defaultVal){
+		Object objToReturn = ConfigurationManager.getBundle().getObject(key);
+		return null!=objToReturn? objToReturn:(null != defaultVal) && (defaultVal.length > 0) ?defaultVal[0]:null;
 	}
 }

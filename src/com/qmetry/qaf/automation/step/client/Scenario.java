@@ -39,6 +39,7 @@ import com.qmetry.qaf.automation.core.LoggingBean;
 import com.qmetry.qaf.automation.core.MessageTypes;
 import com.qmetry.qaf.automation.core.QAFTestBase;
 import com.qmetry.qaf.automation.core.TestBaseProvider;
+import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.step.StepExecutionTracker;
 import com.qmetry.qaf.automation.step.StepNotFoundException;
 import com.qmetry.qaf.automation.step.StringTestStep;
@@ -238,8 +239,8 @@ public class Scenario extends WebDriverTestCase implements QAFTestNGTest, TestSt
 	protected void beforeScanario() {
 		status = "NOTRUN";
 		logger.info("\n\nExecuting scenario: " + scenarioName + " - " + description);
-		getBundle().setProperty("current.testcase.name", scenarioName);
-		getBundle().setProperty("current.testcase.desc", description);
+		getBundle().setProperty(ApplicationProperties.CURRENT_TEST_NAME.key, scenarioName);
+		getBundle().setProperty(ApplicationProperties.CURRENT_TEST_DESCRIPTION.key, description);
 	}
 
 	public String getSignature() {
