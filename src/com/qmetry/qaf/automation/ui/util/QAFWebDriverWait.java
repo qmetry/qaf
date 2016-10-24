@@ -1,28 +1,35 @@
 /*******************************************************************************
- * QMetry Automation Framework provides a powerful and versatile platform to author 
- * Automated Test Cases in Behavior Driven, Keyword Driven or Code Driven approach
- *                
+ * QMetry Automation Framework provides a powerful and versatile platform to
+ * author
+ * Automated Test Cases in Behavior Driven, Keyword Driven or Code Driven
+ * approach
  * Copyright 2016 Infostretch Corporation
- *
- * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- *
- * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
- * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT
- * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE
- *
- * You should have received a copy of the GNU General Public License along with this program in the name of LICENSE.txt in the root folder of the distribution. If not, see https://opensource.org/licenses/gpl-3.0.html
- *
- * See the NOTICE.TXT file in root folder of this source files distribution 
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or any later version.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR
+ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT
+ * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE
+ * You should have received a copy of the GNU General Public License along with
+ * this program in the name of LICENSE.txt in the root folder of the
+ * distribution. If not, see https://opensource.org/licenses/gpl-3.0.html
+ * See the NOTICE.TXT file in root folder of this source files distribution
  * for additional information regarding copyright ownership and licenses
  * of other open source software / files used by QMetry Automation Framework.
- *
- * For any inquiry or need additional information, please contact support-qaf@infostretch.com
+ * For any inquiry or need additional information, please contact
+ * support-qaf@infostretch.com
  *******************************************************************************/
 
-
 package com.qmetry.qaf.automation.ui.util;
+
+import static com.qmetry.qaf.automation.core.ConfigurationManager.getBundle;
 
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
@@ -34,9 +41,8 @@ import org.openqa.selenium.support.ui.Sleeper;
 import org.openqa.selenium.support.ui.SystemClock;
 
 import com.google.common.collect.ImmutableList;
-import com.qmetry.qaf.automation.core.ConfigurationManager;
+import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.ui.WebDriverTestBase;
-import com.qmetry.qaf.automation.ui.selenium.WaitService;
 import com.qmetry.qaf.automation.ui.webdriver.QAFExtendedWebDriver;
 
 /**
@@ -57,7 +63,7 @@ public class QAFWebDriverWait extends FluentWait<QAFExtendedWebDriver> {
 	 */
 	public QAFWebDriverWait(QAFExtendedWebDriver driver, long timeOutInMiliSeconds) {
 		this(driver, new SystemClock(), Sleeper.SYSTEM_SLEEPER, timeOutInMiliSeconds,
-				WaitService.getDefaultWaitIntervalTimeNum());
+				getDefaultInterval());
 	}
 
 	/**
@@ -74,8 +80,10 @@ public class QAFWebDriverWait extends FluentWait<QAFExtendedWebDriver> {
 	 *            The duration in milliseconds to sleep between polls.
 	 * @see QAFWebDriverWait#ignoring(Class[]) equals
 	 */
-	public QAFWebDriverWait(QAFExtendedWebDriver driver, long timeOutInMiliSeconds, long sleepInMillis) {
-		this(driver, new SystemClock(), Sleeper.SYSTEM_SLEEPER, timeOutInMiliSeconds, sleepInMillis);
+	public QAFWebDriverWait(QAFExtendedWebDriver driver, long timeOutInMiliSeconds,
+			long sleepInMillis) {
+		this(driver, new SystemClock(), Sleeper.SYSTEM_SLEEPER, timeOutInMiliSeconds,
+				sleepInMillis);
 	}
 
 	/**
@@ -108,8 +116,8 @@ public class QAFWebDriverWait extends FluentWait<QAFExtendedWebDriver> {
 	 * @param sleepTimeOut
 	 *            The timeout used whilst sleeping. Defaults to 500ms called.
 	 */
-	protected QAFWebDriverWait(QAFExtendedWebDriver driver, Clock clock, Sleeper sleeper, long timeOutInMiliSeconds,
-			long sleepTimeOut) {
+	protected QAFWebDriverWait(QAFExtendedWebDriver driver, Clock clock, Sleeper sleeper,
+			long timeOutInMiliSeconds, long sleepTimeOut) {
 		super(driver, clock, sleeper);
 		withTimeout(timeOutInMiliSeconds, TimeUnit.MILLISECONDS);
 		pollingEvery(sleepTimeOut, TimeUnit.MILLISECONDS);
@@ -120,8 +128,8 @@ public class QAFWebDriverWait extends FluentWait<QAFExtendedWebDriver> {
 	 * @see #ignoreAll(Collection)
 	 */
 	public QAFWebDriverWait ignore(Class<? extends RuntimeException>... exceptionType) {
-		return (QAFWebDriverWait) this
-				.ignoreAll(ImmutableList.<Class<? extends RuntimeException>> copyOf(exceptionType));
+		return (QAFWebDriverWait) this.ignoreAll(
+				ImmutableList.<Class<? extends RuntimeException>> copyOf(exceptionType));
 	}
 
 	private static long getTimeout(long... timeout) {
@@ -139,14 +147,13 @@ public class QAFWebDriverWait extends FluentWait<QAFExtendedWebDriver> {
 	}
 
 	private static long getDefaultTimeout() {
-		return ConfigurationManager.getBundle().getLong("selenium.explicit.wait.timeout",
-				WaitService.getDefaultPageWaitTimeNum());
+		return getBundle().getLong("selenium.explicit.wait.timeout",
+				ApplicationProperties.SELENIUM_WAIT_TIMEOUT.getIntVal(5000));
 	}
 
 	private static long getDefaultInterval() {
-		return ConfigurationManager.getBundle().getLong("selenium.explicit.wait.interval",
-				WaitService.getDefaultWaitIntervalTimeNum());
-
+		return getBundle().getLong("selenium.explicit.wait.interval",
+				getBundle().getLong("selenium.wait.interval", 1000));
 	}
 
 }
