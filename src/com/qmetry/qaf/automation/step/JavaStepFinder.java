@@ -35,10 +35,8 @@ import static com.qmetry.qaf.automation.keys.ApplicationProperties.STEP_PROVIDER
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -46,8 +44,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.impl.LogFactoryImpl;
 import org.reflections.Reflections;
-import org.reflections.scanners.MethodAnnotationsScanner;
 import org.reflections.scanners.SubTypesScanner;
 import org.reflections.scanners.TypeAnnotationsScanner;
 import org.reflections.util.ClasspathHelper;
@@ -64,6 +63,7 @@ import com.qmetry.qaf.automation.util.ClassUtil;
  */
 public final class JavaStepFinder {
 	public static final String STEPS_PACKAGE = "com.qmetry.qaf.automation.step";
+	private static final Log logger = LogFactoryImpl.getLog(JavaStepFinder.class);
 
 	public static Map<String, TestStep> getAllJavaSteps() {
 		Map<String, TestStep> stepMapping = new HashMap<String, TestStep>();
@@ -77,18 +77,24 @@ public final class JavaStepFinder {
 			pkgs.addAll(Arrays.asList(getBundle().getStringArray(STEP_PROVIDER_PKG.key)));
 		}
 		for (String pkg : pkgs) {
-			System.out.println("pkg: " + pkg);
-			Reflections reflections = new Reflections(pkg, new TypeAnnotationsScanner(),
-					new org.reflections.scanners.MethodAnnotationsScanner(),
-					new SubTypesScanner(false));
-			
-			steps.addAll(reflections.getMethodsAnnotatedWith(QAFTestStep.class));
+			logger.info("pkg: " + pkg);
+
+			ConfigurationBuilder configuration =
+					new ConfigurationBuilder().setUrls(ClasspathHelper.forPackage(pkg))
+							.setScanners(new TypeAnnotationsScanner(),
+									new org.reflections.scanners.MethodAnnotationsScanner(),
+									new SubTypesScanner(false))
+							.filterInputsBy(new FilterBuilder().includePackage(pkg));
+			Reflections reflections = new Reflections(configuration);
+
 			try {
 				Set<Class<? extends Object>> classes =
 						reflections.getSubTypesOf(Object.class);
 				steps.addAll(getAllMethodsWithAnnotation(classes, QAFTestStep.class));
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error("Unable to scaning step through classes from package: " + pkg
+						+ "\n Using direct step annotation scanning instead", e);
+				steps.addAll(reflections.getMethodsAnnotatedWith(QAFTestStep.class));
 			}
 			stepProviders
 					.addAll(reflections.getTypesAnnotatedWith(QAFTestStepProvider.class));
@@ -126,10 +132,18 @@ public final class JavaStepFinder {
 			String[] pkgs = getBundle().getStringArray(STEP_PROVIDER_PKG.key);
 			int oldStepPriority = getStepPriority(oldStep, pkgs);
 			int curStepPriority = getStepPriority(step, pkgs);
+
+			logger.debug(String.format(
+					"Found duplicate step to load [%s] with [%s] prority then [%s]",
+					oldStep.getSignature(),
+					(oldStepPriority > curStepPriority ? "higher" : "lower"),
+					step.getSignature()));
+
 			if (oldStepPriority > curStepPriority) {
 				step = oldStep;
 				oldStep = stepMapping.put(step.getName().toUpperCase(), oldStep);
 			}
+
 		}
 
 	}
