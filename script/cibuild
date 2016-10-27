@@ -3,4 +3,4 @@ set -e # halt script on error
 
 bundle exec jekyll build
 bundle exec htmlproofer --help
-bundle exec htmlproofer ./_site --log_level ":stdout"
+bundle exec htmlproofer ./_site --log-level ":stdout"
