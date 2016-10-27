@@ -82,7 +82,7 @@ from mako.template import Template
 def fun(dir,rootdir):
     print('Processing: '+dir)
     filenames = [fname for fname in sorted(os.listdir(dir))
-              if fname not in EXCLUDED  and print(os.path.isfile('E:/OSS_QAF/qaf-gh-pages-qmetry/'+dir+fname)) and os.path.isfile('E:/OSS_QAF/qaf-gh-pages-qmetry/'+dir+fname)]
+              if fname not in EXCLUDED and os.path.isfile(dir+fname)]
     dirnames = [fname for fname in sorted(os.listdir(dir))
               if fname not in EXCLUDED and not os.path.isfile(fname)]
 #    header = os.path.basename(dir)
@@ -91,7 +91,7 @@ def fun(dir,rootdir):
     f.close()
     for subdir in dirnames:
         try:
-            fun(dir+"/"+subdir+"/",rootdir+'../')
+            fun(dir+subdir+"/",rootdir+'../')
         except:
             pass
 
@@ -100,7 +100,7 @@ def main():
     parser.add_argument("directory")
     parser.add_argument("--header")
     args = parser.parse_args()
-    fun(args.directory,'../')
+    fun(args.directory+'/','../')
     
 if __name__ == '__main__':
     main()
