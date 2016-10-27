@@ -84,7 +84,7 @@ def fun(dir,rootdir):
     filenames = [fname for fname in sorted(os.listdir(dir))
               if fname not in EXCLUDED and os.path.isfile(dir+fname)]
     dirnames = [fname for fname in sorted(os.listdir(dir))
-              if fname not in EXCLUDED and not os.path.isfile(fname)]
+              if fname not in EXCLUDED and not os.path.isfile(dir+fname)]
 #    header = os.path.basename(dir)
     f = open(dir+'/index.html','w')
     print(Template(INDEX_TEMPLATE).render(dirnames=dirnames,filenames=filenames, header='Index of '+dir,ROOTDIR=rootdir,time=time.ctime(os.path.getmtime(dir))),file=f)
