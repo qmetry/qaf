@@ -2,4 +2,4 @@
 set -e # halt script on error
 
 bundle exec jekyll build
-bundle exec travis_wait htmlproofer ./_site
+travis_wait bundle exec htmlproofer ./_site
