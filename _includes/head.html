@@ -2,7 +2,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="QAF {% if page.summary %}{{ page.summary | strip_html | strip_newlines | truncate: 160 }}{% elsif page.title %}{{ page.title | strip_html | strip_newlines | truncate: 160 }}{% endif %}">
-<meta name="keywords" content="{{page.tags}}{% if page.tags %}, {% endif %} {{page.keywords}} {% if page.keywords %}, {% endif %} QAF">
+<meta name="keywords" content="{{page.tags}}{% if page.tags %}, {% endif %} {{page.keywords}} {% if page.keywords %}, {% endif %} QAF" itemprop="{{page.tags}}{% if page.tags %}, {% endif %} {{page.keywords}} {% if page.keywords %}, {% endif %} QAF">
 <title>{{ page.title }} | {{ site.site_title }}</title>
 <link rel="stylesheet" href="{{ "../css/syntax.css" }}">
 <link rel="stylesheet" href="{{ "css/syntax.css" }}">
