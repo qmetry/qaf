@@ -9,6 +9,8 @@ INDEX_TEMPLATE = r"""
 
 <html>
 <head>
+<meta name="description" content="Repository for QMetry Automation Framework"/>
+<meta name="keywords" itemprop="Selenium,WebDriver,Infostretch,QMetry,QAF,Automation,Framework,TestNg,Testing,QA,Gherkin,BDD,KWD,ISFW,QAF"/>
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -16,7 +18,7 @@ INDEX_TEMPLATE = r"""
       })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
       ga('create', 'UA-83031490-1', 'auto');
       ga('require', 'linkid');
-      ga('send', 'pageview','download');
+      ga('send', 'pageview');
     </script>
 </head>
 <body>
