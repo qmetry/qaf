@@ -9,6 +9,7 @@ INDEX_TEMPLATE = r"""
 
 <html>
 <head>
+<title>QMetry Automation Framework - ${header}</title>
 <meta name="description" content="Repository for QMetry Automation Framework"/>
 <meta name="keywords" itemprop="Selenium,WebDriver,Infostretch,QMetry,QAF,Automation,Framework,TestNg,Testing,QA,Gherkin,BDD,KWD,ISFW,QAF"/>
     <script>
@@ -22,7 +23,7 @@ INDEX_TEMPLATE = r"""
     </script>
 </head>
 <body>
-    <h2>${header}</h2>
+    <h2>Index of ${header}</h2>
     <p>
     <table>
         <tbody>
@@ -93,7 +94,7 @@ def fun(dir,rootdir):
     dirnames = [fname for fname in dirnames if fname not in filenames]
 #    header = os.path.basename(dir)
     f = open(dir+'/index.html','w')
-    print(Template(INDEX_TEMPLATE).render(dirnames=dirnames,filenames=filenames, header='Index of '+dir,ROOTDIR=rootdir,time=time.ctime(os.path.getmtime(dir))),file=f)
+    print(Template(INDEX_TEMPLATE).render(dirnames=dirnames,filenames=filenames, header=dir,ROOTDIR=rootdir,time=time.ctime(os.path.getmtime(dir))),file=f)
     f.close()
     for subdir in dirnames:
         try:
