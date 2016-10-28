@@ -97,7 +97,7 @@ def fun(dir,rootdir):
             if fname not in EXCLUDED  ]
     dirnames = [fname for fname in dirnames if fname not in filenames]
     filesizes = [os.path.getsize(dir+fname) for fname in filenames]
-    filetimes = [subprocess.check_output(["git", "log", "--pretty=format:%cd", "-n", "1" ,"--date=iso",os.path.dirname(dir+fname)]) for fname in filenames]
+    filetimes = [subprocess.check_output(["git", "log", "--pretty=format:%cd", "-n", "1" ,"--date=iso",dir+fname]) for fname in filenames]
 
 #    header = os.path.basename(dir)
     f = open(dir+'/index.html','w')
