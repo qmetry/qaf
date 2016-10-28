@@ -27,4 +27,6 @@ tags: [getting_started]
 | retry.count	| 0	| To retry testcase if testcase failed cause of any exception.<br> **Note**: testcase will not retry if there is any checkpoint failure.
 | bean.populate.random | 	false	| Set true to fill bean randomly from available data sets, more details [fill Databean from multiple dataset.](databeans.html)
 | selenium.singletone | |	To define driver instance scope.Possible value can be Tests or Methods or Groups.
+|driver.init.retry.timeout|0|Duration in multiplication of 10 seconds for example 50. Set time out for retry driver initialization when driver initialization fail (since 2.1.9).
+|step.provider.sharedinstance|false|specify wherether to share class object among step in the same class. (sice 2.1.9)
 
