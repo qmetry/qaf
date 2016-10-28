@@ -68,7 +68,7 @@ INDEX_TEMPLATE = r"""
                 <td><a href="${name}">${name}</a></td>
                 <td align="left">${filetimes[loop.index]}</td>
 
-                <td align="right">${filesizes[loop.index]/1000}kb</td>
+                <td align="right">${filesizes[loop.index]}</td>
                 <td>&nbsp;</td>
             </tr>
             % endfor
@@ -96,7 +96,7 @@ def fun(dir,rootdir):
     dirnames = [fname for fname in sorted(os.listdir(dir))
             if fname not in EXCLUDED  ]
     dirnames = [fname for fname in dirnames if fname not in filenames]
-    filesizes = [os.path.getsize(dir+fname) for fname in filenames]
+    filesizes = [hbytes(os.path.getsize(dir+fname)) for fname in filenames]
     filetimes = [subprocess.check_output(["git", "log", "--pretty=format:%cd", "-n", "1" ,"--date=iso",dir+fname]) for fname in filenames]
     
     dirtimes = [subprocess.check_output(["git", "log", "--pretty=format:%cd", "-n", "1" ,"--date=iso",dir+fname]) for fname in dirnames]
@@ -110,6 +110,13 @@ def fun(dir,rootdir):
             fun(dir+subdir+"/",rootdir+'../')
         except:
             pass
+
+def hbytes(num):
+    for x in ['bytes','KB','MB','GB']:
+        if num < 1024.0:
+            return "%3.1f%s" % (num, x)
+        num /= 1024.0
+    return "%3.1f%s" % (num, 'TB')
 
 def main():
     parser = argparse.ArgumentParser()
