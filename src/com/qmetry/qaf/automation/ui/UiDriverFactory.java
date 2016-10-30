@@ -62,6 +62,7 @@ import com.qmetry.qaf.automation.core.AutomationError;
 import com.qmetry.qaf.automation.core.ConfigurationManager;
 import com.qmetry.qaf.automation.core.DriverFactory;
 import com.qmetry.qaf.automation.core.LoggingBean;
+import com.qmetry.qaf.automation.core.QAFListener;
 import com.qmetry.qaf.automation.core.QAFTestBase.STBArgs;
 import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.ui.selenium.webdriver.SeleniumDriverFactory;
@@ -201,6 +202,17 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 				listners.add(cls);
 			} catch (Exception e) {
 				logger.error("Unable to register listener class " + listenr, e);
+			}
+		}
+		clistners = ConfigurationManager.getBundle()
+				.getStringArray(ApplicationProperties.QAF_LISTENERS.key);
+		for (String listener : clistners) {
+			try {
+				QAFListener cls = (QAFListener) Class.forName(listener).newInstance();
+				if(QAFWebDriverCommandListener.class.isAssignableFrom(cls.getClass()))
+				listners.add((QAFWebDriverCommandListener)cls);
+			} catch (Exception e) {
+				logger.error("Unable to register class as driver listener:  " + listener, e);
 			}
 		}
 		return listners;

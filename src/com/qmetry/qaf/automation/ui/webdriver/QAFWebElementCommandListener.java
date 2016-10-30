@@ -26,13 +26,14 @@ package com.qmetry.qaf.automation.ui.webdriver;
 
 import org.openqa.selenium.remote.Response;
 
+import com.qmetry.qaf.automation.core.QAFListener;
+
 /**
- * com.qmetry.qaf.automation.ui.webdriver.listener.IsWebElementCommandListener.
- * java
+ * com.qmetry.qaf.automation.ui.webdriver.QAFWebElementCommandListener.java
  * 
- * @author chirag
+ * @author chirag.jayswal
  */
-public interface QAFWebElementCommandListener {
+public interface QAFWebElementCommandListener extends QAFListener {
 	/**
 	 * This can be used as intercepter. If you want to skip execution of actual
 	 * command then set response in {@link CommandTracker#setResponce(Response)}

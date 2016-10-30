@@ -59,6 +59,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.qmetry.qaf.automation.core.ConfigurationManager;
+import com.qmetry.qaf.automation.core.QAFListener;
 import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.ui.WebDriverCommandLogger;
 import com.qmetry.qaf.automation.ui.WebDriverTestBase;
@@ -136,6 +137,17 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 					.getStringArray(ApplicationProperties.WEBDRIVER_COMMAND_LISTENERS.key);
 			for (String listenr : listners) {
 				registerListeners(listenr);
+			}
+			listners = ConfigurationManager.getBundle()
+					.getStringArray(ApplicationProperties.QAF_LISTENERS.key);
+			for (String listener : listners) {
+				try {
+					QAFListener cls = (QAFListener) Class.forName(listener).newInstance();
+					if(QAFWebDriverCommandListener.class.isAssignableFrom(cls.getClass()))
+					this.listners.add((QAFWebDriverCommandListener)cls);
+				} catch (Exception e) {
+					logger.error("Unable to register class as driver listener:  " + listener, e);
+				}
 			}
 
 			onInitialize(this);

@@ -30,6 +30,7 @@ import org.testng.ITestContext;
 import org.testng.ITestResult;
 
 import com.qmetry.qaf.automation.core.ConfigurationManager;
+import com.qmetry.qaf.automation.core.QAFListener;
 import com.qmetry.qaf.automation.data.BaseDataBean;
 import com.qmetry.qaf.automation.step.QAFTestStepListener;
 import com.qmetry.qaf.automation.ui.selenium.SeleniumCommandListener;
@@ -420,6 +421,14 @@ public enum ApplicationProperties {
 	 * local
 	 */
 	ISFW_BUILD_INFO("isfw.build.info"),
+	/**
+	 * <b>key</b>: <code>qaf.listeners</code><br/>
+	 * <b>value</b>: list of qaf listeners (fully qualified class name
+	 * that implements any of {@link QAFTestStepListener}, {@link QAFWebDriverCommandListener}, {@link QAFWebElementCommandListener}) to be registered.
+	 * 
+	 * @see QAFListener
+	 */
+	QAF_LISTENERS("qaf.listeners"),
 	/**
 	 * <b>key</b>: <code> teststep.listeners</code><br/>
 	 * <b>value</b>: list of test step listeners (fully qualified class name

@@ -54,6 +54,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.qmetry.qaf.automation.core.ConfigurationManager;
 import com.qmetry.qaf.automation.core.MessageTypes;
+import com.qmetry.qaf.automation.core.QAFListener;
 import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.ui.WebDriverCommandLogger;
 import com.qmetry.qaf.automation.ui.WebDriverTestBase;
@@ -99,6 +100,17 @@ public class QAFExtendedWebElement extends RemoteWebElement implements QAFWebEle
 				.getStringArray(ApplicationProperties.WEBELEMENT_COMMAND_LISTENERS.key);
 		for (String listenr : listners) {
 			registerListeners(listenr);
+		}
+		listners = ConfigurationManager.getBundle()
+				.getStringArray(ApplicationProperties.QAF_LISTENERS.key);
+		for (String listener : listners) {
+			try {
+				QAFListener cls = (QAFListener) Class.forName(listener).newInstance();
+				if(QAFWebElementCommandListener.class.isAssignableFrom(cls.getClass()))
+				this.listners.add((QAFWebElementCommandListener)cls);
+			} catch (Exception e) {
+				logger.error("Unable to register class as element listener:  " + listener, e);
+			}
 		}
 	}
 
