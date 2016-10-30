@@ -17,17 +17,19 @@ You can create listener by implementing appropriate listener interface of by ext
 
 | List Interface | Adapter Class | Property | Listener Methods |
 |-------|--------|---------|---------|
-| QAFTestStepListener | QAFTestStepAdapter  | teststep.listeners  | onFailure(StepExecutionTracker)
+| QAFTestStepListener | QAFTestStepAdapter  | teststep.listeners or qaf.listeners  | onFailure(StepExecutionTracker)
 | | | | beforExecute(StepExecutionTracker)
 | | | | afterExecute(StepExecutionTracker)
-| QAFWebDriverCommandListener | QAFWebDriverCommandAdapter | wd.command.listeners |beforeInitialize(Capabilities)
+| QAFWebDriverCommandListener | QAFWebDriverCommandAdapter | wd.command.listeners or qaf.listeners |beforeInitialize(Capabilities)
 | | | | onInitialize(QAFExtendedWebDriver)
 | | | | beforeCommand(QAFExtendedWebDriver, CommandTracker)
 | | | | afterCommand(QAFExtendedWebDriver, CommandTracker)
 | | | | onFailure(QAFExtendedWebDriver, CommandTracker)
-| QAFWebElementCommandListener | QAFWebElementCommandAdapter | we.command.listeners | beforeCommand(QAFExtendedWebElement, CommandTracker)
+| QAFWebElementCommandListener | QAFWebElementCommandAdapter | we.command.listeners or qaf.listeners | beforeCommand(QAFExtendedWebElement, CommandTracker)
 | | | | afterCommand(QAFExtendedWebElement, CommandTracker)
 | | | | onFailure(QAFExtendedWebElement, CommandTracker)
+
+> There is additional Adapter Class `QAFListenerAdapter` introduced from 2.1.9 that implements all of the qaf listeners. You can extend it, override required methods and register using `qaf.listeners` property.
 
 ## TestStep Listener
 
