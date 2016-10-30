@@ -25,6 +25,8 @@ You can create listener by implementing appropriate listener interface of by ext
 | | | | beforeCommand(QAFExtendedWebDriver, CommandTracker)
 | | | | afterCommand(QAFExtendedWebDriver, CommandTracker)
 | | | | onFailure(QAFExtendedWebDriver, CommandTracker)
+| | | | onInitializationFailure(Capabilities desiredCapabilities, Throwable t);
+
 | QAFWebElementCommandListener | QAFWebElementCommandAdapter | we.command.listeners or qaf.listeners | beforeCommand(QAFExtendedWebElement, CommandTracker)
 | | | | afterCommand(QAFExtendedWebElement, CommandTracker)
 | | | | onFailure(QAFExtendedWebElement, CommandTracker)
