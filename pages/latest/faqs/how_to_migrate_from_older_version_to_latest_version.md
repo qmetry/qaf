@@ -1,8 +1,8 @@
 ---
 title: How to migrate from older version to latest version
 sidebar: faq_sidebar
-permalink: qaf-2.1.9/how_to_migrate_from_older_version.html
-folder: qaf-2.1.9
+permalink: latest/how_to_migrate_from_older_version.html
+folder: latest
 ---
 
 Follow below steps to use QAF 2.1.8:

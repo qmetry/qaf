@@ -1,8 +1,8 @@
 ---
 title: How to configure KWD for execution
 sidebar: faq_sidebar
-permalink: latest/how_to_configure_kwd_for_execution.html
-folder: latest
+permalink: qaf-2.1.8/how_to_configure_kwd_for_execution.html
+folder: qaf-2.1.8
 ---
 
 

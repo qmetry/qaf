@@ -2,9 +2,9 @@
 title: "Web Driver Related Pages"
 tagName: WebDriver
 search: exclude
-permalink: qaf-2.1.9/tag_webdriver.html
-sidebar: qaf_2_1_9-sidebar
-folder: qaf-2.1.9
+permalink: latest/tag_webdriver.html
+sidebar: latest-sidebar
+folder: latest
 ---
 {% include taglogic.html %}
 

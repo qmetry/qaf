@@ -1,8 +1,8 @@
 ---
 title: Web Services Testing
-sidebar: qaf_latest-sidebar
-permalink: latest/web_services.html
-folder: latest
+sidebar: qaf_2_1_8-sidebar
+permalink: qaf-2.1.8/web_services.html
+folder: qaf-2.1.8
 tags: [java]
 ---
 

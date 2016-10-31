@@ -1,8 +1,8 @@
 ---
 title: Locator Repository
-sidebar: qaf_latest-sidebar
-permalink: latest/locator_repository.html
-folder: latest
+sidebar: qaf_2_1_8-sidebar
+permalink: qaf-2.1.8/locator_repository.html
+folder: qaf-2.1.8
 tags: [Selenium,locator,java, webdriver, webelement]
 ---
 

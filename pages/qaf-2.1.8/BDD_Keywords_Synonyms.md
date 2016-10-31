@@ -1,8 +1,8 @@
 ---
 title: BDD Keyword Synonyms
-sidebar: qaf_latest-sidebar
-permalink: latest/BDD_Keywords_Synonyms.html
-folder: latest
+sidebar: qaf_2_1_8-sidebar
+permalink: qaf-2.1.8/BDD_Keywords_Synonyms.html
+folder: qaf-2.1.8
 tags: [bdd]
 ---
 

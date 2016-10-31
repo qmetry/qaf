@@ -1,8 +1,8 @@
 ---
 title: How to run mobile web automation on Android
 sidebar: faq_sidebar
-permalink: qaf-2.1.9/how_to_run_mweb_on_android.html
-folder: qaf-2.1.9
+permalink: latest/how_to_run_mweb_on_android.html
+folder: latest
 ---
 
 Following are possible ways for mobile web for android platform.

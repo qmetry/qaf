@@ -1,8 +1,8 @@
 ---
 title: Define Test Suite
-sidebar: qaf_2_1_9-sidebar
-permalink: qaf-2.1.9/Define_Test_Suite.html
-folder: qaf-2.1.9
+sidebar: latest-sidebar
+permalink: latest/Define_Test_Suite.html
+folder: latest
 tags: [bdd,scenario]
 ---
 

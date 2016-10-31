@@ -1,9 +1,9 @@
 
 ---
 title: Introduction
-sidebar: qaf_latest-sidebar
-permalink: latest/using_listeners.html
-folder: latest
+sidebar: qaf_2_1_8-sidebar
+permalink: qaf-2.1.8/using_listeners.html
+folder: qaf-2.1.8
 ---
 
 ## Using Listeners

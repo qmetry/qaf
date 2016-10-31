@@ -1,8 +1,8 @@
 ---
 title: How multiple parents supported in page hierarchy?
 sidebar: faq_sidebar
-permalink: qaf-2.1.9/how_multiple_parents_supported_in_page_hierarchy.html
-folder: qaf-2.1.9
+permalink: latest/how_multiple_parents_supported_in_page_hierarchy.html
+folder: latest
 ---
 
 

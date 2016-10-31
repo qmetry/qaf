@@ -1,9 +1,9 @@
 ---
 title: Make Tests Data driven
-sidebar: qaf_latest-sidebar
-permalink: latest/maketest_data_driven.html
+sidebar: qaf_2_1_8-sidebar
+permalink: qaf-2.1.8/maketest_data_driven.html
 tags: [getting_started,datadriven]
-folder: latest
+folder: qaf-2.1.8
 ---
 
 To make any test data driven you can use **QAFDataProvider** annotation on test method, where test get executed for each data set provided in external data file. QAF supports following file formats to provide data for data driven tests.

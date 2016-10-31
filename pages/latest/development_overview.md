@@ -1,8 +1,8 @@
 ---
 title: Development with QAF
-sidebar: qaf_2_1_9-sidebar
-permalink: qaf-2.1.9/development_overview.html
-folder: qaf-2.1.9
+sidebar: latest-sidebar
+permalink: latest/development_overview.html
+folder: latest
 next: Creating_test_cases.html
 ---
 

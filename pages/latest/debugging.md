@@ -1,8 +1,8 @@
 ---
 title: Debugging
-sidebar: qaf_2_1_9-sidebar
-permalink: qaf-2.1.9/debugging.html
-folder: qaf-2.1.9
+sidebar: latest-sidebar
+permalink: latest/debugging.html
+folder: latest
 ---
 
 ## Debugging

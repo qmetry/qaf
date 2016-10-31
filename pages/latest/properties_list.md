@@ -1,8 +1,8 @@
 ---
 title: Property List
-sidebar: qaf_2_1_9-sidebar
-permalink: qaf-2.1.9/properties_list.html
-folder: qaf-2.1.9
+sidebar: latest-sidebar
+permalink: latest/properties_list.html
+folder: latest
 tags: [getting_started]
 ---
 

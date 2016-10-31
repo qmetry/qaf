@@ -1,8 +1,8 @@
 ---
 title: QAF cucumber
-sidebar: qaf_2_1_9-sidebar
-permalink: qaf-2.1.9/qaf_cucumber.html
-folder: qaf-2.1.9
+sidebar: latest-sidebar
+permalink: latest/qaf_cucumber.html
+folder: latest
 ---
 
 A cucumber QAF Formatter is provided to use with cucumber JVM.

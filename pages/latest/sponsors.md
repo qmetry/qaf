@@ -1,7 +1,7 @@
 ---
 title: Sponsors
-permalink: qaf-2.1.9/sponsors.html
-folder: qaf-2.1.9
+permalink: latest/sponsors.html
+folder: latest
 
 ---
 

@@ -1,8 +1,8 @@
 ---
 title: How to Run QAS Project
 sidebar: faq_sidebar
-permalink: qaf-2.1.9/how_to_run_qas_project.html
-folder: qaf-2.1.9
+permalink: latest/how_to_run_qas_project.html
+folder: latest
 ---
 
 

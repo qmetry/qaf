@@ -1,8 +1,8 @@
 ---
 title: testrun_config.xml
 sidebar: faq_sidebar
-permalink: qaf-2.1.9/testrun_config.html
-folder: qaf-2.1.9
+permalink: latest/testrun_config.html
+folder: latest
 ---
 
 ``` xml

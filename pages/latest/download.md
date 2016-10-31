@@ -1,8 +1,8 @@
 ---
 title: Download
 sidebar: download_sidebar
-permalink: qaf-2.1.9/download.html
-folder: qaf-2.1.9
+permalink: latest/download.html
+folder: latest
 ---
 
 ## Blank Project

@@ -1,8 +1,8 @@
 ---
 title: Describe Test Step
-sidebar: qaf_latest-sidebar
-permalink: latest/Describe_Test_Step.html
-folder: latest
+sidebar: qaf_2_1_8-sidebar
+permalink: qaf-2.1.8/Describe_Test_Step.html
+folder: qaf-2.1.8
 tags: [bdd,scenario,bdl,java]
 ---
 

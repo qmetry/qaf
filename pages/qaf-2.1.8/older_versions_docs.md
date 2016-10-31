@@ -1,7 +1,7 @@
 ---
 title: Older Version Documentation
-permalink: latest/older_versions_docs.html
-folder: latest
+permalink: qaf-2.1.8/older_versions_docs.html
+folder: qaf-2.1.8
 ---
 
 Please contact support(at)infostretch.com / support(at)qmetry.com for older version's documentation.

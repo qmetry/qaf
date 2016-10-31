@@ -1,9 +1,9 @@
 ---
 title: QAF Reporting
-sidebar: qaf_latest-sidebar
+sidebar: qaf_2_1_8-sidebar
 
-permalink: latest/qaf_reporting.html
-folder: latest
+permalink: qaf-2.1.8/qaf_reporting.html
+folder: qaf-2.1.8
 ---
 
 ## Summary

@@ -1,8 +1,8 @@
 ---
 title: Different ways of providing properties
-sidebar: qaf_2_1_9-sidebar
-permalink: qaf-2.1.9/different_ways_of_providing_prop.html
-folder: qaf-2.1.9
+sidebar: latest-sidebar
+permalink: latest/different_ways_of_providing_prop.html
+folder: latest
 ---
 
 

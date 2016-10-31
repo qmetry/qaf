@@ -1,8 +1,8 @@
 ---
 title: TestNG listeners
-sidebar: qaf_latest-sidebar
-permalink: latest/testNG_listeners.html
-folder: latest
+sidebar: qaf_2_1_8-sidebar
+permalink: qaf-2.1.8/testNG_listeners.html
+folder: qaf-2.1.8
 tags: [testng]
 ---
 

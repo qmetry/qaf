@@ -1,9 +1,9 @@
 ---
 title: QMetry Automation Framework
 tags: [getting_started]
-sidebar: qaf_latest-sidebar
-permalink: latest/docs.html
-folder: latest
+sidebar: qaf_2_1_8-sidebar
+permalink: qaf-2.1.8/docs.html
+folder: qaf-2.1.8
 ---
 ## Overview
 
