@@ -28,12 +28,12 @@ You can use QAF as a Maven Artifact. Users would need to add this to their pom.x
 <dependency>
     <groupId>com.qmetry</groupId>
     <artifactId>qaf</artifactId>
-    <version>{{site.data.strings.version}}</version>
+    <version>latest.integration</version>
 </dependency>
 <dependency>
     <groupId>com.qmetry</groupId>
     <artifactId>qaf-support</artifactId>
-    <version>{{site.data.strings.version}}</version>
+    <version>latest.integration</version>
 </dependency>
 ```
 
