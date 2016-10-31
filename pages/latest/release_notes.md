@@ -1,9 +1,9 @@
 ---
 title: Release Notes
-sidebar: qaf_2_1_9-sidebar
+sidebar: qaf_latest-sidebar
 
-permalink: qaf-2.1.9/release_notes.html
-folder: qaf-2.1.9
+permalink: latest/release_notes.html
+folder: latest
 ---
 
 ## VER-2.1.8 Release Notes:
