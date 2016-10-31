@@ -1,8 +1,8 @@
 ---
 title: What is the use of listeners?
 sidebar: faq_sidebar
-permalink: latest/what_is_the_use_of_listeners.html
-folder: latest
+permalink: qaf-2.1.9/what_is_the_use_of_listeners.html
+folder: qaf-2.1.9
 ---
 
 The general idea is that one or more objects (the listeners) register their interest in being notified of command execution on selenium/webdriver/webelement. The listener can perform some actions or track details before/after command execution as well as on failure. You can create listener by implementing appropriate listener interface of by extending adaptor class. To register listener set property “wd.command.listeners” for web driver listener and “we.command.listeners” for web element listener.

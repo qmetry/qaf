@@ -1,8 +1,8 @@
 ---
 title: QAF listeners
-sidebar: qaf_2_1_8-sidebar
-permalink: qaf-2.1.8/qaf_listeners.html
-folder: qaf-2.1.8
+sidebar: qaf_latest-sidebar
+permalink: latest/qaf_listeners.html
+folder: latest
 tags: [webelement,webdriver,java]
 ---
 

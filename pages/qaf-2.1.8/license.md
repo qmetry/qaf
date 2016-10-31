@@ -1,8 +1,9 @@
 ---
 title: License
-sidebar: qaf_2_1_8-sidebar
-permalink: qaf-2.1.8/license.html
-folder: qaf-2.1.8
+sidebar: qaf_latest-sidebar
+
+permalink: latest/license.html
+folder: latest
 ---
                     GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007

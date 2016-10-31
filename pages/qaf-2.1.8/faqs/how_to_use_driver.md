@@ -1,8 +1,8 @@
 ---
 title: How to use driver?
 sidebar: faq_sidebar
-permalink: qaf-2.1.8/how_to_use_driver.html
-folder: qaf-2.1.8
+permalink: latest/how_to_use_driver.html
+folder: latest
 ---
 
 Default available driver names in QAF:

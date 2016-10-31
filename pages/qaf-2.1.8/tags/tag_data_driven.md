@@ -2,10 +2,10 @@
 title: "DataDriven Related Pages"
 tagName: daradriven
 search: exclude
-permalink: qaf-2.1.8/tag_datadriven.html
-sidebar: qaf_2_1_8-sidebar
+permalink: latest/tag_datadriven.html
+sidebar: qaf_latest-sidebar
 
-folder: qaf-2.1.8
+folder: latest
 ---
 {% include taglogic.html %}
 

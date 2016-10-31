@@ -1,8 +1,8 @@
 ---
 title: Data Beans
-sidebar: qaf_2_1_8-sidebar
-permalink: qaf-2.1.8/databeans.html
-folder: qaf-2.1.8
+sidebar: qaf_latest-sidebar
+permalink: latest/databeans.html
+folder: latest
 tags: [java,testdata]
 ---
 To provide data you can use data beans also. To create data bean you required to extend **BaseDataBean** class. Data bean can be created to provide data to filling forms to communicate data between two or more test case/page and so on. Main advantage of using data beans is
@@ -90,7 +90,6 @@ Sample of xml data to be filled in bean
     <sample>
         <data>
             <name>xmldata</name>
-            <age>30</age>
             <email>xmldata@malinator.com</email>
             <pwd>xmldata123#</pwd>
             <ssn>252-06-0029</ssn>
@@ -109,7 +108,7 @@ Populating bean using above xml data. Assumed that the xml file is under resourc
 Consider the example below UserBean and sample xml test data:
 
 ```java
-class UserBean extends BaseDataBean {
+Class UserBean extends BaseDataBean {
     String fname;
     String lname;
     int age;
@@ -221,7 +220,7 @@ public int numChild;
 public int chield1Age = "1";
 @Randomizer(minval=1, maxval=17)
 @UiElement(fieldLoc = CHLD2_AGE_LOC, fieldType = Type.selectbox, dependsOnField = "numChild", dependingValue = "${numChild}>1",order=15)
-public int child2Age = "1";
+public int chield2Age = "1";
 ```
 
 

@@ -1,8 +1,8 @@
 ---
 title: Creating Test Project
-sidebar: qaf_latest-sidebar
-permalink: latest/create_test_project.html
-folder: latest
+sidebar: qaf_2_1_9-sidebar
+permalink: qaf-2.1.9/create_test_project.html
+folder: qaf-2.1.9
 tags: [getting_started]
 next: understand_dirstructure.html
 ---
@@ -19,3 +19,4 @@ You can directly import project in Eclipse. Following plugins are recommanded fo
 * [TestNG](http://testng.org/doc/eclipse.html)
 * [Apache IvyDE plugin](https://ant.apache.org/ivy/ivyde/download.html) (not requred for maven project)
 * Maven plugin (not required for IVY + Ant project)
+* [BDD Editor plugin](https://qmetry.github.io/qaf/editor/bdd/eclipse/) - BDD and Gherkin Editor for BDD test authoring

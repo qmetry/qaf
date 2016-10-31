@@ -1,8 +1,8 @@
 ---
 title: Product license has been expired…
 sidebar: faq_sidebar
-permalink: qaf-2.1.8/product_license_has been_expired.html
-folder: qaf-2.1.8
+permalink: latest/product_license_has been_expired.html
+folder: latest
 ---
 
 **Follow below steps to resolve.**

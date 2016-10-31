@@ -1,8 +1,8 @@
 ---
 title: How can I use existing driver session?
 sidebar: faq_sidebar
-permalink: latest/how_can_i_use_existing_driver_session.html
-folder: latest
+permalink: qaf-2.1.9/how_can_i_use_existing_driver_session.html
+folder: qaf-2.1.9
 ---
 
 **Following are the steps:**

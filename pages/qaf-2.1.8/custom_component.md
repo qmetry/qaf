@@ -1,8 +1,8 @@
 ---
 title: Custom component
-sidebar: qaf_2_1_8-sidebar
-permalink: qaf-2.1.8/custom_component.html
-folder: qaf-2.1.8
+sidebar: qaf_latest-sidebar
+permalink: latest/custom_component.html
+folder: latest
 tags: [java,component,locator,testdata]
 ---
 

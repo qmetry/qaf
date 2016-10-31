@@ -2,9 +2,9 @@
 title: "Single sourcing pages"
 tagName: single_sourcing
 search: exclude
-permalink: latest/tag_single_sourcing.html
-sidebar: qaf_latest-sidebar
-folder: latest
+permalink: qaf-2.1.9/tag_single_sourcing.html
+sidebar: qaf_2_1_9-sidebar
+folder: qaf-2.1.9
 ---
 {% include taglogic.html %}
 

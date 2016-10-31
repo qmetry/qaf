@@ -1,8 +1,8 @@
 ---
 title: Assertion/Verification
-sidebar: qaf_latest-sidebar
-permalink: latest/assertion_verification.html
-folder: latest
+sidebar: qaf_2_1_9-sidebar
+permalink: qaf-2.1.9/assertion_verification.html
+folder: qaf-2.1.9
 tags: [java,checkpoint]
 ---
 

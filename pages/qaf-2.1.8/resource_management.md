@@ -1,8 +1,8 @@
 ---
 title: Resource management
-sidebar: qaf_2_1_8-sidebar
-permalink: qaf-2.1.8/resource_management.html
-folder: qaf-2.1.8
+sidebar: qaf_latest-sidebar
+permalink: latest/resource_management.html
+folder: latest
 ---
 
 ## Resource management

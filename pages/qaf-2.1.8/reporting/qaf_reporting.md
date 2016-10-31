@@ -1,8 +1,9 @@
 ---
 title: QAF Reporting
-sidebar: qaf_2_1_8-sidebar
-permalink: qaf-2.1.8/qaf_reporting.html
-folder: qaf-2.1.8
+sidebar: qaf_latest-sidebar
+
+permalink: latest/qaf_reporting.html
+folder: latest
 ---
 
 ## Summary
@@ -101,6 +102,7 @@ It shows the trends of all execution respect to all execution and number of test
 ## Live Reporting
 
 Live Reporting can be useful to show result automatically as test results created. Enable live reporting by click on Auto Refresh icon.
+<div style="position: fixed;border: 3px solid #73AD21;right:5px;top:100px"><a href="dashboard.htm" target="_blank">Live Demo</a></div>
 
 {% include inline_image.html file="AutoRefreshButton.png" alt="Auto Refresh "  %}
 

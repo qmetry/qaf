@@ -1,8 +1,8 @@
 ---
 title: Qmetry5 Test Management Tool Integration with Qmetry Automation framework
 sidebar: faq_sidebar
-permalink: qaf-2.1.8/qmetry5_test_management_tool_tntegration_with_qas.html
-folder: qaf-2.1.8
+permalink: latest/qmetry5_test_management_tool_tntegration_with_qas.html
+folder: latest
 ---
 
 First of all please make sure that **QmetryWSClient.jar** and **QMScheduler.jar** file is present in your lib folder. If you do not have these jar files, please find attachment of this document.

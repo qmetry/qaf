@@ -1,8 +1,8 @@
 ---
 title: Test Step Metadata
-sidebar: qaf_2_1_8-sidebar
-permalink: qaf-2.1.8/Test_Step_Metadata.html
-folder: qaf-2.1.8
+sidebar: qaf_latest-sidebar
+permalink: latest/Test_Step_Metadata.html
+folder: latest
 tags: [bdd,scenario,java,kwd]
 ---
 

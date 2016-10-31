@@ -1,8 +1,8 @@
 ---
 title: Testing Mobile web in desktop Browser with modify header
-sidebar: qaf_2_1_8-sidebar
-permalink: qaf-2.1.8/testing_mobile_web_in_desktop_browser.html
-folder: qaf-2.1.8
+sidebar: qaf_latest-sidebar
+permalink: latest/testing_mobile_web_in_desktop_browser.html
+folder: latest
 ---
 
 ## Using Firefox

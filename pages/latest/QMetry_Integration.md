@@ -1,8 +1,8 @@
 ---
 title: QMetry Integration
-sidebar: qaf_latest-sidebar
-permalink: latest/QMetry_Integration.html
-folder: latest
+sidebar: qaf_2_1_9-sidebar
+permalink: qaf-2.1.9/QMetry_Integration.html
+folder: qaf-2.1.9
 ---
 
 

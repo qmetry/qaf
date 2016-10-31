@@ -1,8 +1,8 @@
 ---
 title: How can I Use Selenium grid with Qmetry Automation Framework?
 sidebar: faq_sidebar
-permalink: qaf-2.1.8/how_can_i_use_selenium_grid_with_qas.html
-folder: qaf-2.1.8
+permalink: latest/how_can_i_use_selenium_grid_with_qas.html
+folder: latest
 ---
 
 You need to set appropriate server, port and remote driver.

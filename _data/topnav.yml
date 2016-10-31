@@ -27,6 +27,8 @@
        folderitems:
          - title: JavaDoc
            url: javadoc\index.html
+	 - title: QAF 2.1.8 Docs
+           url: ../qaf-2.1.8/docs.html
          - title: QAF 2.1.7b Docs
            url: ../qaf-2.1.7b/docs.html
          - title: Older Version Docs

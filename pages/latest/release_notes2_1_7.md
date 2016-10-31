@@ -1,9 +1,9 @@
 ---
 title: QAF-2.1.7b Release Notes
-sidebar: qaf_latest-sidebar
+sidebar: qaf_2_1_9-sidebar
 
-permalink: latest/release_notes2_1_7.html
-folder: latest
+permalink: qaf-2.1.9/release_notes2_1_7.html
+folder: qaf-2.1.9
 ---
 
 ## New Features

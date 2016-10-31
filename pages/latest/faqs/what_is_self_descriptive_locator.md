@@ -1,8 +1,8 @@
 ---
 title: What is self-descriptive locator?
 sidebar: faq_sidebar
-permalink: latest/what_is_self_descriptive_locator.html
-folder: latest
+permalink: qaf-2.1.9/what_is_self_descriptive_locator.html
+folder: qaf-2.1.9
 ---
 
 

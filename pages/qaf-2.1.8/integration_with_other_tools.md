@@ -1,8 +1,8 @@
 ---
 title: Integration
-sidebar: qaf_2_1_8-sidebar
-permalink: qaf-2.1.8/integration_with_other_tools.html
-folder: qaf-2.1.8
+sidebar: qaf_latest-sidebar
+permalink: latest/integration_with_other_tools.html
+folder: latest
 ---
 
 

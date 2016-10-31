@@ -1,8 +1,8 @@
 ---
 title: Download
 sidebar: download_sidebar
-permalink: latest/download.html
-folder: latest
+permalink: qaf-2.1.9/download.html
+folder: qaf-2.1.9
 ---
 
 ## Blank Project
@@ -59,12 +59,12 @@ Create or update ivysettings.xml file to add new repository. Alternately you can
 **IVY Dependency Entry**
 
 ```xml
-<dependency org="com.qmetry" name="qaf" rev="{{site.data.strings.version}}" />
-<dependency org="com.qmetry" name="qaf-support" rev="{{site.data.strings.version}}" />
+<dependency org="com.qmetry" name="qaf" rev="latest.integration" />
+<dependency org="com.qmetry" name="qaf-support" rev="latest.integration" />
 ```
 
 ## Direct Download
 
-You can download QAF jar from [here]({{site.data.strings.qaf_repository}}/com/qmetry/qaf/{{site.data.strings.version}}/qaf-{{site.data.strings.version}}.jar).
+You can download QAF jar from [here](https://qmetry.github.io/qaf/dist).
 
-You can download QAF Support jar from [here]({{site.data.strings.qaf_repository}}/com/qmetry/qaf-support/{{site.data.strings.version}}/qaf-support-{{site.data.strings.version}}.jar).
+You can download QAF Support jar from [here](https://qmetry.github.io/qaf/dist).

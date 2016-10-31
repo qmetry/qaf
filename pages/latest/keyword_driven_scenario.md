@@ -1,8 +1,8 @@
 ---
 title: Keyword driven scenario
-sidebar: qaf_latest-sidebar
-permalink: latest/keyword_driven_scenario.html
-folder: latest
+sidebar: qaf_2_1_9-sidebar
+permalink: qaf-2.1.9/keyword_driven_scenario.html
+folder: qaf-2.1.9
 ---
 
 ## Scenario

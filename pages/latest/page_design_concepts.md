@@ -1,8 +1,8 @@
 ---
 title: Page Design Concepts
-sidebar: qaf_latest-sidebar
-permalink: latest/page_design_concepts.html
-folder: latest
+sidebar: qaf_2_1_9-sidebar
+permalink: qaf-2.1.9/page_design_concepts.html
+folder: qaf-2.1.9
 tags: [page,java,locator,testng]
 ---
 

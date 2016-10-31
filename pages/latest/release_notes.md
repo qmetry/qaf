@@ -1,16 +1,16 @@
 ---
 title: Release Notes
-sidebar: qaf_latest-sidebar
+sidebar: qaf_2_1_9-sidebar
 
-permalink: latest/release_notes.html
-folder: latest
+permalink: qaf-2.1.9/release_notes.html
+folder: qaf-2.1.9
 ---
 
 ## VER-2.1.8 Release Notes:
 
 **New Features:**
 
-1. Refactored package from 'com.infostretch' to 'com.qmetry.qaf'
+1. Refactored package from com.infostretch to com.qmetry.qaf
 
 ## VER-2.1.7b Release Notes:
 
@@ -40,12 +40,8 @@ folder: latest
 21. Underlying configuration of property util from property configuration to xml configuration
 22. For Test Step string argument , Single quote (') or Double quote (") is now compulsory
 23. Updated cucumber formatter
+24. Deprecated "driver.class" use instead "driverClass"
  
- **Modifications/Improvements**
- 
- 1. Deprecated "driver.class" use instead "driverClass"
- 
-
 **Bug Fixes:**
 
 1. ISFW-148 - Same Scenario name overwrites &lt;test_case_name&gt;.json file in report.
@@ -72,27 +68,23 @@ folder: latest
 1. custom meta-data support in json report
 2. Test management tool integration support for QMetry 6
 3. Randomized data selection for the data driven test cases
-4. Generate failed test cases incase of bdd
-5. Added property change listener to handle driver, resources, step provider package changes on the fly.
-
-**Modifications/Improvements**
-
-1. Renamed few of properties related to driver.
+4. Introduced new property 'bean.populate.random'
+5. Generate failed test cases incase of bdd
+6. Added property change listener to handle driver, resources, step provider package changes on the fly.
+7. Renamed few of properties related to driver.
    * selenium.defaultBrowser-->driver.name
    * selenium.server-->remote.server
    * selenium.port-->remote.port
-2. removed setup method from WebDriverTestBase class
-3. for Test Step string argument , Single quote (') or Double quote (") is now compulsory
-4. Renamed Attritube to Attribute for following methods
+8. removed setup method from WebDriverTestBase class
+9. for Test Step string argument , Single quote (') or Double quote (") is now compulsory
+10. Renamed Attritube to Attribute for following methods
 	* verifyAttritube --> verifyAttribute
 	* verifyNotAttritube --> verifyNotAttribute
 	* waitForNotAttritube -->  waitForNotAttribute
 	* waitForAttritube --> waitForAttribute
 	* assertAttritube --> assertAttribute
 	* assertNotAttritube --> assertNotAttribute
-5. Introduced new property 'bean.populate.random'
-
-
+ 
 **QAF Reporter:**
 
 1. Report Enhancements/Improvements
@@ -110,13 +102,9 @@ folder: latest
 **New Features:**
 
 1. Custom meta-data filter support using include and exclude parameters
-2. Enable Perfecto Command logs same as selenium logs
-3. Test management tool integration support for QMetry
-
-**Modifications/Improvements**
-
-1. Typo correction in 'assertNotText'
-
+2. Typo correction in 'assertNotText'
+3. Enable Perfecto Command logs same as selenium logs
+4. Test management tool integration support for QMetry
 
 **Bug Fixes:**
 

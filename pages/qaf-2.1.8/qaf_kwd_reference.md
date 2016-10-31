@@ -1,8 +1,8 @@
 ---
 title: QAF KWD Reference
-sidebar: qaf_2_1_8-sidebar
-permalink: qaf-2.1.8/qaf_kwd_reference.html
-folder: qaf-2.1.8
+sidebar: qaf_latest-sidebar
+permalink: latest/qaf_kwd_reference.html
+folder: latest
 ---
 
 [Keyword Driven Define Test Suite](keyword_driven_define_test_suite.html)

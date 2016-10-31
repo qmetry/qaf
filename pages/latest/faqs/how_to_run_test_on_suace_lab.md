@@ -1,8 +1,8 @@
 ---
 title: How to run test on suace lab?
 sidebar: faq_sidebar
-permalink: latest/how_to_run_test_on_suace_lab.html
-folder: latest
+permalink: qaf-2.1.9/how_to_run_test_on_suace_lab.html
+folder: qaf-2.1.9
 ---
 
 
@@ -41,5 +41,6 @@ remote.server=http://<username>:<access-key>@ondemand.saucelabs.com:80/wd/hub
 firefox.additional.capabilities={'name':'SampleTestOnFirefox','platform':'Windows 8','version':'40.0'}
 
 ```
+
 
 

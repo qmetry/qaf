@@ -1,8 +1,8 @@
 ---
 title: Reflection Error
 sidebar: troubleshoot_sidebar
-permalink: latest/problem_reflection_error.html
-folder: latest
+permalink: qaf-2.1.9/problem_reflection_error.html
+folder: qaf-2.1.9
 ---
 You can solve reflection error by following steps.
 

@@ -1,8 +1,8 @@
 ---
 title: Scenario Meta-Data Filtering Using Include-Exclude Property
-sidebar: qaf_latest-sidebar
-permalink: latest/scenario_metadatata_filter_include_exclude_prop.html
-folder: latest
+sidebar: qaf_2_1_9-sidebar
+permalink: qaf-2.1.9/scenario_metadatata_filter_include_exclude_prop.html
+folder: qaf-2.1.9
 ---
 
 
