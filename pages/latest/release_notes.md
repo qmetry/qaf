@@ -10,15 +10,15 @@ folder: latest
 
 ** New Features **
 
-#11 TestNG 6.9.10 support
-#28 Gherkin for test authoring
-#29 Driver initialize failure method in driver listener
-#30 Introduce new property qaf.listeners to register any of qaf listener
-#19 scenario object access in test-step listener
-#31 FormDataBean Custom Component support
-#32 New property step.provider.sharedinstance to allow class variable sharing among steps in same class. Default is false.
-#36 New step creation code snippet when step not found
-#37 new property driver.init.retry.timeout to retry on driver initialization failure
+1. #11 TestNG 6.9.10 support
+2. #28 Gherkin for test authoring
+3. #29 Driver initialize failure method in driver listener
+4. #30 Introduce new property qaf.listeners to register any of qaf listener
+5. #19 scenario object access in test-step listener
+6. #31 FormDataBean Custom Component support
+7. #32 New property step.provider.sharedinstance to allow class variable sharing among steps in same class. Default is false.
+8. #36 New step creation code snippet when step not found
+9. #37 new property driver.init.retry.timeout to retry on driver initialization failure
 
 ** Bug Fixes **
 
