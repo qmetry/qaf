@@ -1,6 +1,6 @@
 ---
 title: QAF KWD Reference
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 permalink: latest/qaf_kwd_reference.html
 folder: latest
 ---

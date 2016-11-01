@@ -1,6 +1,6 @@
 ---
 title: Creating configuration file
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 permalink: latest/creating_configuration_file.html
 folder: latest
 ---

@@ -1,6 +1,6 @@
 ---
 title: Page Design Concepts
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 permalink: latest/page_design_concepts.html
 folder: latest
 tags: [page,java,locator,testng]

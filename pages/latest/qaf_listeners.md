@@ -1,6 +1,6 @@
 ---
 title: QAF listeners
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 permalink: latest/qaf_listeners.html
 folder: latest
 tags: [webelement,webdriver,java]

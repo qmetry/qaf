@@ -1,6 +1,6 @@
 ---
 title: QAF Gherkin Scenario Factory
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 permalink: latest/gherkin_client.html
 summary: "Author tests in standard Gherkin format that Cucumber understands with power of QAF as back-end"
 folder: latest

@@ -3,7 +3,7 @@ title: "Content types pages"
 tagName: content_types
 search: exclude
 permalink: latest/tag_content_types.html
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 folder: latest
 ---
 {% include taglogic.html %}

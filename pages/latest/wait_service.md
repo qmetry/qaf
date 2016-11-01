@@ -1,6 +1,6 @@
 ---
 title: Wait Service
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 permalink: latest/wait_service.html
 folder: latest
 tags: [java,webelement,webdriver]

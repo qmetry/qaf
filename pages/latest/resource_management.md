@@ -1,6 +1,6 @@
 ---
 title: Resource management
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 permalink: latest/resource_management.html
 folder: latest
 ---

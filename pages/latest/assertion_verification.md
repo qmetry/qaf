@@ -1,6 +1,6 @@
 ---
 title: Assertion/Verification
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 permalink: latest/assertion_verification.html
 folder: latest
 tags: [java,checkpoint]

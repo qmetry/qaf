@@ -1,6 +1,6 @@
 ---
 title: Different ways of providing properties
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 permalink: latest/different_ways_of_providing_prop.html
 folder: latest
 ---

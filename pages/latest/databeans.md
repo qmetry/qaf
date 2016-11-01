@@ -1,6 +1,6 @@
 ---
 title: Data Beans
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 permalink: latest/databeans.html
 folder: latest
 tags: [java,testdata]

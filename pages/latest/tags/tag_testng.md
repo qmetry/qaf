@@ -3,7 +3,7 @@ title: "TestNG Related Pages"
 tagName: testng
 search: exclude
 permalink: latest/tag_testng.html
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 folder: latest
 ---
 {% include taglogic.html %}

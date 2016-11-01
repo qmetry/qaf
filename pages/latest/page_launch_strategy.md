@@ -1,6 +1,6 @@
 ---
 title: Page launch strategy
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 permalink: latest/page_launch_strategy.html
 folder: latest
 tags: [page,testng,java]

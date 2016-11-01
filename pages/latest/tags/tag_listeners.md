@@ -3,7 +3,7 @@ title: "Listeners Related Pages"
 tagName: listeners
 search: exclude
 permalink: latest/tag_listeners.html
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 folder: latest
 ---
 {% include taglogic.html %}

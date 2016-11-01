@@ -1,6 +1,6 @@
 ---
 title: License
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 
 permalink: latest/license.html
 folder: latest

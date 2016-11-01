@@ -1,6 +1,6 @@
 ---
 title: Test Step Threshold and time tracking
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 permalink: latest/Test_Step_Threshold_and_time_tracking.html
 folder: latest
 tags: [bdd,scenario,java,kwd]

@@ -1,6 +1,6 @@
 ---
 title: Test Data
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 permalink: latest/testdata.html
 folder: latest
 tags: [scenario,testdata]

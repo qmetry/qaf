@@ -1,6 +1,6 @@
 ---
 title: Keyword driven scenario
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 permalink: latest/keyword_driven_scenario.html
 folder: latest
 ---

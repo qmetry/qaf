@@ -1,6 +1,6 @@
 ---
 title: Web Services Testing
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 permalink: latest/web_services.html
 folder: latest
 tags: [java]

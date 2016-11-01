@@ -1,7 +1,7 @@
 
 ---
 title: Introduction
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 permalink: latest/using_listeners.html
 folder: latest
 ---

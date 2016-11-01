@@ -1,6 +1,6 @@
 ---
 title: Development with QAF
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 permalink: latest/development_overview.html
 folder: latest
 next: Creating_test_cases.html

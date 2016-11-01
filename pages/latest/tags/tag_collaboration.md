@@ -3,7 +3,7 @@ title: "Collaboration pages"
 tagName: collaboration
 search: exclude
 permalink: latest/tag_collaboration.html
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 folder: latest
 ---
 {% include taglogic.html %}

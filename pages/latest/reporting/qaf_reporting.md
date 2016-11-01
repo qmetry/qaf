@@ -1,6 +1,6 @@
 ---
 title: QAF Reporting
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 
 permalink: latest/qaf_reporting.html
 folder: latest

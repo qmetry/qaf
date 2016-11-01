@@ -1,6 +1,6 @@
 ---
 title: Property List
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 permalink: latest/properties_list.html
 folder: latest
 tags: [getting_started]

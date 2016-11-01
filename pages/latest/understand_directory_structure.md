@@ -1,6 +1,6 @@
 ---
 title: Understating Directory Structure
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 permalink: latest/understand_dirstructure.html
 folder: latest
 tags: [getting_started]

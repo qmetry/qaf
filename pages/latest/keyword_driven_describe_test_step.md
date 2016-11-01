@@ -1,6 +1,6 @@
 ---
 title: Keyword driven describe test step
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 permalink: latest/keyword_driven_describe_test_step.html
 folder: latest
 ---

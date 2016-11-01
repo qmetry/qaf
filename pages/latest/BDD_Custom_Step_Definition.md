@@ -1,6 +1,6 @@
 ---
 title: BDD Custom Step Definition
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 permalink: latest/BDD_Custom_Step_Definition.html
 folder: latest
 tags: [bdd,scenario]

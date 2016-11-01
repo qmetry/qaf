@@ -1,6 +1,6 @@
 ---
 title: Locating Elements
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 permalink: latest/locating_elements.html
 folder: latest
 tags: [Selenium, locator, java, webdriver, webelement]

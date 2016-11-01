@@ -1,6 +1,6 @@
 ---
 title: Creating Test Project
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 permalink: latest/create_test_project.html
 folder: latest
 tags: [getting_started]

@@ -1,6 +1,6 @@
 ---
 title: QAF cucumber
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 permalink: latest/qaf_cucumber.html
 folder: latest
 ---

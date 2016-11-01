@@ -1,6 +1,6 @@
 ---
 title: TestNG listeners
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 permalink: latest/testNG_listeners.html
 folder: latest
 tags: [testng]

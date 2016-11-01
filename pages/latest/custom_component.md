@@ -1,6 +1,6 @@
 ---
 title: Custom component
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 permalink: latest/custom_component.html
 folder: latest
 tags: [java,component,locator,testdata]

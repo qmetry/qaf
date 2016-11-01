@@ -1,6 +1,6 @@
 ---
 title: Setting driver capabilities
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 permalink: latest/setting_driver_capabilities.html
 folder: latest
 ---

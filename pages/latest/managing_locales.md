@@ -1,6 +1,6 @@
 ---
 title: Managing Locales
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 permalink: latest/managing_locales.html
 folder: latest
 ---

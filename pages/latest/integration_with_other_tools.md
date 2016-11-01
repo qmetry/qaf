@@ -1,6 +1,6 @@
 ---
 title: Integration
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 permalink: latest/integration_with_other_tools.html
 folder: latest
 ---

@@ -1,6 +1,6 @@
 ---
 title: Execution
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 permalink: latest/execution.html
 folder: latest
 ---

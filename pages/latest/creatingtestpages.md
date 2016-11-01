@@ -1,6 +1,6 @@
 ---
 title: Creating Test Pages
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 permalink: latest/creatingtestpages.html
 folder: latest
 tags: [java,page]

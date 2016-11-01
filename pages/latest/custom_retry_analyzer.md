@@ -1,6 +1,6 @@
 ---
 title: Custom Retry Analyzer
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 permalink: latest/custom_retry_analyzer.html
 folder: latest
 ---

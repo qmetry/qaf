@@ -1,6 +1,6 @@
 ---
 title: BDD Keyword Synonyms
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 permalink: latest/BDD_Keywords_Synonyms.html
 folder: latest
 tags: [bdd]

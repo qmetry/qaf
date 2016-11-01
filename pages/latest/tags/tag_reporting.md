@@ -3,7 +3,7 @@ title: "Reporting Related Pages"
 tagName: reporting
 search: exclude
 permalink: latest/tag_reporting.html
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 folder: latest
 ---
 {% include taglogic.html %}

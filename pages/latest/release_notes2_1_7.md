@@ -1,6 +1,6 @@
 ---
 title: QAF-2.1.7b Release Notes
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 
 permalink: latest/release_notes2_1_7.html
 folder: latest

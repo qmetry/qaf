@@ -1,6 +1,6 @@
 ---
 title: Define Test Suite
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 permalink: latest/Define_Test_Suite.html
 folder: latest
 tags: [bdd,scenario]

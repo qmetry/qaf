@@ -1,6 +1,6 @@
 ---
 title: Java
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 permalink: latest/prerequisite_java.html
 folder: latest
 tags: [getting_started]

@@ -1,6 +1,6 @@
 ---
 title: Creating test cases
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 permalink: latest/Creating_test_cases.html
 folder: latest
 ---

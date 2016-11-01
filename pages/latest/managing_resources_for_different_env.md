@@ -1,6 +1,6 @@
 ---
 title: Managing resources for Different Environments
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 permalink: latest/managing_resources_for_different_env.html
 folder: latest
 ---

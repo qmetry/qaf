@@ -1,6 +1,6 @@
 ---
 title: QMetry Integration
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 permalink: latest/QMetry_Integration.html
 folder: latest
 ---

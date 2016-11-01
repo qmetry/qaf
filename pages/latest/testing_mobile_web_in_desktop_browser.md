@@ -1,6 +1,6 @@
 ---
 title: Testing Mobile web in desktop Browser with modify header
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 permalink: latest/testing_mobile_web_in_desktop_browser.html
 folder: latest
 ---

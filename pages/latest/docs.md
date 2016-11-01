@@ -1,7 +1,7 @@
 ---
 title: QMetry Automation Framework
 tags: [getting_started]
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 permalink: latest/docs.html
 folder: latest
 ---

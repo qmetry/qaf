@@ -1,6 +1,6 @@
 ---
 title: Using running Driver Session
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 permalink: latest/using_running_driver_session.html
 folder: latest
 ---

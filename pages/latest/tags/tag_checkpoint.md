@@ -3,7 +3,7 @@ title: "Checkpoint Related Pages"
 tagName: checkpoint
 search: exclude
 permalink: latest/tag_checkpoint.html
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 folder: latest
 ---
 {% include taglogic.html %}

@@ -1,6 +1,6 @@
 ---
 title: Debugging
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 permalink: latest/debugging.html
 folder: latest
 ---

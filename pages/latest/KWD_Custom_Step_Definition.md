@@ -1,6 +1,6 @@
 ---
 title: KWD Custom Step Definition
-sidebar: latest-sidebar
+sidebar: qaf_latest-sidebar
 permalink: latest/KWD_Custom_Step_Definition.html
 folder: latest
 tags: [kwd,scenario]
