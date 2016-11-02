@@ -3,4 +3,4 @@ set -e # halt script on error
 
 bundle exec jekyll build
 bundle exec htmlproofer --help
-bundle exec htmlproofer ./_site --log-level ":stdout" --file-ignore "/.+\/javadoc.+/" --alt-ignore="/.+\/images.+/" --allow-hash-href
+bundle exec htmlproofer ./_site --log-level ":stdout" --file-ignore "/.+\/javadoc.+/" --alt-ignore="/.+\/images.+/","images.+/" --allow-hash-href
