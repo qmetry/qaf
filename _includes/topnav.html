@@ -18,13 +18,13 @@
                 {% if item.external_url %}
                 <li><a href="{{item.external_url}}" target="_blank">{{item.title}}</a></li>
                 {% elsif page.url contains item.url %}
-                <li class="active"><a href="{{item.url | remove: "/"}}">{{item.title}}</a></li>
+                <li class="active"><a href="{{item.url | remove: "/"}}" data_proofer_ignore>{{item.title}}</a></li>
                 {% elsif item.url contains "news.html"%}
-                <li><a href="{{item.url | remove: "/"}}">{{item.title}}</a></li>
+                <li><a href="{{item.url | remove: "/"}}" data_proofer_ignore>{{item.title}}</a></li>
                 {% elsif page.url contains "news"%}
-                <li><a href="latest/{{item.url | remove: "/"}}">{{item.title}}</a></li>
+                <li><a href="latest/{{item.url | remove: "/"}}" data_proofer_ignore>{{item.title}}</a></li>
                 {% else %}
-                <li><a href="{{item.url | remove: "/"}}">{{item.title}}</a></li>
+                <li><a href="{{item.url | remove: "/"}}" data_proofer_ignore>{{item.title}}</a></li>
                 {% endif %}
                 {% endfor %}
                 {% endfor %}
@@ -39,13 +39,13 @@
                         {% if folderitem.external_url %}
                         <li><a href="{{folderitem.external_url}}" target="_blank">{{folderitem.title}}</a></li>
                         {% elsif page.url contains folderitem.url %}
-                        <li class="dropdownActive"><a href="{{folderitem.url}}">{{folderitem.title}}</a></li>
+                        <li class="dropdownActive"><a href="{{folderitem.url}}" data_proofer_ignore>{{folderitem.title}}</a></li>
                         {% elsif page.url contains "news"%}
                             {% if folderitem.url contains "javadoc" %}
                             <li><a href="latest/{{folderitem.url}}" data_proofer_ignore>{{folderitem.title}}</a>    </li>
                             {% endif %}
                         {% else %}
-                        <li><a href="{{folderitem.url}}">{{folderitem.title}}</a></li>
+                        <li><a href="{{folderitem.url}}" data_proofer_ignore>{{folderitem.title}}</a></li>
                         {% endif %}
                         {% endfor %}
                     </ul>
