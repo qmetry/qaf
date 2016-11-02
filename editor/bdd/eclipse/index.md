@@ -1,6 +1,6 @@
 ---
 title: Eclipse Update Site
-layout: home
+layout: page
 summary: QAF Editors
 tags: Selenium, WebDriver, Infostretch, QMetry, QAF, Automation, Framework,TestNg,Testing,QA,Cucumber,BDD,KWD,ISFW
 ---
