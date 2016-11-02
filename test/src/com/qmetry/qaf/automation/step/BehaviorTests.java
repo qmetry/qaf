@@ -43,7 +43,6 @@ import com.qmetry.qaf.automation.step.client.text.BDDDefinitionHelper;
 import com.qmetry.qaf.automation.step.client.text.BDDDefinitionHelper.BDDKeyword;
 import com.qmetry.qaf.automation.step.client.text.BDDDefinitionHelper.ParamType;
 import com.qmetry.qaf.automation.step.client.text.BDDFileParser;
-import com.qmetry.qaf.automation.util.StringUtil;
 import com.qmetry.qaf.automation.util.Validator;
 
 /**
@@ -62,6 +61,16 @@ public class BehaviorTests {
 					Matchers.equalTo("Given I am on Google Search Page"));
 		}
 	}
+
+	@Test
+	public void parseBDDWithSingleScenario() {
+		BDDFileParser parser = new BDDFileParser();
+		List<Scenario> scenarios = new ArrayList<Scenario>();
+		parser.parse("resources/scenarios/singlescenario.bdd", scenarios);
+		Validator.assertThat("Scenarios in bdd", scenarios, Matchers.hasSize(1));
+		Validator.assertThat("steps in scenario", scenarios.get(0).getSteps(), Matchers.hasSize(3));
+	}
+	
 
 	@Test
 	public void testGetKeyword() {

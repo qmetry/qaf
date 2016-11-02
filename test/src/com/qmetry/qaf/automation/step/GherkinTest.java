@@ -53,11 +53,37 @@ public class GherkinTest {
 		GherkinFileParser parser = new GherkinFileParser();
 		List<Scenario> scenarios = new ArrayList<Scenario>();
 		parser.parse("resources/features/gherkin.feature", scenarios);
-		Validator.assertThat(scenarios, Matchers.hasSize(4));
+		Validator.assertThat(scenarios, Matchers.hasSize(6));
 		for (Scenario scenario : scenarios) {
 			Validator.assertThat(scenario.getM_groups(),
 					Matchers.hasItemInArray("@Web"));
 		}
+
+	}
+	
+	@Test(description="make sure it parse scenario with all steps")
+	public void testGherkinParserForScenarioSteps() {
+		GherkinFileParser parser = new GherkinFileParser();
+		List<Scenario> scenarios = new ArrayList<Scenario>();
+		parser.parse("resources/features/gherkinWithSingleScenario.feature", scenarios);
+		Validator.assertThat("Scenarios in feature", scenarios, Matchers.hasSize(1));
+		Validator.assertThat("Steps in scenario" , scenarios.get(0).getSteps(), Matchers.hasSize(4));
+	}
+	@Test
+	public void parseBDDWithMultipleScenario() {
+		GherkinFileParser parser = new GherkinFileParser();
+		List<Scenario> scenarios = new ArrayList<Scenario>();
+		parser.parse("resources/features/gherkin.feature", scenarios);
+		Validator.assertThat("Scenarios in feature", scenarios, Matchers.hasSize(6));
+		
+		Validator.assertThat("steps in scenario 1", scenarios.get(0).getSteps(), Matchers.hasSize(4));
+		Validator.assertThat("steps in scenario 2", scenarios.get(1).getSteps(), Matchers.hasSize(3));
+		Validator.assertThat("steps in scenario 3", scenarios.get(2).getSteps(), Matchers.hasSize(4));
+		Validator.assertThat("steps in scenario 4", scenarios.get(3).getSteps(), Matchers.hasSize(4));
+		Validator.assertThat("steps in scenario 5", scenarios.get(4).getSteps(), Matchers.hasSize(4));
+		Validator.assertThat("steps in scenario 6", scenarios.get(5).getSteps(), Matchers.hasSize(4));
+
+
 	}
 	@Test
 	public void parseGherkinWithBackground() {

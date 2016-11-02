@@ -5,3 +5,5 @@ META-DATA: {}
 Given i have 10 rupees
 When i add 5 rupees
 And i should have 15 rupees
+
+END

@@ -164,21 +164,22 @@ public class GherkinFileParser extends AbstractScenarioFileParser {
 						System.arraycopy(currLine.split(":", 2), 0, cols, 0, 2);
 						if (type.equalsIgnoreCase(EXAMPLES)) {
 							Object[] scenario = rows.get(lastScenarioIndex);
+							scenario[0] = SCENARIO;
+
 							Map<Object, Object> metadata =
 									new Gson().fromJson((String) scenario[2], Map.class);
+							//scenario[2] = new Gson().toJson(metadata);
+
 							String exampleMetadata = (String) cols[1];
+
 							if (StringUtil.isNotBlank(exampleMetadata)
 									&& exampleMetadata.trim().startsWith("{")) {
 								metadata.putAll(
 										new Gson().fromJson(exampleMetadata, Map.class));
-							} else {
-								// metadata.put(params.DATAFILE.name(),
-								// strFile);
-								// metadata.put("line-no", lineNo + 1);
-
+								scenario[2] = new Gson().toJson(metadata);
+								currLineBuffer = new StringBuffer();
+								continue;
 							}
-							scenario[0] = SCENARIO;
-							scenario[2] = new Gson().toJson(metadata);
 
 						} else {
 							scenarioTags.addAll(globalTags);
@@ -227,13 +228,18 @@ public class GherkinFileParser extends AbstractScenarioFileParser {
 				}
 			}
 
+			int lastStatementIndex =  rows.size() - 1;
+			String lastStamtent = (String) rows.get(lastStatementIndex)[0];
+			if (lastStamtent.equalsIgnoreCase(EXAMPLES)) {
+				rows.remove(lastStatementIndex);
+				lastStatementIndex =lastScenarioIndex;
+			}
+			
 			if (!examplesTable.isEmpty()) {
-				String lastStamtent = (String) rows.get(rows.size() - 1)[0];
-				int lastStatementIndex = lastStamtent.equalsIgnoreCase(EXAMPLES)
-						? lastScenarioIndex : rows.size() - 1;
 				setExamples(rows.get(lastStatementIndex), examplesTable);
 				examplesTable.clear();
 			}
+			
 		} catch (Exception e) {
 			String strMsg = "Exception while reading BDD file: " + strFile + "#" + lineNo;
 			logger.error(strMsg + e);
@@ -249,6 +255,8 @@ public class GherkinFileParser extends AbstractScenarioFileParser {
 			}
 
 		}
+
+		rows.add(new Object[]{"END", "", "", lineNo+1});//indicate end of BDD
 		return rows;
 	}
 
