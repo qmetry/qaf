@@ -19,7 +19,7 @@ folder: latest
  7. [#32](https://github.com/qmetry/qaf/issues/32) New property `step.provider.sharedinstance` to allow class variable sharing among steps in same class. Default is false.
  8. [#36](https://github.com/qmetry/qaf/issues/36) New step creation code snippet when step not found
  9. [#37](https://github.com/qmetry/qaf/issues/37) new property `driver.init.retry.timeout` to retry on driver initialization failure
- 10 [#10](https://github.com/qmetry/qaf/issues/10) Support for xml for test-authoring 
+ 10. [#10](https://github.com/qmetry/qaf/issues/10) Support for xml for test-authoring 
  12. Support to third party java step annotation (for example cucumber Given/When/Then instead of QAFTestStep) 
  13. Added new driver name _perfecto_ can be used in `driver.name` value as `perfectoDriver` or `perfectoRemoteDriver`
   
