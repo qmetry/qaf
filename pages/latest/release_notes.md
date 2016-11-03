@@ -37,11 +37,11 @@ folder: latest
 
  1. [#18](https://github.com/qmetry/qaf/pull/18) Fixed infinite loop issue with retry.count
  2. Fixed issue of not scanning steps from all step provider package. Improved step finder.
-
  
- **Depricated/Removed features**
+**Depricated/Removed features**
  
   * Moved cucumber package in seperate QAF-Cucumber project. 
+
 
 ## VER-2.1.8 Release Notes:
 
