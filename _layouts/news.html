@@ -177,8 +177,8 @@ for (var i = 0; i < links.length; i++) {
 
   {{content}}
 
-    <div class="tags">
-        {% if page.tags != null %}
+    {% if page.tags != null %}
+    <div class="tags">    
         <b>Tags: </b>
         {% assign projectTags = site.data.tags.allowed-tags %}
         {% for tag in page.tags %}
