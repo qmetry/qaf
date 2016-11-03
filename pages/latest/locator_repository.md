@@ -11,6 +11,8 @@ QMetry Automation Framework provides concept called **“Locator Repository”**
 ## Creating Locator repository
 You can create Locator repository with property file having extension ‘. property’ or ‘.loc’. In repository provide key-value pair of **locator-key** and **locator-value**. While developing test assets insted of providing locator you can use the **locator-key**. To provide locator-value refer [how to locating element](locating_elements.html). 
 
+## Example ##
+
 **loginscreen.loc**
 
 ```properties
@@ -19,7 +21,7 @@ You can create Locator repository with property file having extension ‘. prope
   login.pageheader.lbl = css=.header
   ...
   
-  #self-descriptive example
+  #self-descriptive locator example
   login.username.txt = {'locator':'name=uname'; 'desc':'User name texbox on Login Page'}
   login.password.txt = {'locator':'name=upwd'; 'desc':'Password texbox on Login Page'}
   login.pageheader.lbl = {'locator':'css=.header'; 'desc':'Header of Login Page'}
@@ -45,6 +47,7 @@ Page Class:
 **BDD**
 
 While using in-built step you can provide locator-key to refer any locator.
+
 ```javaScript
   assert 'login.username.txt' is present
   sendKeys 'myusername' into 'login.username.txt'
