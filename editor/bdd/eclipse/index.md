@@ -2,7 +2,7 @@
 title: Eclipse Update Site
 layout: page
 summary: QAF Editors
-layout: news
+layout: home
 keywords: Selenium, WebDriver, Infostretch, QMetry, QAF, Automation, Framework,TestNg,Testing,QA,Cucumber,BDD,KWD,ISFW
 ---
 <h1>You're close!</h1>
