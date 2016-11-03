@@ -6,7 +6,7 @@ search: exclude
 
 [
 {% for page in site.pages %}
-{% if page.folder == "qaf-2.1.9" %}
+{% if page.folder == "latest" %}
 {% unless page.search == "exclude" %}
 {
 "title": "{{ page.title | escape }}",
