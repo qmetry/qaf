@@ -59,22 +59,28 @@ accessibility id=<accessibilityId for element>
 ```
 
 ## Self-descriptive locator
-Self-descriptive locator holds locator for element along with description of the element. Description will be used by the framework in assertion/verification messages for the element.
+Self-descriptive locator holds locator for element along with description of the element. Description will be used by the framework in assertion/verification messages for the element. You also can take advantage of self-descriptive locator to provide additional custom meta-data with element locator. 
 
 ### Self-descriptive locator syntax
-Self-descriptive locator expects JSON string with following keys:
+Self-descriptive locator expects JSON map of _locator-matadata-key_ and _locator-metadata-value_ pair:
 
-  * locator: actual locator of element
+**Syntax:**
+
+``` javascript
+{'locator':'<locator strategy>=<locator value>','<locator-matadata-key1>' = '<locator-matadata-value1>','<locator-matadata-keyN>' = '<locator-matadata-valueN>'}
+```
+
+Following are reservered  _locator-matadata-keys_
+  * locator: actual locator of element (**mandatory**)
   * desc: description of the locator (optinal)
   * cacheable: flag to indicate is element is cashable or not (optional)
 
-
+**Examples:**
 ```
 {'locator':'<locator strategy>=<locator value>','desc':'Description of element'}
 ```
 Where <locator strategy> is any of the strategy supported by underlying web-driver and <locator value> is locator in that strategy. 
 
-**Example:**
 
 ```java
 {'locator':'css=.header';'desc':'Header of Page'}
@@ -93,7 +99,7 @@ public interface HomePageLocators {
 }
 ```
 
-You also can take advantage of self-descriptive locator to provide additional custom meta-data with element locator. For example:
+**Custom meta-data example:**
 
 ```
 {"locator":"xpath=//*[@name='Result']","desc":"Input box","context":"WEBVIEW"}
@@ -122,6 +128,7 @@ You can provide more than one locator to locate the webelement. In such case whe
 ## jQuery Locator
 
 Borrowing from CSS 1–3, and then adding its own, jQuery offers a powerful set of selectors for matching a set of elements. QAF have now provided one more locator strategy named "jQuery", by using it you can locate element by [jQuey css selectors.](http://api.jquery.com/category/selectors/)
+
 **Usage:**
 
 **Normal locator:**
