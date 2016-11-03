@@ -8,19 +8,40 @@ folder: latest
 
 ## VER-2.1.9 Release Notes:
 
-** New Features **
+**New Features**
 
-1. #11 TestNG 6.9.10 support
-2. #28 Gherkin for test authoring
-3. #29 Driver initialize failure method in driver listener
-4. #30 Introduce new property qaf.listeners to register any of qaf listener
-5. #19 scenario object access in test-step listener
-6. #31 FormDataBean Custom Component support
-7. #32 New property step.provider.sharedinstance to allow class variable sharing among steps in same class. Default is false.
-8. #36 New step creation code snippet when step not found
-9. #37 new property driver.init.retry.timeout to retry on driver initialization failure
+ 1. [#11](https://github.com/qmetry/qaf/issues/11) TestNG 6.9.10 support
+ 2. [#28](https://github.com/qmetry/qaf/issues/28) Gherkin for test authoring
+ 3. [#29](https://github.com/qmetry/qaf/issues/29) Driver initialize failure method in driver listener
+ 4. [#30](https://github.com/qmetry/qaf/issues/30) Introduce new property `qaf.listeners` to register any of qaf listener
+ 5. [#19](https://github.com/qmetry/qaf/issues/19) scenario object access in test-step listener
+ 6. [#31](https://github.com/qmetry/qaf/issues/31) FormDataBean Custom Component support
+ 7. [#32](https://github.com/qmetry/qaf/issues/32) New property `step.provider.sharedinstance` to allow class variable sharing among steps in same class. Default is false.
+ 8. [#36](https://github.com/qmetry/qaf/issues/36) New step creation code snippet when step not found
+ 9. [#37](https://github.com/qmetry/qaf/issues/37) new property `driver.init.retry.timeout` to retry on driver initialization failure
+ 10 [#10](https://github.com/qmetry/qaf/issues/10) Support for xml for test-authoring 
+ 12. Support to third party java step annotation (for example cucumber Given/When/Then instead of QAFTestStep) 
+ 13. Added new driver name _perfecto_ can be used in `driver.name` value as `perfectoDriver` or `perfectoRemoteDriver`
+  
 
-** Bug Fixes **
+**Enahancements**
+
+ 1. [#17](https://github.com/qmetry/qaf/pull/17) passing params in deployResult instead of scenario.getMetadata()
+ 2. [#20](https://github.com/qmetry/qaf/pull/20) support to provide .xml or .loc file location as resources
+ 3. QAF BDD background support
+ 4. Private method (with step annotation or Step provider annotation at class level) will be excluded from step mapping
+ 5. Utility method in UIDriverFectory to get capability that will be used by factory to create driver object.
+ 6. Updates releated to selenium 3 and Removed seleniumExceptions to make code work without selenium-leg dependency with selenium 3.
+
+**Bug Fixes**
+
+ 1. [#18](https://github.com/qmetry/qaf/pull/18) Fixed infinite loop issue with retry.count
+ 2. Fixed issue of not scanning steps from all step provider package. Improved step finder.
+
+ 
+ **Depricated/Removed features**
+ 
+  * Moved cucumber package in seperate QAF-Cucumber project. 
 
 ## VER-2.1.8 Release Notes:
 
