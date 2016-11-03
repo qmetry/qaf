@@ -144,11 +144,14 @@ entries:
     - title: Page Launch Strategy
       url: page_launch_strategy.html
       output: web, pdf
-      
+
     - title: Locating Elements
       url: locating_elements.html
       output: web, pdf
-
+      
+    - title: Locator Repository
+      url: locator_repository.html
+      output: web, pdf
     - title: Web Services Testing
       url: web_services.html
       output: web, pdf
