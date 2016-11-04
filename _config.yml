@@ -103,3 +103,4 @@ url:
 gems:
   - jekyll-seo-tag
   - html-proofer
+  - gemoji
