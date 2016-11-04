@@ -29,5 +29,5 @@ tags: [getting_started]
 | bean.populate.random | 	false	| Set true to fill bean randomly from available data sets, more details [fill Databean from multiple dataset.](databeans.html)
 | selenium.singletone | |	To define driver instance scope.Possible value can be Tests or Methods or Groups.
 |driver.init.retry.timeout|0|Duration in multiplication of 10 seconds for example 50. Set time out for retry driver initialization when driver initialization fail (:new:since 2.1.9).
-|step.provider.sharedinstance|false|specify wherether to share class object among step in the same class. (:new:sice 2.1.9)
+|step.provider.sharedinstance|false|specify wherether to share class object among step in the same class. ( :new: sice 2.1.9)
 
