@@ -504,7 +504,9 @@ public enum ApplicationProperties {
 	 * populating bean from configuration, when more than one record exist in
 	 * configuration .
 	 */
-	BEAN_POPULATE_RANDOM("bean.populate.random");
+	BEAN_POPULATE_RANDOM("bean.populate.random"),
+	
+	DRY_RUN_MODE("dryrun.mode");
 
 	public String key;
 

@@ -41,9 +41,13 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.qmetry.qaf.automation.core.MessageTypes;
+import com.qmetry.qaf.automation.keys.ApplicationProperties;
+import com.qmetry.qaf.automation.step.client.CustomStep;
 import com.qmetry.qaf.automation.step.client.text.BDDDefinitionHelper;
 import com.qmetry.qaf.automation.step.client.text.BDDDefinitionHelper.BDDKeyword;
 import com.qmetry.qaf.automation.step.client.text.BDDDefinitionHelper.ParamType;
+import com.qmetry.qaf.automation.util.Reporter;
 import com.qmetry.qaf.automation.util.StringUtil;
 
 /**
@@ -58,7 +62,6 @@ public class StringTestStep extends BaseTestStep {
 	private String resultParameterName;
 	private Map<String, Object> context;
 	private String codeSnippet;
-
 	private TestStep step;
 
 	public StringTestStep(String name, Object... actualArgs) {
@@ -123,7 +126,11 @@ public class StringTestStep extends BaseTestStep {
 
 	@Override
 	public Object execute() {
+		if (DryRunAnalyzer.isDryRun(this)) {
+			return null;
+		}
 		initStep();
+
 		if (null != step) {
 			Object retVal = null;
 			try {
@@ -227,7 +234,7 @@ public class StringTestStep extends BaseTestStep {
 	}
 
 	public String getCodeSnippet() {
-		if(StringUtil.isBlank(codeSnippet)){
+		if (StringUtil.isBlank(codeSnippet)) {
 			generateCodeSnippet();
 		}
 		return codeSnippet;
