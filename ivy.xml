@@ -87,10 +87,9 @@
 
 		<dependency org="commons-codec" name="commons-codec" rev="1.8" />
 		<dependency org="commons-configuration" name="commons-configuration"
-			rev="1.7" conf="compile->default" />
+			rev="1.7" />
 
-		<dependency org="commons-io" name="commons-io"
-			rev="2.5" conf="compile->default" />
+		<dependency org="commons-io" name="commons-io" rev="2.5" />
 		<dependency org="com.google.code.gson" name="gson" rev="2.1">
 			<artifact name="gson" type="jar"></artifact>
 		</dependency>
@@ -102,7 +101,7 @@
 		</dependency>
 		<dependency org="com.google.inject" name="guice" rev="3.0"/>
 		
-		<dependency org="io.github.lukehutch" name="fast-classpath-scanner" rev="2.0.6" />
+		<dependency org="io.github.lukehutch" name="fast-classpath-scanner" rev="2.0.6"   conf="provided->default" />
 		<dependency org="velocity" name="velocity-dep" rev="1.4"
 			conf="compile->default" />
 

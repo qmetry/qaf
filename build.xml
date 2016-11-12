@@ -86,9 +86,12 @@ For any inquiry or need additional information, please contact support-qaf@infos
 		<ivy:resolve file="ivy.xml" />
 		<ivy:cachepath pathid="lib.path.id" />
 
+		
 		<ivy:addpath topath="build.classpath">
 			<path refid="lib.path.id" />
 		</ivy:addpath>
+		<ivy:cachepath pathid="compile.path" conf="compile,provided"/>
+		<ivy:cachepath pathid="test.path"    conf="test,provided"/>
 	</target>
 
 	<target name="init" depends="resolve">
@@ -185,8 +188,8 @@ For any inquiry or need additional information, please contact support-qaf@infos
 <!--<zip destfile="${dist.dir}/qaf-javadoc.jar" basedir="${dist.dir}/docs">
 </zip>-->
 <jar compress="true" destfile="${dist.dir}/qaf-javadoc.jar" basedir="${dist.dir}/docs" />
-<delete dir="${dist.dir}/docs">
-</delete>
+<!-- <delete dir="${dist.dir}/docs"> 
+</delete>-->
 </target>
 <target name="gensource" description="Generate Source" depends="init">
 <jar destfile="${dist.dir}/qaf-sources.jar" basedir="${src.dir}">
@@ -231,9 +234,9 @@ For any inquiry or need additional information, please contact support-qaf@infos
 <ivy:buildnumber resolver="local-m2-publish" organisation="${ivy.organisation}" module="${ivy.module}" revision="${release.num}" />
 
 <!-- Resolve ivy dependencies and create a Maven POM file -->
-<ivy:deliver deliverpattern="${dist.dir}/ivy.xml" pubrevision="${release.num}" status="release" />
+<ivy:deliver deliverpattern="${dist.dir}/ivy.xml" pubrevision="${release.num}" status="release" conf="runtime->default" />
 <ivy:makepom ivyfile="${dist.dir}/ivy.xml" pomfile="${dist.dir}/qaf.pom">
-	<mapping conf="*,default" scope="compile" />
+	<mapping conf="runtime,default" scope="compile" />
 </ivy:makepom>
 
 <!-- Publish the local repo. Defaults to ~/.ivy2/local -->
