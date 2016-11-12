@@ -56,7 +56,7 @@ For any inquiry or need additional information, please contact support-qaf@infos
 	</path>
 
 	<!-- IVY -->
-	<target name="download-ivy" unless="skip.download">
+	<target name="download-ivy" unless="${skip.download}">
 		<mkdir dir="${ivy.jar.dir}" />
 		<!-- download Ivy from web site so that it can be used even without any 
 			special installation -->
