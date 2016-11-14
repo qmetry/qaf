@@ -20,6 +20,10 @@ You can use QAF as a Maven Artifact. Users would need to add this to their pom.x
     <id>qaf</id>
     <url>{{site.data.strings.qaf_repository}}</url>
 </repository>
+<repository>
+	<id>jai</id>
+	<url>https://repository.jboss.org/nexus/content/repositories/thirdparty-releases</url>
+</repository>
 ```
 
 **Maven Dependency Entry:**
@@ -51,6 +55,8 @@ Create or update ivysettings.xml file to add new repository. Alternately you can
         <chain name="qaf">
             <ibiblio name="central" m2compatible="true"/>
             <ibiblio name="QAF" m2compatible="true" root="{{site.data.strings.qaf_repository}}" />
+            <ibiblio name="jai" m2compatible="true"
+				root="https://repository.jboss.org/nexus/content/repositories/thirdparty-releases" />
         </chain>
     </resolvers>
 </ivysettings>
