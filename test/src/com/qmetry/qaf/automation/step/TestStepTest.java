@@ -28,17 +28,11 @@
  *******************************************************************************/
 package com.qmetry.qaf.automation.step;
 
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.qmetry.qaf.automation.core.ConfigurationManager;
 
 public class TestStepTest {
-	@BeforeClass
-	public void setUp() {
-		ConfigurationManager.getBundle().setProperty("step.provider.pkg", "test.step");
-		StringTestStep.addSteps(JavaStepFinder.getAllJavaSteps());
-	}
 
 	@Test
 	public void stepProviderTest() {
@@ -82,4 +76,12 @@ public class TestStepTest {
 		StringTestStep.execute("keyWord", new Object[]{"a"});
 
 	}
-}
+	
+
+	@Test(description = "")
+	public void testStepFromClassExtendingAnotherClass() {
+		ConfigurationManager.getBundle().setProperty("step.provider.pkg", "com.qmetry.qaf.automation.impl.step.common");
+
+		StringTestStep.execute("step from class extending another class", new Object[]{});
+
+	}}

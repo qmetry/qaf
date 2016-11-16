@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/qmetry/qaf.svg?branch=master)](https://travis-ci.org/qmetry/qaf)
-[![License](https://img.shields.io/github/license/qmetry/qaf.svg)](https://opensource.org/licenses/gpl-3.0.html)
-[![Release](https://img.shields.io/github/release/qmetry/qaf.svg?maxAge=2592000)](https://github.com/qmetry/qaf/releases)
-[![GitHub tag](https://img.shields.io/github/tag/qmetry/qaf.svg?maxAge=2592000)](https://github.com/qmetry/qaf/tags)
+[![License](https://img.shields.io/github/license/qmetry/qaf.svg?maxAge=2592000)](https://opensource.org/licenses/gpl-3.0.html)
+[![Release](https://img.shields.io/github/release/qmetry/qaf.svg)](https://github.com/qmetry/qaf/releases)
+[![GitHub tag](https://img.shields.io/github/tag/qmetry/qaf.svg)](https://github.com/qmetry/qaf/tags)
 [![StackExchange]( https://img.shields.io/badge/questions-Stack_Overflow-lightgray.svg?maxAge=2592000)](http://stackoverflow.com/questions/tagged/qaf)
 [![Help]( https://img.shields.io/badge/help-Documentation-blue.svg?maxAge=2592000)](https://qmetry.github.io/qaf/)
 
@@ -10,7 +10,7 @@
 # QMetry Automation Framework
   for web, mobileweb, mobile native and rest web-service functional test automation
   
-  <a href="https://qmetry.github.io/qaf/" target="_blank">Online documentation</a>
+  <a href="https://qmetry.github.io/qaf/" target="_blank">Online documentation</a> | <a href="https://github.com/qmetry/qaf-step-by-step-tutorial/wiki" target="_blank">Step-By-Step-Tutorial</a>
 
 QMetry Automation Framework source code is made available under the <a href="https://opensource.org/licenses/gpl-3.0.html" target="_blank"> GNU General Public License, version 3 (GPL-3.0)</a>.
 

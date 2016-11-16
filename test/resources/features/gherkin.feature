@@ -36,3 +36,23 @@ Scenario Outline: Search Keyword using data from file
  Then it should have "<searchResult>" in search results
 
 Examples:{'datafile':'resources/testdata.txt'}
+# | searchKey | searchResult | number |
+ 
+Scenario Outline: Search Keyword using data from file-2
+ Given I am on Google Search Page
+ When I search for "<searchKey>"
+ Then I get at least <number> results
+ Then it should have "<searchResult>" in search results
+
+Examples:{'datafile':'resources/testdata.txt'}
+
+Scenario Outline: Search Keyword-2
+ Given I am on Google Search Page
+ When I search for "<searchKey>"
+ Then I get at least <number> results
+ Then it should have "<searchResult>" in search results
+
+Examples:
+ | searchKey | searchResult | number |
+ | QMetry QAF | QMetry Automation Framework | 5 |
+ | Selenium ISFW | Infostretch Test Automation Framework | 10 |

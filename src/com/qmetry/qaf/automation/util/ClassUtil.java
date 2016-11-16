@@ -1,26 +1,31 @@
 /*******************************************************************************
- * QMetry Automation Framework provides a powerful and versatile platform to author 
- * Automated Test Cases in Behavior Driven, Keyword Driven or Code Driven approach
- *                
+ * QMetry Automation Framework provides a powerful and versatile platform to
+ * author
+ * Automated Test Cases in Behavior Driven, Keyword Driven or Code Driven
+ * approach
  * Copyright 2016 Infostretch Corporation
- *
- * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- *
- * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
- * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT
- * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE
- *
- * You should have received a copy of the GNU General Public License along with this program in the name of LICENSE.txt in the root folder of the distribution. If not, see https://opensource.org/licenses/gpl-3.0.html
- *
- * See the NOTICE.TXT file in root folder of this source files distribution 
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or any later version.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR
+ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT
+ * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE
+ * You should have received a copy of the GNU General Public License along with
+ * this program in the name of LICENSE.txt in the root folder of the
+ * distribution. If not, see https://opensource.org/licenses/gpl-3.0.html
+ * See the NOTICE.TXT file in root folder of this source files distribution
  * for additional information regarding copyright ownership and licenses
  * of other open source software / files used by QMetry Automation Framework.
- *
- * For any inquiry or need additional information, please contact support-qaf@infostretch.com
+ * For any inquiry or need additional information, please contact
+ * support-qaf@infostretch.com
  *******************************************************************************/
-
 
 package com.qmetry.qaf.automation.util;
 
@@ -36,6 +41,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -44,6 +50,10 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+
+import com.google.common.reflect.ClassPath;
 
 /**
  * com.qmetry.qaf.automation.util.ClassUtil.java
@@ -52,7 +62,11 @@ import java.util.Set;
  */
 public final class ClassUtil {
 
-	public static Set<Method> getAllMethodsWithAnnotation(String packageName, Class<? extends Annotation> annotation) {
+	private static final String CLASS_SUFIX = ".class";
+	private static final String PROTOCOL_JAR = "jar";
+
+	public static Set<Method> getAllMethodsWithAnnotation(String packageName,
+			Class<? extends Annotation> annotation) {
 		Set<Method> methods = new HashSet<Method>();
 		try {
 			for (Class<?> cls : getClasses(packageName)) {
@@ -62,8 +76,6 @@ public final class ClassUtil {
 					}
 				}
 			}
-		} catch (ClassNotFoundException e) {
-			System.err.println("ClassUtil.getAllMethods: " + e.getMessage());
 		} catch (SecurityException e) {
 			System.err.println("ClassUtil.getAllMethods: " + e.getMessage());
 		} catch (IOException e) {
@@ -73,13 +85,15 @@ public final class ClassUtil {
 		return methods;
 	}
 
-	public static boolean hasAnnotation(Method method, Class<? extends Annotation> annotation) {
+	public static boolean hasAnnotation(Method method,
+			Class<? extends Annotation> annotation) {
 		if (method.isAnnotationPresent(annotation))
 			return true;
 		Class<?>[] intfaces = method.getDeclaringClass().getInterfaces();
 		for (Class<?> intface : intfaces) {
 			try {
-				if (intface.getMethod(method.getName(), method.getParameterTypes()).isAnnotationPresent(annotation))
+				if (intface.getMethod(method.getName(), method.getParameterTypes())
+						.isAnnotationPresent(annotation))
 					return true;
 			} catch (NoSuchMethodException e) {
 				// Ignore!...
@@ -91,13 +105,15 @@ public final class ClassUtil {
 		return false;
 	}
 
-	public static <T extends Annotation> T getAnnotation(Method method, Class<T> annotation) {
+	public static <T extends Annotation> T getAnnotation(Method method,
+			Class<T> annotation) {
 		if (method.isAnnotationPresent(annotation))
 			return method.getAnnotation(annotation);
 		Class<?>[] intfaces = method.getDeclaringClass().getInterfaces();
 		for (Class<?> intface : intfaces) {
 			try {
-				Method iMethod = intface.getMethod(method.getName(), method.getParameterTypes());
+				Method iMethod =
+						intface.getMethod(method.getName(), method.getParameterTypes());
 				if (iMethod.isAnnotationPresent(annotation))
 					return iMethod.getAnnotation(annotation);
 			} catch (NoSuchMethodException e) {
@@ -110,7 +126,8 @@ public final class ClassUtil {
 		return null;
 	}
 
-	public static <T extends Annotation> T getAnnotation(Class<?> clazz, Class<T> annotation) {
+	public static <T extends Annotation> T getAnnotation(Class<?> clazz,
+			Class<T> annotation) {
 		if (clazz.isAnnotationPresent(annotation))
 			return clazz.getAnnotation(annotation);
 		Class<?>[] intfaces = clazz.getInterfaces();
@@ -127,29 +144,49 @@ public final class ClassUtil {
 		return null;
 	}
 
-	/**
-	 * Scans all classes accessible from the context class loader which belong
-	 * to the given package and sub packages.
-	 * 
-	 * @param packageName
-	 *            The base package
-	 * @return The classes
-	 * @throws ClassNotFoundException
-	 * @throws IOException
-	 */
-	public static List<Class<?>> getClasses(String packageName) throws ClassNotFoundException, IOException {
-		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-		String path = packageName.replace('.', '/');
-		Enumeration<URL> resources = classLoader.getResources(path);
-		List<File> dirs = new ArrayList<File>();
-		while (resources.hasMoreElements()) {
-			URL resource = resources.nextElement();
-			dirs.add(new File(resource.getFile()));
-		}
+	public static List<Class<?>> getClasses(String pkg) throws IOException {
+			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+			String path = pkg.replace('.', '/');
+			Enumeration<URL> resources = classLoader.getResources(path);
+			List<Class<?>> classes = new ArrayList<Class<?>>();
+			while (resources.hasMoreElements()) {
+				URL resource = resources.nextElement();
+				if (resource.getProtocol().equalsIgnoreCase(PROTOCOL_JAR)) {
+					try {
+						classes.addAll(getClassesFromJar(resource, pkg));
+					} catch (IOException e) {
+						System.err
+								.println("Unable to get classes from jar: " + resource);
+					}
+				} else {
+					classes.addAll(getClasses(new File(resource.getFile()), pkg));
+				}
+			}
+			return classes;
+	}
+
+	private static List<Class<?>> getClassesFromJar(URL jar, String pkg)
+			throws IOException {
 		List<Class<?>> classes = new ArrayList<Class<?>>();
-		for (File directory : dirs) {
-			classes.addAll(findClasses(directory, packageName));
+
+		String jarFileName = URLDecoder.decode(jar.getFile(), "UTF-8");
+		jarFileName = jarFileName.substring(5, jarFileName.indexOf("!"));
+		JarFile jf = new JarFile(jarFileName);
+		Enumeration<JarEntry> jarEntries = jf.entries();
+
+		while (jarEntries.hasMoreElements()) {
+			String entryName = jarEntries.nextElement().getName().replace("/", ".");
+			if (entryName.startsWith(pkg) && entryName.endsWith(CLASS_SUFIX)) {
+				entryName = entryName.substring(0,
+						entryName.lastIndexOf('.'));
+				try {
+					classes.add(Class.forName(entryName));
+				} catch (Throwable e) {
+					System.err.println("Unable to get class " + entryName + " from jar " + jarFileName);
+				}
+			}
 		}
+		jf.close();
 
 		return classes;
 	}
@@ -163,9 +200,8 @@ public final class ClassUtil {
 	 * @param packageName
 	 *            The package name for classes found inside the base directory
 	 * @return The classes
-	 * @throws ClassNotFoundException
 	 */
-	private static List<Class<?>> findClasses(File directory, String packageName) throws ClassNotFoundException {
+	private static List<Class<?>> getClasses(File directory, String packageName) {
 		List<Class<?>> classes = new ArrayList<Class<?>>();
 		if (!directory.exists()) {
 			return classes;
@@ -173,10 +209,15 @@ public final class ClassUtil {
 		File[] files = directory.listFiles();
 		for (File file : files) {
 			if (file.isDirectory()) {
-				classes.addAll(findClasses(file, packageName + "." + file.getName()));
-			} else if (file.getName().endsWith(".class")) {
-				classes.add(
-						Class.forName(packageName + '.' + file.getName().substring(0, file.getName().length() - 6)));
+				classes.addAll(getClasses(file, packageName + "." + file.getName()));
+			} else if (file.getName().endsWith(CLASS_SUFIX)) {
+				String clsName = packageName + '.'
+						+ file.getName().substring(0, file.getName().lastIndexOf("."));
+				try {
+					classes.add(Class.forName(clsName));
+				} catch (ClassNotFoundException e) {
+					// ignore it
+				}
 			}
 		}
 		return classes;
@@ -191,7 +232,8 @@ public final class ClassUtil {
 	 * @return
 	 * @throws NoSuchMethodException
 	 */
-	public static Method getMethod(Class<?> clazz, String name) throws NoSuchMethodException {
+	public static Method getMethod(Class<?> clazz, String name)
+			throws NoSuchMethodException {
 		Method[] methods = clazz.getMethods();
 		for (Method m : methods) {
 			if (m.getName().equalsIgnoreCase(name)) {
@@ -217,10 +259,11 @@ public final class ClassUtil {
 	public static Field[] getAllFields(Class<?> clazz, Class<?> uptoParent) {
 		Collection<Field> fields = new HashSet<Field>();
 		fields.addAll(Arrays.asList(clazz.getDeclaredFields()));
-		if ((clazz.getSuperclass() != null) && !clazz.getSuperclass().equals(uptoParent)) {
+		if ((clazz.getSuperclass() != null)
+				&& !clazz.getSuperclass().equals(uptoParent)) {
 			fields.addAll(Arrays.asList(getAllFields(clazz.getSuperclass(), uptoParent)));
 		}
-		return fields.toArray(new Field[] {});
+		return fields.toArray(new Field[]{});
 	}
 
 	public static void extractInterfaces(Set<Class<?>> iSet, Class<?> clazz) {
@@ -242,8 +285,9 @@ public final class ClassUtil {
 	@SuppressWarnings("unchecked")
 	public static <C> C getInstance() {
 		try {
-			Class<C> class1 = (Class<C>) ((ParameterizedType) ClassUtil.class.getMethod("getInstance")
-					.getGenericReturnType()).getActualTypeArguments()[0].getClass();
+			Class<C> class1 = (Class<C>) ((ParameterizedType) ClassUtil.class
+					.getMethod("getInstance").getGenericReturnType())
+							.getActualTypeArguments()[0].getClass();
 
 			return class1.newInstance();
 		} catch (Exception e) {
@@ -274,7 +318,8 @@ public final class ClassUtil {
 		return signBuilder.toString();
 	}
 
-	public static Class getTemplateParameterOfInterface(Class base, Class desiredInterface) {
+	public static Class getTemplateParameterOfInterface(Class base,
+			Class desiredInterface) {
 		Object rtn = getSomething(base, desiredInterface);
 		if ((rtn != null) && (rtn instanceof Class)) {
 			return (Class) rtn;
@@ -360,7 +405,8 @@ public final class ClassUtil {
 	 *            interface method
 	 * @return
 	 */
-	public static Type getGenericReturnTypeOfGenericInterfaceMethod(Class clazz, Method method) {
+	public static Type getGenericReturnTypeOfGenericInterfaceMethod(Class clazz,
+			Method method) {
 		if (!method.getDeclaringClass().isInterface()) {
 			return method.getGenericReturnType();
 		}
@@ -392,7 +438,8 @@ public final class ClassUtil {
 	 *            interface method
 	 * @return
 	 */
-	public static Type[] getGenericParameterTypesOfGenericInterfaceMethod(Class clazz, Method method) {
+	public static Type[] getGenericParameterTypesOfGenericInterfaceMethod(Class clazz,
+			Method method) {
 		if (!method.getDeclaringClass().isInterface()) {
 			return method.getGenericParameterTypes();
 		}
@@ -417,7 +464,8 @@ public final class ClassUtil {
 			return (Class<?>) rawType;
 		} else if (type instanceof GenericArrayType) {
 			final GenericArrayType genericArrayType = (GenericArrayType) type;
-			final Class<?> componentRawType = getRawType(genericArrayType.getGenericComponentType());
+			final Class<?> componentRawType =
+					getRawType(genericArrayType.getGenericComponentType());
 			return Array.newInstance(componentRawType, 0).getClass();
 		} else if (type instanceof TypeVariable) {
 			final TypeVariable typeVar = (TypeVariable) type;
@@ -439,7 +487,8 @@ public final class ClassUtil {
 			return (Class<?>) rawType;
 		} else if (type instanceof GenericArrayType) {
 			final GenericArrayType genericArrayType = (GenericArrayType) type;
-			final Class<?> componentRawType = getRawType(genericArrayType.getGenericComponentType());
+			final Class<?> componentRawType =
+					getRawType(genericArrayType.getGenericComponentType());
 			return Array.newInstance(componentRawType, 0).getClass();
 		}
 		return null;
@@ -520,13 +569,16 @@ public final class ClassUtil {
 	 * @param typevariable
 	 * @return actual type of the type variable
 	 */
-	public static Type getActualValueOfTypevariable(Class<?> clazz, TypeVariable<?> typevariable) {
+	public static Type getActualValueOfTypevariable(Class<?> clazz,
+			TypeVariable<?> typevariable) {
 		if (typevariable.getGenericDeclaration() instanceof Class<?>) {
-			Class<?> classDeclaringTypevariable = (Class<?>) typevariable.getGenericDeclaration();
+			Class<?> classDeclaringTypevariable =
+					(Class<?>) typevariable.getGenericDeclaration();
 
 			// find the generic version of classDeclaringTypevariable
 
-			Type fromInterface = getTypeVariableViaGenericInterface(clazz, classDeclaringTypevariable, typevariable);
+			Type fromInterface = getTypeVariableViaGenericInterface(clazz,
+					classDeclaringTypevariable, typevariable);
 			if (fromInterface != null) {
 				return fromInterface;
 			}
@@ -534,10 +586,13 @@ public final class ClassUtil {
 			while (clazz.getSuperclass() != null) {
 				if (clazz.getSuperclass().equals(classDeclaringTypevariable)) {
 					// found it
-					ParameterizedType parameterizedSuperclass = (ParameterizedType) clazz.getGenericSuperclass();
+					ParameterizedType parameterizedSuperclass =
+							(ParameterizedType) clazz.getGenericSuperclass();
 
-					for (int i = 0; i < classDeclaringTypevariable.getTypeParameters().length; i++) {
-						TypeVariable<?> tv = classDeclaringTypevariable.getTypeParameters()[i];
+					for (int i = 0; i < classDeclaringTypevariable
+							.getTypeParameters().length; i++) {
+						TypeVariable<?> tv =
+								classDeclaringTypevariable.getTypeParameters()[i];
 						if (tv.equals(typevariable)) {
 							return parameterizedSuperclass.getActualTypeArguments()[i];
 						}
@@ -548,7 +603,8 @@ public final class ClassUtil {
 			}
 		}
 
-		throw new RuntimeException("Unable to determine value of type parameter " + typevariable);
+		throw new RuntimeException(
+				"Unable to determine value of type parameter " + typevariable);
 	}
 
 	public static void setField(String fieldName, Object classObj, Object value) {
@@ -558,7 +614,8 @@ public final class ClassUtil {
 			try {
 				field = classObj.getClass().getField(fieldName);
 			} catch (NoSuchFieldException e) {
-				Field[] fields = ClassUtil.getAllFields(classObj.getClass(), Object.class);
+				Field[] fields =
+						ClassUtil.getAllFields(classObj.getClass(), Object.class);
 				for (Field f : fields) {
 					if (f.getName().equalsIgnoreCase(fieldName)) {
 						field = f;
@@ -578,30 +635,34 @@ public final class ClassUtil {
 
 	}
 
-	private static Type getTypeVariableViaGenericInterface(Class<?> clazz, Class<?> classDeclaringTypevariable,
-			TypeVariable<?> typevariable) {
+	private static Type getTypeVariableViaGenericInterface(Class<?> clazz,
+			Class<?> classDeclaringTypevariable, TypeVariable<?> typevariable) {
 		for (Type genericInterface : clazz.getGenericInterfaces()) {
 
 			if (genericInterface instanceof ParameterizedType) {
-				ParameterizedType parameterizedType = (ParameterizedType) genericInterface;
+				ParameterizedType parameterizedType =
+						(ParameterizedType) genericInterface;
 
-				for (int i = 0; i < classDeclaringTypevariable.getTypeParameters().length; i++) {
-					TypeVariable<?> tv = classDeclaringTypevariable.getTypeParameters()[i];
+				for (int i = 0; i < classDeclaringTypevariable
+						.getTypeParameters().length; i++) {
+					TypeVariable<?> tv =
+							classDeclaringTypevariable.getTypeParameters()[i];
 					if (tv.equals(typevariable)) {
 						return parameterizedType.getActualTypeArguments()[i];
 					}
 				}
 			} else if (genericInterface instanceof Class) {
-				return getTypeVariableViaGenericInterface((Class<?>) genericInterface, classDeclaringTypevariable,
-						typevariable);
+				return getTypeVariableViaGenericInterface((Class<?>) genericInterface,
+						classDeclaringTypevariable, typevariable);
 			}
 		}
 		return null;
 	}
 
-	private static final Set<Class<?>> WRAPPER_TYPES = new HashSet<Class<?>>(
-			Arrays.asList(new Class<?>[] { Boolean.class, Character.class, Byte.class, Short.class, Integer.class,
-					Long.class, Float.class, Double.class, Void.class, String.class }));
+	private static final Set<Class<?>> WRAPPER_TYPES =
+			new HashSet<Class<?>>(Arrays.asList(new Class<?>[]{Boolean.class,
+					Character.class, Byte.class, Short.class, Integer.class, Long.class,
+					Float.class, Double.class, Void.class, String.class}));
 
 	/**
 	 * @param clazz

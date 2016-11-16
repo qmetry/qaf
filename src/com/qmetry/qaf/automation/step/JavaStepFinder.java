@@ -37,6 +37,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -46,14 +47,9 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.LogFactoryImpl;
-import org.reflections.Reflections;
-import org.reflections.scanners.SubTypesScanner;
-import org.reflections.scanners.TypeAnnotationsScanner;
-import org.reflections.util.ClasspathHelper;
-import org.reflections.util.ConfigurationBuilder;
-import org.reflections.util.FilterBuilder;
 
-import com.qmetry.qaf.automation.ui.webdriver.QAFWebComponent;
+import com.qmetry.qaf.automation.core.ClassFinder;
+import com.qmetry.qaf.automation.core.ClassFinderFactory;
 import com.qmetry.qaf.automation.util.ClassUtil;
 
 /**
@@ -64,10 +60,9 @@ import com.qmetry.qaf.automation.util.ClassUtil;
 public final class JavaStepFinder {
 	public static final String STEPS_PACKAGE = "com.qmetry.qaf.automation.step";
 	private static final Log logger = LogFactoryImpl.getLog(JavaStepFinder.class);
-
+    private static final ClassFinder CLASS_FINDER = ClassFinderFactory.getClassFinder();
 	public static Map<String, TestStep> getAllJavaSteps() {
 		Map<String, TestStep> stepMapping = new HashMap<String, TestStep>();
-		Set<Class<?>> stepProviders = new LinkedHashSet<Class<?>>();;
 		Set<Method> steps = new LinkedHashSet<Method>();
 
 		List<String> pkgs = new ArrayList<String>();
@@ -78,34 +73,11 @@ public final class JavaStepFinder {
 		}
 		for (String pkg : pkgs) {
 			logger.info("pkg: " + pkg);
-
-			ConfigurationBuilder configuration =
-					new ConfigurationBuilder().setUrls(ClasspathHelper.forPackage(pkg))
-							.setScanners(new TypeAnnotationsScanner(),
-									new org.reflections.scanners.MethodAnnotationsScanner(),
-									new SubTypesScanner(false))
-							.filterInputsBy(new FilterBuilder().includePackage(pkg));
-			Reflections reflections = new Reflections(configuration);
-
 			try {
-				Set<Class<? extends Object>> classes =
-						reflections.getSubTypesOf(Object.class);
+				List<Class<?>> classes = CLASS_FINDER.getClasses(pkg);
 				steps.addAll(getAllMethodsWithAnnotation(classes, QAFTestStep.class));
 			} catch (Exception e) {
-				logger.error("Unable to scaning step through classes from package: " + pkg
-						+ "\n Using direct step annotation scanning instead", e);
-				steps.addAll(reflections.getMethodsAnnotatedWith(QAFTestStep.class));
-			}
-			stepProviders
-					.addAll(reflections.getTypesAnnotatedWith(QAFTestStepProvider.class));
-		}
-		for (Class<?> stepProvider : stepProviders) {
-			if (QAFWebComponent.class.isAssignableFrom(stepProvider)) {
-
-			} else if (stepProvider.isInterface())
-				continue;
-			else {
-				steps.addAll(Arrays.asList(stepProvider.getMethods()));
+				System.err.println("Unable to load steps for package: " + pkg);
 			}
 		}
 
@@ -158,19 +130,23 @@ public final class JavaStepFinder {
 		return i;
 	}
 
-	private static Set<Method> getAllMethodsWithAnnotation(Set<Class<?>> classes,
+	private static Set<Method> getAllMethodsWithAnnotation(Collection<Class<?>> classes,
 			Class<? extends Annotation> annotation) {
 
 		Set<Method> methods = new HashSet<Method>();
 		for (Class<?> cls : classes) {
-			if (cls.isInterface())
+
+			if (cls.isInterface() || Modifier.isAbstract(cls.getModifiers()))
 				continue;
 
+			boolean isStepProvider = cls.isAnnotationPresent(QAFTestStepProvider.class);
+
 			for (Method method : cls.getMethods()) {
-				if (ClassUtil.hasAnnotation(method, annotation)) {
+				if (isStepProvider || ClassUtil.hasAnnotation(method, annotation)) {
 					methods.add(method);
 				}
 			}
+
 		}
 
 		return methods;

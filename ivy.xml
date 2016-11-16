@@ -27,19 +27,29 @@
 	xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
 	<info organisation="com.qmetry" module="qaf" status="release" revision="2.1.8">
 	</info>
+	
+	<configurations>
+        <conf name="compile"  description="Required to compile application"/>
+        <conf name="runtime"  description="Additional run-time dependencies" extends="compile"/>
+        <conf name="test"     description="Required for test only" extends="runtime"/>
+        <conf name="provided" description="Needed for compile, but will be present on the target platform."/>
+    </configurations>
+    
 	<dependencies>
 
 		<!-- hamcrest -->
 		<dependency org="org.hamcrest" name="hamcrest-core" rev="1.3" />
+		<dependency org="org.hamcrest" name="hamcrest-library" rev="1.3" />
+		
 
 		<!-- <dependency org="junit" name="junit" rev="4.11" /> -->
 
 		<!-- jai -->
-		<dependency org="javax.media" name="jai-core" rev="1.1.3">
+		<dependency org="javax.media" name="jai-core" rev="1.1.3"  conf="provided->default">
 			<artifact name="jai-core" type="jar"
 				url="https://repository.jboss.org/nexus/content/repositories/thirdparty-releases/javax/media/jai-core/1.1.3/jai-core-1.1.3.jar" />
 		</dependency>
-		<dependency org="com.sun.media" name="jai-codec" rev="1.1.3">
+		<dependency org="com.sun.media" name="jai-codec" rev="1.1.3" conf="provided->default">
 			<artifact name="jai-codec" type="jar"
 				url="https://repository.jboss.org/nexus/content/repositories/thirdparty-releases/com/sun/media/jai-codec/1.1.3/jai-codec-1.1.3.jar" />
 		</dependency>
@@ -51,11 +61,11 @@
 			rev="1.17.1" />
 
 		<!-- reflect -->
-		<dependency org="org.javassist" name="javassist" rev="3.18.2-GA" />
-		<dependency org="org.reflections" name="reflections" rev="0.9.9" />
-
+		<dependency org="org.javassist" name="javassist" rev="3.18.2-GA"  conf="provided->default"/>
+		<dependency org="org.reflections" name="reflections" rev="0.9.9"  conf="provided->default"/>
+		
 		<!-- ssh -->
-		<dependency org="sshtools" name="j2ssh-core" rev="0.2.9" />
+		<dependency org="sshtools" name="j2ssh-core" rev="0.2.9"  conf="provided->default" />
 
 		<!-- aspectj -->
 		<dependency org="org.aspectj" name="aspectjrt" rev="1.8.9">
@@ -77,24 +87,23 @@
 
 		<dependency org="commons-codec" name="commons-codec" rev="1.8" />
 		<dependency org="commons-configuration" name="commons-configuration"
-			rev="1.7" conf="default" />
+			rev="1.7" />
 
-		<dependency org="commons-io" name="commons-io"
-			rev="2.5" conf="default" />
+		<dependency org="commons-io" name="commons-io" rev="2.5" />
 		<dependency org="com.google.code.gson" name="gson" rev="2.1">
 			<artifact name="gson" type="jar"></artifact>
 		</dependency>
 
 
-		<dependency org="org.easytesting" name="fest-reflect" rev="1.4.1" />
+		<!-- <dependency org="org.easytesting" name="fest-reflect" rev="1.4.1" /> -->
 		<dependency org="org.testng" name="testng" rev="6.9.10">
 			<artifact name="testng" type="jar"></artifact>
 		</dependency>
 		<dependency org="com.google.inject" name="guice" rev="3.0"/>
 		
-
+		<dependency org="io.github.lukehutch" name="fast-classpath-scanner" rev="2.0.6"   conf="provided->default" />
 		<dependency org="velocity" name="velocity-dep" rev="1.4"
-			conf="default" />
+			conf="compile->default" />
 
 		<!-- min rev 2.34.0 -->
 		<dependency org="org.seleniumhq.selenium" name="selenium-remote-driver"
@@ -105,7 +114,7 @@
 		<dependency org="org.seleniumhq.selenium" name="selenium-leg-rc" rev="3.0.0"/>
         	-->
 		
-		<!-- ws -->
+		<!-- ws 
 		<dependency org="xmlunit" name="xmlunit" rev="1.4" />
 
 		<dependency org="org.xmlmatchers" name="xml-matchers" rev="0.10" />
@@ -113,13 +122,13 @@
 		<dependency org="com.jayway.jsonpath" name="json-path" rev="0.8.1" />
 		<dependency org="com.jayway.jsonpath" name="json-path-assert"
 			rev="0.8.1" />
-
+		-->
 		<dependency org="org.codehaus.groovy" name="groovy-all"
-			rev="2.1.9" />
-		<dependency org="info.cukes" name="cucumber-java" rev="1.2.4"/>
+			rev="2.1.9"  conf="provided->default" />
+		<dependency org="info.cukes" name="cucumber-java" rev="1.2.4"  conf="test->default"/>
 		<!-- <dependency org="info.cukes" name="cucumber-testng" rev="1.2.4" /> -->
 
-		<dependency org="org.json" name="json" rev="20131018" />
+		<dependency org="org.json" name="json" rev="20160810" />
 
 	</dependencies>
 </ivy-module>

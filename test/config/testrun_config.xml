@@ -20,8 +20,11 @@
 	information, please contact support-qaf@infostretch.com -->
 
 <suite name="QAF Tests" verbose="0">
+	<parameter name="step.provider.sharedinstance" value="false" />
 
 	<test name="QAF-BDD">
+		<parameter name="step.provider.sharedinstance" value="true" />
+
 		<parameter name="step.provider.pkg" value="com.qmetry.qaf.automation.impl.step.qaf" />
 		<parameter name="scenario.file.loc" value="resources/scenarios" />
 
@@ -30,10 +33,11 @@
 		</classes>
 	</test>
 	<test name="QAF-BDD-regexstep">
+		<parameter name="step.provider.sharedinstance" value="true" />
+
 		<parameter name="step.provider.pkg"
 			value="com.qmetry.qaf.automation.impl.step.cucumber" />
 		<parameter name="scenario.file.loc" value="resources/scenarios" />
-		<parameter name="step.provider.sharedinstance" value="true" />
 		<classes>
 			<class name="com.qmetry.qaf.automation.step.client.text.BDDTestFactory" />
 		</classes>
