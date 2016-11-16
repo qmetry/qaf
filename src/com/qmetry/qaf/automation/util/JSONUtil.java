@@ -36,8 +36,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.LogFactoryImpl;
@@ -74,20 +72,6 @@ public class JSONUtil {
 			return false;
 		}
 
-	}
-
-	public static void main(String[] args) {
-		String input =
-				"a book with the title 'One good book', written by 'Anonymous', published in 14 March 2013";
-
-		Matcher matcher = Pattern
-				.compile(
-						".+book with the title '(.+)', written by '(.+)', published in (.+)")
-				.matcher(input);
-		while (matcher.find()) {
-			for (int i = 1; i <= matcher.groupCount(); i++)
-				System.out.println(matcher.group(i));
-		}
 	}
 
 	/**
@@ -139,8 +123,7 @@ public class JSONUtil {
 		}
 	}
 
-	public synchronized static <T> void writeJsonObjectToFile(final String file,
-			final T obj) {
+	public static <T> void writeJsonObjectToFile(final String file, final T obj) {
 
 		File f = new File(file);
 		try {
