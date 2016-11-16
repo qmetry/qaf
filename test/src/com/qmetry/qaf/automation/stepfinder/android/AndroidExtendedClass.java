@@ -1,7 +1,7 @@
-package com.qmetry.qaf.automation.step.android;
+package com.qmetry.qaf.automation.stepfinder.android;
 
-import com.qmetry.qaf.automation.step.common.BaseClass;
 import com.qmetry.qaf.automation.step.QAFTestStep;
+import com.qmetry.qaf.automation.stepfinder.common.BaseClass;
 
 public class AndroidExtendedClass extends BaseClass {
 

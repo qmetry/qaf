@@ -1,4 +1,4 @@
-package com.qmetry.qaf.automation.step.common;
+package com.qmetry.qaf.automation.stepfinder.common;
 
 import com.qmetry.qaf.automation.step.QAFTestStep;
 

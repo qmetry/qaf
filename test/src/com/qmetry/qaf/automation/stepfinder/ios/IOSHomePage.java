@@ -1,7 +1,7 @@
-package com.qmetry.qaf.automation.step.ios;
+package com.qmetry.qaf.automation.stepfinder.ios;
 
 import com.qmetry.qaf.automation.step.QAFTestStep;
-import com.qmetry.qaf.automation.step.common.HomePage;
+import com.qmetry.qaf.automation.stepfinder.common.HomePage;
 
 public class IOSHomePage implements HomePage {
 

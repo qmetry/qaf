@@ -1,7 +1,7 @@
-package com.qmetry.qaf.automation.step.ios;
+package com.qmetry.qaf.automation.stepfinder.ios;
 
-import com.qmetry.qaf.automation.step.common.BaseClass;
 import com.qmetry.qaf.automation.step.QAFTestStep;
+import com.qmetry.qaf.automation.stepfinder.common.BaseClass;
 
 public class IOExtendedClass extends BaseClass {
 
