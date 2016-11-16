@@ -24,6 +24,8 @@
 
 package com.qmetry.qaf.automation.ui.util;
 
+import static com.qmetry.qaf.automation.core.ConfigurationManager.getBundle;
+
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 
@@ -36,9 +38,8 @@ import org.openqa.selenium.support.ui.SystemClock;
 
 import com.google.common.collect.ImmutableList;
 import com.qmetry.qaf.automation.core.ConfigurationManager;
-import com.qmetry.qaf.automation.ui.selenium.WaitService;
+import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.ui.webdriver.QAFExtendedWebElement;
-import com.thoughtworks.selenium.SeleniumException;
 
 /**
  * A specialization of {@link FluentWait} that uses WebDriver instances.
@@ -101,12 +102,13 @@ public class QAFWebElementWait extends FluentWait<QAFExtendedWebElement> {
 		super(element, clock, sleeper);
 		withTimeout(timeOutInMiliSeconds, TimeUnit.MILLISECONDS);
 		pollingEvery(sleepTimeOut, TimeUnit.MILLISECONDS);
-		ignore(NoSuchElementException.class, StaleElementReferenceException.class, SeleniumException.class);
+		ignore(NoSuchElementException.class, StaleElementReferenceException.class);
 	}
 
 	/**
 	 * @see #ignoreAll(Collection)
 	 */
+	@SuppressWarnings("unchecked")
 	public QAFWebElementWait ignore(Class<? extends RuntimeException>... exceptionType) {
 		return (QAFWebElementWait) this
 				.ignoreAll(ImmutableList.<Class<? extends RuntimeException>> copyOf(exceptionType));
@@ -128,13 +130,12 @@ public class QAFWebElementWait extends FluentWait<QAFExtendedWebElement> {
 
 	private static long getDefaultTimeout() {
 		return ConfigurationManager.getBundle().getLong("selenium.explicit.wait.timeout",
-				WaitService.getDefaultPageWaitTimeNum());
+				ApplicationProperties.SELENIUM_WAIT_TIMEOUT.getIntVal(5000));
 	}
 
 	private static long getDefaultInterval() {
-		return ConfigurationManager.getBundle().getLong("selenium.explicit.wait.interval",
-				WaitService.getDefaultWaitIntervalTimeNum());
-
+		return getBundle().getLong("selenium.explicit.wait.interval",
+				getBundle().getLong("selenium.wait.interval", 1000));
 	}
 
 }

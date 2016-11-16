@@ -1,40 +1,50 @@
 /*******************************************************************************
- * QMetry Automation Framework provides a powerful and versatile platform to author 
- * Automated Test Cases in Behavior Driven, Keyword Driven or Code Driven approach
- *                
+ * QMetry Automation Framework provides a powerful and versatile platform to
+ * author
+ * Automated Test Cases in Behavior Driven, Keyword Driven or Code Driven
+ * approach
  * Copyright 2016 Infostretch Corporation
- *
- * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- *
- * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
- * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT
- * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE
- *
- * You should have received a copy of the GNU General Public License along with this program in the name of LICENSE.txt in the root folder of the distribution. If not, see https://opensource.org/licenses/gpl-3.0.html
- *
- * See the NOTICE.TXT file in root folder of this source files distribution 
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or any later version.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR
+ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT
+ * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE
+ * You should have received a copy of the GNU General Public License along with
+ * this program in the name of LICENSE.txt in the root folder of the
+ * distribution. If not, see https://opensource.org/licenses/gpl-3.0.html
+ * See the NOTICE.TXT file in root folder of this source files distribution
  * for additional information regarding copyright ownership and licenses
  * of other open source software / files used by QMetry Automation Framework.
- *
- * For any inquiry or need additional information, please contact support-qaf@infostretch.com
+ * For any inquiry or need additional information, please contact
+ * support-qaf@infostretch.com
  *******************************************************************************/
-
 
 package com.qmetry.qaf.automation.core;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.LogFactoryImpl;
+import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.support.ui.FluentWait;
 
+import com.google.common.base.Supplier;
 import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.ui.UiDriver;
 import com.qmetry.qaf.automation.ui.UiDriverFactory;
+import com.qmetry.qaf.automation.ui.util.ExpectedCondition;
 import com.qmetry.qaf.automation.util.FileUtil;
 import com.qmetry.qaf.automation.util.PropertyUtil;
 import com.qmetry.qaf.automation.util.StringMatcher;
@@ -73,7 +83,10 @@ public class QAFTestBase {
 	 * @author chirag.jayswal
 	 */
 	public enum STBArgs {
-		browser_str("firefoxDriver"), base_url("http://localhost"), sel_server("localhost"), port("4444");
+		browser_str("firefoxDriver"),
+		base_url("http://localhost"),
+		sel_server("localhost"),
+		port("4444");
 		public String defaultVal;
 
 		private STBArgs(String def) {
@@ -82,7 +95,8 @@ public class QAFTestBase {
 
 		public String getFrom(String... args) {
 			if ((args != null) && (args.length > ordinal())) {
-				return ConfigurationManager.getBundle().getSubstitutor().replace(args[ordinal()]);
+				return ConfigurationManager.getBundle().getSubstitutor()
+						.replace(args[ordinal()]);
 			}
 			return "";
 		}
@@ -127,7 +141,8 @@ public class QAFTestBase {
 		commandLog = new ArrayList<LoggingBean>();
 		checkPointResults = new ArrayList<CheckpointResultBean>();
 		context = new PropertyUtil();
-		setAlwaysCaptureScreenShot(ApplicationProperties.SUCEESS_SCREENSHOT.getBoolenVal());
+		setAlwaysCaptureScreenShot(
+				ApplicationProperties.SUCEESS_SCREENSHOT.getBoolenVal());
 
 		setScreenShotDir(ApplicationProperties.SCREENSHOT_DIR.getStringVal("./img"));
 		setReportDir(ApplicationProperties.REPORT_DIR.getStringVal("./"));
@@ -177,7 +192,8 @@ public class QAFTestBase {
 	}
 
 	public void setMethod(Method method) {
-		ConfigurationManager.getBundle().addProperty("current.testcase.name", method.getName());
+		ConfigurationManager.getBundle().addProperty(ApplicationProperties.CURRENT_TEST_NAME.key,
+				method.getName());
 	}
 
 	public void setPrepareForShutdown(boolean prepareForShutdown) {
@@ -188,8 +204,8 @@ public class QAFTestBase {
 		if (StringUtil.isBlank(lastCapturedScreenShot)) {
 			return "";
 		}
-		String dir = ApplicationProperties.SCREENSHOT_RELATIVE_PATH
-				.getStringVal(FileUtil.getReletivePath(ApplicationProperties.REPORT_DIR.getStringVal("./"),
+		String dir = ApplicationProperties.SCREENSHOT_RELATIVE_PATH.getStringVal(FileUtil
+				.getReletivePath(ApplicationProperties.REPORT_DIR.getStringVal("./"),
 						ApplicationProperties.SCREENSHOT_DIR.getStringVal("./img/")));
 		if (!dir.endsWith("/")) {
 			dir = dir + "/";
@@ -272,8 +288,7 @@ public class QAFTestBase {
 		addAssertionLog(e.getMessage(), MessageTypes.Fail);
 		if (!logger.isDebugEnabled())
 			logger.error(MessageTypes.Fail.formatText(e.getMessage()));
-		else
-			logger.debug(e.getMessage(), e);
+		else logger.debug(e.getMessage(), e);
 
 	}
 
@@ -296,9 +311,11 @@ public class QAFTestBase {
 		boolean added = addCheckpoint(bean);
 
 		if (added && StringUtil.isBlank(getLastCapturedScreenShot())
-				&& ((ApplicationProperties.FAILURE_SCREENSHOT.getBoolenVal(true) && (type.isFailure()))
+				&& ((ApplicationProperties.FAILURE_SCREENSHOT.getBoolenVal(true)
+						&& (type.isFailure()))
 						|| ((type != MessageTypes.Info)
-								&& ApplicationProperties.SUCEESS_SCREENSHOT.getBoolenVal(false)))) {
+								&& ApplicationProperties.SUCEESS_SCREENSHOT
+										.getBoolenVal(false)))) {
 
 			takeScreenShot();
 		}
@@ -333,7 +350,7 @@ public class QAFTestBase {
 	}
 
 	protected String getTestCaseName() {
-		return ConfigurationManager.getBundle().getString("current.testcase.name", "QAFTest");
+		return ApplicationProperties.CURRENT_TEST_NAME.getStringVal("QAFTest");
 	}
 
 	protected void setScreenShotDir(String screenShotDir) {
@@ -353,15 +370,24 @@ public class QAFTestBase {
 	}
 
 	private void init() {
-
 		if (ApplicationProperties.DRIVER_NAME.getStringVal("").equalsIgnoreCase("")) {
-			System.err.println("Driver not configured!... \nUsing " + STBArgs.browser_str.getDefaultVal()
+			System.err.println("Driver not configured!... \nUsing "
+					+ STBArgs.browser_str.getDefaultVal()
 					+ " as default value. Please configure driver to be used using '"
 					+ ApplicationProperties.DRIVER_NAME.key + "' property");
 		}
 		stb = initStbArgs();
 		logger.info("Initializing Driver..." + STBArgs.allToString(stb));
-		uiDriver = new UiDriverFactory().get(commandLog, stb);
+		// uiDriver = new UiDriverFactory().get(commandLog, stb);
+		DriverInitExpectedCondition driverInitExpectedCondition =
+				new DriverInitExpectedCondition(commandLog, stb);
+		uiDriver = new UiDriverInitializer()
+				.withTimeout(ApplicationProperties.DRIVER_INIT_TIMEOUT.getIntVal(0),
+						TimeUnit.SECONDS)
+				.pollingEvery(10, TimeUnit.SECONDS)
+				.withMessage(driverInitExpectedCondition)
+				.ignoring(WebDriverException.class).until(driverInitExpectedCondition);
+		System.out.println("driver init done");
 	}
 
 	private boolean hasFailure(List<CheckpointResultBean> subSteps) {
@@ -375,19 +401,27 @@ public class QAFTestBase {
 
 	private boolean addCheckpoint(CheckpointResultBean bean) {
 		int checkPoints = checkPointResults.size();
-		CheckpointResultBean lastCheckpoint = checkPoints > 1 ? checkPointResults.get(checkPoints - 1) : null;
+		CheckpointResultBean lastCheckpoint =
+				checkPoints > 1 ? checkPointResults.get(checkPoints - 1) : null;
 
-		List<CheckpointResultBean> parent = MessageTypes.TestStep.name().equalsIgnoreCase(bean.getType())
-				|| (lastCheckpoint == null) || !MessageTypes.TestStep.name().equalsIgnoreCase(lastCheckpoint.getType())
-						? checkPointResults : lastCheckpoint.getSubCheckPoints();
+		List<CheckpointResultBean> parent =
+				MessageTypes.TestStep.name().equalsIgnoreCase(bean.getType())
+						|| (lastCheckpoint == null)
+						|| !MessageTypes.TestStep.name()
+								.equalsIgnoreCase(lastCheckpoint.getType())
+										? checkPointResults
+										: lastCheckpoint.getSubCheckPoints();
 
-		CheckpointResultBean prevCheckpointResultBean = !parent.isEmpty() ? parent.get(parent.size() - 1) : null;
+		CheckpointResultBean prevCheckpointResultBean =
+				!parent.isEmpty() ? parent.get(parent.size() - 1) : null;
 
-		if ((prevCheckpointResultBean == null) || !prevCheckpointResultBean.equals(bean)) {
+		if ((prevCheckpointResultBean == null)
+				|| !prevCheckpointResultBean.equals(bean)) {
 			parent.add(bean);
-			if ((lastCheckpoint != null) && MessageTypes.TestStep.name().equalsIgnoreCase(lastCheckpoint.getType())) {
-				lastCheckpoint.setType(hasFailure(lastCheckpoint.getSubCheckPoints()) ? MessageTypes.TestStepFail
-						: MessageTypes.TestStepPass);
+			if ((lastCheckpoint != null) && MessageTypes.TestStep.name()
+					.equalsIgnoreCase(lastCheckpoint.getType())) {
+				lastCheckpoint.setType(hasFailure(lastCheckpoint.getSubCheckPoints())
+						? MessageTypes.TestStepFail : MessageTypes.TestStepPass);
 			}
 			return true;
 		}
@@ -403,8 +437,8 @@ public class QAFTestBase {
 	private String base64ImageToFile(String base64Image) {
 		String filename = "";
 		try {
-			filename = FileUtil.saveImageFile(base64Image, StringUtil.createRandomString(getTestCaseName()),
-					getScreenShotDir());
+			filename = FileUtil.saveImageFile(base64Image,
+					StringUtil.createRandomString(getTestCaseName()), getScreenShotDir());
 			lastCapturedScreenShot = filename;
 			logger.info("Capturing screen shot" + lastCapturedScreenShot);
 
@@ -418,16 +452,71 @@ public class QAFTestBase {
 	private String[] initStbArgs(String... args) {
 
 		return STBArgs.browser_str.setIfEmpty(
-				ApplicationProperties.DRIVER_NAME.getStringVal(STBArgs.browser_str.defaultVal),
+				ApplicationProperties.DRIVER_NAME
+						.getStringVal(STBArgs.browser_str.defaultVal),
 				STBArgs.base_url.setIfEmpty(
-						ApplicationProperties.SELENIUM_BASE_URL.getStringVal(STBArgs.base_url.defaultVal),
+						ApplicationProperties.SELENIUM_BASE_URL
+								.getStringVal(STBArgs.base_url.defaultVal),
 						STBArgs.port.setIfEmpty(
 
-								ApplicationProperties.REMOTE_PORT.getStringVal(STBArgs.port.defaultVal),
+								ApplicationProperties.REMOTE_PORT
+										.getStringVal(STBArgs.port.defaultVal),
 								STBArgs.sel_server.setIfEmpty(
-										ApplicationProperties.REMOTE_SERVER.getStringVal(STBArgs.sel_server.defaultVal),
+										ApplicationProperties.REMOTE_SERVER.getStringVal(
+												STBArgs.sel_server.defaultVal),
 										args))));
 
 	}
 
+	private class DriverInitExpectedCondition
+			implements
+				ExpectedCondition<UiDriverFactory, UiDriver>,
+				Supplier<String> {
+		int count = 0;
+		private ArrayList<LoggingBean> commandLog;
+		private String[] stb;
+
+		public DriverInitExpectedCondition(ArrayList<LoggingBean> commandLog,
+				String[] stb) {
+			this.commandLog = commandLog;
+			this.stb = stb;
+		}
+		public UiDriver apply(UiDriverFactory driverFectory) {
+			try {
+				count++;
+				return driverFectory.get(this.commandLog, this.stb);
+			} catch (Throwable e) {
+				String msg = get();
+				System.err.println(msg + e.getMessage());
+				throw new WebDriverException(msg, e.getCause());
+			}
+		}
+
+		@Override
+		public String get() {
+			return "Unable to create driver instance in "
+					+ StringUtil.toStringWithSufix(count)
+					+ " attempt with retry timeout of "
+					+ ApplicationProperties.DRIVER_INIT_TIMEOUT.getIntVal(0)
+					+ " seconds. You can check/set value of '"
+					+ ApplicationProperties.DRIVER_INIT_TIMEOUT.key
+					+ "' appropriately to set retry timeout on driver initialization failure.";
+		}
+
+	}
+	
+	private class UiDriverInitializer extends FluentWait<UiDriverFactory>{
+
+		public UiDriverInitializer() {
+			super(new UiDriverFactory());
+		}
+		@Override
+		protected RuntimeException timeoutException(String message,
+				Throwable lastException) {
+			AutomationError ae = new AutomationError(message + "\n"+lastException.getCause().getMessage());
+			ae.setStackTrace(lastException.getCause().getStackTrace());
+			return ae;
+		}
+		
+	}
 }

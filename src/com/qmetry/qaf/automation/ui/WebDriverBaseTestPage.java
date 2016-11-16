@@ -102,4 +102,10 @@ public abstract class WebDriverBaseTestPage<P extends WebDriverTestPage>
 		obj.getId();
 		return obj;
 	}
+	
+	
+	
+	public void waitForTextPresent(String text) {
+		new QAFExtendedWebElement(By.partialLinkText(text)).waitForPresent();
+	}
 }

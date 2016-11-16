@@ -54,6 +54,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.qmetry.qaf.automation.core.ConfigurationManager;
 import com.qmetry.qaf.automation.core.MessageTypes;
+import com.qmetry.qaf.automation.core.QAFListener;
 import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.ui.WebDriverCommandLogger;
 import com.qmetry.qaf.automation.ui.WebDriverTestBase;
@@ -63,12 +64,11 @@ import com.qmetry.qaf.automation.ui.webdriver.CommandTracker.Stage;
 import com.qmetry.qaf.automation.util.JSONUtil;
 import com.qmetry.qaf.automation.util.LocatorUtil;
 import com.qmetry.qaf.automation.util.StringMatcher;
-import com.thoughtworks.selenium.SeleniumException;
 
 /**
- * com.qmetry.qaf.automation.ui.webdriver.extended.IsExtendedWebElement.java
+ * com.qmetry.qaf.automation.ui.webdriver.extended.QAFExtendedWebElement.java
  * 
- * @author chirag
+ * @author chirag.jayswal
  */
 public class QAFExtendedWebElement extends RemoteWebElement implements QAFWebElementCommandListener, QAFWebElement {
 	protected final Log logger = LogFactory.getLog(getClass());
@@ -101,8 +101,23 @@ public class QAFExtendedWebElement extends RemoteWebElement implements QAFWebEle
 		for (String listenr : listners) {
 			registerListeners(listenr);
 		}
+		listners = ConfigurationManager.getBundle()
+				.getStringArray(ApplicationProperties.QAF_LISTENERS.key);
+		for (String listener : listners) {
+			try {
+				QAFListener cls = (QAFListener) Class.forName(listener).newInstance();
+				if(QAFWebElementCommandListener.class.isAssignableFrom(cls.getClass()))
+				this.listners.add((QAFWebElementCommandListener)cls);
+			} catch (Exception e) {
+				logger.error("Unable to register class as element listener:  " + listener, e);
+			}
+		}
 	}
 
+	/**
+	 * 
+	 * @param by
+	 */
 	public QAFExtendedWebElement(By by) {
 		this(new WebDriverTestBase().getDriver(), by);
 	}
@@ -118,15 +133,31 @@ public class QAFExtendedWebElement extends RemoteWebElement implements QAFWebEle
 		initLoc(locator);
 	}
 
+	/**
+	 * 
+	 * @param parentElement
+	 * @param locator
+	 */
 	public QAFExtendedWebElement(QAFExtendedWebElement parentElement, String locator) {
 		this(parentElement, (By) null);
 		initLoc(locator);
 	}
-
+	
+	/**
+	 * 
+	 * @param driver
+	 * @param by
+	 */
 	public QAFExtendedWebElement(QAFExtendedWebDriver driver, By by) {
 		this(driver, by, false);
 	}
 
+	/**
+	 * 
+	 * @param driver
+	 * @param by
+	 * @param cacheable
+	 */
 	public QAFExtendedWebElement(QAFExtendedWebDriver driver, By by, boolean cacheable) {
 		this(driver);
 		this.by = by;
@@ -442,31 +473,31 @@ public class QAFExtendedWebElement extends RemoteWebElement implements QAFWebEle
 	@SuppressWarnings("unchecked")
 	public void waitForVisible(long... timeout) {
 		new QAFWebElementWait(this, timeout)
-				.ignore(SeleniumException.class, NoSuchElementException.class, StaleElementReferenceException.class)
+				.ignore(RuntimeException.class, NoSuchElementException.class, StaleElementReferenceException.class)
 				.withMessage("Wait time out for " + getDescription() + " to be visible")
 				.until(QAFWebElementExpectedConditions.elementVisible());
 	}
 
 	public void waitForNotVisible(long... timeout) {
-		new QAFWebElementWait(this, timeout).ignoring(SeleniumException.class)
+		new QAFWebElementWait(this, timeout).ignoring(RuntimeException.class)
 				.until(QAFWebElementExpectedConditions.elementNotVisible());
 
 	}
 
 	public void waitForDisabled(long... timeout) {
-		new QAFWebElementWait(this, timeout).ignoring(SeleniumException.class, NoSuchElementException.class)
+		new QAFWebElementWait(this, timeout).ignoring(RuntimeException.class, NoSuchElementException.class)
 				.withMessage("Wait time out for " + getDescription() + " to be disabled")
 				.until(QAFWebElementExpectedConditions.elementDisabled());
 	}
 
 	public void waitForEnabled(long... timeout) {
-		new QAFWebElementWait(this, timeout).ignoring(NoSuchElementException.class, SeleniumException.class)
+		new QAFWebElementWait(this, timeout).ignoring(NoSuchElementException.class, RuntimeException.class)
 				.withMessage("Wait time out for " + getDescription() + " to be enabled")
 				.until(QAFWebElementExpectedConditions.elementEnabled());
 	}
 
 	public void waitForPresent(long... timeout) {
-		new QAFWebElementWait(this, timeout).ignoring(NoSuchElementException.class, SeleniumException.class)
+		new QAFWebElementWait(this, timeout).ignoring(NoSuchElementException.class, RuntimeException.class)
 				.withMessage("Wait time out for " + getDescription() + " to be present")
 				.until(QAFWebElementExpectedConditions.elementPresent());
 	}
@@ -478,99 +509,99 @@ public class QAFExtendedWebElement extends RemoteWebElement implements QAFWebEle
 
 	@Override
 	public void waitForText(StringMatcher matcher, long... timeout) {
-		new QAFWebElementWait(this, timeout).ignoring(NoSuchElementException.class, SeleniumException.class)
+		new QAFWebElementWait(this, timeout).ignoring(NoSuchElementException.class, RuntimeException.class)
 				.withMessage("Wait time out for " + getDescription() + " text " + matcher.toString())
 				.until(QAFWebElementExpectedConditions.elementTextEq(matcher));
 	}
 
 	public void waitForText(String text, long... timeout) {
-		new QAFWebElementWait(this, timeout).ignoring(NoSuchElementException.class, SeleniumException.class)
+		new QAFWebElementWait(this, timeout).ignoring(NoSuchElementException.class, RuntimeException.class)
 				.withMessage("Wait time out for " + getDescription() + " text " + text)
 				.until(QAFWebElementExpectedConditions.elementTextEq(text));
 	}
 
 	public void waitForNotText(StringMatcher matcher, long... timeout) {
-		new QAFWebElementWait(this, timeout).ignoring(NoSuchElementException.class, SeleniumException.class)
+		new QAFWebElementWait(this, timeout).ignoring(NoSuchElementException.class, RuntimeException.class)
 				.withMessage("Wait time out for " + getDescription() + " text not: " + matcher.toString())
 				.until(QAFWebElementExpectedConditions.elementTextNotEq(matcher));
 	}
 
 	public void waitForNotText(String text, long... timeout) {
-		new QAFWebElementWait(this, timeout).ignoring(NoSuchElementException.class, SeleniumException.class)
+		new QAFWebElementWait(this, timeout).ignoring(NoSuchElementException.class, RuntimeException.class)
 				.withMessage("Wait time out for " + getDescription() + " text not: " + text)
 				.until(QAFWebElementExpectedConditions.elementTextNotEq(text));
 	}
 
 	public void waitForValue(Object value, long... timeout) {
-		new QAFWebElementWait(this, timeout).ignoring(NoSuchElementException.class, SeleniumException.class)
+		new QAFWebElementWait(this, timeout).ignoring(NoSuchElementException.class, RuntimeException.class)
 				.withMessage("Wait time out for " + getDescription() + " value" + value)
 				.until(QAFWebElementExpectedConditions.elementValueEq(value));
 	}
 
 	public void waitForNotValue(Object value, long... timeout) {
-		new QAFWebElementWait(this, timeout).ignoring(NoSuchElementException.class, SeleniumException.class)
+		new QAFWebElementWait(this, timeout).ignoring(NoSuchElementException.class, RuntimeException.class)
 				.withMessage("Wait time out for " + getDescription() + " value not " + value)
 				.until(QAFWebElementExpectedConditions.elementValueNotEq(value));
 	}
 
 	public void waitForSelected(long... timeout) {
-		new QAFWebElementWait(this, timeout).ignoring(NoSuchElementException.class, SeleniumException.class)
+		new QAFWebElementWait(this, timeout).ignoring(NoSuchElementException.class, RuntimeException.class)
 				.withMessage("Wait time out for " + getDescription() + " to be selected")
 				.until(QAFWebElementExpectedConditions.elementSelected());
 	}
 
 	public void waitForNotSelected(long... timeout) {
-		new QAFWebElementWait(this, timeout).ignoring(NoSuchElementException.class, SeleniumException.class)
+		new QAFWebElementWait(this, timeout).ignoring(NoSuchElementException.class, RuntimeException.class)
 				.withMessage("Wait time out for " + getDescription() + " to not selected")
 				.until(QAFWebElementExpectedConditions.elementNotSelected());
 	}
 
 	public void waitForAttribute(String name, String value, long... timeout) {
-		new QAFWebElementWait(this, timeout).ignoring(NoSuchElementException.class, SeleniumException.class)
+		new QAFWebElementWait(this, timeout).ignoring(NoSuchElementException.class, RuntimeException.class)
 				.withMessage("Wait time out for " + getDescription() + " " + name + " = " + value)
 				.until(QAFWebElementExpectedConditions.elementAttributeValueEq(name, value));
 	}
 
 	@Override
 	public void waitForAttribute(String attr, StringMatcher value, long... timeout) {
-		new QAFWebElementWait(this, timeout).ignoring(NoSuchElementException.class, SeleniumException.class)
+		new QAFWebElementWait(this, timeout).ignoring(NoSuchElementException.class, RuntimeException.class)
 				.withMessage("Wait time out for " + getDescription() + " " + attr + " = " + value)
 				.until(QAFWebElementExpectedConditions.elementAttributeValueEq(attr, value));
 	}
 
 	public void waitForNotAttribute(String name, String value, long... timeout) {
-		new QAFWebElementWait(this, timeout).ignoring(NoSuchElementException.class, SeleniumException.class)
+		new QAFWebElementWait(this, timeout).ignoring(NoSuchElementException.class, RuntimeException.class)
 				.withMessage("Wait time out for " + getDescription() + " " + name + "!=" + value)
 				.until(QAFWebElementExpectedConditions.elementAttributeValueNotEq(name, value));
 	}
 
 	@Override
 	public void waitForNotAttribute(String attr, StringMatcher value, long... timeout) {
-		new QAFWebElementWait(this, timeout).ignoring(NoSuchElementException.class, SeleniumException.class)
+		new QAFWebElementWait(this, timeout).ignoring(NoSuchElementException.class, RuntimeException.class)
 				.withMessage("Wait time out for " + getDescription() + " " + attr + " = " + value)
 				.until(QAFWebElementExpectedConditions.elementAttributeValueNotEq(attr, value));
 	}
 
 	public void waitForCssClass(String name, long... timeout) {
-		new QAFWebElementWait(this, timeout).ignoring(NoSuchElementException.class, SeleniumException.class)
+		new QAFWebElementWait(this, timeout).ignoring(NoSuchElementException.class, RuntimeException.class)
 				.withMessage("Wait time out for " + getDescription() + " have css class " + name)
 				.until(QAFWebElementExpectedConditions.elementHasCssClass(name));
 	}
 
 	public void waitForNotCssClass(String name, long... timeout) {
-		new QAFWebElementWait(this, timeout).ignoring(NoSuchElementException.class, SeleniumException.class)
+		new QAFWebElementWait(this, timeout).ignoring(NoSuchElementException.class, RuntimeException.class)
 				.withMessage("Wait time out for " + getDescription() + " have not css class" + name)
 				.until(QAFWebElementExpectedConditions.elementHasNotCssClass(name));
 	}
 
 	public void waitForCssStyle(String name, String value, long... timeout) {
-		new QAFWebElementWait(this, timeout).ignoring(NoSuchElementException.class, SeleniumException.class)
+		new QAFWebElementWait(this, timeout).ignoring(NoSuchElementException.class, RuntimeException.class)
 				.withMessage("Wait time out for " + getDescription() + " have css style " + name + "=" + value)
 				.until(QAFWebElementExpectedConditions.elementCssPropertyValueEq(name, value));
 	}
 
 	public void waitForNotCssStyle(String name, String value, long... timeout) {
-		new QAFWebElementWait(this, timeout).ignoring(NoSuchElementException.class, SeleniumException.class)
+		new QAFWebElementWait(this, timeout).ignoring(NoSuchElementException.class, RuntimeException.class)
 				.withMessage("Wait time out for " + getDescription() + " have css style " + name + "!=" + value)
 				.until(QAFWebElementExpectedConditions.elementCssPropertyValueNotEq(name, value));
 	}

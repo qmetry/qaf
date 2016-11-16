@@ -30,9 +30,10 @@
 		</classes>
 	</test>
 	<test name="QAF-BDD-regexstep">
-		<parameter name="step.provider.pkg" value="com.qmetry.qaf.automation.impl.step.cucumber" />
+		<parameter name="step.provider.pkg"
+			value="com.qmetry.qaf.automation.impl.step.cucumber" />
 		<parameter name="scenario.file.loc" value="resources/scenarios" />
-
+		<parameter name="step.provider.sharedinstance" value="true" />
 		<classes>
 			<class name="com.qmetry.qaf.automation.step.client.text.BDDTestFactory" />
 		</classes>
@@ -45,6 +46,7 @@
 	<test name="Gherkin-QAF-CucumberSTEP">
 		<parameter name="step.provider.pkg"
 			value="com.qmetry.qaf.automation.impl.step.cucumber" />
+		<parameter name="step.provider.sharedinstance" value="true" />
 		<parameter name="scenario.file.loc" value="resources/features" />
 		<classes>
 			<class
@@ -78,5 +80,5 @@
 			<package name="com.qmetry.qaf.automation.data" />
 		</packages>
 	</test>
-<!--  -->
+	<!-- -->
 </suite>

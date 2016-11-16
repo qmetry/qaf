@@ -24,16 +24,17 @@
 
 package com.qmetry.qaf.automation.step;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.qmetry.qaf.automation.core.ConfigurationManager;
+import com.qmetry.qaf.automation.core.QAFListener;
 import com.qmetry.qaf.automation.keys.ApplicationProperties;
 
 /**
@@ -47,7 +48,7 @@ public abstract class BaseTestStep implements TestStep {
 	protected String description;
 	transient protected Object[] actualArgs;
 	protected StepExecutionTracker stepExecutionTracker;
-	private List<QAFTestStepListener> stepListeners;
+	private Set<QAFTestStepListener> stepListeners;
 	protected String fileName;
 	protected int lineNumber;
 	protected int threshold;
@@ -189,7 +190,7 @@ public abstract class BaseTestStep implements TestStep {
 	}
 
 	private void initStepListeners() {
-		stepListeners = new ArrayList<QAFTestStepListener>();
+		stepListeners = new LinkedHashSet<QAFTestStepListener>();
 		// add listeners registered through property
 		String[] listeners = ConfigurationManager.getBundle()
 				.getStringArray(ApplicationProperties.TESTSTEP_LISTENERS.key);
@@ -198,7 +199,19 @@ public abstract class BaseTestStep implements TestStep {
 				QAFTestStepListener cls = (QAFTestStepListener) Class.forName(listener).newInstance();
 				stepListeners.add(cls);
 			} catch (Exception e) {
-				logger.error("Unable to register test step listener:  " + listener, e);
+				logger.error("Unable to register class as test step listener:  " + listener, e);
+			}
+		}
+		
+		listeners = ConfigurationManager.getBundle()
+				.getStringArray(ApplicationProperties.QAF_LISTENERS.key);
+		for (String listener : listeners) {
+			try {
+				QAFListener cls = (QAFListener) Class.forName(listener).newInstance();
+				if(QAFTestStepListener.class.isAssignableFrom(cls.getClass()))
+				stepListeners.add((QAFTestStepListener)cls);
+			} catch (Exception e) {
+				logger.error("Unable to register class as test step listener:  " + listener, e);
 			}
 		}
 	}

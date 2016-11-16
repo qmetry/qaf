@@ -41,7 +41,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.LogFactoryImpl;
 
 import com.qmetry.qaf.automation.core.ConfigurationManager;
-
+import com.qmetry.qaf.automation.keys.ApplicationProperties;
+ 
 /**
  * com.qmetry.qaf.automation.util.PropUtil.java
  * 
@@ -148,6 +149,7 @@ public class PropertyUtil extends XMLConfiguration {
 				xmlConfiguration.clear();
 			} else {
 				PropertiesConfiguration propertiesConfiguration = new PropertiesConfiguration();
+				propertiesConfiguration.setEncoding(getString(ApplicationProperties.LOCALE_CHAR_ENCODING.key, "UTF-8"));
 				propertiesConfiguration.load(new FileInputStream(file));
 				copy(propertiesConfiguration);
 				propertiesConfiguration.clear();

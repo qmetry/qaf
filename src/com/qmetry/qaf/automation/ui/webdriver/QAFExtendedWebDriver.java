@@ -59,6 +59,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.qmetry.qaf.automation.core.ConfigurationManager;
+import com.qmetry.qaf.automation.core.QAFListener;
 import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.ui.WebDriverCommandLogger;
 import com.qmetry.qaf.automation.ui.WebDriverTestBase;
@@ -67,7 +68,6 @@ import com.qmetry.qaf.automation.ui.util.QAFWebDriverExpectedConditions;
 import com.qmetry.qaf.automation.ui.util.QAFWebDriverWait;
 import com.qmetry.qaf.automation.ui.webdriver.CommandTracker.Stage;
 import com.qmetry.qaf.automation.util.LocatorUtil;
-import com.thoughtworks.selenium.SeleniumException;
 
 /**
  * com.qmetry.qaf.automation.ui.webdriver.QAFWebDriver.java
@@ -138,6 +138,17 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 			for (String listenr : listners) {
 				registerListeners(listenr);
 			}
+			listners = ConfigurationManager.getBundle()
+					.getStringArray(ApplicationProperties.QAF_LISTENERS.key);
+			for (String listener : listners) {
+				try {
+					QAFListener cls = (QAFListener) Class.forName(listener).newInstance();
+					if(QAFWebDriverCommandListener.class.isAssignableFrom(cls.getClass()))
+					this.listners.add((QAFWebDriverCommandListener)cls);
+				} catch (Exception e) {
+					logger.error("Unable to register class as driver listener:  " + listener, e);
+				}
+			}
 
 			onInitialize(this);
 		} catch (Exception e) {
@@ -199,7 +210,7 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 			for (QAFExtendedWebElement element : elements) {
 				final By by = element.getBy();
 				element.setId(((QAFExtendedWebElement) new QAFWebDriverWait(this).ignore(NoSuchElementException.class,
-						StaleElementReferenceException.class, SeleniumException.class)
+						StaleElementReferenceException.class, RuntimeException.class)
 						.until(ExpectedConditions.presenceOfElementLocated(by))).getId());
 			}
 		}

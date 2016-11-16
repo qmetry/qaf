@@ -30,6 +30,7 @@ import org.apache.commons.logging.LogFactory;
 
 import com.qmetry.qaf.automation.ui.annotations.UiElement;
 import com.qmetry.qaf.automation.ui.annotations.UiElement.Type;
+import com.qmetry.qaf.automation.ui.webdriver.QAFExtendedWebElement;
 
 public abstract class DataView<B extends BaseFormDataBean> {
 
@@ -41,7 +42,7 @@ public abstract class DataView<B extends BaseFormDataBean> {
 	}
 
 	public String getData(String loc, Type type, int... index) {
-		Object val = interactor.fetchValue(String.format(loc, index), type);
+		Object val = interactor.fetchValue(String.format(loc, index), type, QAFExtendedWebElement.class);
 
 		return String.valueOf(val);
 	}
@@ -79,7 +80,7 @@ public abstract class DataView<B extends BaseFormDataBean> {
 				Object beanData = bean.getBeanData(loc);
 				if (beanData != null) {
 					outcome = interactor.verifyValue(String.format(loc, index), String.valueOf(bean.getBeanData(loc)),
-							getType(field));
+							getType(field), QAFExtendedWebElement.class);
 
 				}
 			} catch (Exception e) {

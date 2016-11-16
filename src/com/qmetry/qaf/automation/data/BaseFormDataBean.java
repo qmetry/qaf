@@ -40,6 +40,7 @@ import javax.script.ScriptException;
 import com.qmetry.qaf.automation.core.AutomationError;
 import com.qmetry.qaf.automation.ui.annotations.UiElement;
 import com.qmetry.qaf.automation.ui.annotations.UiElement.Type;
+import com.qmetry.qaf.automation.ui.webdriver.QAFExtendedWebElement;
 import com.qmetry.qaf.automation.util.ClassUtil;
 import com.qmetry.qaf.automation.util.StringUtil;
 
@@ -281,7 +282,9 @@ public class BaseFormDataBean extends BaseDataBean {
 		}
 		Type type = map.fieldType();
 		String loc = map.fieldLoc();
-		return interactor.fetchValue(loc, type);
+		Class<? extends QAFExtendedWebElement> eleClass = map.elementClass();
+
+		return interactor.fetchValue(loc, type,eleClass);
 	}
 
 	private void fillUiData(Field fld) {
@@ -295,6 +298,7 @@ public class BaseFormDataBean extends BaseDataBean {
 		String depends = params.dependsOnField();
 		String depVal = params.dependingValue();
 		boolean includePageWait = params.pagewait();
+		Class<? extends QAFExtendedWebElement> eleClass = params.elementClass();
 
 		try {
 			fld.setAccessible(true);
@@ -319,7 +323,7 @@ public class BaseFormDataBean extends BaseDataBean {
 				m.invoke(this);
 
 			} catch (NoSuchMethodException nse) {
-				interactor.fillValue(loc, val, type, includePageWait);
+				interactor.fillValue(loc, val, type, eleClass);
 			} catch (Exception e) {
 				logger.error("Unable to invoke custom fill method for field " + fld.getName(), e);
 				throw new AutomationError("Unable to invoke custom fill method for field " + fld.getName(), e);
@@ -333,9 +337,11 @@ public class BaseFormDataBean extends BaseDataBean {
 		String loc = map.fieldLoc();
 		String depends = map.dependsOnField();
 		String depVal = map.dependingValue();
+		Class<? extends QAFExtendedWebElement> eleClass = map.elementClass();
+
 		try {
 			if (StringUtil.isBlank(depends) || checkParent(depends, depVal)) {
-				return interactor.verifyValue(loc, String.valueOf(getBeanData(loc)), type);
+				return interactor.verifyValue(loc, String.valueOf(getBeanData(loc)), type,eleClass);
 			}
 		} catch (Exception e1) {
 			e1.printStackTrace();

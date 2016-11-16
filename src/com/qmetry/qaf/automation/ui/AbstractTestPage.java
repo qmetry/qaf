@@ -33,8 +33,9 @@ import com.qmetry.qaf.automation.core.ConfigurationManager;
 import com.qmetry.qaf.automation.ui.api.PageLocator;
 import com.qmetry.qaf.automation.ui.api.TestPage;
 import com.qmetry.qaf.automation.ui.api.UiTestBase;
-import com.qmetry.qaf.automation.ui.selenium.WaitService;
+import com.qmetry.qaf.automation.ui.selenium.WaitService.JsToolkit;
 import com.qmetry.qaf.automation.ui.webdriver.ElementFactory;
+import com.qmetry.qaf.automation.ui.webdriver.QAFExtendedWebDriver;
 import com.qmetry.qaf.automation.util.PropertyUtil;
 
 /**
@@ -67,7 +68,7 @@ import com.qmetry.qaf.automation.util.PropertyUtil;
  * @param <D>
  *            Driver implementation - e.g. selenium or webdriver
  */
-public abstract class AbstractTestPage<P extends TestPage<D>, D> extends WaitService implements TestPage<D> {
+public abstract class AbstractTestPage<P extends TestPage<D>, D> implements TestPage<D> {
 	protected P parent;
 	protected UiTestBase<D> testbase;
 	protected D driver;
@@ -136,6 +137,10 @@ public abstract class AbstractTestPage<P extends TestPage<D>, D> extends WaitSer
 			waitForPageToLoad();
 			afterLaunch();
 		}
+	}
+
+	public void waitForPageToLoad() {
+		
 	}
 
 	@Override
@@ -215,4 +220,19 @@ public abstract class AbstractTestPage<P extends TestPage<D>, D> extends WaitSer
 		String msg = String.format("Expected %s is active.", this.getClass().getSimpleName());
 		AbstractTestCase.assertTrue(isPageActive(pageLocator, launchArguments), msg, msg);
 	}
+	
+	@Deprecated
+	public void waitForImageToLoad(final String imgLoc) {
+		
+	}
+	
+	
+	/**
+	 * for any kit
+	 * @deprecated use {@link QAFExtendedWebDriver#waitForAjax(JsToolkit, long...) instead}
+	 */
+	public void waitForAjaxToComplete() {
+	
+	}
+
 }

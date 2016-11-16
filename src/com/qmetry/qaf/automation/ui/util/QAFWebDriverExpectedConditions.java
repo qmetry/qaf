@@ -26,11 +26,8 @@ package com.qmetry.qaf.automation.ui.util;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.StaleElementReferenceException;
 
 import com.qmetry.qaf.automation.ui.webdriver.QAFExtendedWebDriver;
-import com.thoughtworks.selenium.SeleniumException;
 
 /**
  * com.qmetry.qaf.automation.core.ui.ExpectedConditions.java
@@ -65,13 +62,9 @@ public class QAFWebDriverExpectedConditions {
 				try {
 					driver.findElement(locator);
 					return true;
-				} catch (NoSuchElementException e) {
+				} catch (RuntimeException e) {
 					return false;
-				} catch (SeleniumException se) {
-					return false;
-				} catch (StaleElementReferenceException sr) {
-					return false;
-				}
+				} 
 			}
 		};
 	}
@@ -83,11 +76,9 @@ public class QAFWebDriverExpectedConditions {
 				try {
 					driver.findElement(locator);
 
-				} catch (NoSuchElementException e) {
+				} catch (RuntimeException e) {
 					return true;
-				} catch (SeleniumException se) {
-					return true;
-				}
+				} 
 				return false;
 			}
 		};
