@@ -147,7 +147,7 @@ public class StepTests extends WebDriverTestCase {
 
 	@Test(description = "root package should find all steps")
 	public void rootFindAllPackages() {
-		ConfigurationManager.getBundle().setProperty("step.provider.pkg", "com.qas.qaf");
+		ConfigurationManager.getBundle().setProperty("step.provider.pkg", "com.qmetry.qaf.automation.stepfinder");
 
 		StringTestStep.execute("only in extended android step", new Object[]{});
 		Validator.verifyThat(getBundle().getString("last.step.result"),
@@ -173,7 +173,7 @@ public class StepTests extends WebDriverTestCase {
 
 	@Test(description = "verify step finder should find common steps")
 	public void shouldFindCommonSteps() {
-		ConfigurationManager.getBundle().setProperty("step.provider.pkg", "com.qas.qaf");
+		ConfigurationManager.getBundle().setProperty("step.provider.pkg", "com.qmetry.qaf");
 		Validator.verifyThat(JavaStepFinder.getAllJavaSteps(),
 				Matchers.hasKey("COMMENT"));
 	}
