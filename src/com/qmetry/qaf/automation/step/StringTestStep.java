@@ -41,13 +41,9 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.qmetry.qaf.automation.core.MessageTypes;
-import com.qmetry.qaf.automation.keys.ApplicationProperties;
-import com.qmetry.qaf.automation.step.client.CustomStep;
 import com.qmetry.qaf.automation.step.client.text.BDDDefinitionHelper;
 import com.qmetry.qaf.automation.step.client.text.BDDDefinitionHelper.BDDKeyword;
 import com.qmetry.qaf.automation.step.client.text.BDDDefinitionHelper.ParamType;
-import com.qmetry.qaf.automation.util.Reporter;
 import com.qmetry.qaf.automation.util.StringUtil;
 
 /**
@@ -82,6 +78,7 @@ public class StringTestStep extends BaseTestStep {
 			step = getTestStep();
 			if (null != step) {
 				step.setActualArgs(actualArgs);
+				step.setDescription(description);
 				step.getStepExecutionTracker()
 						.setContext(getStepExecutionTracker().getContext());
 			}
@@ -206,7 +203,6 @@ public class StringTestStep extends BaseTestStep {
 					}
 					setActualArgs(params);
 					step = getStepMapping().get(stepName.getName().toUpperCase()).clone();
-					step.setDescription(description);
 					step.getStepExecutionTracker().setType(prefix);
 					break;
 				}

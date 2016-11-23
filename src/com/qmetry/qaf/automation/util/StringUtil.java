@@ -386,11 +386,11 @@ public class StringUtil extends StringUtils {
 	 * @return boolean value for the string.
 	 */
 	public static boolean booleanValueOf(String sVal, Boolean defaultValue) {
-		if (StringUtils.isBlank(sVal)) {
+		if (isBlank(sVal)) {
 			return null == defaultValue ? false : defaultValue.booleanValue();
 		}
 		sVal = sVal.trim();
-		boolean val = StringUtils.isNumeric(sVal) ? (Integer.parseInt(sVal) != 0)
+		boolean val = isNumeric(sVal) ? (Integer.parseInt(sVal) != 0)
 				: Boolean.parseBoolean(sVal) || sVal.equalsIgnoreCase("T") || sVal.equalsIgnoreCase("Y")
 						|| sVal.equalsIgnoreCase("YES") || sVal.equalsIgnoreCase("ON");
 

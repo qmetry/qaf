@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.qmetry.qaf.automation.core.MessageTypes;
+import com.qmetry.qaf.automation.core.TestBaseProvider;
 import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.step.client.CustomStep;
 import com.qmetry.qaf.automation.util.Reporter;
@@ -74,11 +75,11 @@ public class DryRunAnalyzer {
 			TestStep actualStep = step.getTestStep();
 			if (null == actualStep) {
 				String name = step.getDescription();
-				Reporter.log(name, MessageTypes.TestStepFail);
-				// new StepNotFoundException(this);//just generate snippet....
+				//Reporter.log(name, MessageTypes.TestStepFail);
 				String codeSnippet = step.getCodeSnippet();
 				getInstance().addStep(step.getDescription(), name, step.getSignature(),
 						codeSnippet);
+				TestBaseProvider.instance().get().addVerificationError(new StepNotFoundException(step));
 				return true;
 			} else {
 				getInstance().addStep(actualStep.getDescription(), step.getDescription(),
