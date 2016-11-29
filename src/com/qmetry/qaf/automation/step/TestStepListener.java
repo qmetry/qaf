@@ -190,8 +190,9 @@ class TestStepListener implements QAFTestStepListener {
 
 			CheckpointResultBean stepResultBean = new CheckpointResultBean();
 			stepResultBean.setMessage((String) starStepExecutionTracker.getStep().getActualArgs()[0]);
+			String threshold = starStepExecutionTracker.getStep().getActualArgs()[1].toString();
 			stepResultBean
-					.setThreshold(Integer.parseInt((String) starStepExecutionTracker.getStep().getActualArgs()[1]));
+					.setThreshold(StringUtil.isBlank(threshold)?0:Integer.parseInt(threshold));
 
 			// update duration and sub-check-point
 			stepResultBean.setSubCheckPoints(subcheckPoints);
@@ -277,6 +278,7 @@ class TestStepListener implements QAFTestStepListener {
 		String result = getBundle().getSubstitutor().replace(text);
 		ParamType ptype = ParamType.getType(result);
 		if (ptype.equals(ParamType.MAP)) {
+			@SuppressWarnings("unchecked")
 			Map<String, Object> kv = new Gson().fromJson(result, Map.class);
 			if (kv.containsKey("desc")) {
 				result = String.valueOf(kv.get("desc"));
@@ -286,4 +288,5 @@ class TestStepListener implements QAFTestStepListener {
 		}
 		return result;
 	}
+	
 }
