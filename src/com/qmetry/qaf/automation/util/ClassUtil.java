@@ -40,6 +40,7 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -159,7 +160,11 @@ public final class ClassUtil {
 								.println("Unable to get classes from jar: " + resource);
 					}
 				} else {
-					classes.addAll(getClasses(new File(resource.getFile()), pkg));
+					try {
+						classes.addAll(getClasses(new File(resource.toURI()), pkg));
+					} catch (URISyntaxException e) {
+						// ignore it
+					}
 				}
 			}
 			return classes;
