@@ -234,9 +234,8 @@ For any inquiry or need additional information, please contact support-qaf@infos
 <ivy:buildnumber resolver="local-m2-publish" organisation="${ivy.organisation}" module="${ivy.module}" revision="${release.num}" />
 
 <!-- Resolve ivy dependencies and create a Maven POM file -->
-<ivy:deliver deliverpattern="${dist.dir}/ivy.xml" pubrevision="${release.num}" status="release" conf="runtime->default" />
+<ivy:deliver deliverpattern="${dist.dir}/ivy.xml" pubrevision="${release.num}" status="release" />
 <ivy:makepom ivyfile="${dist.dir}/ivy.xml" pomfile="${dist.dir}/qaf.pom">
-	<mapping conf="runtime,default" scope="compile" />
 </ivy:makepom>
 
 <!-- Publish the local repo. Defaults to ~/.ivy2/local -->
