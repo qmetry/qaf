@@ -86,12 +86,12 @@ For any inquiry or need additional information, please contact support-qaf@infos
 		<ivy:resolve file="ivy.xml" />
 		<ivy:cachepath pathid="lib.path.id" />
 
-		
+
 		<ivy:addpath topath="build.classpath">
 			<path refid="lib.path.id" />
 		</ivy:addpath>
-		<ivy:cachepath pathid="compile.path" conf="compile,provided"/>
-		<ivy:cachepath pathid="test.path"    conf="test,provided"/>
+		<ivy:cachepath pathid="compile.path" conf="compile,provided" />
+		<ivy:cachepath pathid="test.path" conf="test,provided" />
 	</target>
 
 	<target name="init" depends="resolve">
@@ -234,9 +234,8 @@ For any inquiry or need additional information, please contact support-qaf@infos
 <ivy:buildnumber resolver="local-m2-publish" organisation="${ivy.organisation}" module="${ivy.module}" revision="${release.num}" />
 
 <!-- Resolve ivy dependencies and create a Maven POM file -->
-<ivy:deliver deliverpattern="${dist.dir}/ivy.xml" pubrevision="${release.num}" status="release" conf="runtime->default" />
+<ivy:deliver deliverpattern="${dist.dir}/ivy.xml" pubrevision="${release.num}" status="release" />
 <ivy:makepom ivyfile="${dist.dir}/ivy.xml" pomfile="${dist.dir}/qaf.pom">
-	<mapping conf="runtime,default" scope="compile" />
 </ivy:makepom>
 
 <!-- Publish the local repo. Defaults to ~/.ivy2/local -->
@@ -270,13 +269,13 @@ For any inquiry or need additional information, please contact support-qaf@infos
 <echo level="info">--- test compile (finished) ---</echo>
 </target>
 <target name="test" depends="make-jar, test-compile">
-	<taskdef resource="testngtasks" classpathref="test.classpath"/>
-	<testng classpathref="test.classpath" workingDir="${test.dir}" outputDir="${test.dir}/test-results" haltOnFailure="true" verbose="2">
-		<classpath location="${bin.dir}" />
-		<xmlfileset dir="${test.dir}/config" includes="testrun_config.xml"/>
-		<sysproperty key="log4j.configuration" value="file:///${test.dir}/log4j.properties" />
-		<sysproperty key="outputDir" value="test-results" />
+<taskdef resource="testngtasks" classpathref="test.classpath" />
+<testng classpathref="test.classpath" workingDir="${test.dir}" outputDir="${test.dir}/test-results" haltOnFailure="true" verbose="2">
+	<classpath location="${bin.dir}" />
+	<xmlfileset dir="${test.dir}/config" includes="testrun_config.xml" />
+	<sysproperty key="log4j.configuration" value="file:///${test.dir}/log4j.properties" />
+	<sysproperty key="outputDir" value="test-results" />
 
-	</testng>
+</testng>
 </target>
 </project>
