@@ -234,7 +234,7 @@ public abstract class BaseDataBean implements DataBean {
 	 */
 	public void fillData(Map<String, String> map) {
 		for (String key : map.keySet()) {
-			fillData(key, map.get(key));
+			fillData(key, String.valueOf(map.get(key)));
 		}
 	}
 
