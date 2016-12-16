@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor 
+	license agreements. See the NOTICE file distributed with this work for additional 
+	information regarding copyright ownership. The ASF licenses this file to 
+	you under the Apache License, Version 2.0 (the "License"); you may not use 
+	this file except in compliance with the License. You may obtain a copy of 
+	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
+	by applicable law or agreed to in writing, software distributed under the 
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
+	OF ANY KIND, either express or implied. See the License for the specific 
+	language governing permissions and limitations under the License. -->
+<ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
+	<info organisation="com.qmetry" module="qaf-qmetry-updator" revision="1.0.1" status="integration" publication="20161216153051">
+	</info>
+
+	<dependencies>
+		<dependency org="com.qmetry" name="qaf" rev="2.1.10-RC2" revConstraint="latest.integration"/>
+		<dependency org="com.qmetry" name="qaf-support" rev="2.1.10-RC2" revConstraint="latest.integration"/>
+		
+		
+		<!-- QMETRY -->
+		<dependency org="org.apache.axis" name="axis" rev="1.4"/>
+		<dependency org="org.apache.axis" name="axis-jaxrpc" rev="1.4"/>
+		<dependency org="org.apache.axis" name="axis-saaj" rev="1.4"/>
+		<dependency org="org.apache.axis" name="axis-ant" rev="1.4"/>
+		<dependency org="commons-discovery" name="commons-discovery" rev="0.4"/>
+		<dependency org="wsdl4j" name="wsdl4j" rev="1.6.2"/>
+		<dependency org="org.eclipse.persistence" name="org.eclipse.persistence.moxy" rev="2.6.1-RC1"/>  
+ 		<dependency org="javax.xml.bind" name="jaxb-api" rev="2.2.12"/>
+
+		<!-- rest -->
+		<dependency org="com.sun.jersey" name="jersey-client" rev="1.11"/>
+		<dependency org="com.sun.jersey" name="jersey-core" rev="1.11"/>
+
+		<!-- excel -->
+		<dependency org="log4j" name="log4j" rev="1.2.14"/>
+		<dependency org="commons-codec" name="commons-codec" rev="1.8"/>
+		<dependency org="commons-configuration" name="commons-configuration" rev="1.7" conf="default"/>
+		<dependency org="commons-io" name="commons-io" rev="2.4"/>
+		<dependency org="com.google.code.gson" name="gson" rev="2.1">
+			<artifact name="gson" type="jar"/>
+		</dependency>
+		<dependency org="org.apache.httpcomponents" name="httpclient" rev="4.4.1"/>
+		<dependency org="org.apache.httpcomponents" name="httpmime" rev="4.3.1"/>
+		
+	</dependencies>
+</ivy-module>
