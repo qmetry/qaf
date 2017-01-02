@@ -10,18 +10,14 @@
 	OF ANY KIND, either express or implied. See the License for the specific 
 	language governing permissions and limitations under the License. -->
 <ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
-	<info organisation="com.qmetry" module="qaf-support-mobile" revision="2.1.10" status="integration" publication="20161229185109">
+	<info organisation="com.qmetry" module="qaf-support-mobile" revision="2.1.10" status="integration" publication="20170102120903">
 	</info>
 
 	<dependencies>
-		<dependency org="com.qmetry" name="qaf" rev="2.1.10-RC2" revConstraint="latest.integration"/>
+		<dependency org="com.qmetry" name="qaf" rev="2.1.10" revConstraint="latest.integration"/>
 		<dependency org="org.aspectj" name="aspectjtools" rev="1.8.5">
 			<artifact name="aspectjtools" type="jar"/>
 		</dependency>
-				
-		<!--  ws  -->
-		<dependency org="xmlunit" name="xmlunit" rev="1.4"/>
-		<dependency org="org.xmlmatchers" name="xml-matchers" rev="1.0-RC1" revConstraint="latest.integration"/>
-		<dependency org="com.jayway.jsonpath" name="json-path" rev="0.8.1"/>
-		<dependency org="com.jayway.jsonpath" name="json-path-assert" rev="0.8.1"/>	</dependencies>
+		<dependency org="io.appium" name="java-client" rev="5.0.0-BETA1" revConstraint="latest.integration"/>
+	</dependencies>
 </ivy-module>
