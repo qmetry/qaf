@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ QMetry Automation Framework provides a powerful and versatile platform to author
+ Automated Test Cases in Behavior Driven, Keyword Driven or Code Driven approach
+ 
+ Copyright 2016 Infostretch Corporation
+ 
+ This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
+ 
+ This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ 
+ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+ OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT
+ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE
+ 
+ You should have received a copy of the GNU General Public License along with this program in the name of LICENSE.txt in the root folder of the distribution. If not, see https://opensource.org/licenses/gpl-3.0.html
+ 
+ See the NOTICE.TXT file in root folder of this source files distribution
+ for additional information regarding copyright ownership and licenses
+ of other open source software / files used by QMetry Automation Framework.
+ 
+ For any inquiry or need additional information, please contact support-qaf@infostretch.com
+ 
+ -->
+<ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
+	<info organisation="com.qmetry" module="qaf" revision="2.1.10" status="integration" publication="20170103140158">
+	</info>
+	
+	<configurations>
+        <conf name="compile" description="Required to compile application"/>
+        <conf name="runtime" description="Additional run-time dependencies" extends="compile"/>
+        <conf name="test" description="Required for test only" extends="runtime"/>
+        <conf name="provided" description="Needed for compile, but will be present on the target platform."/>
+    </configurations>
+    
+	<dependencies>
+
+		<!-- hamcrest -->
+		<dependency org="org.hamcrest" name="hamcrest-core" rev="1.3" conf="compile->default"/>
+		<dependency org="org.hamcrest" name="hamcrest-library" rev="1.3" conf="compile->default"/>
+		
+
+		<!-- <dependency org="junit" name="junit" rev="4.11" /> -->
+
+		<!-- jai -->
+		<dependency org="javax.media" name="jai-core" rev="1.1.3" conf="provided->default">
+			<artifact name="jai-core" type="jar" url="https://repository.jboss.org/nexus/content/repositories/thirdparty-releases/javax/media/jai-core/1.1.3/jai-core-1.1.3.jar"/>
+		</dependency>
+		<dependency org="com.sun.media" name="jai-codec" rev="1.1.3" conf="provided->default">
+			<artifact name="jai-codec" type="jar" url="https://repository.jboss.org/nexus/content/repositories/thirdparty-releases/com/sun/media/jai-codec/1.1.3/jai-codec-1.1.3.jar"/>
+		</dependency>
+
+		<!-- rest -->
+		<dependency org="com.sun.jersey" name="jersey-client" rev="1.11" conf="compile->default"/>
+		<dependency org="com.sun.jersey" name="jersey-core" rev="1.11" conf="compile->default"/>
+		<dependency org="com.sun.jersey.contribs" name="jersey-apache-client" rev="1.17.1" conf="compile->default"/>
+
+		<!-- reflect -->
+		<dependency org="org.javassist" name="javassist" rev="3.18.2-GA" conf="provided->default"/>
+		<dependency org="org.reflections" name="reflections" rev="0.9.9" conf="provided->default"/>
+		
+		<!-- ssh -->
+		<dependency org="sshtools" name="j2ssh-core" rev="0.2.9" conf="provided->default"/>
+
+		<!-- aspectj -->
+		<dependency org="org.aspectj" name="aspectjrt" rev="1.8.9" conf="compile->default">
+			<artifact name="aspectjrt" type="jar"/>
+		</dependency>
+
+		<dependency org="org.aspectj" name="aspectjweaver" rev="1.8.9" conf="compile->default">
+			<artifact name="aspectjweaver" type="jar"/>
+		</dependency>
+		<dependency org="org.aspectj" name="aspectjtools" rev="1.8.9" conf="compile->default">
+			<artifact name="aspectjtools" type="jar"/>
+		</dependency>
+
+		<!-- excel -->
+		<dependency org="net.sourceforge.jexcelapi" name="jxl" rev="2.6.12" conf="compile->default">
+			<artifact name="jxl" type="jar"/>
+		</dependency>
+
+
+		<dependency org="commons-codec" name="commons-codec" rev="1.8" conf="compile->default"/>
+		<dependency org="commons-configuration" name="commons-configuration" rev="1.7" conf="compile->default"/>
+		<dependency org="commons-lang" name="commons-lang" rev="2.6" conf="compile->default"/>
+
+		<dependency org="commons-io" name="commons-io" rev="2.5" conf="compile->default"/>
+		<dependency org="com.google.code.gson" name="gson" rev="2.1" conf="compile->default">
+			<artifact name="gson" type="jar"/>
+		</dependency>
+
+
+		<!-- <dependency org="org.easytesting" name="fest-reflect" rev="1.4.1" /> -->
+		<dependency org="org.testng" name="testng" rev="6.9.10" conf="compile->default">
+			<artifact name="testng" type="jar"/>
+		</dependency>
+		<dependency org="com.google.inject" name="guice" rev="3.0" conf="compile->default"/>
+		
+		<dependency org="io.github.lukehutch" name="fast-classpath-scanner" rev="2.0.6" conf="provided->default"/>
+		<dependency org="velocity" name="velocity-dep" rev="1.4" conf="compile->default"/>
+
+		<!-- min rev 2.34.0 -->
+		<dependency org="org.seleniumhq.selenium" name="selenium-remote-driver" rev="2.53.0" conf="compile->default"/>
+		<dependency org="org.seleniumhq.selenium" name="selenium-java" rev="2.53.0" conf="compile->default"/>
+		<!--
+		<dependency org="org.seleniumhq.selenium" name="selenium-leg-rc" rev="3.0.0"/>
+        	-->
+		
+		<!-- ws 
+		<dependency org="xmlunit" name="xmlunit" rev="1.4" />
+
+		<dependency org="org.xmlmatchers" name="xml-matchers" rev="0.10" />
+
+		<dependency org="com.jayway.jsonpath" name="json-path" rev="0.8.1" />
+		<dependency org="com.jayway.jsonpath" name="json-path-assert"
+			rev="0.8.1" />
+		-->
+		<dependency org="org.codehaus.groovy" name="groovy-all" rev="2.1.9" conf="provided->default"/>
+		<dependency org="info.cukes" name="cucumber-java" rev="1.2.4" conf="test->default"/>
+		<!-- <dependency org="info.cukes" name="cucumber-testng" rev="1.2.4" /> -->
+
+		<dependency org="org.json" name="json" rev="20160810" conf="compile->default"/>
+		<dependency org="javax.mail" name="mail" rev="1.4.7"/>
+
+	</dependencies>
+</ivy-module>
