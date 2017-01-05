@@ -283,7 +283,7 @@ class TestStepListener implements QAFTestStepListener {
 
 	private String getParam(String text) {
 		String result = getBundle().getSubstitutor().replace(text);
-		String value = String.valueOf(getBundle().getString(result));
+		String value = String.valueOf(getBundle().getObject(result));
 		ParamType ptype = ParamType.getType(value);
 		if (ptype.equals(ParamType.MAP)) {
 			@SuppressWarnings("unchecked")
