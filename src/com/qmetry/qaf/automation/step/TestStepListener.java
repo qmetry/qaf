@@ -31,6 +31,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.text.StrSubstitutor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.LogFactoryImpl;
 
@@ -125,6 +126,7 @@ class TestStepListener implements QAFTestStepListener {
 
 		CheckpointResultBean stepResultBean = new CheckpointResultBean();
 		stepResultBean.setMessage(processArgs(stepExecutionTracker.getStep().getDescription(),
+				stepExecutionTracker.getContext(),
 				stepExecutionTracker.getStep().getActualArgs()));
 		stepResultBean.setSubCheckPoints(new ArrayList<CheckpointResultBean>(stb.getCheckPointResults()));
 		stepResultBean.setDuration(duration.intValue());
@@ -175,6 +177,7 @@ class TestStepListener implements QAFTestStepListener {
 
 			int stIndex = getCheckPointIndex(testBase.getCheckPointResults(),
 					processArgs(starStepExecutionTracker.getStep().getDescription(),
+							starStepExecutionTracker.getContext(),
 							starStepExecutionTracker.getStep().getActualArgs()));
 
 			List<CheckpointResultBean> allcheckPoints = new ArrayList<CheckpointResultBean>(
@@ -244,7 +247,7 @@ class TestStepListener implements QAFTestStepListener {
 		return -1;
 	}
 
-	private String processArgs(String description, Object... actualArgs) {
+	private String processArgs(String description,Map<String,Object> context,Object... actualArgs) {
 		if (null == actualArgs || actualArgs.length <= 0)
 			return description;
 		List<String> args = BDDDefinitionHelper.getArgNames(description);
@@ -260,6 +263,10 @@ class TestStepListener implements QAFTestStepListener {
 								getParam((String) actualArgs[i]), 1);
 					} else {
 						// If argument is not processed
+						
+						//for data driven testcase or custom step actualArgs[i] is like ${args[0]}
+						//that should replace with context
+						actualArgs[i] = StrSubstitutor.replace(actualArgs[i], context);
 						description = StringUtil.replace(description, args.get(i),
 								"'" + getParam((String) actualArgs[i]) + "'", 1);
 					}
@@ -276,10 +283,11 @@ class TestStepListener implements QAFTestStepListener {
 
 	private String getParam(String text) {
 		String result = getBundle().getSubstitutor().replace(text);
-		ParamType ptype = ParamType.getType(result);
+		String value = String.valueOf(getBundle().getString(result));
+		ParamType ptype = ParamType.getType(value);
 		if (ptype.equals(ParamType.MAP)) {
 			@SuppressWarnings("unchecked")
-			Map<String, Object> kv = new Gson().fromJson(result, Map.class);
+			Map<String, Object> kv = new Gson().fromJson(value, Map.class);
 			if (kv.containsKey("desc")) {
 				result = String.valueOf(kv.get("desc"));
 			} else if (kv.containsKey("description")) {
@@ -288,5 +296,4 @@ class TestStepListener implements QAFTestStepListener {
 		}
 		return result;
 	}
-	
 }

@@ -78,7 +78,6 @@ public class StringTestStep extends BaseTestStep {
 			step = getTestStep();
 			if (null != step) {
 				step.setActualArgs(actualArgs);
-				step.setDescription(description);
 				step.getStepExecutionTracker()
 						.setContext(getStepExecutionTracker().getContext());
 			}
