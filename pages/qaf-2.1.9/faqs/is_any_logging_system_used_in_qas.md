@@ -2,7 +2,7 @@
 title: Is any logging system used in Qmetry Automation Framework?
 sidebar: faq_sidebar
 permalink: qaf-2.1.9/is_any_logging_system_used_in_qas.html
-folder: latest
+folder: qaf-2.1.9
 ---
 
 

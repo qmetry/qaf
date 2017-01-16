@@ -2,7 +2,7 @@
 title: Integration
 sidebar: qaf_2_1_9-sidebar
 permalink: qaf-2.1.9/integration_with_other_tools.html
-folder: latest
+folder: qaf-2.1.9
 ---
 
 

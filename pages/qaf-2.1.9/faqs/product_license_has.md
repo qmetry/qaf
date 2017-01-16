@@ -2,7 +2,7 @@
 title: Product license has been expired…
 sidebar: faq_sidebar
 permalink: qaf-2.1.9/product_license_has been_expired.html
-folder: latest
+folder: qaf-2.1.9
 ---
 
 **Follow below steps to resolve.**
@@ -23,4 +23,4 @@ Now:
 
 4. Your License is updated now for QAS as well as all open automation projects.
 
-{% include note.html content="If any automation project is closed or not updated with license key then check application properties in the project and update 'license.key' property value with latest license key" %}
+{% include note.html content="If any automation project is closed or not updated with license key then check application properties in the project and update 'license.key' property value with qaf-2.1.9 license key" %}

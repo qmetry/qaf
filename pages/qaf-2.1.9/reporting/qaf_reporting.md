@@ -3,7 +3,7 @@ title: QAF Reporting
 sidebar: qaf_2_1_9-sidebar
 
 permalink: qaf-2.1.9/qaf_reporting.html
-folder: latest
+folder: qaf-2.1.9
 ---
 
 ## Summary

@@ -3,7 +3,7 @@ title: Release Notes
 sidebar: qaf_2_1_9-sidebar
 
 permalink: qaf-2.1.9/release_notes.html
-folder: latest
+folder: qaf-2.1.9
 ---
 
 ## VER-2.1.9 Release Notes:
@@ -476,7 +476,7 @@ SEL_REPORT_DIR("selenium.report.dir"),
 
 **Improvements:**
 
-* Compatibility for chrome driver with server version above or below 2.22 (latest till the date is 2.33)
+* Compatibility for chrome driver with server version above or below 2.22 (qaf-2.1.9 till the date is 2.33)
 
 * Changed the way of providing extra capabilities from csv to json for example
 
@@ -736,7 +736,7 @@ Also it will be used in different assertion/verification messages automatically 
   
 alphabet will replaced random alphabet and digit will replaced with random digit
 
-* Added safari driver support. required selenium server 2.21 or latest
+* Added safari driver support. required selenium server 2.21 or qaf-2.1.9
 
 * Added support for Date property in data bean. Fill random data will generate random date for day range min-max to current date
 

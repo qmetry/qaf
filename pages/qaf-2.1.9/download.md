@@ -2,7 +2,7 @@
 title: Download
 sidebar: download_sidebar
 permalink: qaf-2.1.9/download.html
-folder: latest
+folder: qaf-2.1.9
 ---
 
 ## Blank Project
@@ -32,12 +32,12 @@ You can use QAF as a Maven Artifact. Users would need to add this to their pom.x
 <dependency>
     <groupId>com.qmetry</groupId>
     <artifactId>qaf</artifactId>
-    <version>latest.integration</version>
+    <version>qaf-2.1.9.integration</version>
 </dependency>
 <dependency>
     <groupId>com.qmetry</groupId>
     <artifactId>qaf-support</artifactId>
-    <version>latest.integration</version>
+    <version>qaf-2.1.9.integration</version>
 </dependency>
 ```
 
@@ -65,8 +65,8 @@ Create or update ivysettings.xml file to add new repository. Alternately you can
 **IVY Dependency Entry**
 
 ```xml
-<dependency org="com.qmetry" name="qaf" rev="latest.integration" />
-<dependency org="com.qmetry" name="qaf-support" rev="latest.integration" />
+<dependency org="com.qmetry" name="qaf" rev="qaf-2.1.9.integration" />
+<dependency org="com.qmetry" name="qaf-support" rev="qaf-2.1.9.integration" />
 ```
 
 ## Direct Download

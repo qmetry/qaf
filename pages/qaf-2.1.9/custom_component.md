@@ -2,7 +2,7 @@
 title: Custom component
 sidebar: qaf_2_1_9-sidebar
 permalink: qaf-2.1.9/custom_component.html
-folder: latest
+folder: qaf-2.1.9
 tags: [java,component,locator,testdata]
 ---
 

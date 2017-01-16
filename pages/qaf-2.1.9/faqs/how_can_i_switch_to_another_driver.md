@@ -2,7 +2,7 @@
 title: How can I switch to another driver during same testcase execution.
 sidebar: faq_sidebar
 permalink: qaf-2.1.9/how_can_i_switch_to_another_driver.html
-folder: latest
+folder: qaf-2.1.9
 ---
 
 In some exceptional changes, it may be required to change the driver.

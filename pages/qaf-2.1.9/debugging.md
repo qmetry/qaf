@@ -2,7 +2,7 @@
 title: Debugging
 sidebar: qaf_2_1_9-sidebar
 permalink: qaf-2.1.9/debugging.html
-folder: latest
+folder: qaf-2.1.9
 ---
 
 ## Debugging

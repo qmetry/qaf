@@ -3,7 +3,7 @@ title: QAF Gherkin Scenario Factory
 sidebar: qaf_2_1_9-sidebar
 permalink: qaf-2.1.9/gherkin_client.html
 summary: "Author tests in standard Gherkin format that Cucumber understands with power of QAF as back-end"
-folder: latest
+folder: qaf-2.1.9
 tags: [bdd,scenario,cucumber,gherkin]
 ---
 
@@ -36,7 +36,7 @@ In order to overcome with such challenges, We provided Scenario Factory for Gher
 
 - It will support test data outside feature file (all QAF data provider support) using QAF data-provider meta-data with Examples you can separate out data from feature file to **text, csv, xml, excel or json file or DB**
 
-- Another useful value addition is regardless of which step implementation (cucumber or QAF) you have, you can use [step listeners]( https://qmetry.github.io/qaf/latest/qaf_listeners.html#teststep-listener).
+- Another useful value addition is regardless of which step implementation (cucumber or QAF) you have, you can use [step listeners]( https://qmetry.github.io/qaf/qaf-2.1.9/qaf_listeners.html#teststep-listener).
 
 - You can use either QAS BDD editor or standard Cucumber editor for authoring feature file.
 

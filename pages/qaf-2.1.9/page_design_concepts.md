@@ -2,7 +2,7 @@
 title: Page Design Concepts
 sidebar: qaf_2_1_9-sidebar
 permalink: qaf-2.1.9/page_design_concepts.html
-folder: latest
+folder: qaf-2.1.9
 tags: [page,java,locator,testng]
 ---
 

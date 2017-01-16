@@ -2,7 +2,7 @@
 title: Managing Locales
 sidebar: qaf_2_1_9-sidebar
 permalink: qaf-2.1.9/managing_locales.html
-folder: latest
+folder: qaf-2.1.9
 ---
 
 While Automating AUT that supports to different languages, regional differences, we need to take care of different translation/text on UI for different locales.
