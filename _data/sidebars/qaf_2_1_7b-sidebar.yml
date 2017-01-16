@@ -31,11 +31,8 @@ entries:
     - title: Release Notes
       url: release_notes.html
       output: web, pdf
-    - title: QAF 2.1.9 Docs
+    - title: Latest Version Docs
       url: ../latest/docs.html
-      output: web, pdf 
-    - title: QAF 2.1.8 Docs
-      url: ../qaf-2.1.8/docs.html
       output: web, pdf
   - title:
     output: pdf
