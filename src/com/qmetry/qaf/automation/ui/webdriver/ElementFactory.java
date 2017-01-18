@@ -45,6 +45,7 @@ import com.qmetry.qaf.automation.data.MetaDataScanner;
 import com.qmetry.qaf.automation.ui.AbstractTestPage;
 import com.qmetry.qaf.automation.ui.WebDriverTestBase;
 import com.qmetry.qaf.automation.util.ClassUtil;
+import com.qmetry.qaf.automation.util.StringUtil;
 
 public class ElementFactory {
 	private static final Log logger = LogFactory.getLog(ElementFactory.class);
@@ -169,5 +170,18 @@ public class ElementFactory {
 				? new ComponentListHandler(context, loc, cls, clsObject)
 				: new ComponentListHandler(context, loc, QAFExtendedWebElement.class, clsObject);
 		return Proxy.newProxyInstance(this.getClass().getClassLoader(), new Class[] { List.class }, iHandler);
+	}
+	
+	public static QAFWebElement $(String loc) {
+		QAFExtendedWebElement eleToReturn = new QAFExtendedWebElement(loc);
+		String compClass = (String) eleToReturn.getMetaData().get("component-class");
+		if(StringUtil.isNotBlank(compClass)){
+			try {
+				return (QAFWebElement) ComponentFactory.getObject(Class.forName(compClass), loc, null);
+			} catch (Exception e) {
+				logger.error(e);
+			}
+		}
+		return eleToReturn;
 	}
 }

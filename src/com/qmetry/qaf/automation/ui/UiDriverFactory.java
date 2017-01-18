@@ -101,7 +101,6 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 	public void tearDown(UiDriver driver) {
 		try {
 			driver.stop();
-			ChromeDriverHelper.teardownService();
 			logger.info("UI-driver tear down complete...");
 		} catch (Throwable t) {
 			logger.error(t.getMessage());

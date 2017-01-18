@@ -27,6 +27,8 @@ package com.qmetry.qaf.automation.core;
 import java.util.Iterator;
 import java.util.Vector;
 
+import com.qmetry.qaf.automation.ui.webdriver.ChromeDriverHelper;
+
 /**
  * This class provides thread-local {@link #QAFTestBase}.
  * 
@@ -93,6 +95,7 @@ public class TestBaseProvider extends ThreadLocal<QAFTestBase> {
 			public void run() {
 				TestBaseProvider.instance().prepareForShutDown();
 				TestBaseProvider.instance().stopAll();
+				ChromeDriverHelper.teardownService();
 			}
 		});
 	}

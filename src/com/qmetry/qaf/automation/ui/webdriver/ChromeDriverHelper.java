@@ -62,6 +62,7 @@ public class ChromeDriverHelper {
 
 	private void stopService() {
 		if ((service != null) && service.isRunning()) {
+			logger.info("Stopping chrome driver service.");
 			service.stop();
 		}
 	}

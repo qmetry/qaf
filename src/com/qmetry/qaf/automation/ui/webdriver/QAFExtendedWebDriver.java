@@ -179,7 +179,7 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 	 * @return
 	 */
 	public QAFWebElement findElement(String locator) {
-		return new QAFExtendedWebElement(locator);
+		return ElementFactory.$(locator);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -265,7 +265,9 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 	 */
 	@Override
 	public <X> X getScreenshotAs(OutputType<X> target) throws WebDriverException {
-		if ((Boolean) getCapabilities().getCapability(CapabilityType.TAKES_SCREENSHOT)) {
+		Object takeScreenshot =
+				getCapabilities().getCapability(CapabilityType.TAKES_SCREENSHOT);
+		if (null == takeScreenshot || (Boolean) takeScreenshot) {
 			String base64Str = execute(DriverCommand.SCREENSHOT).getValue().toString();
 			return target.convertFromBase64Png(base64Str);
 		}
