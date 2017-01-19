@@ -312,7 +312,7 @@ public class QAFTestNGListener {
 			if ((null != context.getPassedTests())) {
 
 				if (context.getPassedTests().getResults(tr.getMethod()).size() > 1) {
-					context.getPassedTests().getResults(tr.getMethod()).remove(tr);
+					context.getPassedTests().removeResult(tr);
 				} else {
 					context.getPassedTests().removeResult(tr.getMethod());
 				} // removeResult(tr.getMethod());

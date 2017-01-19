@@ -252,7 +252,7 @@ public class ReporterUtil {
 			if (f.exists()) {
 				// if file already exists then it will append some random
 				// character as suffix
-				fileName += StringUtil.getRandomString("aaa");
+				fileName += StringUtil.getRandomString("aaaaaaaaaa");
 				// add updated file name as 'resultFileName' key in metaData
 				methodResultFile = dir + "/" + fileName;
 				updateClassMetaInfo(context, result, fileName);
