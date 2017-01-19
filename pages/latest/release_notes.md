@@ -6,6 +6,28 @@ permalink: latest/release_notes.html
 folder: latest
 ---
 
+## VER-2.1.10 Release Notes:
+
+**New Features**
+
+ 1. [#14](https://github.com/qmetry/qaf/issues/14) support for bdd, kwd dry-run mode
+ 
+ 
+**Enahancements**
+ 
+ 1. [#45](https://github.com/qmetry/qaf/issues/45) Support to set class-finder for TestStepFinder
+ 2. [#52](https://github.com/qmetry/qaf/issues/52) allowed space in path for step provider classes
+ 
+**Bug Fixes**
+
+ 1. [#40](https://github.com/qmetry/qaf/issues/40) TestStep executed from the wrong package
+ 2. [#41](https://github.com/qmetry/qaf/issues/41) Gherkin parser does does not include last step in scenario
+ 3. [#42](https://github.com/qmetry/qaf/issues/42) Unable to load step from the class extending another class
+ 4. [#50](https://github.com/qmetry/qaf/issues/50) Step reporting broken in when test authored in java
+ 5. [#53](https://github.com/qmetry/qaf/issues/53) Solved ClassCastException in fillData
+ 
+ 
+
 ## VER-2.1.9 Release Notes:
 
 **New Features**
