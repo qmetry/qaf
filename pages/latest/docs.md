@@ -28,7 +28,7 @@ QMetry Automation Framework supports integrations with Test Management Platform 
 
 **Test Authoring:** Behavior Driven Development (BDD), Keyword Driven and Code Driven Development
 
-**Test Data Management:** Test Data Support (CSV, JSON, XML etc), Multi Property Editor (Different Locales, Different Environments, etc)
+**Test Data Management:** Test Data Support (CSV, JSON, XML etc), Different Locales support, Different Environments support
 
 **Execution Reporting:** Execution Dashboard, Detailed Analysis and Screenshot Capturing, Integrations with Test Management Tools, etc
 
