@@ -292,9 +292,7 @@ public class ReporterUtil {
 		if (result.getMethod().isTest()) {
 			methodInfo.setIndex(result.getMethod().getCurrentInvocationCount());
 			int retryCount = getBundle().getInt(RetryAnalyzer.RETRY_INVOCATION_COUNT, 0);
-			if (retryCount > 0) {
-				methodInfo.setRetryCount(retryCount);
-			}
+			methodInfo.setRetryCount(retryCount);
 			methodInfo.setArgs(result.getParameters());
 
 			if (result.getMethod() instanceof TestNGScenario) {
@@ -417,29 +415,13 @@ public class ReporterUtil {
 	}
 
 	private static int getFailCnt(ITestContext context) {
-		int failCnt = 0;
-
 		if ((context != null) && (context.getFailedTests() != null)) {
-			Collection<ITestNGMethod> allFailedTests =
-					context.getFailedTests().getAllMethods();
-			// get unique failed test methods
-			Set<ITestNGMethod> set = new HashSet<ITestNGMethod>(allFailedTests);
-			if (ApplicationProperties.RETRY_CNT.getIntVal(0) > 0)
-				set.removeAll(context.getPassedTests().getAllMethods());
-			Iterator<ITestNGMethod> iter = set.iterator();
-
-			while (iter.hasNext()) {
-				ITestNGMethod m = iter.next();
-				// get failed invocations (remove duplicate because of retry)
-				// for data driven, in case not data driven test invocations
-				// will be 0
-				Set<Integer> invocationNumbers =
-						new HashSet<Integer>(m.getFailedInvocationNumbers());
-				int invocatons = invocationNumbers.size();
-				failCnt += invocatons > 0 ? invocatons : 1;
+			if (context.getFailedTests().getAllResults() != null) {
+				return context.getFailedTests().getAllResults().size();
 			}
+			return context.getFailedTests().size();
 		}
-		return failCnt;
+		return 0;
 	}
 
 	private static int getFailWithPassPerCnt(ITestContext context) {
@@ -458,6 +440,14 @@ public class ReporterUtil {
 	private static int getSkipCnt(ITestContext context) {
 		if ((context != null) && (context.getSkippedTests() != null)) {
 			if (context.getSkippedTests().getAllResults() != null) {
+				Collection<ITestNGMethod> skippedTest =
+						context.getSkippedTests().getAllMethods();
+				Set<ITestNGMethod> set = new HashSet<ITestNGMethod>(skippedTest);
+				if (ApplicationProperties.RETRY_CNT.getIntVal(0) > 0) {
+					set.removeAll(context.getPassedTests().getAllMethods());
+					set.removeAll(context.getFailedTests().getAllMethods());
+					return set.size();
+				}
 				return context.getSkippedTests().getAllResults().size();
 			}
 			return context.getSkippedTests().size();
