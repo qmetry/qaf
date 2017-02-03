@@ -91,7 +91,9 @@ public class DependencyMap {
         // otherwise, it's a method depending on a method in a different class so we
         // don't bother checking the instance
         if (fromMethod.getRealClass().isAssignableFrom(m.getRealClass())) {
-          if (m.getInstance() == fromMethod.getInstance()) return m;
+					if (m.getInstance() == fromMethod.getInstance()
+							|| m.getRealClass().isAssignableFrom(Scenario.class))
+						return m;
         } else {
           return m;
         }
