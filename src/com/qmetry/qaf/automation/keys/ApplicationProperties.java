@@ -37,6 +37,7 @@ import com.qmetry.qaf.automation.ui.selenium.SeleniumCommandListener;
 import com.qmetry.qaf.automation.ui.selenium.WaitService;
 import com.qmetry.qaf.automation.ui.webdriver.QAFWebDriverCommandListener;
 import com.qmetry.qaf.automation.ui.webdriver.QAFWebElementCommandListener;
+import com.qmetry.qaf.automation.ws.rest.RestClientFactory;
 
 /**
  * TO get properties key/value While reading value First preference will be
@@ -506,7 +507,15 @@ public enum ApplicationProperties {
 	 */
 	BEAN_POPULATE_RANDOM("bean.populate.random"),
 	
-	DRY_RUN_MODE("dryrun.mode");
+	DRY_RUN_MODE("dryrun.mode"),
+	
+	/**
+	 * @since 2.1.11
+	 * <b>key</b>: <code>rest.client.impl</code><br/>
+	 * <b>value</b>: full qualified name of the class that extends {@link RestClientFactory}.
+	 */
+	REST_CLIENT_FACTORY_IMPL("rest.client.impl");
+
 
 	public String key;
 
