@@ -43,7 +43,7 @@ public abstract class RestClientFactory {
 	abstract protected Client createClient();
 	
 	public final Client getClient() {
-		Client client = getClient();
+		Client client = createClient();
 
 		client.addFilter(new ConnectionListenerFilter(getRequestListener()));
 		client.addFilter(getRequestListener());
