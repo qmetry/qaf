@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <metadata>
   <groupId>com.qmetry</groupId>
-  <artifactId>qaf-support-mobile</artifactId>
+  <artifactId>qaf-qmetry-updator</artifactId>
   <versioning>
     <latest>2.1.11-RC1</latest>
     <release>2.1.10</release>
