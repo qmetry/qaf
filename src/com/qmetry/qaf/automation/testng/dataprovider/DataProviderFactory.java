@@ -114,7 +114,9 @@ public class DataProviderFactory {
 			}
 		}
 		return StringUtil.isNotBlank(map.get(params.SQLQUERY.name())) ? dataproviders.isfw_database.name()
-				: StringUtil.isNotBlank(map.get(params.KEY.name())) ? dataproviders.isfw_property.name() : "";
+				: StringUtil.isNotBlank(map.get(params.KEY.name())) ? dataproviders.isfw_property.name()
+						: StringUtil.isNotBlank(map.get(params.DATAPROVIDERCLASS.name()))
+								? dataproviders.isfw_custom.name() : "";
 	}
 
 	protected static Map<String, String> getParameters(Method method) {

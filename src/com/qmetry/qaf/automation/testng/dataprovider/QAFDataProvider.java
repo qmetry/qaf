@@ -54,11 +54,11 @@ import java.lang.annotation.Target;
 @Target({ METHOD, TYPE })
 public @interface QAFDataProvider {
 	public enum params {
-		DATAFILE, SHEETNAME, KEY, HASHEADERROW, SQLQUERY, BEANCLASS, JSON_DATA_TABLE;
+		DATAFILE, SHEETNAME, KEY, HASHEADERROW, SQLQUERY, BEANCLASS, JSON_DATA_TABLE, DATAPROVIDERCLASS;
 	}
 
 	public enum dataproviders {
-		isfw_csv, isfw_database, isfw_excel, isfw_excel_table, isfw_json, isfw_property;
+		isfw_csv, isfw_database, isfw_excel, isfw_excel_table, isfw_json, isfw_property, isfw_custom;
 	}
 
 	/**
