@@ -32,6 +32,9 @@ import static com.qmetry.qaf.automation.core.ConfigurationManager.getBundle;
 import java.util.Iterator;
 import org.apache.commons.configuration.Configuration;
 import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.config.ClientConfig;
+import com.sun.jersey.api.client.config.DefaultClientConfig;
+import com.sun.jersey.multipart.impl.MultiPartWriter;
 
 /**
  * @author chirag.jayswal
@@ -41,7 +44,9 @@ public class DefaultRestClient extends RestClientFactory {
 			"com.sun.jersey.client.property";
 	Client client;
 	public DefaultRestClient() {
-		client = Client.create();
+		ClientConfig config = new DefaultClientConfig();
+		config.getClasses().add(MultiPartWriter.class);
+		client = Client.create(config);
 	}
 
 	public DefaultRestClient(Client client) {

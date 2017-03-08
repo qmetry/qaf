@@ -21,6 +21,7 @@
  * For any inquiry or need additional information, please contact support-qaf@infostretch.com
  *******************************************************************************/
 
+
 package com.qmetry.qaf.automation.step.client;
 
 import static com.qmetry.qaf.automation.core.ConfigurationManager.getBundle;
@@ -36,7 +37,6 @@ import org.testng.annotations.Test;
 
 import com.qmetry.qaf.automation.step.StringTestStep;
 import com.qmetry.qaf.automation.step.TestStep;
-import com.qmetry.qaf.automation.testng.dataprovider.CustomDataProvider;
 import com.qmetry.qaf.automation.testng.dataprovider.QAFDataProvider.dataproviders;
 import com.qmetry.qaf.automation.testng.dataprovider.QAFDataProvider.params;
 import com.qmetry.qaf.automation.testng.pro.DataProviderUtil;
@@ -125,14 +125,6 @@ public class DataDrivenScenario extends Scenario {
 				return JSONUtil.getJsonArrayOfMaps(param.get(params.JSON_DATA_TABLE.name()));
 			
 			return JSONUtil.getJsonArrayOfMaps(param.get(params.DATAFILE.name()));
-		}
-		if (dataproviderName.equalsIgnoreCase(dataproviders.isfw_custom.name())) {
-			try {
-				Class<?> cls = Class.forName(param.get(params.DATAPROVIDERCLASS.name()));
-				return ((CustomDataProvider) cls.newInstance()).getData(getMetadata());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		}
 		throw new RuntimeException("No data provider found");
 	}
