@@ -155,9 +155,12 @@ public class ConfigurationManager {
 							+ propFiles.length);
 					File[] locFiles = FileUtil.listFilesAsArray(resourceFile, ".loc", StringComparator.Suffix,
 							loadSubDirs);
+					File[] wscFiles = FileUtil.listFilesAsArray(resourceFile, ".wsc", StringComparator.Suffix,
+							loadSubDirs);
 					PropertyUtil p1 = new PropertyUtil();
 					p1.load(propFiles);
 					p1.load(locFiles);
+					p1.load(wscFiles);
 					p.copy(p1);
 
 					propFiles = FileUtil.listFilesAsArray(resourceFile, ".xml", StringComparator.Suffix, loadSubDirs);
@@ -172,7 +175,8 @@ public class ConfigurationManager {
 					try {
 						if (fileOrDir.endsWith(".properties")
 								|| fileOrDir.endsWith(".xml")
-								|| fileOrDir.endsWith(".loc")) {
+								|| fileOrDir.endsWith(".loc")
+								|| fileOrDir.endsWith(".wsc")) {
 							p.load(new File[]{resourceFile});
 						}
 					} catch (Exception e) {
