@@ -74,3 +74,7 @@ Create or update ivysettings.xml file to add new repository. Alternately you can
 You can download QAF jar from [here](https://qmetry.github.io/qaf/dist).
 
 You can download QAF Support jar from [here](https://qmetry.github.io/qaf/dist).
+
+## QAF BDD Editors For Eclipse
+
+<a href="http://marketplace.eclipse.org/marketplace-client-intro?mpc_install=3153377" class="drag" title="Drag to your running Eclipse workspace."><img class="img-responsive" src="https://marketplace.eclipse.org/sites/all/themes/solstice/public/images/marketplace/btn-install.png" alt="Drag to your running Eclipse workspace." /></a> eclipse plugins for QAF BDD and Gherkin editors providing syntax highlighting, syntax validation and content assist. 
