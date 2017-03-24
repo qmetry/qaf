@@ -46,14 +46,8 @@ public class DependencyMap {
 
   public DependencyMap(ITestNGMethod[] methods) {
     for (ITestNGMethod m : methods) {
-		if (Scenario.class.isAssignableFrom(m.getRealClass())) {
-			System.out.println(" Scenario MethodName: " + m.getMethodName());
-
-			m_dependencies.put(m.getMethodName(), m);
-		} else {
-
-			m_dependencies.put(m.getRealClass().getName() + "." + m.getMethodName(), m);
-		}      for (String g : m.getGroups()) {
+    	m_dependencies.put( m.getQualifiedName(), m);
+      for (String g : m.getGroups()) {
         m_groups.put(g, m);
       }
     }
@@ -66,9 +60,7 @@ public class DependencyMap {
 
     for (String k : uniqueKeys) {
       if (Pattern.matches(group, k)) {
-        List<ITestNGMethod> temp = m_groups.get(k);
-        if (temp != null)
-          result.addAll(m_groups.get(k));
+        result.addAll(m_groups.get(k));
       }
     }
 
@@ -82,21 +74,19 @@ public class DependencyMap {
 
   public ITestNGMethod getMethodDependingOn(String methodName, ITestNGMethod fromMethod) {
     List<ITestNGMethod> l = m_dependencies.get(methodName);
-    if (l == null && fromMethod.ignoreMissingDependencies()){
+    if (l.isEmpty() && fromMethod.ignoreMissingDependencies()){
     	return fromMethod;
     }
-    if (l != null) {
-      for (ITestNGMethod m : l) {
-        // If they are in the same class hierarchy, they must belong to the same instance,
-        // otherwise, it's a method depending on a method in a different class so we
-        // don't bother checking the instance
-        if (fromMethod.getRealClass().isAssignableFrom(m.getRealClass())) {
-					if (m.getInstance() == fromMethod.getInstance()
-							|| m.getRealClass().isAssignableFrom(Scenario.class))
-						return m;
-        } else {
-          return m;
-        }
+    for (ITestNGMethod m : l) {
+      // If they are in the same class hierarchy, they must belong to the same instance,
+      // otherwise, it's a method depending on a method in a different class so we
+      // don't bother checking the instance
+      if (fromMethod.getRealClass().isAssignableFrom(m.getRealClass())) {
+        if (m.getInstance() == fromMethod.getInstance()
+        		|| m.getRealClass().isAssignableFrom(Scenario.class)) 
+        	return m;
+      } else {
+        return m;
       }
     }
     throw new TestNGException("Method \"" + fromMethod

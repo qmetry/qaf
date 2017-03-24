@@ -22,6 +22,7 @@
  *
  * For any inquiry or need additional information, please contact support-qaf@infostretch.com
  *******************************************************************************/
+
 package org.testng;
 
 import java.lang.annotation.Annotation;
@@ -31,7 +32,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -69,7 +69,6 @@ import org.testng.internal.Utils;
 import org.testng.internal.XmlMethodSelector;
 import org.testng.internal.annotations.AnnotationHelper;
 import org.testng.internal.annotations.IAnnotationFinder;
-import org.testng.internal.annotations.IListeners;
 import org.testng.internal.thread.graph.GraphThreadPoolExecutor;
 import org.testng.internal.thread.graph.IThreadWorkerFactory;
 import org.testng.internal.thread.graph.IWorker;
@@ -111,7 +110,7 @@ public class TestRunner
   transient private boolean m_skipFailedInvocationCounts;
 
   transient private Collection<IInvokedMethodListener> m_invokedMethodListeners = Lists.newArrayList();
-  transient private List<IClassListener> m_classListeners = Lists.newArrayList();
+  transient private final Map<Class<? extends IClassListener>, IClassListener> m_classListeners = Maps.newHashMap();
 
   /**
    * All the test methods we found, associated with their respective classes.
@@ -173,6 +172,10 @@ public class TestRunner
   private transient IConfiguration m_configuration;
   private IMethodInterceptor builtinInterceptor;
 
+  private enum PriorityWeight {
+    groupByInstance, preserveOrder, priority, dependsOnGroups, dependsOnMethods
+  }
+
   protected TestRunner(IConfiguration configuration,
                     ISuite suite,
                     XmlTest test,
@@ -214,7 +217,7 @@ public class TestRunner
     setVerbose(test.getVerbose());
 
 
-    boolean preserveOrder = "true".equalsIgnoreCase(test.getPreserveOrder());
+    boolean preserveOrder = test.getPreserveOrder();
     m_methodInterceptors = new ArrayList<IMethodInterceptor>();
     builtinInterceptor = preserveOrder ? new PreserveOrderMethodInterceptor() : new InstanceOrderingMethodInterceptor();
 
@@ -227,12 +230,15 @@ public class TestRunner
 
     m_annotationFinder= annotationFinder;
     m_invokedMethodListeners = invokedMethodListeners;
-    m_classListeners = classListeners;
+    m_classListeners.clear();
+    for (IClassListener classListener : classListeners) {
+      m_classListeners.put(classListener.getClass(), classListener);
+    }
     m_invoker = new Invoker(m_configuration, this, this, m_suite.getSuiteState(),
         m_skipFailedInvocationCounts, invokedMethodListeners, classListeners);
 
-    if (suite.getParallel() != null) {
-      log(3, "Running the tests in '" + test.getName() + "' with parallel mode:" + suite.getParallel());
+    if (test.getParallel() != null) {
+      log(3, "Running the tests in '" + test.getName() + "' with parallel mode:" + test.getParallel());
     }
 
     setOutputDirectory(outputDirectory);
@@ -273,6 +279,9 @@ public class TestRunner
 
     initListeners();
     addConfigurationListener(m_confListener);
+    for (IConfigurationListener cl : m_configuration.getConfigurationListeners()) {
+      addConfigurationListener(cl);
+    }
   }
 
   private static class ListenerHolder {
@@ -321,7 +330,7 @@ public class TestRunner
     Class<? extends ITestNGListenerFactory> listenerFactoryClass = null;
 
     for (IClass cls : getTestClasses()) {
-      Class<? extends ITestNGListenerFactory> realClass = cls.getRealClass();
+      Class<?> realClass = cls.getRealClass();
       ListenerHolder listenerHolder = findAllListeners(realClass);
       if (listenerFactoryClass == null) {
         listenerFactoryClass = listenerHolder.listenerFactoryClass;
@@ -355,44 +364,15 @@ public class TestRunner
 
     // Instantiate all the listeners
     for (Class<? extends ITestNGListener> c : listenerClasses) {
-      Object listener = listenerFactory != null ? listenerFactory.createListener(c) : null;
+      if (IClassListener.class.isAssignableFrom(c) && m_classListeners.containsKey(c)) {
+          continue;
+      }
+      ITestNGListener listener = listenerFactory != null ? listenerFactory.createListener(c) : null;
       if (listener == null) {
         listener = ClassHelper.newInstance(c);
       }
 
-      if (listener instanceof IMethodInterceptor) {
-        m_methodInterceptors.add((IMethodInterceptor) listener);
-      }
-      if (listener instanceof ISuiteListener) {
-        m_suite.addListener((ISuiteListener) listener);
-      }
-      if (listener instanceof IInvokedMethodListener) {
-        m_suite.addListener((ITestNGListener) listener);
-      }
-      if (listener instanceof ITestListener) {
-        // At this point, the field m_testListeners has already been used in the creation
-        addTestListener((ITestListener) listener);
-      }
-      if (listener instanceof IClassListener) {
-        m_classListeners.add((IClassListener) listener);
-      }
-      if (listener instanceof IConfigurationListener) {
-        addConfigurationListener((IConfigurationListener) listener);
-      }
-      if (listener instanceof IReporter) {
-        m_suite.addListener((ITestNGListener) listener);
-      }
-      if (listener instanceof IConfigurable) {
-        m_configuration.setConfigurable((IConfigurable) listener);
-      }
-      if (listener instanceof IHookable) {
-        m_configuration.setHookable((IHookable) listener);
-      }
-      if (listener instanceof IExecutionListener) {
-        IExecutionListener iel = (IExecutionListener) listener;
-        iel.onExecutionStart();
-        m_configuration.addExecutionListener(iel);
-      }
+      addListener(listener);
     }
   }
 
@@ -446,7 +426,6 @@ public class TestRunner
 
     ClassInfoMap classMap = new ClassInfoMap(m_testClassesFromXml);
     m_testClassFinder= new TestNGClassFinder(classMap,
-                                             null,
                                              m_xmlTest,
                                              m_configuration,
                                              this);
@@ -753,16 +732,12 @@ public class TestRunner
     m_allTestMethods= runMethods.toArray(new ITestNGMethod[runMethods.size()]);
   }
 
-  private static final EnumSet<XmlSuite.ParallelMode> PRIVATE_RUN_PARALLEL_MODES
-      = EnumSet.of(XmlSuite.ParallelMode.METHODS, XmlSuite.ParallelMode.TRUE,
-                   XmlSuite.ParallelMode.CLASSES, XmlSuite.ParallelMode.INSTANCES);
   /**
    * Main method that create a graph of methods and then pass it to the
    * graph executor to run them.
    */
   private void privateRun(XmlTest xmlTest) {
-    XmlSuite.ParallelMode parallelMode = xmlTest.getParallel();
-    boolean parallel = PRIVATE_RUN_PARALLEL_MODES.contains(parallelMode);
+    boolean parallel = xmlTest.getParallel().isParallel();
 
     {
       // parallel
@@ -831,12 +806,12 @@ public class TestRunner
     for (IMethodInstance imi : methodInstances) {
       result.add(imi.getMethod());
     }
-    
-    //Since an interceptor is involved, we would need to ensure that the ClassMethodMap object is in sync with the 
+
+    //Since an interceptor is involved, we would need to ensure that the ClassMethodMap object is in sync with the
     //output of the interceptor, else @AfterClass doesn't get executed at all when interceptors are involved.
     //so let's update the current classMethodMap object with the list of methods obtained from the interceptor.
     this.m_classMethodMap = new ClassMethodMap(result, null);
-    
+
     return result.toArray(new ITestNGMethod[result.size()]);
   }
 
@@ -942,7 +917,7 @@ public class TestRunner
           m_groupMethods,
           m_classMethodMap,
           this,
-          m_classListeners);
+          new ArrayList<IClassListener>(m_classListeners.values()));
       result.add(tmw);
     }
 
@@ -981,7 +956,7 @@ public class TestRunner
         m_groupMethods,
         m_classMethodMap,
         this,
-        m_classListeners);
+        new ArrayList<IClassListener>(m_classListeners.values()));
   }
 
   private IMethodInstance[] findClasses(List<IMethodInstance> methodInstances, Class<?> c) {
@@ -1017,9 +992,6 @@ public class TestRunner
   //
   // Invoke the workers
   //
-  private static final EnumSet<XmlSuite.ParallelMode> WORKERS_PARALLEL_MODES
-      = EnumSet.of(XmlSuite.ParallelMode.METHODS, XmlSuite.ParallelMode.TRUE,
-                   XmlSuite.ParallelMode.CLASSES);
   private void runJUnitWorkers(List<? extends IWorker<ITestNGMethod>> workers) {
       //
       // Sequential run
@@ -1059,12 +1031,23 @@ public class TestRunner
 
   private DynamicGraph<ITestNGMethod> createDynamicGraph(ITestNGMethod[] methods) {
     DynamicGraph<ITestNGMethod> result = new DynamicGraph<ITestNGMethod>();
-    result.setComparator(new Comparator<ITestNGMethod>() {
-      @Override
-      public int compare(ITestNGMethod o1, ITestNGMethod o2) {
-        return o1.getPriority() - o2.getPriority();
+
+    ListMultiMap<Integer, ITestNGMethod> methodsByPriority = Maps.newListMultiMap();
+    for (ITestNGMethod method : methods) {
+      methodsByPriority.put(method.getPriority(), method);
+    }
+    List<Integer> availablePriorities = Lists.newArrayList(methodsByPriority.keySet());
+    Collections.sort(availablePriorities);
+    Integer previousPriority = methods.length > 0 ? availablePriorities.get(0) : 0;
+    for (int i = 1; i < availablePriorities.size(); i++) {
+      Integer currentPriority = availablePriorities.get(i);
+      for (ITestNGMethod p0Method : methodsByPriority.get(previousPriority)) {
+        for (ITestNGMethod p1Method : methodsByPriority.get(currentPriority)) {
+          result.addEdge(PriorityWeight.priority.ordinal(), p1Method, p0Method);
+        }
       }
-    });
+      previousPriority = currentPriority;
+    }
 
     DependencyMap dependencyMap = new DependencyMap(methods);
 
@@ -1082,7 +1065,7 @@ public class TestRunner
           for (String d : dependentMethods) {
             ITestNGMethod dm = dependencyMap.getMethodDependingOn(d, m);
             if (m != dm){
-            	result.addEdge(m, dm);
+            	result.addEdge(PriorityWeight.dependsOnMethods.ordinal(), m, dm);
             }
           }
         }
@@ -1099,7 +1082,7 @@ public class TestRunner
                 + "\" depends on nonexistent group \"" + d + "\"");
           }
           for (ITestNGMethod ddm : dg) {
-            result.addEdge(m, ddm);
+            result.addEdge(PriorityWeight.dependsOnGroups.ordinal(), m, ddm);
           }
         }
       }
@@ -1111,8 +1094,8 @@ public class TestRunner
     // giving the impression of parallelism (multiple thread id's) while still running
     // sequentially.
     if (! hasDependencies
-        && getCurrentXmlTest().getParallel() == XmlSuite.ParallelMode.FALSE
-        && "true".equalsIgnoreCase(getCurrentXmlTest().getPreserveOrder())) {
+        && getCurrentXmlTest().getParallel() == XmlSuite.ParallelMode.NONE
+        && getCurrentXmlTest().getPreserveOrder()) {
       // If preserve-order was specified and the class order is A, B
       // create a new set of dependencies where each method of B depends
       // on all the methods of A
@@ -1121,31 +1104,24 @@ public class TestRunner
 
       for (Map.Entry<ITestNGMethod, List<ITestNGMethod>> es : classDependencies.entrySet()) {
         for (ITestNGMethod dm : es.getValue()) {
-          result.addEdge(dm, es.getKey());
+          result.addEdge(PriorityWeight.preserveOrder.ordinal(), dm, es.getKey());
         }
       }
     }
 
     // Group by instances
     if (getCurrentXmlTest().getGroupByInstances()) {
-      ListMultiMap<ITestNGMethod, ITestNGMethod> instanceDependencies
-          = createInstanceDependencies(methods, getCurrentXmlTest());
-
+      ListMultiMap<ITestNGMethod, ITestNGMethod> instanceDependencies = createInstanceDependencies(methods);
       for (Map.Entry<ITestNGMethod, List<ITestNGMethod>> es : instanceDependencies.entrySet()) {
-        for (ITestNGMethod dm : es.getValue()) {
-          result.addEdge(dm, es.getKey());
-        }
+        result.addEdge(PriorityWeight.groupByInstance.ordinal(), es.getKey(), es.getValue());
       }
-
     }
 
     return result;
   }
 
-  private ListMultiMap<ITestNGMethod, ITestNGMethod> createInstanceDependencies(
-      ITestNGMethod[] methods, XmlTest currentXmlTest)
-  {
-    ListMultiMap<Object, ITestNGMethod> instanceMap = Maps.newListMultiMap();
+  private ListMultiMap<ITestNGMethod, ITestNGMethod> createInstanceDependencies(ITestNGMethod[] methods) {
+    ListMultiMap<Object, ITestNGMethod> instanceMap = Maps.newSortedListMultiMap();
     for (ITestNGMethod m : methods) {
       instanceMap.put(m.getInstance(), m);
     }
@@ -1221,10 +1197,8 @@ public class TestRunner
         // index
         String classDependedUpon = indexedClasses2.get(index - 1);
         List<ITestNGMethod> methodsDependedUpon = methodsFromClass.get(classDependedUpon);
-        if (methodsDependedUpon != null) {
-          for (ITestNGMethod mdu : methodsDependedUpon) {
-            result.put(mdu, m);
-          }
+        for (ITestNGMethod mdu : methodsDependedUpon) {
+          result.put(mdu, m);
         }
       }
     }
@@ -1256,11 +1230,15 @@ public class TestRunner
    */
   private void fireEvent(boolean isStart) {
     for (ITestListener itl : m_testListeners) {
-      if (isStart) {
-        itl.onStart(this);
-      }
-      else {
-        itl.onFinish(this);
+      try {
+        if (isStart) {
+          itl.onStart(this);
+        }
+        else {
+          itl.onFinish(this);
+        }
+      } catch (Exception e) {
+        e.printStackTrace();
       }
     }
   }
@@ -1497,24 +1475,56 @@ public class TestRunner
   /////
   // Listeners
   //
+  /**
+   * @deprecated addListener(ITestNGListener) should be used instead
+   */
+  // TODO remove it
+  @Deprecated
   public void addListener(Object listener) {
-    if(listener instanceof ITestListener) {
+    if (listener instanceof ITestNGListener) {
+      addListener((ITestNGListener) listener);
+    }
+  }
+
+  public void addListener(ITestNGListener listener) {
+    // TODO a listener may be added many times if it implements many interfaces
+    if (listener instanceof IMethodInterceptor) {
+      m_methodInterceptors.add((IMethodInterceptor) listener);
+    }
+    if (listener instanceof ITestListener) {
+      // At this point, the field m_testListeners has already been used in the creation
       addTestListener((ITestListener) listener);
     }
-    if(listener instanceof IConfigurationListener) {
+    if (listener instanceof IClassListener) {
+      IClassListener classListener = (IClassListener) listener;
+      if (!m_classListeners.containsKey(classListener.getClass())) {
+        m_classListeners.put(classListener.getClass(), classListener);
+      }
+    }
+    if (listener instanceof IConfigurationListener) {
       addConfigurationListener((IConfigurationListener) listener);
     }
-    if(listener instanceof IClassListener) {
-      addClassListener((IClassListener) listener);
+    if (listener instanceof IConfigurable) {
+      m_configuration.setConfigurable((IConfigurable) listener);
     }
+    if (listener instanceof IHookable) {
+      m_configuration.setHookable((IHookable) listener);
+    }
+    if (listener instanceof IExecutionListener) {
+      IExecutionListener iel = (IExecutionListener) listener;
+      iel.onExecutionStart();
+      m_configuration.addExecutionListener(iel);
+    }
+    m_suite.addListener(listener);
   }
 
+  /**
+   * @deprecated addListener(ITestNGListener) should be used instead
+   */
+  // TODO change public to package visibility
+  @Deprecated
   public void addTestListener(ITestListener il) {
     m_testListeners.add(il);
-  }
-
-  public void addClassListener(IClassListener cl) {
-    m_classListeners.add(cl);
   }
 
   void addConfigurationListener(IConfigurationListener icl) {
@@ -1621,8 +1631,7 @@ public class TestRunner
 
   @Override
   public List<Module> getGuiceModules(Class<? extends Module> cls) {
-    List<Module> result = m_guiceModules.get(cls);
-    return result;
+    return m_guiceModules.get(cls);
   }
 
   private void addGuiceModule(Class<? extends Module> cls, Module module) {

@@ -98,7 +98,7 @@
 
 
 		<!-- <dependency org="org.easytesting" name="fest-reflect" rev="1.4.1" /> -->
-		<dependency org="org.testng" name="testng" rev="6.9.10" conf="compile->default">
+		<dependency org="org.testng" name="testng" rev="6.10" conf="compile->default">
 			<artifact name="testng" type="jar"></artifact>
 		</dependency>
 		<dependency org="com.google.inject" name="guice" rev="3.0" conf="compile->default"/>
