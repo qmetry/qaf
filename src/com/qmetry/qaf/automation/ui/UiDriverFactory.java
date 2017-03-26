@@ -116,12 +116,7 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 	 * @return
 	 */
 	public static DesiredCapabilities getDesiredCapabilities(String driverName) {
-		for (Browsers browser : Browsers.values()) {
-			if (driverName.contains(browser.name())) {
-				return browser.getDesiredCapabilities();
-			}
-		}
-		return null;
+		return Browsers.getBrowser(driverName).getDesiredCapabilities();
 	}
 	public static String[] checkAndStartServer(String... args) {
 		if (!isServerRequired(args)) {
@@ -142,7 +137,6 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 		}
 		return args;
 	}
-
 
 	private static boolean isServerRequired(String... args) {
 		String browser = STBArgs.browser_str.getFrom(args).toLowerCase();
@@ -208,10 +202,11 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 		for (String listener : clistners) {
 			try {
 				QAFListener cls = (QAFListener) Class.forName(listener).newInstance();
-				if(QAFWebDriverCommandListener.class.isAssignableFrom(cls.getClass()))
-				listners.add((QAFWebDriverCommandListener)cls);
+				if (QAFWebDriverCommandListener.class.isAssignableFrom(cls.getClass()))
+					listners.add((QAFWebDriverCommandListener) cls);
 			} catch (Exception e) {
-				logger.error("Unable to register class as driver listener:  " + listener, e);
+				logger.error("Unable to register class as driver listener:  " + listener,
+						e);
 			}
 		}
 		return listners;
@@ -223,20 +218,17 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 				? STBArgs.sel_server.getFrom(args) : String.format("http://%s:%s/wd/hub",
 						STBArgs.sel_server.getFrom(args), STBArgs.port.getFrom(args));
 
-		for (Browsers browser : Browsers.values()) {
-			if (b.contains(browser.name())) {
+		Browsers browser = Browsers.getBrowser(b);
 
-				ConfigurationManager.getBundle().setProperty("driver.desiredCapabilities",
-						browser.getDesiredCapabilities().asMap());
-				QAFExtendedWebDriver driver =
-						b.contains("remote") ? browser.getDriver(urlStr, reporter)
-								: browser.getDriver(reporter, urlStr);
-				ConfigurationManager.getBundle().setProperty("driver.actualCapabilities",
-						driver.getCapabilities().asMap());
-				return driver;
-			}
-		}
-		return null;
+		ConfigurationManager.getBundle().setProperty("driver.desiredCapabilities",
+				browser.getDesiredCapabilities().asMap());
+		QAFExtendedWebDriver driver =
+				b.contains("remote") ? browser.getDriver(urlStr, reporter)
+						: browser.getDriver(reporter, urlStr);
+		ConfigurationManager.getBundle().setProperty("driver.actualCapabilities",
+				driver.getCapabilities().asMap());
+		return driver;
+
 	}
 
 	private static WebDriver getDriverObj(Class<? extends WebDriver> of,
@@ -313,6 +305,7 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 		private DesiredCapabilities desiredCapabilities;
 
 		private Class<? extends WebDriver> driverCls = null;
+		private String browserName = name();
 
 		private Browsers(DesiredCapabilities desiredCapabilities) {
 			this.desiredCapabilities = desiredCapabilities;
@@ -370,10 +363,10 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 					ConfigurationManager.getBundle().getString(driverCapsKey, "{}"),
 					Map.class);
 			capabilities.putAll(extraCapabilities);
-
 			// individual capability property with driver name prefix
 			String driverCapKey = String.format(
-					ApplicationProperties.DRIVER_CAPABILITY_PREFIX_FORMAT.key, name());
+					ApplicationProperties.DRIVER_CAPABILITY_PREFIX_FORMAT.key,
+					browserName);
 			config = ConfigurationManager.getBundle().subset(driverCapKey);
 			capabilities.putAll(new ConfigurationMap(config));
 
@@ -394,6 +387,21 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 			return new DesiredCapabilities(capabilities);
 		}
 
+		private static Browsers getBrowser(String name) {
+			for (Browsers browser : Browsers.values()) {
+				if (name.contains(browser.name())) {
+					browser.setBrowserName(name);
+					return browser;
+				}
+			}
+			Browsers b = Browsers.other;
+			b.setBrowserName(name);
+			return b;
+		}
+		private void setBrowserName(String name) {
+			//remove driver and remote from name
+			browserName = name.replaceAll("(?i)remote|driver", "");
+		}
 		private QAFExtendedWebDriver getDriver(WebDriverCommandLogger reporter,
 				String urlstr) {
 			DesiredCapabilities desiredCapabilities = getDesiredCapabilities();
@@ -411,8 +419,8 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 			} catch (Throwable e) {
 				onInitializationFailure(desiredCapabilities, e, listners);
 
-				throw new AutomationError("Unable to Create Driver Instance for " + name()
-						+ ": " + e.getMessage(), e);
+				throw new AutomationError("Unable to Create Driver Instance for "
+						+ browserName + ": " + e.getMessage(), e);
 			}
 		}
 

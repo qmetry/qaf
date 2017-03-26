@@ -1,26 +1,31 @@
 /*******************************************************************************
- * QMetry Automation Framework provides a powerful and versatile platform to author 
- * Automated Test Cases in Behavior Driven, Keyword Driven or Code Driven approach
- *                
+ * QMetry Automation Framework provides a powerful and versatile platform to
+ * author
+ * Automated Test Cases in Behavior Driven, Keyword Driven or Code Driven
+ * approach
  * Copyright 2016 Infostretch Corporation
- *
- * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- *
- * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
- * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT
- * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE
- *
- * You should have received a copy of the GNU General Public License along with this program in the name of LICENSE.txt in the root folder of the distribution. If not, see https://opensource.org/licenses/gpl-3.0.html
- *
- * See the NOTICE.TXT file in root folder of this source files distribution 
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or any later version.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR
+ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT
+ * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE
+ * You should have received a copy of the GNU General Public License along with
+ * this program in the name of LICENSE.txt in the root folder of the
+ * distribution. If not, see https://opensource.org/licenses/gpl-3.0.html
+ * See the NOTICE.TXT file in root folder of this source files distribution
  * for additional information regarding copyright ownership and licenses
  * of other open source software / files used by QMetry Automation Framework.
- *
- * For any inquiry or need additional information, please contact support-qaf@infostretch.com
+ * For any inquiry or need additional information, please contact
+ * support-qaf@infostretch.com
  *******************************************************************************/
-
 
 package com.qmetry.qaf.automation.core;
 
@@ -92,33 +97,35 @@ public class ConfigurationManager {
 		return INSTANCE;
 	}
 
-	private static InheritableThreadLocal<PropertyUtil> LocalProps = new InheritableThreadLocal<PropertyUtil>() {
-		@Override
-		protected PropertyUtil initialValue() {
-			PropertyUtil p = new PropertyUtil(
-					System.getProperty("application.properties.file", "resources/application.properties"));
-			p.setProperty("isfw.build.info", getBuildInfo());
+	private static InheritableThreadLocal<PropertyUtil> LocalProps =
+			new InheritableThreadLocal<PropertyUtil>() {
+				@Override
+				protected PropertyUtil initialValue() {
+					PropertyUtil p = new PropertyUtil(
+							System.getProperty("application.properties.file",
+									"resources/application.properties"));
+					p.setProperty("isfw.build.info", getBuildInfo());
 
-			log.info("ISFW build info: " + p.getProperty("isfw.build.info"));
-			String[] resources = p.getStringArray("env.resources", "resources");
-			for (String resource : resources) {
-				addBundle(p, resource);
+					log.info("ISFW build info: " + p.getProperty("isfw.build.info"));
+					String[] resources = p.getStringArray("env.resources", "resources");
+					for (String resource : resources) {
+						addBundle(p, resource);
 
-			}
-			ConfigurationListener cl = new PropertyConfigurationListener();
-			p.addConfigurationListener(cl);
-			return p;
-		}
+					}
+					ConfigurationListener cl = new PropertyConfigurationListener();
+					p.addConfigurationListener(cl);
+					return p;
+				}
 
-		@Override
-		protected PropertyUtil childValue(PropertyUtil parentValue) {
-			PropertyUtil cp = new PropertyUtil(parentValue);
-			ConfigurationListener cl = new PropertyConfigurationListener();
-			cp.addConfigurationListener(cl);
-			return cp;
-		}
+				@Override
+				protected PropertyUtil childValue(PropertyUtil parentValue) {
+					PropertyUtil cp = new PropertyUtil(parentValue);
+					ConfigurationListener cl = new PropertyConfigurationListener();
+					cp.addConfigurationListener(cl);
+					return cp;
+				}
 
-	};
+			};
 
 	/**
 	 * To add local resources.
@@ -134,7 +141,8 @@ public class ConfigurationManager {
 	 * @param fileOrDir
 	 */
 	private static void addBundle(PropertyUtil p, String fileOrDir) {
-		String localResources = p.getString("local.reasources", p.getString("env.local.resources", "resources"));
+		String localResources = p.getString("local.reasources",
+				p.getString("env.local.resources", "resources"));
 		fileOrDir = p.getSubstitutor().replace(fileOrDir);
 		File resourceFile = new File(fileOrDir);
 		String[] locals = p.getStringArray(ApplicationProperties.LOAD_LOCALES.key);
@@ -149,23 +157,24 @@ public class ConfigurationManager {
 			if (resourceFile.exists()) {
 				if (resourceFile.isDirectory()) {
 					boolean loadSubDirs = p.getBoolean("resources.load.subdirs", true);
-					File[] propFiles = FileUtil.listFilesAsArray(resourceFile, ".properties", StringComparator.Suffix,
-							loadSubDirs);
-					log.info("Resource dir: " + resourceFile.getAbsolutePath() + ". Found property files to load: "
-							+ propFiles.length);
-					File[] locFiles = FileUtil.listFilesAsArray(resourceFile, ".loc", StringComparator.Suffix,
-							loadSubDirs);
-					File[] wscFiles = FileUtil.listFilesAsArray(resourceFile, ".wsc", StringComparator.Suffix,
-							loadSubDirs);
+					File[] propFiles = FileUtil.listFilesAsArray(resourceFile,
+							".properties", StringComparator.Suffix, loadSubDirs);
+					log.info("Resource dir: " + resourceFile.getAbsolutePath()
+							+ ". Found property files to load: " + propFiles.length);
+					File[] locFiles = FileUtil.listFilesAsArray(resourceFile, ".loc",
+							StringComparator.Suffix, loadSubDirs);
+					File[] wscFiles = FileUtil.listFilesAsArray(resourceFile, ".wsc",
+							StringComparator.Suffix, loadSubDirs);
 					PropertyUtil p1 = new PropertyUtil();
 					p1.load(propFiles);
 					p1.load(locFiles);
 					p1.load(wscFiles);
 					p.copy(p1);
 
-					propFiles = FileUtil.listFilesAsArray(resourceFile, ".xml", StringComparator.Suffix, loadSubDirs);
-					log.info("Resource dir: " + resourceFile.getAbsolutePath() + ". Found property files to load: "
-							+ propFiles.length);
+					propFiles = FileUtil.listFilesAsArray(resourceFile, ".xml",
+							StringComparator.Suffix, loadSubDirs);
+					log.info("Resource dir: " + resourceFile.getAbsolutePath()
+							+ ". Found property files to load: " + propFiles.length);
 
 					p1 = new PropertyUtil();
 					p1.load(propFiles);
@@ -180,12 +189,15 @@ public class ConfigurationManager {
 							p.load(new File[]{resourceFile});
 						}
 					} catch (Exception e) {
-						log.error("Unable to load " + resourceFile.getAbsolutePath() + "!", e);
+						log.error(
+								"Unable to load " + resourceFile.getAbsolutePath() + "!",
+								e);
 					}
 				}
 				// add locals if any
-				if (null != locals && locals.length > 0 && (locals.length == 1
-						|| StringUtil.isBlank(p.getString(ApplicationProperties.DEFAULT_LOCALE.key, "")))) {
+				if (null != locals && locals.length > 0
+						&& (locals.length == 1 || StringUtil.isBlank(p.getString(
+								ApplicationProperties.DEFAULT_LOCALE.key, "")))) {
 					p.setProperty(ApplicationProperties.DEFAULT_LOCALE.key, locals[0]);
 				}
 				for (String local : locals) {
@@ -212,10 +224,11 @@ public class ConfigurationManager {
 
 		if (resourceFile.exists()) {
 			PropertyUtil p1 = new PropertyUtil();
-			p1.setEncoding(p.getString(ApplicationProperties.LOCALE_CHAR_ENCODING.key, "UTF-8"));
+			p1.setEncoding(
+					p.getString(ApplicationProperties.LOCALE_CHAR_ENCODING.key, "UTF-8"));
 			if (resourceFile.isDirectory()) {
-				File[] propFiles = FileUtil.listFilesAsArray(resourceFile, "." + local, StringComparator.Suffix,
-						loadSubDirs);
+				File[] propFiles = FileUtil.listFilesAsArray(resourceFile, "." + local,
+						StringComparator.Suffix, loadSubDirs);
 				p1.load(propFiles);
 
 			} else {
@@ -224,7 +237,8 @@ public class ConfigurationManager {
 						p1.load(fileOrDir);
 					}
 				} catch (Exception e) {
-					log.error("Unable to load " + resourceFile.getAbsolutePath() + "!", e);
+					log.error("Unable to load " + resourceFile.getAbsolutePath() + "!",
+							e);
 				}
 			}
 			if (local.equalsIgnoreCase(defaultLocal)) {
@@ -256,7 +270,8 @@ public class ConfigurationManager {
 		Map<String, String> buildInfo = new HashMap<String, String>();
 		JarFile jar = null;
 		try {
-			URL url = ConfigurationManager.class.getProtectionDomain().getCodeSource().getLocation();
+			URL url = ConfigurationManager.class.getProtectionDomain().getCodeSource()
+					.getLocation();
 			File file = new File(url.toURI());
 			jar = new JarFile(file);
 			manifest = jar.getManifest();
@@ -298,8 +313,10 @@ public class ConfigurationManager {
 	@SuppressWarnings("unchecked")
 	public static Map<String, TestStep> getStepMapping() {
 		if (!ConfigurationManager.getBundle().containsKey("teststep.mapping")) {
-			ConfigurationManager.getBundle().addProperty("teststep.mapping", JavaStepFinder.getAllJavaSteps());
-			if (ConfigurationManager.getBundle().containsKey(ApplicationProperties.STEP_PROVIDER_PKG.key)) {
+			ConfigurationManager.getBundle().addProperty("teststep.mapping",
+					JavaStepFinder.getAllJavaSteps());
+			if (ConfigurationManager.getBundle()
+					.containsKey(ApplicationProperties.STEP_PROVIDER_PKG.key)) {
 				for (String pkg : ConfigurationManager.getBundle()
 						.getStringArray(ApplicationProperties.STEP_PROVIDER_PKG.key)) {
 					for (ScenarioFactory factory : getStepFactories()) {
@@ -308,12 +325,13 @@ public class ConfigurationManager {
 				}
 			}
 		}
-		return (Map<String, TestStep>) ConfigurationManager.getBundle().getObject("teststep.mapping");
+		return (Map<String, TestStep>) ConfigurationManager.getBundle()
+				.getObject("teststep.mapping");
 	}
 
 	private static ScenarioFactory[] getStepFactories() {
-		return new ScenarioFactory[] { new BDDTestFactory(Arrays.asList("bdl")),
-				new KwdTestFactory(Arrays.asList("kwl")), new ExcelTestFactory() };
+		return new ScenarioFactory[]{new BDDTestFactory(Arrays.asList("bdl")),
+				new KwdTestFactory(Arrays.asList("kwl")), new ExcelTestFactory()};
 	}
 
 	private static class PropertyConfigurationListener implements ConfigurationListener {
@@ -324,12 +342,15 @@ public class ConfigurationManager {
 		public void configurationChanged(ConfigurationEvent event) {
 
 			if ((event.getType() == AbstractConfiguration.EVENT_CLEAR_PROPERTY
-					|| event.getType() == AbstractConfiguration.EVENT_SET_PROPERTY) && event.isBeforeUpdate()) {
-				oldValue = String.format("%s", getBundle().getObject(event.getPropertyName()));
+					|| event.getType() == AbstractConfiguration.EVENT_SET_PROPERTY)
+					&& event.isBeforeUpdate()) {
+				oldValue = String.format("%s",
+						getBundle().getObject(event.getPropertyName()));
 			}
 
 			if ((event.getType() == AbstractConfiguration.EVENT_ADD_PROPERTY
-					|| event.getType() == AbstractConfiguration.EVENT_SET_PROPERTY) && !event.isBeforeUpdate()) {
+					|| event.getType() == AbstractConfiguration.EVENT_SET_PROPERTY)
+					&& !event.isBeforeUpdate()) {
 				String key = event.getPropertyName();
 				Object value = event.getPropertyValue();
 				if (null != oldValue && Matchers.equalTo(oldValue).matches(value)) {
@@ -339,8 +360,8 @@ public class ConfigurationManager {
 
 				// driver reset
 				if (key.equalsIgnoreCase(ApplicationProperties.DRIVER_NAME.key)
-						|| StringMatcher.containsIgnoringCase("additional.capabilities").match(key)
-						|| StringMatcher.containsIgnoringCase("driver.").match(key)
+						// single capability or set of capabilities change
+						|| StringMatcher.containsIgnoringCase(".capabilit").match(key)
 						|| key.equalsIgnoreCase(ApplicationProperties.REMOTE_SERVER.key)
 						|| key.equalsIgnoreCase(ApplicationProperties.REMOTE_PORT.key)) {
 					TestBaseProvider.instance().get().tearDown();
@@ -351,12 +372,14 @@ public class ConfigurationManager {
 				if (key.equalsIgnoreCase("env.resources")) {
 
 					if (event.getPropertyValue() instanceof ArrayList<?>) {
-						ArrayList<String> bundlesArray = ((ArrayList<String>) event.getPropertyValue());
+						ArrayList<String> bundlesArray =
+								((ArrayList<String>) event.getPropertyValue());
 						bundles = bundlesArray.toArray(new String[bundlesArray.size()]);
 					} else {
 						String resourcesBundle = (String) value;
 						if (StringUtil.isNotBlank(resourcesBundle))
-							bundles = resourcesBundle.split(String.valueOf(PropertyUtil.getDefaultListDelimiter()));
+							bundles = resourcesBundle.split(String
+									.valueOf(PropertyUtil.getDefaultListDelimiter()));
 					}
 					if (null != bundles && bundles.length > 0) {
 						for (String res : bundles) {
@@ -367,10 +390,12 @@ public class ConfigurationManager {
 				}
 				// Locale loading
 				if (key.equalsIgnoreCase(ApplicationProperties.DEFAULT_LOCALE.key)) {
-					String[] resources = getBundle().getStringArray("env.resources", "resources");
+					String[] resources =
+							getBundle().getStringArray("env.resources", "resources");
 					for (String resource : resources) {
 						String fileOrDir = getBundle().getSubstitutor().replace(resource);
-						addLocal(getBundle(), (String) event.getPropertyValue(), fileOrDir);
+						addLocal(getBundle(), (String) event.getPropertyValue(),
+								fileOrDir);
 					}
 				}
 				// step provider package re-load
@@ -380,21 +405,26 @@ public class ConfigurationManager {
 					// steps....
 					// for example suite level parameter has common steps and
 					// test level parameter has test specific steps
-					if (ConfigurationManager.getBundle().containsKey("teststep.mapping")) {
-						ConfigurationManager.getStepMapping().putAll(JavaStepFinder.getAllJavaSteps());
+					if (ConfigurationManager.getBundle()
+							.containsKey("teststep.mapping")) {
+						ConfigurationManager.getStepMapping()
+								.putAll(JavaStepFinder.getAllJavaSteps());
 
 						for (ScenarioFactory factory : getStepFactories()) {
 
 							if (event.getPropertyValue() instanceof ArrayList<?>) {
-								ArrayList<String> bundlesArray = ((ArrayList<String>) event.getPropertyValue());
-								bundles = bundlesArray.toArray(new String[bundlesArray.size()]);
+								ArrayList<String> bundlesArray =
+										((ArrayList<String>) event.getPropertyValue());
+								bundles = bundlesArray
+										.toArray(new String[bundlesArray.size()]);
 								for (String pkg : bundlesArray) {
 									factory.process(pkg.replaceAll("\\.", "/"));
 								}
 							} else {
 								String resourcesBundle = (String) value;
 								if (StringUtil.isNotBlank(resourcesBundle)) {
-									factory.process(resourcesBundle.replaceAll("\\.", "/"));
+									factory.process(
+											resourcesBundle.replaceAll("\\.", "/"));
 								}
 							}
 						}

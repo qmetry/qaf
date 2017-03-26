@@ -31,7 +31,10 @@ package com.qmetry.qaf.automation.core;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang.StringUtils;
@@ -44,6 +47,7 @@ import com.google.common.base.Supplier;
 import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.ui.UiDriver;
 import com.qmetry.qaf.automation.ui.UiDriverFactory;
+import com.qmetry.qaf.automation.ui.WebDriverTestBase;
 import com.qmetry.qaf.automation.ui.util.ExpectedCondition;
 import com.qmetry.qaf.automation.util.FileUtil;
 import com.qmetry.qaf.automation.util.PropertyUtil;
@@ -62,11 +66,12 @@ import com.qmetry.qaf.automation.util.StringUtil;
  */
 public class QAFTestBase {
 	private PropertyUtil context;
+	private Map<String, UiDriver> driverContext;
+
 	private final Log logger = LogFactoryImpl.getLog(QAFTestBase.class);
 	public static final String SELENIUM_DEFAULT_TIMEOUT = "selenium.wait.timeout";
 	private boolean prepareForShutdown;
 	/** Use this object to run all of your uiDriver tests */
-	private UiDriver uiDriver;
 	private ArrayList<LoggingBean> commandLog;
 	private List<CheckpointResultBean> checkPointResults;
 	private String[] stb;
@@ -141,6 +146,8 @@ public class QAFTestBase {
 		commandLog = new ArrayList<LoggingBean>();
 		checkPointResults = new ArrayList<CheckpointResultBean>();
 		context = new PropertyUtil();
+		driverContext = new HashMap<String, UiDriver>();
+
 		setAlwaysCaptureScreenShot(
 				ApplicationProperties.SUCEESS_SCREENSHOT.getBoolenVal());
 
@@ -162,10 +169,24 @@ public class QAFTestBase {
 
 	/** checks for verification errors and stops the browser */
 	public void tearDown() {
-		if (null != uiDriver) {
-			new UiDriverFactory().tearDown(uiDriver);
-			uiDriver = null;
+		Map<String, UiDriver> drivercontext = getDriverContext();
+		String[] drivers = drivercontext.keySet().toArray(new String[]{});
+		for (String driver : drivers) {
+			UiDriver uiDriver = (UiDriver) drivercontext.get(driver);
+			if (null != uiDriver) {
+				new UiDriverFactory().tearDown(uiDriver);
+			}
+			drivercontext.remove(driver);
 		}
+	}
+
+	public void setDriver(String driverName) {
+		stb = STBArgs.browser_str.set(driverName);
+	}
+
+	public void setDriver(String driverName, UiDriver driver) {
+		stb = STBArgs.browser_str.set(driverName);
+		setUiDriver(driver);
 	}
 
 	public String getBaseUrl() {
@@ -173,10 +194,10 @@ public class QAFTestBase {
 	}
 
 	public UiDriver getUiDriver() {
-		if ((uiDriver == null)) {
+		if (!hasUiDriver()) {
 			init();
 		}
-		return uiDriver;
+		return getDriverContext().get(getBrowser());
 	}
 
 	/** Sleeps for the specified number of milliseconds */
@@ -192,8 +213,8 @@ public class QAFTestBase {
 	}
 
 	public void setMethod(Method method) {
-		ConfigurationManager.getBundle().addProperty(ApplicationProperties.CURRENT_TEST_NAME.key,
-				method.getName());
+		ConfigurationManager.getBundle().addProperty(
+				ApplicationProperties.CURRENT_TEST_NAME.key, method.getName());
 	}
 
 	public void setPrepareForShutdown(boolean prepareForShutdown) {
@@ -271,11 +292,11 @@ public class QAFTestBase {
 	}
 
 	public String takeScreenShot() {
-		if (null == uiDriver) {
+		if (!hasUiDriver()) {
 			return "";
 		}
 		try {
-			lastCapturedScreenShot = base64ImageToFile(uiDriver.takeScreenShot());
+			lastCapturedScreenShot = base64ImageToFile(getUiDriver().takeScreenShot());
 		} catch (Exception e) {
 			e.printStackTrace();
 			return "";
@@ -381,12 +402,14 @@ public class QAFTestBase {
 		// uiDriver = new UiDriverFactory().get(commandLog, stb);
 		DriverInitExpectedCondition driverInitExpectedCondition =
 				new DriverInitExpectedCondition(commandLog, stb);
-		uiDriver = new UiDriverInitializer()
+		UiDriver uiDriver = new UiDriverInitializer()
 				.withTimeout(ApplicationProperties.DRIVER_INIT_TIMEOUT.getIntVal(0),
 						TimeUnit.SECONDS)
 				.pollingEvery(10, TimeUnit.SECONDS)
 				.withMessage(driverInitExpectedCondition)
 				.ignoring(WebDriverException.class).until(driverInitExpectedCondition);
+
+		setUiDriver(uiDriver);
 		System.out.println("driver init done");
 	}
 
@@ -450,7 +473,8 @@ public class QAFTestBase {
 	}
 
 	private String[] initStbArgs(String... args) {
-
+		//String browser = stb
+		args = STBArgs.browser_str.setIfEmpty(getBrowser(),args);
 		return STBArgs.browser_str.setIfEmpty(
 				ApplicationProperties.DRIVER_NAME
 						.getStringVal(STBArgs.browser_str.defaultVal),
@@ -484,7 +508,7 @@ public class QAFTestBase {
 		public UiDriver apply(UiDriverFactory driverFectory) {
 			try {
 				count++;
-				return driverFectory.get(this.commandLog, this.stb);
+				return driverFectory.get(commandLog, stb);
 			} catch (Throwable e) {
 				String msg = get();
 				System.err.println(msg + e.getMessage());
@@ -504,8 +528,8 @@ public class QAFTestBase {
 		}
 
 	}
-	
-	private class UiDriverInitializer extends FluentWait<UiDriverFactory>{
+
+	private class UiDriverInitializer extends FluentWait<UiDriverFactory> {
 
 		public UiDriverInitializer() {
 			super(new UiDriverFactory());
@@ -513,10 +537,51 @@ public class QAFTestBase {
 		@Override
 		protected RuntimeException timeoutException(String message,
 				Throwable lastException) {
-			AutomationError ae = new AutomationError(message + "\n"+lastException.getCause().getMessage());
+			AutomationError ae = new AutomationError(
+					message + "\n" + lastException.getCause().getMessage());
 			ae.setStackTrace(lastException.getCause().getStackTrace());
 			return ae;
 		}
-		
+
+	}
+
+	private boolean hasUiDriver() {
+
+		return null!= driverContext.get(getBrowser());
+	}
+
+	private void setUiDriver(UiDriver uiDriver) {
+		driverContext.put(getBrowser(), uiDriver);
+	}
+
+	private Map<String, UiDriver> getDriverContext() {
+		return driverContext;
+	}
+
+	public static void main(String[] args) {
+		System.setProperty("driver.name", "chromeDriver");
+		System.setProperty("webdriver.chrome.driver", "/Users/chiragjayswal/Downloads/chromedriver");
+		System.setProperty("webdriver.gecko.driver", "/Users/chiragjayswal/Downloads/geckodriver");
+
+		new WebDriverTestBase().getDriver().get("http://www.google.com");
+		pause(5000);
+
+		System.out.println(TestBaseProvider.instance().get().getBrowser());
+
+		TestBaseProvider.instance().get().setDriver("chrome2Driver");
+		System.out.println(TestBaseProvider.instance().get().getBrowser());
+		new WebDriverTestBase().getDriver().get("http://www.google.com");
+		new WebDriverTestBase().getDriver().findElement("name=q").sendKeys("firefoxDriver");
+
+		TestBaseProvider.instance().get().setDriver("chromeDriver");
+		System.out.println(TestBaseProvider.instance().get().getBrowser());
+		new WebDriverTestBase().getDriver().findElement("name=q").sendKeys("chromeDriver");
+
+
+		pause(50000);
+
+
+		System.exit(0);
+
 	}
 }
