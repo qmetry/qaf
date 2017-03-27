@@ -84,11 +84,13 @@ public class DataProviderFactory {
 			if(param.containsKey(params.JSON_DATA_TABLE)){
 				return JSONUtil.getJsonArrayOfMaps(param.get(params.JSON_DATA_TABLE.name()));
 			}
-			@SuppressWarnings("unchecked")
-			List<Map<String, Object>> mapData = JSONUtil.getJsonObjectFromFile(param.get(params.DATAFILE.name()),
-					List.class);
+//			@SuppressWarnings("unchecked")
+//			List<Map<String, Object>> mapData = JSONUtil.getJsonObjectFromFile(param.get(params.DATAFILE.name()),
+//					List.class);
+//
+//			return mapData.toArray(new Object[][] {});
+			return JSONUtil.getJsonArrayOfMaps(param.get(params.DATAFILE.name()));
 
-			return mapData.toArray(new Object[][] {});
 
 		}
 		throw new RuntimeException("No data provider found");
