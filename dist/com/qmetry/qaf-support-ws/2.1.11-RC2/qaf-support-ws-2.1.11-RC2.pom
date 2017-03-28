@@ -16,56 +16,56 @@
     <dependency>
       <groupId>com.qmetry</groupId>
       <artifactId>qaf</artifactId>
-      <version>2.1.11-RC1</version>
-      <optional>true</optional>
+      <version>2.1.11-RC2</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjtools</artifactId>
       <version>1.8.5</version>
-      <optional>true</optional>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.sun.jersey</groupId>
       <artifactId>jersey-client</artifactId>
       <version>1.19</version>
-      <optional>true</optional>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.sun.jersey</groupId>
       <artifactId>jersey-core</artifactId>
       <version>1.19</version>
-      <optional>true</optional>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.sun.jersey.contribs</groupId>
       <artifactId>jersey-multipart</artifactId>
       <version>1.19</version>
-      <optional>true</optional>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>xmlunit</groupId>
       <artifactId>xmlunit</artifactId>
       <version>1.4</version>
-      <optional>true</optional>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.xmlmatchers</groupId>
       <artifactId>xml-matchers</artifactId>
       <version>1.0-RC1</version>
-      <optional>true</optional>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.jayway.jsonpath</groupId>
       <artifactId>json-path</artifactId>
       <version>2.2.0</version>
-      <optional>true</optional>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.jayway.jsonpath</groupId>
       <artifactId>json-path-assert</artifactId>
       <version>2.2.0</version>
-      <optional>true</optional>
+      <scope>compile</scope>
     </dependency>
   </dependencies>
 </project>
