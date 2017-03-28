@@ -236,6 +236,10 @@ For any inquiry or need additional information, please contact support-qaf@infos
 <!-- Resolve ivy dependencies and create a Maven POM file -->
 <ivy:deliver deliverpattern="${dist.dir}/ivy.xml" pubrevision="${release.num}" status="release" />
 <ivy:makepom ivyfile="${dist.dir}/ivy.xml" pomfile="${dist.dir}/qaf.pom">
+	<mapping conf="compile" scope="compile" />
+	<mapping conf="runtime" scope="runtime" />
+	<mapping conf="test" scope="test" />
+	<mapping conf="provided" scope="provided" />
 </ivy:makepom>
 
 <!-- Publish the local repo. Defaults to ~/.ivy2/local -->
@@ -293,34 +297,34 @@ For any inquiry or need additional information, please contact support-qaf@infos
 	</fileset>
 </path>
 -->
-	<jar destfile="${dist.dir}/qaf-standalone.jar" basedir="${bin.dir}" excludes="**/test/**,**/step/CommonStep.*" includes="**/*.*" duplicate="preserve">
-		<zipgroupfileset dir="${lib.dir}" includes="*.jar" excludes="*sources.jar,*javadoc.jar"/>
-		<zipgroupfileset dir="dependencies" includes="*.jar" excludes="*sources.jar,*javadoc.jar"/>
+<jar destfile="${dist.dir}/qaf-standalone.jar" basedir="${bin.dir}" excludes="**/test/**,**/step/CommonStep.*" includes="**/*.*" duplicate="preserve">
+	<zipgroupfileset dir="${lib.dir}" includes="*.jar" excludes="*sources.jar,*javadoc.jar" />
+	<zipgroupfileset dir="dependencies" includes="*.jar" excludes="*sources.jar,*javadoc.jar" />
 
-				<metainf dir="." includes="LICENSE.txt,NOTICE.txt" />
-				<manifest>
-					<attribute name="Vendor" value="Infostretch Corp." />
-					<attribute name="Built-By" value="${user.name}" />
+	<metainf dir="." includes="LICENSE.txt,NOTICE.txt" />
+	<manifest>
+		<attribute name="Vendor" value="Infostretch Corp." />
+		<attribute name="Built-By" value="${user.name}" />
 
-					<section name="Build-Info">
-						<attribute name="qaf-Build-Time" value="${build.timestamp}" />
-						<!-- Information about the program itself -->
-						<attribute name="qaf-Version" value="${version-num}" />
-						<attribute name="qaf-Revision" value="${build-num}" />
-						<attribute name="qaf-Type" value="core" />
-					</section>
-				</manifest>
-				<metainf dir="${src.dir}" includes="**/aop.xml" />
-				<service type="org.testng.ITestNGListener">
-					<provider classname="com.qmetry.qaf.automation.testng.pro.QAFAnnotationTransformer2" />
+		<section name="Build-Info">
+			<attribute name="qaf-Build-Time" value="${build.timestamp}" />
+			<!-- Information about the program itself -->
+			<attribute name="qaf-Version" value="${version-num}" />
+			<attribute name="qaf-Revision" value="${build-num}" />
+			<attribute name="qaf-Type" value="core" />
+		</section>
+	</manifest>
+	<metainf dir="${src.dir}" includes="**/aop.xml" />
+	<service type="org.testng.ITestNGListener">
+		<provider classname="com.qmetry.qaf.automation.testng.pro.QAFAnnotationTransformer2" />
 
-					<provider classname="com.qmetry.qaf.automation.testng.pro.QAFInvokedMethodListener2" />
+		<provider classname="com.qmetry.qaf.automation.testng.pro.QAFInvokedMethodListener2" />
 
-					<provider classname="com.qmetry.qaf.automation.testng.pro.QAFMethodInterceptor" />
+		<provider classname="com.qmetry.qaf.automation.testng.pro.QAFMethodInterceptor" />
 
-					<provider classname="com.qmetry.qaf.automation.testng.pro.QAFResultListener" />
-					<provider classname="com.qmetry.qaf.automation.testng.pro.QAFSuiteListener" />
-				</service>
-			</jar>
+		<provider classname="com.qmetry.qaf.automation.testng.pro.QAFResultListener" />
+		<provider classname="com.qmetry.qaf.automation.testng.pro.QAFSuiteListener" />
+	</service>
+</jar>
 </target>
 </project>
