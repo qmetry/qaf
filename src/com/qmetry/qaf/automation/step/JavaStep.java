@@ -43,6 +43,7 @@ import java.util.Map;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.configuration.ConfigurationMap;
 import org.apache.commons.lang.text.StrSubstitutor;
 import org.json.JSONException;
 
@@ -233,7 +234,12 @@ public class JavaStep extends BaseTestStep {
 							: context.containsKey(pname) ? context.get(pname)
 									: getBundle().containsKey(pstr)
 											? getBundle().getObject(pstr) : getBundle()
-													.getObject(pname);
+													.subset(pname).isEmpty()
+															? getBundle().getObject(
+																	pname)
+															: new ConfigurationMap(
+																	getBundle().subset(
+																			pname));
 				} else if (pstr.indexOf("$") >= 0) {
 					pstr = getBundle().getSubstitutor().replace(pstr);
 					params[i] = StrSubstitutor.replace(pstr, context);
