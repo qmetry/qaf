@@ -12,7 +12,7 @@ search: exclude
 "title": "{{ page.title | escape }}",
 "tags": "{{ page.tags }}",
 "keywords": "{{page.keywords}}",
-"url": "{{ page.url | remove: "/" | remove: "qaf-2.1.7b" | remove: "qaf-2.1.8" | remove: "qaf-2.1.10" | remove: "qaf-2.1.9" | remove: page.folder}}",
+"url": "{{ page.url | remove: "/" | remove: "qaf-2.1.7b" | remove: "qaf-2.1.8" | remove: "qaf-2.1.10" | remove: "qaf-2.1.9"| remove: "qaf-2.1.10" | remove: page.folder}}",
 "summary": "{{page.summary | strip }}"
 },
 {% endunless %}
