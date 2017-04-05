@@ -5,21 +5,7 @@ sidebar: qaf_2_1_10-sidebar
 permalink: qaf-2.1.10/release_notes.html
 folder: qaf-2.1.9
 ---
-## VER-2.1.11 Release Notes:
 
-**New Features**
-
- 1. 
- 
-**Enahancements**
- 
- 1. 
-
-**Bug Fixes**
-
- 1. 
- 
- 
 ## VER-2.1.10 Release Notes:
 
 **New Features**

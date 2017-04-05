@@ -5,7 +5,21 @@ sidebar: qaf_latest-sidebar
 permalink: latest/release_notes.html
 folder: latest
 ---
+## VER-2.1.11 Release Notes:
 
+**New Features**
+
+ 1. 
+ 
+**Enahancements**
+ 
+ 1. 
+
+**Bug Fixes**
+
+ 1. 
+ 
+ 
 ## VER-2.1.10 Release Notes:
 
 **New Features**
