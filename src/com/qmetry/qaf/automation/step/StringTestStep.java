@@ -281,12 +281,12 @@ public class StringTestStep extends BaseTestStep {
 				count++;
 			}
 			for (int i = 0; i < count; i++) {
-				description = description.replaceFirst(arguments.get(i), "{" + i + "}");
+				description = description.replaceFirst(Pattern.quote(arguments.get(i)),
+						Matcher.quoteReplacement("{" + i + "}"));
 			}
 			actualArgs = arguments.toArray(new String[]{});
 		}
 		name = StringUtil
 				.toCamelCaseIdentifier(description.length() > 0 ? description : name);
 	}
-
 }
