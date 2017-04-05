@@ -9,15 +9,23 @@ folder: latest
 
 **New Features**
 
- 1. 
+ 1. [#54] (https://github.com/qmetry/qaf/issues/54) Support XML node key in BDD step call where to JavaStep requires map
+ 2. [#96] (https://github.com/qmetry/qaf/issues/96) Support for Multiple Devices in one script
  
 **Enahancements**
  
- 1. 
+ 1. [#73] (https://github.com/qmetry/qaf/issues/73) Support to define component with locator repository
+ 2. [#74] (https://github.com/qmetry/qaf/issues/74) Data driven scenario count issue in case of verification failure
+ 3. [#91] (https://github.com/qmetry/qaf/issues/91) Support for Rest Client Factory
+ 4. [#92] (https://github.com/qmetry/qaf/issues/92) TestNG version upgrade to 6.10
 
 **Bug Fixes**
 
- 1. 
+ 1. [#66] (https://github.com/qmetry/qaf/issues/66) dependsOnMethods not working for BDD scenarios
+ 2. [#69] (https://github.com/qmetry/qaf/issues/69) Getting Error "Error communicating with the remote browser. It may have died."
+ 3. [#70] (https://github.com/qmetry/qaf/issues/70) Unable to capture screenshot for IE driver
+ 4. [#75] (https://github.com/qmetry/qaf/issues/75) Duplicate result file for data driven testcase
+ 
  
  
 ## VER-2.1.10 Release Notes:
