@@ -1,0 +1,44 @@
+{
+  "methods": [
+    {
+      "index": 1,
+      "type": "test",
+      "args": [],
+      "metaData": {
+        "description": "Verify Add Contact Screen",
+        "groups": [
+          "SMOKE"
+        ],
+        "lineNo": 2.0,
+        "name": "Verify Add Contact Screen",
+        "referece": "scenarios/suite1.bdd",
+        "sign": "scenarios.suite1.bdd.Verify Add Contact Screen()[pri:1000, instance:com.qmetry.qaf.automation.step.client.Scenario@3e8]"
+      },
+      "dependsOn": [],
+      "startTime": 1469193085688,
+      "duration": 31710,
+      "result": "pass",
+      "passPer": 0.0
+    },
+    {
+      "index": 1,
+      "type": "test",
+      "args": [],
+      "metaData": {
+        "description": "Add Contact and Verify",
+        "groups": [
+          "SMOKE"
+        ],
+        "lineNo": 12,
+        "name": "Add New Contact",
+        "referece": "scenarios/suite1.bdd",
+        "sign": "scenarios.suite1.bdd.Add New Contact()[pri:1001, instance:com.qmetry.qaf.automation.step.client.Scenario@3e9]"
+      },
+      "dependsOn": [],
+      "startTime": 1469193117460,
+      "duration": 40788,
+      "result": "pass",
+      "passPer": 0.0
+    }
+  ]
+}
