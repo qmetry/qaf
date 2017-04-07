@@ -37,6 +37,12 @@ End
 ```
 Want to iterate with set of test data from file? You got it with data-driven Scenario. 
 
+## Comment and line-break
+
+  - Comment: # or !
+  - Line break: _&
+
+
 ## Meta-data 
 
 * There are predefined meta-key available to use which are list in table below.
