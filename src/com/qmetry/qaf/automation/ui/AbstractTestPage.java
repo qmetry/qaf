@@ -229,10 +229,8 @@ public abstract class AbstractTestPage<P extends TestPage<D>, D> implements Test
 	
 	/**
 	 * for any kit
-	 * @deprecated use {@link QAFExtendedWebDriver#waitForAjax(JsToolkit, long...) instead}
 	 */
 	public void waitForAjaxToComplete() {
-	
 	}
 
 }

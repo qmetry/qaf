@@ -63,7 +63,7 @@ import com.qmetry.qaf.automation.core.QAFListener;
 import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.ui.WebDriverCommandLogger;
 import com.qmetry.qaf.automation.ui.WebDriverTestBase;
-import com.qmetry.qaf.automation.ui.selenium.WaitService.JsToolkit;
+import com.qmetry.qaf.automation.ui.JsToolkit;
 import com.qmetry.qaf.automation.ui.util.QAFWebDriverExpectedConditions;
 import com.qmetry.qaf.automation.ui.util.QAFWebDriverWait;
 import com.qmetry.qaf.automation.ui.webdriver.CommandTracker.Stage;
@@ -464,9 +464,13 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 
 	public void waitForAjax(JsToolkit toolkit, long... timeout) {
 		new QAFWebDriverWait(this, timeout).withMessage("AJAX load Wait time out.")
-				.until(QAFWebDriverExpectedConditions.jsCondition(toolkit.waitConditionWD()));
+				.until(QAFWebDriverExpectedConditions.jsCondition(toolkit.waitCondition()));
 	}
 
+	public void waitForAjax( long... timeout) {
+		new QAFWebDriverWait(this, timeout).withMessage("AJAX load Wait time out.")
+				.until(QAFWebDriverExpectedConditions.jsCondition(JsToolkit.globalWaitCondition()));
+	}
 	@Override
 	public void beforeInitialize(Capabilities desiredCapabilities) {
 		// can't do anything over here...

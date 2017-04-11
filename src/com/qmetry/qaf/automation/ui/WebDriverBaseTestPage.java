@@ -103,7 +103,10 @@ public abstract class WebDriverBaseTestPage<P extends WebDriverTestPage>
 		return obj;
 	}
 	
-	
+	@Override
+	public void waitForAjaxToComplete() {
+		getTestBase().getDriver().waitForAjax();
+	}
 	
 	public void waitForTextPresent(String text) {
 		new QAFExtendedWebElement(By.partialLinkText(text)).waitForPresent();

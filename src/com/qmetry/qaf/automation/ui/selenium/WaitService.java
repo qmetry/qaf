@@ -35,6 +35,7 @@ import com.qmetry.qaf.automation.util.StringUtil;
 import com.thoughtworks.selenium.Wait;
 
 /**
+ * @deprecated use wait methods available with driver or element.
  * Wait service provides custom wait conditions
  * 
  * @author chirag
@@ -43,6 +44,11 @@ public class WaitService {
 	private IsSelenium selenium;
 	private final Log logger;
 
+	/**
+	 * {@link Deprecated} use {@link com.qmetry.qaf.automation.ui.JsToolkit} instead
+	 * @author chirag.jayswal
+	 *
+	 */
 	public enum JsToolkit {
 		DOJO("dojo", "dojo.io.XMLHTTPTransport.inFlight.length==0"), EXTJS("Ext",
 				"Ext.Ajax.isLoading()==false"), JQUERY("jQuery", "jQuery.active==0"), YUI("YAHOO",
