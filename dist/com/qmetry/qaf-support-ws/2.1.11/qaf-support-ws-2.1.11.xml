@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor 
+	license agreements. See the NOTICE file distributed with this work for additional 
+	information regarding copyright ownership. The ASF licenses this file to 
+	you under the Apache License, Version 2.0 (the "License"); you may not use 
+	this file except in compliance with the License. You may obtain a copy of 
+	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
+	by applicable law or agreed to in writing, software distributed under the 
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
+	OF ANY KIND, either express or implied. See the License for the specific 
+	language governing permissions and limitations under the License. -->
+<ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
+	<info organisation="com.qmetry" module="qaf-support-ws" revision="2.1.11" status="integration" publication="20170412141301">
+	</info>
+
+	<configurations>
+        <conf name="compile" description="Required to compile application"/>
+        <conf name="runtime" description="Additional run-time dependencies" extends="compile"/>
+        <conf name="test" description="Required for test only" extends="runtime"/>
+        <conf name="provided" description="Needed for compile, but will be present on the target platform."/>
+    </configurations>
+    
+	<dependencies>
+		<dependency org="com.qmetry" name="qaf" rev="2.1.11" revConstraint="latest.integration" conf="provided->default"/>
+		<dependency org="org.aspectj" name="aspectjtools" rev="1.8.5" conf="provided->default">
+			<artifact name="aspectjtools" type="jar"/>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.sun.jersey.contribs/jersey-multipart -->
+		<dependency org="com.sun.jersey" name="jersey-client" rev="1.19" conf="compile->default"/>
+		<dependency org="com.sun.jersey" name="jersey-core" rev="1.19" conf="compile->default"/>
+		<dependency org="com.sun.jersey.contribs" name="jersey-multipart" rev="1.19" conf="compile->default"/>
+				
+		<!--  ws  -->
+		<dependency org="xmlunit" name="xmlunit" rev="1.4" conf="provided->default"/>
+		<dependency org="org.xmlmatchers" name="xml-matchers" rev="1.0-RC1" revConstraint="latest.integration" conf="provided->default"/>
+		<dependency org="com.jayway.jsonpath" name="json-path" rev="2.2.0" conf="compile->default"/>
+		<dependency org="com.jayway.jsonpath" name="json-path-assert" rev="2.2.0" conf="compile->default"/>
+		<dependency org="com.github.fge" name="json-schema-validator" rev="2.2.6" revConstraint="latest.integration" conf="compile->default"/>
+		<dependency org="com.github.fge" name="jackson-coreutils" rev="1.8" revConstraint="latest.integration" conf="compile->default"/>
+	
+	</dependencies>
+</ivy-module>
