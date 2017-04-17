@@ -44,13 +44,17 @@ import java.util.Map;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.configuration.ConfigurationMap;
+import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.lang.text.StrSubstitutor;
 import org.json.JSONException;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import com.qmetry.qaf.automation.core.TestBaseProvider;
 import com.qmetry.qaf.automation.data.MetaData;
+import com.qmetry.qaf.automation.gson.GsonDeserializerObjectWrapper;
+import com.qmetry.qaf.automation.gson.ObjectWrapper;
 import com.qmetry.qaf.automation.ui.api.TestPage;
 import com.qmetry.qaf.automation.ui.webdriver.QAFWebElement;
 import com.qmetry.qaf.automation.util.JSONUtil;
@@ -220,7 +224,10 @@ public class JavaStep extends BaseTestStep {
 					+ noOfParams + " parameters but Actual is "
 					+ (objects == null ? "0" : objects.length));
 		}
-		Gson gson = new GsonBuilder().setDateFormat("dd-MM-yyyy").create();
+
+		Gson gson = new GsonBuilder().setDateFormat("dd-MM-yyyy").registerTypeAdapter(
+				ObjectWrapper.class, new GsonDeserializerObjectWrapper()).create();
+
 		description = StrSubstitutor.replace(description, context);
 		description = getBundle().getSubstitutor().replace(description);
 		for (int i = 0; i < noOfParams; i++) {
@@ -233,13 +240,8 @@ public class JavaStep extends BaseTestStep {
 					params[i] = context.containsKey(pstr) ? context.get(pstr)
 							: context.containsKey(pname) ? context.get(pname)
 									: getBundle().containsKey(pstr)
-											? getBundle().getObject(pstr) : getBundle()
-													.subset(pname).isEmpty()
-															? getBundle().getObject(
-																	pname)
-															: new ConfigurationMap(
-																	getBundle().subset(
-																			pname));
+											? getBundle().getObject(pstr)
+											: getPropValue(pname);
 				} else if (pstr.indexOf("$") >= 0) {
 					pstr = getBundle().getSubstitutor().replace(pstr);
 					params[i] = StrSubstitutor.replace(pstr, context);
@@ -258,12 +260,23 @@ public class JavaStep extends BaseTestStep {
 
 				strVal = getBundle().getSubstitutor().replace(strVal);
 				strVal = StrSubstitutor.replace(strVal, context);
-				Object o = gson.fromJson(strVal, paramType);
-				params[i] = o;
+
+				try {
+					// prevent gson from expressing integers as floats
+					ObjectWrapper w = gson.fromJson(strVal, ObjectWrapper.class);
+					Object obj = w.getObject();
+					try {
+						params[i] = paramType.cast(obj);
+					} catch (Exception e) {
+						JsonElement j = gson.toJsonTree(obj);
+						params[i] = gson.fromJson(j, paramType);
+					}
+				} catch (Exception e) {
+					params[i] = gson.fromJson(strVal, paramType);
+				}
 			} catch (Exception e) {
 			}
 		}
-
 		return params;
 	}
 
@@ -345,5 +358,15 @@ public class JavaStep extends BaseTestStep {
 			}
 		}
 		return false;
+	}
+
+	private Object getPropValue(String pname) {
+		Object o = getBundle().subset(pname);
+		if (o instanceof HierarchicalConfiguration
+				&& !((HierarchicalConfiguration) o).getRoot().getChildren().isEmpty()) {
+			return new ConfigurationMap(getBundle().subset(pname));
+		}
+		return getBundle().getObject(pname);
+
 	}
 }
