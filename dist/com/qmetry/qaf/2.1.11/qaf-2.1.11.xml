@@ -23,7 +23,7 @@
  
  -->
 <ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
-	<info organisation="com.qmetry" module="qaf" revision="2.1.11" status="integration" publication="20170410231732">
+	<info organisation="com.qmetry" module="qaf" revision="2.1.11" status="integration" publication="20170417022103">
 	</info>
 	
 	<configurations>
@@ -95,6 +95,8 @@
 		<dependency org="org.testng" name="testng" rev="6.10" conf="compile->default">
 			<artifact name="testng" type="jar"/>
 		</dependency>
+		<dependency org="org.beanshell" name="bsh" rev="2.0b5"/>
+		
 		<dependency org="com.google.inject" name="guice" rev="3.0" conf="compile->default"/>
 		
 		<dependency org="io.github.lukehutch" name="fast-classpath-scanner" rev="2.0.6" conf="provided->default"/>
