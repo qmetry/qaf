@@ -292,9 +292,7 @@ public class ReporterUtil {
 		if (result.getMethod().isTest()) {
 			methodInfo.setIndex(result.getMethod().getCurrentInvocationCount());
 			int retryCount = getBundle().getInt(RetryAnalyzer.RETRY_INVOCATION_COUNT, 0);
-			if (retryCount > 0) {
-				methodInfo.setRetryCount(retryCount);
-			}
+			methodInfo.setRetryCount(retryCount);
 			methodInfo.setArgs(result.getParameters());
 
 			if (result.getMethod() instanceof TestNGScenario) {
