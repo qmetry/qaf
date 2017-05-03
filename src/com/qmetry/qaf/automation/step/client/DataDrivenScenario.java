@@ -91,6 +91,7 @@ public class DataDrivenScenario extends Scenario {
 
 	@DataProvider(name = "scenariodp")
 	public Object[][] dp(Method m) {
+		dataProviderDesc = getBundle().getSubstitutor().replace(dataProviderDesc);
 		Map<String, String> param = StringUtil
 				.toMap(StringUtil.parseCSV(dataProviderDesc, getBundle().getListDelimiter()), true);
 		String dataproviderName = DataProviderUtil.getDataProvider(param);
