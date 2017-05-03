@@ -362,11 +362,10 @@ public class JavaStep extends BaseTestStep {
 
 	private Object getPropValue(String pname) {
 		Object o = getBundle().subset(pname);
-		if (o instanceof HierarchicalConfiguration
-				&& !((HierarchicalConfiguration) o).getRoot().getChildren().isEmpty()) {
+		if (o instanceof HierarchicalConfiguration && ((HierarchicalConfiguration) o).getRoot().getValue() == null
+				&& ((HierarchicalConfiguration) o).getRoot().getChildrenCount() > 0) {
 			return new ConfigurationMap(getBundle().subset(pname));
 		}
 		return getBundle().getObject(pname);
-
 	}
 }
