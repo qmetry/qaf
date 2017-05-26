@@ -48,7 +48,6 @@ public class Validator {
 		if (msg.endsWith("Actual: ")) {
 			msg = String.format(msg + "%s", actual);
 		}
-		System.out.println(msg);
 		msg = msg.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 		Reporter.log(msg, result ? MessageTypes.Pass : MessageTypes.Fail);
 
