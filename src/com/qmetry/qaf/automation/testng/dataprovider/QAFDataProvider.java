@@ -54,7 +54,7 @@ import java.lang.annotation.Target;
 @Target({ METHOD, TYPE })
 public @interface QAFDataProvider {
 	public enum params {
-		DATAFILE, SHEETNAME, KEY, HASHEADERROW, SQLQUERY, BEANCLASS, JSON_DATA_TABLE;
+		DATAFILE, SHEETNAME, KEY, HASHEADERROW, SQLQUERY, BEANCLASS, JSON_DATA_TABLE, DATAPROVIDER, DATAPROVIDERCLASS;
 	}
 
 	public enum dataproviders {

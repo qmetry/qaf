@@ -1,0 +1,26 @@
+
+Feature: Custom data provider with BDD
+
+SCENARIO: Data provider without injection
+META-DATA: {"dataProvider":"dp-without-injection", "dataProviderClass":"com.qmetry.qaf.automation.impl.CustomDataProvider"}
+# Comment '${value}'
+
+END
+
+SCENARIO: Data provider with testng method argument
+META-DATA: {"dataProvider":"dp-with-testngmethod", "dataProviderClass":"com.qmetry.qaf.automation.impl.CustomDataProvider"}
+# Comment '${value}'
+
+END
+
+SCENARIO: Data provider with method argument
+META-DATA: {"dataProvider":"dp-with-method", "dataProviderClass":"com.qmetry.qaf.automation.impl.CustomDataProvider"}
+# Comment '${value}'
+
+END
+
+SCENARIO: Data provider with testng method argument and context
+META-DATA: {"dataProvider":"dp-with-testngmethod-contex", "dataProviderClass":"com.qmetry.qaf.automation.impl.CustomDataProvider"}
+# Comment '${value}'
+
+END

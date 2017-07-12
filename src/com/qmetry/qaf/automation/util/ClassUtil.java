@@ -54,8 +54,6 @@ import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import com.google.common.reflect.ClassPath;
-
 /**
  * com.qmetry.qaf.automation.util.ClassUtil.java
  * 
@@ -66,35 +64,42 @@ public final class ClassUtil {
 	private static final String CLASS_SUFIX = ".class";
 	private static final String PROTOCOL_JAR = "jar";
 
-	public static Set<Method> getAllMethodsWithAnnotation(String packageName,
-			Class<? extends Annotation> annotation) {
+	public static Set<Method> getAllMethodsWithAnnotation(String packageName, Class<? extends Annotation> annotation) {
 		Set<Method> methods = new HashSet<Method>();
 		try {
 			for (Class<?> cls : getClasses(packageName)) {
-				for (Method method : cls.getMethods()) {
-					if (hasAnnotation(method, annotation)) {
-						methods.add(method);
-					}
-				}
+				methods.addAll(getAllMethodsWithAnnotation(cls, annotation));
 			}
 		} catch (SecurityException e) {
-			System.err.println("ClassUtil.getAllMethods: " + e.getMessage());
+			System.err.println("ClassUtil.getAllMethodsWithAnnotation: " + e.getMessage());
 		} catch (IOException e) {
-			System.err.println("ClassUtil.getAllMethods: " + e.getMessage());
+			System.err.println("ClassUtil.getAllMethodsWithAnnotation: " + e.getMessage());
 		}
 
 		return methods;
 	}
 
-	public static boolean hasAnnotation(Method method,
-			Class<? extends Annotation> annotation) {
+	public static Set<Method> getAllMethodsWithAnnotation(Class<?> cls, Class<? extends Annotation> annotation) {
+		Set<Method> methods = new HashSet<Method>();
+		try {
+			for (Method method : cls.getMethods()) {
+				if (hasAnnotation(method, annotation)) {
+					methods.add(method);
+				}
+			}
+		} catch (SecurityException e) {
+			System.err.println("ClassUtil.getAllMethodsWithAnnotation: " + e.getMessage());
+		}
+		return methods;
+	}
+
+	public static boolean hasAnnotation(Method method, Class<? extends Annotation> annotation) {
 		if (method.isAnnotationPresent(annotation))
 			return true;
 		Class<?>[] intfaces = method.getDeclaringClass().getInterfaces();
 		for (Class<?> intface : intfaces) {
 			try {
-				if (intface.getMethod(method.getName(), method.getParameterTypes())
-						.isAnnotationPresent(annotation))
+				if (intface.getMethod(method.getName(), method.getParameterTypes()).isAnnotationPresent(annotation))
 					return true;
 			} catch (NoSuchMethodException e) {
 				// Ignore!...
@@ -106,15 +111,13 @@ public final class ClassUtil {
 		return false;
 	}
 
-	public static <T extends Annotation> T getAnnotation(Method method,
-			Class<T> annotation) {
+	public static <T extends Annotation> T getAnnotation(Method method, Class<T> annotation) {
 		if (method.isAnnotationPresent(annotation))
 			return method.getAnnotation(annotation);
 		Class<?>[] intfaces = method.getDeclaringClass().getInterfaces();
 		for (Class<?> intface : intfaces) {
 			try {
-				Method iMethod =
-						intface.getMethod(method.getName(), method.getParameterTypes());
+				Method iMethod = intface.getMethod(method.getName(), method.getParameterTypes());
 				if (iMethod.isAnnotationPresent(annotation))
 					return iMethod.getAnnotation(annotation);
 			} catch (NoSuchMethodException e) {
@@ -127,8 +130,7 @@ public final class ClassUtil {
 		return null;
 	}
 
-	public static <T extends Annotation> T getAnnotation(Class<?> clazz,
-			Class<T> annotation) {
+	public static <T extends Annotation> T getAnnotation(Class<?> clazz, Class<T> annotation) {
 		if (clazz.isAnnotationPresent(annotation))
 			return clazz.getAnnotation(annotation);
 		Class<?>[] intfaces = clazz.getInterfaces();
@@ -146,32 +148,30 @@ public final class ClassUtil {
 	}
 
 	public static List<Class<?>> getClasses(String pkg) throws IOException {
-			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-			String path = pkg.replace('.', '/');
-			Enumeration<URL> resources = classLoader.getResources(path);
-			List<Class<?>> classes = new ArrayList<Class<?>>();
-			while (resources.hasMoreElements()) {
-				URL resource = resources.nextElement();
-				if (resource.getProtocol().equalsIgnoreCase(PROTOCOL_JAR)) {
-					try {
-						classes.addAll(getClassesFromJar(resource, pkg));
-					} catch (IOException e) {
-						System.err
-								.println("Unable to get classes from jar: " + resource);
-					}
-				} else {
-					try {
-						classes.addAll(getClasses(new File(resource.toURI()), pkg));
-					} catch (URISyntaxException e) {
-						// ignore it
-					}
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		String path = pkg.replace('.', '/');
+		Enumeration<URL> resources = classLoader.getResources(path);
+		List<Class<?>> classes = new ArrayList<Class<?>>();
+		while (resources.hasMoreElements()) {
+			URL resource = resources.nextElement();
+			if (resource.getProtocol().equalsIgnoreCase(PROTOCOL_JAR)) {
+				try {
+					classes.addAll(getClassesFromJar(resource, pkg));
+				} catch (IOException e) {
+					System.err.println("Unable to get classes from jar: " + resource);
+				}
+			} else {
+				try {
+					classes.addAll(getClasses(new File(resource.toURI()), pkg));
+				} catch (URISyntaxException e) {
+					// ignore it
 				}
 			}
-			return classes;
+		}
+		return classes;
 	}
 
-	private static List<Class<?>> getClassesFromJar(URL jar, String pkg)
-			throws IOException {
+	private static List<Class<?>> getClassesFromJar(URL jar, String pkg) throws IOException {
 		List<Class<?>> classes = new ArrayList<Class<?>>();
 
 		String jarFileName = URLDecoder.decode(jar.getFile(), "UTF-8");
@@ -182,8 +182,7 @@ public final class ClassUtil {
 		while (jarEntries.hasMoreElements()) {
 			String entryName = jarEntries.nextElement().getName().replace("/", ".");
 			if (entryName.startsWith(pkg) && entryName.endsWith(CLASS_SUFIX)) {
-				entryName = entryName.substring(0,
-						entryName.lastIndexOf('.'));
+				entryName = entryName.substring(0, entryName.lastIndexOf('.'));
 				try {
 					classes.add(Class.forName(entryName));
 				} catch (Throwable e) {
@@ -216,8 +215,7 @@ public final class ClassUtil {
 			if (file.isDirectory()) {
 				classes.addAll(getClasses(file, packageName + "." + file.getName()));
 			} else if (file.getName().endsWith(CLASS_SUFIX)) {
-				String clsName = packageName + '.'
-						+ file.getName().substring(0, file.getName().lastIndexOf("."));
+				String clsName = packageName + '.' + file.getName().substring(0, file.getName().lastIndexOf("."));
 				try {
 					classes.add(Class.forName(clsName));
 				} catch (ClassNotFoundException e) {
@@ -237,8 +235,7 @@ public final class ClassUtil {
 	 * @return
 	 * @throws NoSuchMethodException
 	 */
-	public static Method getMethod(Class<?> clazz, String name)
-			throws NoSuchMethodException {
+	public static Method getMethod(Class<?> clazz, String name) throws NoSuchMethodException {
 		Method[] methods = clazz.getMethods();
 		for (Method m : methods) {
 			if (m.getName().equalsIgnoreCase(name)) {
@@ -264,11 +261,10 @@ public final class ClassUtil {
 	public static Field[] getAllFields(Class<?> clazz, Class<?> uptoParent) {
 		Collection<Field> fields = new HashSet<Field>();
 		fields.addAll(Arrays.asList(clazz.getDeclaredFields()));
-		if ((clazz.getSuperclass() != null)
-				&& !clazz.getSuperclass().equals(uptoParent)) {
+		if ((clazz.getSuperclass() != null) && !clazz.getSuperclass().equals(uptoParent)) {
 			fields.addAll(Arrays.asList(getAllFields(clazz.getSuperclass(), uptoParent)));
 		}
-		return fields.toArray(new Field[]{});
+		return fields.toArray(new Field[] {});
 	}
 
 	public static void extractInterfaces(Set<Class<?>> iSet, Class<?> clazz) {
@@ -290,9 +286,8 @@ public final class ClassUtil {
 	@SuppressWarnings("unchecked")
 	public static <C> C getInstance() {
 		try {
-			Class<C> class1 = (Class<C>) ((ParameterizedType) ClassUtil.class
-					.getMethod("getInstance").getGenericReturnType())
-							.getActualTypeArguments()[0].getClass();
+			Class<C> class1 = (Class<C>) ((ParameterizedType) ClassUtil.class.getMethod("getInstance")
+					.getGenericReturnType()).getActualTypeArguments()[0].getClass();
 
 			return class1.newInstance();
 		} catch (Exception e) {
@@ -323,8 +318,7 @@ public final class ClassUtil {
 		return signBuilder.toString();
 	}
 
-	public static Class getTemplateParameterOfInterface(Class base,
-			Class desiredInterface) {
+	public static Class getTemplateParameterOfInterface(Class base, Class desiredInterface) {
 		Object rtn = getSomething(base, desiredInterface);
 		if ((rtn != null) && (rtn instanceof Class)) {
 			return (Class) rtn;
@@ -410,8 +404,7 @@ public final class ClassUtil {
 	 *            interface method
 	 * @return
 	 */
-	public static Type getGenericReturnTypeOfGenericInterfaceMethod(Class clazz,
-			Method method) {
+	public static Type getGenericReturnTypeOfGenericInterfaceMethod(Class clazz, Method method) {
 		if (!method.getDeclaringClass().isInterface()) {
 			return method.getGenericReturnType();
 		}
@@ -443,8 +436,7 @@ public final class ClassUtil {
 	 *            interface method
 	 * @return
 	 */
-	public static Type[] getGenericParameterTypesOfGenericInterfaceMethod(Class clazz,
-			Method method) {
+	public static Type[] getGenericParameterTypesOfGenericInterfaceMethod(Class clazz, Method method) {
 		if (!method.getDeclaringClass().isInterface()) {
 			return method.getGenericParameterTypes();
 		}
@@ -469,8 +461,7 @@ public final class ClassUtil {
 			return (Class<?>) rawType;
 		} else if (type instanceof GenericArrayType) {
 			final GenericArrayType genericArrayType = (GenericArrayType) type;
-			final Class<?> componentRawType =
-					getRawType(genericArrayType.getGenericComponentType());
+			final Class<?> componentRawType = getRawType(genericArrayType.getGenericComponentType());
 			return Array.newInstance(componentRawType, 0).getClass();
 		} else if (type instanceof TypeVariable) {
 			final TypeVariable typeVar = (TypeVariable) type;
@@ -492,8 +483,7 @@ public final class ClassUtil {
 			return (Class<?>) rawType;
 		} else if (type instanceof GenericArrayType) {
 			final GenericArrayType genericArrayType = (GenericArrayType) type;
-			final Class<?> componentRawType =
-					getRawType(genericArrayType.getGenericComponentType());
+			final Class<?> componentRawType = getRawType(genericArrayType.getGenericComponentType());
 			return Array.newInstance(componentRawType, 0).getClass();
 		}
 		return null;
@@ -574,16 +564,13 @@ public final class ClassUtil {
 	 * @param typevariable
 	 * @return actual type of the type variable
 	 */
-	public static Type getActualValueOfTypevariable(Class<?> clazz,
-			TypeVariable<?> typevariable) {
+	public static Type getActualValueOfTypevariable(Class<?> clazz, TypeVariable<?> typevariable) {
 		if (typevariable.getGenericDeclaration() instanceof Class<?>) {
-			Class<?> classDeclaringTypevariable =
-					(Class<?>) typevariable.getGenericDeclaration();
+			Class<?> classDeclaringTypevariable = (Class<?>) typevariable.getGenericDeclaration();
 
 			// find the generic version of classDeclaringTypevariable
 
-			Type fromInterface = getTypeVariableViaGenericInterface(clazz,
-					classDeclaringTypevariable, typevariable);
+			Type fromInterface = getTypeVariableViaGenericInterface(clazz, classDeclaringTypevariable, typevariable);
 			if (fromInterface != null) {
 				return fromInterface;
 			}
@@ -591,13 +578,10 @@ public final class ClassUtil {
 			while (clazz.getSuperclass() != null) {
 				if (clazz.getSuperclass().equals(classDeclaringTypevariable)) {
 					// found it
-					ParameterizedType parameterizedSuperclass =
-							(ParameterizedType) clazz.getGenericSuperclass();
+					ParameterizedType parameterizedSuperclass = (ParameterizedType) clazz.getGenericSuperclass();
 
-					for (int i = 0; i < classDeclaringTypevariable
-							.getTypeParameters().length; i++) {
-						TypeVariable<?> tv =
-								classDeclaringTypevariable.getTypeParameters()[i];
+					for (int i = 0; i < classDeclaringTypevariable.getTypeParameters().length; i++) {
+						TypeVariable<?> tv = classDeclaringTypevariable.getTypeParameters()[i];
 						if (tv.equals(typevariable)) {
 							return parameterizedSuperclass.getActualTypeArguments()[i];
 						}
@@ -608,8 +592,7 @@ public final class ClassUtil {
 			}
 		}
 
-		throw new RuntimeException(
-				"Unable to determine value of type parameter " + typevariable);
+		throw new RuntimeException("Unable to determine value of type parameter " + typevariable);
 	}
 
 	public static void setField(String fieldName, Object classObj, Object value) {
@@ -619,8 +602,7 @@ public final class ClassUtil {
 			try {
 				field = classObj.getClass().getField(fieldName);
 			} catch (NoSuchFieldException e) {
-				Field[] fields =
-						ClassUtil.getAllFields(classObj.getClass(), Object.class);
+				Field[] fields = ClassUtil.getAllFields(classObj.getClass(), Object.class);
 				for (Field f : fields) {
 					if (f.getName().equalsIgnoreCase(fieldName)) {
 						field = f;
@@ -640,34 +622,30 @@ public final class ClassUtil {
 
 	}
 
-	private static Type getTypeVariableViaGenericInterface(Class<?> clazz,
-			Class<?> classDeclaringTypevariable, TypeVariable<?> typevariable) {
+	private static Type getTypeVariableViaGenericInterface(Class<?> clazz, Class<?> classDeclaringTypevariable,
+			TypeVariable<?> typevariable) {
 		for (Type genericInterface : clazz.getGenericInterfaces()) {
 
 			if (genericInterface instanceof ParameterizedType) {
-				ParameterizedType parameterizedType =
-						(ParameterizedType) genericInterface;
+				ParameterizedType parameterizedType = (ParameterizedType) genericInterface;
 
-				for (int i = 0; i < classDeclaringTypevariable
-						.getTypeParameters().length; i++) {
-					TypeVariable<?> tv =
-							classDeclaringTypevariable.getTypeParameters()[i];
+				for (int i = 0; i < classDeclaringTypevariable.getTypeParameters().length; i++) {
+					TypeVariable<?> tv = classDeclaringTypevariable.getTypeParameters()[i];
 					if (tv.equals(typevariable)) {
 						return parameterizedType.getActualTypeArguments()[i];
 					}
 				}
 			} else if (genericInterface instanceof Class) {
-				return getTypeVariableViaGenericInterface((Class<?>) genericInterface,
-						classDeclaringTypevariable, typevariable);
+				return getTypeVariableViaGenericInterface((Class<?>) genericInterface, classDeclaringTypevariable,
+						typevariable);
 			}
 		}
 		return null;
 	}
 
-	private static final Set<Class<?>> WRAPPER_TYPES =
-			new HashSet<Class<?>>(Arrays.asList(new Class<?>[]{Boolean.class,
-					Character.class, Byte.class, Short.class, Integer.class, Long.class,
-					Float.class, Double.class, Void.class, String.class}));
+	private static final Set<Class<?>> WRAPPER_TYPES = new HashSet<Class<?>>(
+			Arrays.asList(new Class<?>[] { Boolean.class, Character.class, Byte.class, Short.class, Integer.class,
+					Long.class, Float.class, Double.class, Void.class, String.class }));
 
 	/**
 	 * @param clazz

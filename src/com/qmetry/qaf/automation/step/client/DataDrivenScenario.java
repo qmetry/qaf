@@ -29,18 +29,29 @@ import static com.qmetry.qaf.automation.core.ConfigurationManager.getBundle;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.testng.ITestContext;
+import org.testng.ITestNGMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import org.testng.internal.ClassHelper;
+import org.testng.internal.Configuration;
+import org.testng.internal.MethodInvocationHelper;
+import org.testng.internal.annotations.IAnnotationFinder;
+import org.testng.internal.collections.ArrayIterator;
 
+import com.qmetry.qaf.automation.core.AutomationError;
 import com.qmetry.qaf.automation.step.StringTestStep;
 import com.qmetry.qaf.automation.step.TestStep;
 import com.qmetry.qaf.automation.testng.dataprovider.QAFDataProvider.dataproviders;
 import com.qmetry.qaf.automation.testng.dataprovider.QAFDataProvider.params;
 import com.qmetry.qaf.automation.testng.pro.DataProviderUtil;
 import com.qmetry.qaf.automation.util.CSVUtil;
+import com.qmetry.qaf.automation.util.ClassUtil;
 import com.qmetry.qaf.automation.util.DatabaseUtil;
 import com.qmetry.qaf.automation.util.ExcelUtil;
 import com.qmetry.qaf.automation.util.JSONUtil;
@@ -89,47 +100,80 @@ public class DataDrivenScenario extends Scenario {
 		return getPackage() + "." + scenarioName + "( " + Map.class.getName() + ")";
 	}
 
-	@DataProvider(name = "scenariodp")
-	public Object[][] dp(Method m) {
+	@DataProvider(name = "scenariodp", parallel=true)
+	public Iterator<Object[]> dp(ITestNGMethod tm, ITestContext c) {
+		System.out.println(dataProviderDesc);
 		dataProviderDesc = getBundle().getSubstitutor().replace(dataProviderDesc);
 		Map<String, String> param = StringUtil
 				.toMap(StringUtil.parseCSV(dataProviderDesc, getBundle().getListDelimiter()), true);
+		System.out.println(param);
+
+		if(param.containsKey(params.DATAPROVIDER.name())){
+			return invokeCustomDataProvider(tm,  c, param.get(params.DATAPROVIDER.name()), param.get(params.DATAPROVIDERCLASS.name()));
+		}
 		String dataproviderName = DataProviderUtil.getDataProvider(param);
 		if (dataproviderName.equalsIgnoreCase(dataproviders.isfw_excel.name())) {
-			return ExcelUtil.getExcelDataAsMap(param.get(params.DATAFILE.name()), param.get(params.SHEETNAME.name()));
+			return new ArrayIterator(ExcelUtil.getExcelDataAsMap(param.get(params.DATAFILE.name()), param.get(params.SHEETNAME.name())));
 		}
 
 		if (dataproviderName.equalsIgnoreCase(dataproviders.isfw_excel_table.name())) {
-			return ExcelUtil.getTableDataAsMap(param.get(params.DATAFILE.name()), (param.get(params.KEY.name())),
-					param.get(params.SHEETNAME.name()));
+			return new ArrayIterator(ExcelUtil.getTableDataAsMap(param.get(params.DATAFILE.name()), (param.get(params.KEY.name())),
+					param.get(params.SHEETNAME.name())));
 		}
 
 		if (dataproviderName.equalsIgnoreCase(dataproviders.isfw_csv.name())) {
-			return CSVUtil.getCSVDataAsMap(param.get(params.DATAFILE.name())).toArray(new Object[][] {});
+			return CSVUtil.getCSVDataAsMap(param.get(params.DATAFILE.name())).iterator();
 		}
 
 		if (dataproviderName.equalsIgnoreCase(dataproviders.isfw_database.name())) {
 			String query = param.get(params.SQLQUERY.name());
-
-			return DatabaseUtil.getRecordDataAsMap(query);
-
+			return new ArrayIterator(DatabaseUtil.getRecordDataAsMap(query));
 		}
 		if (dataproviderName.equalsIgnoreCase(dataproviders.isfw_property.name())) {
 			List<Object[]> mapData = DataProviderUtil.getDataSetAsMap(param.get(params.KEY.name()));
 
-			return mapData.toArray(new Object[][] {});
+			return mapData.iterator();
 
 		}
 
 		if (dataproviderName.equalsIgnoreCase(dataproviders.isfw_json.name())) {
 			if(param.containsKey(params.JSON_DATA_TABLE.name()))
-				return JSONUtil.getJsonArrayOfMaps(param.get(params.JSON_DATA_TABLE.name()));
+				return new ArrayIterator(JSONUtil.getJsonArrayOfMaps(param.get(params.JSON_DATA_TABLE.name())));
 			
-			return JSONUtil.getJsonArrayOfMaps(param.get(params.DATAFILE.name()));
+			return new ArrayIterator(JSONUtil.getJsonArrayOfMaps(param.get(params.DATAFILE.name())));
 		}
 		throw new RuntimeException("No data provider found");
 	}
 
+	private Iterator<Object[]> invokeCustomDataProvider(ITestNGMethod tm, ITestContext c, String dp, String dpc) {
+		if(StringUtil.isBlank(dpc)){
+			dpc=getBundle().getString("global.dataproviderclass",getBundle().getString("dataproviderclass"));
+		}
+		if(StringUtil.isNotBlank(dpc)){
+			Method m = getDataProviderMethod(dp, dpc);
+			Object instanceToUse = ClassHelper.newInstanceOrNull(m.getDeclaringClass());
+			return InvocatoinHelper.invokeDataProvider(instanceToUse, m, tm, c, null, new Configuration().getAnnotationFinder());
+		}else{
+			throw new AutomationError("Data-provider class not found. Please provide fully qualified class name as dataProviderClass");
+		}
+	}
+
+	private Method getDataProviderMethod(String dp, String dpc){
+		try {
+			Class<?> dpClass = Class.forName(dpc);
+			Set<Method> dpMethods = ClassUtil.getAllMethodsWithAnnotation(dpClass, DataProvider.class);
+			for(Method m : dpMethods){
+				DataProvider dpObj = ClassUtil.getAnnotation(m, DataProvider.class);
+				if(dp.equalsIgnoreCase(dpObj.name())){
+					//this is the mehod we are lo
+					return m;
+				}
+			}
+		} catch (ClassNotFoundException e) {
+			throw new AutomationError("Data-provider class " + dpc + " not found. Please provide fully qualified class name as dataProviderClass");
+		}
+		throw new AutomationError("Data-provider: '" + dp + "' not found in class: '"+ dpc+ "'. Please provide valid data provider name as dataProvider");
+	}
 	private TestStep[] getStepsToExecute(Map<String, Object> context) {
 		TestStep[] proxySteps = new TestStep[steps.size()];
 		int stepIndex = 0;
@@ -146,6 +190,14 @@ public class DataDrivenScenario extends Scenario {
 		}
 
 		return proxySteps;
+	}
+	
+	private static class InvocatoinHelper extends MethodInvocationHelper{
+		  protected static Iterator<Object[]> invokeDataProvider(Object instance, Method dataProvider,
+			      ITestNGMethod method, ITestContext testContext, Object fedInstance,
+			      IAnnotationFinder annotationFinder) {
+			  return MethodInvocationHelper.invokeDataProvider(instance, dataProvider, method, testContext, fedInstance, annotationFinder);
+		  }
 	}
 
 }
