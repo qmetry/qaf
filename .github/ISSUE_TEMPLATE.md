@@ -9,10 +9,10 @@
 
 ### Is the issue reproductible on runner?
 
-- [ ] QAS
+- [x] QAS
 - [ ] Maven
 - [ ] Gradle
-- [ ] Ant
+- [x] Ant
 - [ ] Eclipse
 
 
