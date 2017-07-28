@@ -3,12 +3,14 @@
   <groupId>com.qmetry</groupId>
   <artifactId>qaf-support-ws</artifactId>
   <versioning>
-    <latest>6.9.10</latest>
+    <latest>6.10</latest>
     <release>6.8.5</release>
     <versions>
       <version>6.8.5</version>
       <version>6.9.10</version>
+      <version>6.10</version>
+      
     </versions>
-    <lastUpdated>20170726141531</lastUpdated>
+    <lastUpdated>20170727221531</lastUpdated>
   </versioning>
 </metadata>
