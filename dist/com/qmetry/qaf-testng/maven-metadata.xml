@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <metadata>
   <groupId>com.qmetry</groupId>
-  <artifactId>qaf-support-ws</artifactId>
+  <artifactId>qaf-testng</artifactId>
   <versioning>
     <latest>6.10</latest>
     <release>6.8.5</release>
@@ -9,8 +9,9 @@
       <version>6.8.5</version>
       <version>6.9.10</version>
       <version>6.10</version>
+      <version>6.11-beta</version>
       
     </versions>
-    <lastUpdated>20170727221531</lastUpdated>
+    <lastUpdated>20170727225031</lastUpdated>
   </versioning>
 </metadata>

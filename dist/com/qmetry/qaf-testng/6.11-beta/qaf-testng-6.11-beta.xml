@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ QMetry Automation Framework provides a powerful and versatile platform to author
+ Automated Test Cases in Behavior Driven, Keyword Driven or Code Driven approach
+ 
+ Copyright 2016 Infostretch Corporation
+ 
+ This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
+ 
+ This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ 
+ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+ OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT
+ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE
+ 
+ You should have received a copy of the GNU General Public License along with this program in the name of LICENSE.txt in the root folder of the distribution. If not, see https://opensource.org/licenses/gpl-3.0.html
+ 
+ See the NOTICE.TXT file in root folder of this source files distribution
+ for additional information regarding copyright ownership and licenses
+ of other open source software / files used by QMetry Automation Framework.
+ 
+ For any inquiry or need additional information, please contact support-qaf@infostretch.com
+ 
+ -->
+<ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
+	<info organisation="com.qmetry" module="qaf-testng" revision="6.11-beta" status="integration" publication="20170727225113">
+	</info>
+	
+	<configurations>
+        <conf name="compile" description="Required to compile application"/>
+        <conf name="runtime" description="Additional run-time dependencies" extends="compile"/>
+        <conf name="test" description="Required for test only" extends="runtime"/>
+        <conf name="provided" description="Needed for compile, but will be present on the target platform."/>
+    </configurations>
+    
+	<dependencies>
+		<dependency org="org.testng" name="testng" rev="6.11" conf="compile->default">
+			<artifact name="testng" type="jar"/>
+		</dependency>
+		<dependency org="com.qmetry" name="qaf" rev="2.1.11" conf="provided->default"/>
+	</dependencies>
+</ivy-module>
