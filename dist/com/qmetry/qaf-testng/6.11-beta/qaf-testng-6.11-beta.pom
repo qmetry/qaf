@@ -14,10 +14,10 @@
   <version>6.11-beta</version>
   <dependencies>
     <dependency>
-      <groupId>org.testng</groupId>
-      <artifactId>testng</artifactId>
-      <version>6.11</version>
-      <scope>compile</scope>
+      <groupId>com.qmetry</groupId>
+      <artifactId>qaf</artifactId>
+      <version>2.1.8</version>
+      <optional>true</optional>
       <exclusions>
         <exclusion>
           <groupId>*</groupId>
@@ -26,10 +26,10 @@
       </exclusions>
     </dependency>
     <dependency>
-      <groupId>com.qmetry</groupId>
-      <artifactId>qaf</artifactId>
-      <version>2.1.11</version>
-      <optional>true</optional>
+      <groupId>org.testng</groupId>
+      <artifactId>testng</artifactId>
+      <version>6.11</version>
+      <scope>compile</scope>
     </dependency>
   </dependencies>
 </project>
