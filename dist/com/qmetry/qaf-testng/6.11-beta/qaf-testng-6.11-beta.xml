@@ -23,7 +23,7 @@
  
  -->
 <ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
-	<info organisation="com.qmetry" module="qaf-testng" revision="6.11-beta" status="integration" publication="20170730123755">
+	<info organisation="com.qmetry" module="qaf-testng" revision="6.11-beta" status="integration" publication="20170730153811">
 	</info>
 	
 	<configurations>
@@ -37,6 +37,6 @@
 		<dependency org="org.testng" name="testng" rev="6.11" force="true" transitive="false">
 			<artifact name="testng" type="jar"/>
 		</dependency>
-		<dependency org="com.qmetry" name="qaf" rev="2.1.11" conf="test->default"/>
+		<dependency org="com.qmetry" name="qaf" rev="2.1.11" conf="provided->*" force="false"/>
 	</dependencies>
 </ivy-module>
