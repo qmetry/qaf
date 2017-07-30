@@ -17,7 +17,13 @@
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
       <version>6.11</version>
-      <optional>true</optional>
+      <scope>compile</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>com.qmetry</groupId>
