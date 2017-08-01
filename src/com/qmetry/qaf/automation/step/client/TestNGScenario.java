@@ -21,7 +21,6 @@
  * For any inquiry or need additional information, please contact support-qaf@infostretch.com
  *******************************************************************************/
 
-
 package com.qmetry.qaf.automation.step.client;
 
 import static com.qmetry.qaf.automation.data.MetaDataScanner.getMetadata;
@@ -33,6 +32,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.testng.internal.TestNGMethod;
 import org.testng.internal.annotations.IAnnotationFinder;
+import org.testng.xml.XmlSuite.ParallelMode;
 import org.testng.xml.XmlTest;
 
 /**
@@ -57,7 +57,10 @@ public class TestNGScenario extends TestNGMethod {
 	private void init(Object instance) {
 		if (Scenario.class.isAssignableFrom(getRealClass())) {
 			scenario = (Scenario) instance;
-			setPriority(scenario.getPriority());
+			if (scenario.getPriority() < 1000 || !getXmlTest().getParallel().isParallel()
+					|| getXmlTest().getParallel().equals(ParallelMode.TESTS)) {
+				setPriority(scenario.getPriority());
+			}
 			setGroups(scenario.getM_groups());
 			setGroupsDependedUpon(scenario.getM_groupsDependedUpon(), new ArrayList<String>());
 			setMethodsDependedUpon(scenario.getM_methodsDependedUpon());
