@@ -384,17 +384,14 @@ public class QAFExtendedWebElement extends RemoteWebElement implements QAFWebEle
 				return Lists.newArrayList(Iterables.transform(results, this));
 			}
 
-			if (result instanceof Map<?, ?>) {
-				return super.apply(result);
-			}
-
-			if (result instanceof Number) {
-				if ((result instanceof Float) || (result instanceof Double)) {
-					return ((Number) result).doubleValue();
+			result = super.apply(result);
+			if(result instanceof RemoteWebElement){
+				if(!(result instanceof QAFExtendedWebElement)){
+					QAFExtendedWebElement ele = newRemoteWebElement();
+					ele.setId(((RemoteWebElement)result).getId());
+					return ele;
 				}
-				return ((Number) result).longValue();
 			}
-
 			return result;
 		}
 
@@ -1170,5 +1167,4 @@ public class QAFExtendedWebElement extends RemoteWebElement implements QAFWebEle
 	public List<WebElement> findElementsByCustomStretegy(String stetegy, String loc) {
 		return (List<WebElement>) (List<? extends WebElement>) findElements(stetegy, loc);
 	}
-
 }
