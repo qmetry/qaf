@@ -1,5 +1,5 @@
 {
-  "name": "QAS Demo",
+  "name": "QAF Demo",
   "status": "pass",
   "tests": [
     "AppiumContactManager"
