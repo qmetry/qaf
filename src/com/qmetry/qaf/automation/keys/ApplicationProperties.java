@@ -21,7 +21,6 @@
  * For any inquiry or need additional information, please contact support-qaf@infostretch.com
  *******************************************************************************/
 
-
 package com.qmetry.qaf.automation.keys;
 
 import org.apache.commons.lang.StringUtils;
@@ -83,10 +82,11 @@ public enum ApplicationProperties {
 	 * <b>value</b>: flag to auto shutdown selenium server
 	 */
 	SELENIUM_AUTO_SHUTDOWN("selenium.auto.shutdown"),
-	
+
 	/**
 	 * <b>key</b>: <code> tng.context </code><br/>
-	 * <b>value</b>: {@link ITestContext} object for current running thread/test-case.
+	 * <b>value</b>: {@link ITestContext} object for current running
+	 * thread/test-case.
 	 * 
 	 */
 	CURRENT_TEST_CONTEXT("tng.context"),
@@ -104,7 +104,8 @@ public enum ApplicationProperties {
 	CURRENT_TEST_DESCRIPTION("current.testcase.desc"),
 	/**
 	 * <b>key</b>: <code> current.testcase.result </code><br/>
-	 * <b>value</b>: {@link ITestResult} object for the current running test case.
+	 * <b>value</b>: {@link ITestResult} object for the current running test
+	 * case.
 	 * 
 	 * @since 2.1.9
 	 */
@@ -117,6 +118,17 @@ public enum ApplicationProperties {
 	 * @since 2.1.6
 	 */
 	DRIVER_NAME("driver.name"),
+	/**
+	 * <b>key</b>: <code> driver.resources.format </code><br/>
+	 * <b>value</b>: file or directory to load driver specific resources, for
+	 * instance driver specific locators. If you specified driver.name
+	 * <code>androidDriver</code> or <code>androidRemoteDriver</code> you can
+	 * specify resources for android driver by using
+	 * <code>android.resources</code> key.
+	 * 
+	 * @since 2.1.12
+	 */
+	DRIVER_RESOURCES_FORMAT("%s.resources"),
 	/**
 	 * <b>key</b>: <code> driver.init.retry.timeout </code><br/>
 	 * <b>value</b>: duration in multiplication of 10 seconds for example 50.
@@ -358,9 +370,9 @@ public enum ApplicationProperties {
 	/**
 	 * <b>key</b>: <code> qc.runname.generator.impl</code><br/>
 	 * <b>value</b>: qualified class name that implements
-	 * com.qmetry.qaf.automation.integration.qc.QCRunNameGenerator interface.
-	 * It can be used to generate name in custom format for auto-generated set
-	 * and run name
+	 * com.qmetry.qaf.automation.integration.qc.QCRunNameGenerator interface. It
+	 * can be used to generate name in custom format for auto-generated set and
+	 * run name
 	 */
 	QC_RUN_NAME_GENERATOR("qc.runname.generator.impl"),
 	/**
@@ -424,8 +436,10 @@ public enum ApplicationProperties {
 	ISFW_BUILD_INFO("isfw.build.info"),
 	/**
 	 * <b>key</b>: <code>qaf.listeners</code><br/>
-	 * <b>value</b>: list of qaf listeners (fully qualified class name
-	 * that implements any of {@link QAFTestStepListener}, {@link QAFWebDriverCommandListener}, {@link QAFWebElementCommandListener}) to be registered.
+	 * <b>value</b>: list of qaf listeners (fully qualified class name that
+	 * implements any of {@link QAFTestStepListener},
+	 * {@link QAFWebDriverCommandListener},
+	 * {@link QAFWebElementCommandListener}) to be registered.
 	 * 
 	 * @see QAFListener
 	 */
@@ -506,16 +520,15 @@ public enum ApplicationProperties {
 	 * configuration .
 	 */
 	BEAN_POPULATE_RANDOM("bean.populate.random"),
-	
+
 	DRY_RUN_MODE("dryrun.mode"),
-	
+
 	/**
-	 * @since 2.1.11
-	 * <b>key</b>: <code>rest.client.impl</code><br/>
-	 * <b>value</b>: full qualified name of the class that extends {@link RestClientFactory}.
+	 * @since 2.1.11 <b>key</b>: <code>rest.client.impl</code><br/>
+	 *        <b>value</b>: full qualified name of the class that extends
+	 *        {@link RestClientFactory}.
 	 */
 	REST_CLIENT_FACTORY_IMPL("rest.client.impl");
-
 
 	public String key;
 
@@ -563,9 +576,10 @@ public enum ApplicationProperties {
 		}
 		return (null != defaultVal) && (defaultVal.length > 0) && defaultVal[0];
 	}
-	
-	public Object getObject(Object... defaultVal){
+
+	public Object getObject(Object... defaultVal) {
 		Object objToReturn = ConfigurationManager.getBundle().getObject(key);
-		return null!=objToReturn? objToReturn:(null != defaultVal) && (defaultVal.length > 0) ?defaultVal[0]:null;
+		return null != objToReturn ? objToReturn
+				: (null != defaultVal) && (defaultVal.length > 0) ? defaultVal[0] : null;
 	}
 }
