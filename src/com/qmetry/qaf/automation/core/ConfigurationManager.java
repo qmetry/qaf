@@ -105,6 +105,9 @@ public class ConfigurationManager {
 							System.getProperty("application.properties.file",
 									"resources/application.properties"));
 					p.setProperty("isfw.build.info", getBuildInfo());
+					File prjDir = new File(".").getAbsoluteFile().getParentFile();
+					p.setProperty("project.path", prjDir.getAbsolutePath());
+					p.setProperty("project.name", prjDir.getName());
 
 					log.info("ISFW build info: " + p.getProperty("isfw.build.info"));
 					String[] resources = p.getStringArray("env.resources", "resources");
