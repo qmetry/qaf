@@ -365,6 +365,9 @@ public class ConfigurationManager {
 						|| key.equalsIgnoreCase(ApplicationProperties.REMOTE_SERVER.key)
 						|| key.equalsIgnoreCase(ApplicationProperties.REMOTE_PORT.key)) {
 					TestBaseProvider.instance().get().tearDown();
+					if(key.equalsIgnoreCase(ApplicationProperties.DRIVER_NAME.key)){
+						TestBaseProvider.instance().get().setDriver((String)value);
+					}
 				}
 				String[] bundles = null;
 
