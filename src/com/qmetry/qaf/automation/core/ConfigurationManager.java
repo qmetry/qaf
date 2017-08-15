@@ -107,6 +107,7 @@ public class ConfigurationManager {
 					p.setProperty("isfw.build.info", getBuildInfo());
 					File prjDir = new File(".").getAbsoluteFile().getParentFile();
 					p.setProperty("project.path", prjDir.getAbsolutePath());
+					if(!p.containsKey("project.name"))
 					p.setProperty("project.name", prjDir.getName());
 
 					log.info("ISFW build info: " + p.getProperty("isfw.build.info"));
