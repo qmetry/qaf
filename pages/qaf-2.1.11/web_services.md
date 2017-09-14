@@ -52,4 +52,4 @@ public class Wstest extends RestWSTestCase {
 }
 ```
 
-For more reference visit [Jersey Client API Documentation](https://jersey.java.net/documentation/1.19/client-api.html).
+For more reference visit [Jersey Client API Documentation](https://jersey.github.io/documentation/1.19/client-api.html).
