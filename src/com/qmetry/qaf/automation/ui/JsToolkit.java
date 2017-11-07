@@ -40,18 +40,23 @@ public enum JsToolkit {
 		this.identifier = identifier;
 		this.expr = expr;
 	}
-
+	
+	
 
 	public String waitCondition() {
-		return "return (!" + identifier + " || " + expr + ");";
+		return "return " + getExpr() +";";
 	}
 
 	public static String globalWaitCondition() {
 		StringBuilder sb = new StringBuilder("return ");
 		for(JsToolkit toolkit: JsToolkit.values()){
-			sb.append(" (!"+ toolkit.identifier + " || " + toolkit.expr + ") &&");
+			sb.append(" ("+ toolkit.getExpr() + ") &&");
 		}
 		sb.append(";");
 		return sb.toString().replace(" &&;", ";");
+	}
+	
+	public String getExpr(){
+		return "((typeof "+ identifier +" === 'undefined') || (" + expr + "))";
 	}
 }

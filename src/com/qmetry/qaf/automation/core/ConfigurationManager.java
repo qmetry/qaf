@@ -105,6 +105,10 @@ public class ConfigurationManager {
 							System.getProperty("application.properties.file",
 									"resources/application.properties"));
 					p.setProperty("isfw.build.info", getBuildInfo());
+					File prjDir = new File(".").getAbsoluteFile().getParentFile();
+					p.setProperty("project.path", prjDir.getAbsolutePath());
+					if(!p.containsKey("project.name"))
+					p.setProperty("project.name", prjDir.getName());
 
 					log.info("ISFW build info: " + p.getProperty("isfw.build.info"));
 					String[] resources = p.getStringArray("env.resources", "resources");
@@ -365,6 +369,9 @@ public class ConfigurationManager {
 						|| key.equalsIgnoreCase(ApplicationProperties.REMOTE_SERVER.key)
 						|| key.equalsIgnoreCase(ApplicationProperties.REMOTE_PORT.key)) {
 					TestBaseProvider.instance().get().tearDown();
+					if(key.equalsIgnoreCase(ApplicationProperties.DRIVER_NAME.key)){
+						TestBaseProvider.instance().get().setDriver((String)value);
+					}
 				}
 				String[] bundles = null;
 

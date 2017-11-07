@@ -219,6 +219,7 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 						STBArgs.sel_server.getFrom(args), STBArgs.port.getFrom(args));
 
 		Browsers browser = Browsers.getBrowser(b);
+		loadDriverResouces(browser.browserName);
 
 		ConfigurationManager.getBundle().setProperty("driver.desiredCapabilities",
 				browser.getDesiredCapabilities().asMap());
@@ -229,6 +230,16 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 				driver.getCapabilities().asMap());
 		return driver;
 
+	}
+
+	private static void loadDriverResouces(String browserName){
+		String driverResourcesKey = String.format(
+				ApplicationProperties.DRIVER_RESOURCES_FORMAT.key,
+				browserName);
+		String driverResources = ConfigurationManager.getBundle().getString(driverResourcesKey,"");
+		if(StringUtil.isNotBlank(driverResources)){
+			ConfigurationManager.addBundle(driverResources);
+		}
 	}
 
 	private static WebDriver getDriverObj(Class<? extends WebDriver> of,
