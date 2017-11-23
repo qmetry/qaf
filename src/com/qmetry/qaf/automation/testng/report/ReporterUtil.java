@@ -245,7 +245,7 @@ public class ReporterUtil {
 
 			updateOverview(context, result);
 
-			String fileName = getMethodName(result);
+			String fileName = getMethodName(result).replaceAll("[^a-zA-Z0-9\\-]", "_");
 			String methodResultFile = dir + "/" + fileName;
 
 			File f = new File(methodResultFile + ".json");
@@ -257,7 +257,7 @@ public class ReporterUtil {
 				methodResultFile = dir + "/" + fileName;
 				updateClassMetaInfo(context, result, fileName);
 			} else {
-				updateClassMetaInfo(context, result, "");
+				updateClassMetaInfo(context, result, fileName);
 			}
 
 			writeJsonObjectToFile(methodResultFile + ".json", methodResult);
