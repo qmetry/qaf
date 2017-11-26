@@ -12,7 +12,7 @@
 ### Actual behavior
 
 
-### Is the issue reproductible on runner?
+### Is the issue reproducible on runner?
 
 - [x] QAS
 - [ ] Maven

@@ -461,7 +461,7 @@ public class QAFTestBase {
 		String filename = "";
 		try {
 			filename = FileUtil.saveImageFile(base64Image,
-					StringUtil.createRandomString(getTestCaseName()), getScreenShotDir());
+					StringUtil.createRandomString(getTestCaseName().replaceAll("[^a-zA-Z0-9\\-]", "_")), getScreenShotDir());
 			lastCapturedScreenShot = filename;
 			logger.info("Capturing screen shot" + lastCapturedScreenShot);
 
