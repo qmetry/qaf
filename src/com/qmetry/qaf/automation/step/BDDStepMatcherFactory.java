@@ -63,11 +63,10 @@ public class BDDStepMatcherFactory {
 		}
 
 		@Override
-		public List<String[]> getArgsFromCall(String stepDescription, String stepCall,Map<String, Object> context) {
+		public List<String[]> getArgsFromCall(String stepDescription, String stepCall, Map<String, Object> context) {
 			stepCall = BDDDefinitionHelper.quoteParams(stepCall);
 			return BDDDefinitionHelper.getArgsFromCall(stepDescription, stepCall);
 		}
-		
 
 	}
 
@@ -83,35 +82,55 @@ public class BDDStepMatcherFactory {
 		public List<String[]> getArgsFromCall(String stepDescription, String stepCall, Map<String, Object> context) {
 			List<String[]> args = new ArrayList<String[]>();
 			stepCall = replaceParams(stepCall, context);
-			  Matcher matcher = getPattern(stepDescription)
-					    .matcher(stepCall);
-					  while (matcher.find()) {
-					   for (int i = 1; i <= matcher.groupCount(); i++){
-						   String arg = matcher.group(i);
-						   args.add(new String[]{arg,ParamType.getType(arg).name()});
-					   }
-					  
-					 }
-					 return args;
+			Matcher matcher = getMatcher(stepDescription, stepCall);
+			while (matcher.find()) {
+				for (int i = 1; i <= matcher.groupCount(); i++) {
+					String arg = matcher.group(i);
+					args.add(new String[] { arg, ParamType.getType(arg).name() });
+				}
+			}
+			return args;
 		}
-		
-		private String replaceParams(String stepCall , Map<String, Object> context){
+
+		private String replaceParams(String stepCall, Map<String, Object> context) {
 			stepCall = StrSubstitutor.replace(stepCall, context);
 			stepCall = getBundle().getSubstitutor().replace(stepCall);
 			return stepCall;
 		}
 
+		private Matcher getMatcher(String stepDescription, String stepName) {
+			Pattern pattern = getPattern(opArgs(stepDescription));
+
+			if (pattern.matcher(stepName).lookingAt()) {
+				return pattern.matcher(stepName);
+			}
+			pattern = getPattern(stepDescription);
+			return pattern.matcher(stepName);
+		}
+
 		private Pattern getPattern(String stepDescription) {
 			if (stepDescription.endsWith(":$")) {
 				String exp = "(.+)";
-				stepDescription =
-						StringUtil.replace(stepDescription, ":$", ":" + exp + "$", 1);
+				stepDescription = StringUtil.replace(stepDescription, ":$", ":" + exp + "$", 1);
 			}
 			return Pattern.compile(stepDescription, Pattern.CASE_INSENSITIVE);
 		}
 
+		private static String opArgs(String stepDescription) {
+			String st = Pattern.quote("(?:");
+			String end = Pattern.quote(")?");
+			Pattern pattern = Pattern.compile(st + ".*" + end);
+			Matcher matcher = pattern.matcher(stepDescription);
+			while (matcher.find()) {
+				for (int i = 0; i <= matcher.groupCount(); i++) {
+					String match = matcher.group(i);
+					match = match.substring(3, match.length() - 2);
+					stepDescription = stepDescription.replaceFirst(st + ".*" + end, match);
+				}
+			}
+			return stepDescription;
+		}
+
 	}
-	
-	
 
 }

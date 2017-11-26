@@ -111,7 +111,7 @@ public class BDDDefinitionHelper {
 		STRING(
 				// "('[^(\\\\')*]*((\\\\')*(\\*|\\!|\\(|\\))*[^(\\\\')*]*)*')|(\"[^(\\\\\")*]*((\\\\\")*(\\*|\\!|\\(|\\))*[^(\\\\\")*]*)*\")"),
 				"('([^\\\\']|\\\\\\\\|\\\\')*')|(\"([^\\\\\"]|\\\\\\\\|\\\\\")*\")","String str"), MAP("(\\{.*})","Map<Object,Object> mapObj"), LIST(
-						"(\\[.*])","Object[] objArray"), LONG("([-+]?\\d+)","long l"), DOUBLE("([-+]?\\d+(\\.\\d+)?)","double d"), ANY("(.*)","Object anyObj");
+						"(\\[.*])","Object[] objArray"), LONG("([-+]?\\d+)","long l"), DOUBLE("([-+]?\\d+(\\.\\d+)?)","double d"), ANY("(.*)","Object anyObj"), OPTIONAL("(\\(\\?:.*\\)\\?)","Object optionalObj");
 
 		private String regx;
 		String argString;
@@ -121,13 +121,14 @@ public class BDDDefinitionHelper {
 		}
 
 		public static ParamType getType(String value) {
+			if(value==null)	return OPTIONAL;
 			for (ParamType type : ParamType.values()) {
 				Pattern p = Pattern.compile(type.getRegx());
 				Matcher matcher = p.matcher(value);
 				if (matcher.matches())
 					return type;
 			}
-			return null;
+			return ANY;
 		}
 
 		public String getRegx() {
