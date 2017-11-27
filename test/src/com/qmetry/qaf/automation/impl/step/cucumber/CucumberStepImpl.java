@@ -64,4 +64,11 @@ public class CucumberStepImpl {
 		System.out.printf("I get at least %d results\n", n);
 
 	}
+	
+	@Given("^I have \"(.?)\"(?: and \"(.?)\")?$")
+	public void optionalParameter(String param1, String optParam) {
+
+	    System.out.println("text:" + param1 + " forText:" + optParam);
+	}
+
 }

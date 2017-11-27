@@ -56,3 +56,9 @@ Examples:
  | searchKey | searchResult | number |
  | QMetry QAF | QMetry Automation Framework | 5 |
  | Selenium ISFW | Infostretch Test Automation Framework | 10 |
+ 
+Scenario: Optional parameter
+
+ Given I have "Grapes" and "Oranges"
+ And I have "Bananas"
+ 

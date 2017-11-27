@@ -32,6 +32,8 @@ import java.util.List;
 
 import com.qmetry.qaf.automation.step.QAFTestStep;
 
+import cucumber.api.java.en.Given;
+
 /**
  * @author chiragj.ayswal
  */
@@ -64,5 +66,17 @@ public class QAFTestStepImpl {
 	public void iGet_inSearchResults(int n) {
 		System.out.printf("I get at least %d results\n", n);
 
+	}
+	
+	@QAFTestStep(description="I have {fruit} and {anotherFruit}")
+	public void parameter2(String param1, String optParam) {
+
+	    System.out.println("text:" + param1 + " forText:" + optParam);
+	}
+	
+	@QAFTestStep(description="I have {fruit}")
+	public void parameter1(String param1) {
+
+	    System.out.println("text:" + param1);
 	}
 }

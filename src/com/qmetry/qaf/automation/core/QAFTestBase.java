@@ -34,7 +34,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang.StringUtils;
@@ -178,8 +177,21 @@ public class QAFTestBase {
 			}
 			drivercontext.remove(driver);
 		}
+		setDriver("");
 	}
 
+	/** checks for verification errors and stops the browser */
+	public void tearDown(String driverName) {
+		Map<String, UiDriver> drivercontext = getDriverContext();
+		UiDriver uiDriver = (UiDriver) drivercontext.get(driverName);
+		if (null != uiDriver) {
+			new UiDriverFactory().tearDown(uiDriver);
+		}
+		drivercontext.remove(driverName);
+		if(getBaseUrl().equalsIgnoreCase(driverName)){
+			setDriver("");
+		}
+	}
 	public void setDriver(String driverName) {
 		stb = STBArgs.browser_str.set(driverName);
 	}
@@ -193,6 +205,14 @@ public class QAFTestBase {
 		return STBArgs.base_url.getFrom(stb);
 	}
 
+	public boolean hasDriver(String driverName){
+		return getDriverContext().containsKey(driverName);
+	}
+	
+	public boolean hasDriver(){
+		String driverName = getBrowser();
+		return hasDriver(driverName);
+	}
 	public UiDriver getUiDriver() {
 		if (!hasUiDriver()) {
 			init();
@@ -222,7 +242,7 @@ public class QAFTestBase {
 	}
 
 	public String getLastCapturedScreenShot() {
-		if (StringUtil.isBlank(lastCapturedScreenShot)) {
+		if (!hasDriver() || StringUtil.isBlank(lastCapturedScreenShot)) {
 			return "";
 		}
 		String dir = ApplicationProperties.SCREENSHOT_RELATIVE_PATH.getStringVal(FileUtil
@@ -461,7 +481,7 @@ public class QAFTestBase {
 		String filename = "";
 		try {
 			filename = FileUtil.saveImageFile(base64Image,
-					StringUtil.createRandomString(getTestCaseName()), getScreenShotDir());
+					StringUtil.createRandomString(getTestCaseName().replaceAll("[^a-zA-Z0-9\\-]", "_")), getScreenShotDir());
 			lastCapturedScreenShot = filename;
 			logger.info("Capturing screen shot" + lastCapturedScreenShot);
 
