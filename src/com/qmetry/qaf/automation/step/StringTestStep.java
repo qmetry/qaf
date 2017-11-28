@@ -74,7 +74,7 @@ public class StringTestStep extends BaseTestStep {
 	}
 
 	public void initStep() {
-		if (step == null) {
+		if (step == null || !getTestStep().getFileName().equalsIgnoreCase(step.getFileName())) {
 			step = getTestStep();
 			if (null != step) {
 				step.setActualArgs(actualArgs);
@@ -84,6 +84,7 @@ public class StringTestStep extends BaseTestStep {
 			}
 		}
 	}
+
 
 	public TestStep deepClone() {
 		initStep();
@@ -289,4 +290,5 @@ public class StringTestStep extends BaseTestStep {
 		name = StringUtil
 				.toCamelCaseIdentifier(description.length() > 0 ? description : name);
 	}
+
 }
