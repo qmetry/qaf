@@ -73,6 +73,7 @@ public class StringTestStep extends BaseTestStep {
 		this.context = context;
 	}
 
+
 	public void initStep() {
 		if (step == null) {
 			step = getTestStep();
@@ -81,6 +82,17 @@ public class StringTestStep extends BaseTestStep {
 				step.setDescription(description);
 				step.getStepExecutionTracker()
 						.setContext(getStepExecutionTracker().getContext());
+			}
+		}
+	}
+
+	public void initStep(Map<String, Object> context) {
+		if (step == null) {
+			step = getTestStep();
+			if (null != step) {
+				step.setActualArgs(actualArgs);
+				step.setDescription(description);
+				step.getStepExecutionTracker().setContext(context);
 			}
 		}
 	}
@@ -289,4 +301,5 @@ public class StringTestStep extends BaseTestStep {
 		name = StringUtil
 				.toCamelCaseIdentifier(description.length() > 0 ? description : name);
 	}
+
 }
