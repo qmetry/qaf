@@ -130,16 +130,17 @@ public class Scenario extends WebDriverTestCase
 		return scenarioName;
 	}
 
-	protected void execute(TestStep[] stepsToExecute) {
+	protected void execute(TestStep[] stepsToExecute, Map<String, Object> context) {
 		int executionIndx = 0;
 		try {
 			for (executionIndx = 0; executionIndx < stepsToExecute.length;) {
 				TestStep currTestStep = stepsToExecute[executionIndx];
 				((StringTestStep) currTestStep).initStep();
-
+				
 				StepExecutionTracker stepExecutionTracker =
 						currTestStep.getStepExecutionTracker();
 				if (null != stepExecutionTracker) {
+					stepExecutionTracker.setContext(context);
 					stepExecutionTracker.setStepCompositer(this);
 					stepExecutionTracker.getContext().put("testStepCompositer", this);
 					stepExecutionTracker.setStepIndex(executionIndx);
@@ -216,7 +217,7 @@ public class Scenario extends WebDriverTestCase
 			for (int i = 0; i < stepsToExecute.length; i++) {
 				stepsToExecute[i] = stepsToExecute[i].clone(); // fix for retry
 			}
-			execute(stepsToExecute);
+			execute(stepsToExecute, null);
 		}
 
 	}

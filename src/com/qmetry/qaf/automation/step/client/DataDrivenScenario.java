@@ -92,7 +92,7 @@ public class DataDrivenScenario extends Scenario {
 		context.put("${args[0]}", testData);
 		context.put("args[0]", testData);
 
-		execute(getStepsToExecute(context));
+		execute(getStepsToExecute(context), context);
 
 	}
 
@@ -180,11 +180,8 @@ public class DataDrivenScenario extends Scenario {
 		for (TestStep testStep : steps) {
 
 			StringTestStep proxy = new StringTestStep(testStep.getName(), context, testStep.getActualArgs());
-			proxy.initStep();
 			proxy.setLineNumber(testStep.getLineNumber());
 			proxy.setFileName(testStep.getFileName());
-			if (null != proxy.getStepExecutionTracker())
-				proxy.getStepExecutionTracker().setContext(context);
 
 			proxySteps[stepIndex++] = proxy;
 		}
