@@ -73,8 +73,9 @@ public class StringTestStep extends BaseTestStep {
 		this.context = context;
 	}
 
+
 	public void initStep() {
-		if (step == null || !getTestStep().getFileName().equalsIgnoreCase(step.getFileName())) {
+		if (step == null) {
 			step = getTestStep();
 			if (null != step) {
 				step.setActualArgs(actualArgs);
@@ -85,6 +86,16 @@ public class StringTestStep extends BaseTestStep {
 		}
 	}
 
+	public void initStep(Map<String, Object> context) {
+		if (step == null) {
+			step = getTestStep();
+			if (null != step) {
+				step.setActualArgs(actualArgs);
+				step.setDescription(description);
+				step.getStepExecutionTracker().setContext(context);
+			}
+		}
+	}
 
 	public TestStep deepClone() {
 		initStep();

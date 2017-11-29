@@ -130,12 +130,15 @@ public class Scenario extends WebDriverTestCase
 		return scenarioName;
 	}
 
-	protected void execute(TestStep[] stepsToExecute) {
+	protected void execute(TestStep[] stepsToExecute, Map<String, Object> context) {
 		int executionIndx = 0;
 		try {
 			for (executionIndx = 0; executionIndx < stepsToExecute.length;) {
 				TestStep currTestStep = stepsToExecute[executionIndx];
-				((StringTestStep) currTestStep).initStep();
+
+				if (null != context) {
+					((StringTestStep) currTestStep).initStep(context);
+				} else((StringTestStep) currTestStep).initStep();
 
 				StepExecutionTracker stepExecutionTracker =
 						currTestStep.getStepExecutionTracker();
@@ -154,11 +157,9 @@ public class Scenario extends WebDriverTestCase
 					stepResultBean.setType(MessageTypes.Warn);
 					stb.getCheckPointResults().add(stepResultBean);
 
-					LoggingBean comLoggingBean =
-							new LoggingBean(currTestStep.getName(),
-									new String[]{Arrays
-											.toString(currTestStep.getActualArgs())},
-									"Error: Step Not Found");
+					LoggingBean comLoggingBean = new LoggingBean(currTestStep.getName(),
+							new String[]{Arrays.toString(currTestStep.getActualArgs())},
+							"Error: Step Not Found");
 					stb.getLog().add(comLoggingBean);
 					if (!ApplicationProperties.DRY_RUN_MODE.getBoolenVal(false))
 						throw new StepNotFoundException((StringTestStep) currTestStep);
@@ -193,11 +194,9 @@ public class Scenario extends WebDriverTestCase
 				stepResultBean.setType(MessageTypes.TestStep);
 				stb.getCheckPointResults().add(stepResultBean);
 
-				LoggingBean comLoggingBean =
-						new LoggingBean(notRunTestStep.getName(),
-								new String[]{
-										Arrays.toString(notRunTestStep.getActualArgs())},
-								"Not Run");
+				LoggingBean comLoggingBean = new LoggingBean(notRunTestStep.getName(),
+						new String[]{Arrays.toString(notRunTestStep.getActualArgs())},
+						"Not Run");
 				stb.getLog().add(comLoggingBean);
 
 			}
@@ -216,7 +215,7 @@ public class Scenario extends WebDriverTestCase
 			for (int i = 0; i < stepsToExecute.length; i++) {
 				stepsToExecute[i] = stepsToExecute[i].clone(); // fix for retry
 			}
-			execute(stepsToExecute);
+			execute(stepsToExecute, null);
 		}
 
 	}
