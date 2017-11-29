@@ -33,6 +33,7 @@ import static com.qmetry.qaf.automation.core.ConfigurationManager.getBundle;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -217,7 +218,7 @@ public class Scenario extends WebDriverTestCase
 			for (int i = 0; i < stepsToExecute.length; i++) {
 				stepsToExecute[i] = stepsToExecute[i].clone(); // fix for retry
 			}
-			execute(stepsToExecute, null);
+			execute(stepsToExecute, new HashMap<String, Object>());
 		}
 
 	}

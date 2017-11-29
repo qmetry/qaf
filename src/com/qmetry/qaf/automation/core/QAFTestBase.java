@@ -162,7 +162,19 @@ public class QAFTestBase {
 		return commandLog;
 	}
 
+	/**
+	 * @deprecated use {@link #getDriverName()} instead
+	 * @return
+	 */
 	public String getBrowser() {
+		return STBArgs.browser_str.getFrom(stb);
+	}
+	
+	/**
+	 * @since 2.1.13
+	 * @return current driver name with active session or session will be created on next {@link #getUiDriver()} call.
+	 */
+	public String getDriverName() {
 		return STBArgs.browser_str.getFrom(stb);
 	}
 
@@ -205,10 +217,20 @@ public class QAFTestBase {
 		return STBArgs.base_url.getFrom(stb);
 	}
 
+	/**
+	 * Method to check driver session exist or not.
+	 * @param driverName
+	 * @return whether given driver session is running or not.
+	 */
 	public boolean hasDriver(String driverName){
 		return getDriverContext().containsKey(driverName);
 	}
 	
+	/**
+	 * Method to check driver session exist or not. If you want to query current driver name use {@link #getDriverName()}
+	 * @return whether configured driver session is running or not.
+	 * @see #hasDriver(String)
+	 */
 	public boolean hasDriver(){
 		String driverName = getBrowser();
 		return hasDriver(driverName);
