@@ -29,31 +29,15 @@
 
 package com.qmetry.qaf.automation.ui;
 
-import static com.qmetry.qaf.automation.util.Reporter.log;
-
-import java.lang.reflect.Method;
-import java.util.LinkedHashMap;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.impl.LogFactoryImpl;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterGroups;
 import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterSuite;
 import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeGroups;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeSuite;
-import org.testng.annotations.BeforeTest;
 
 import com.qmetry.qaf.automation.core.ConfigurationManager;
-import com.qmetry.qaf.automation.core.MessageTypes;
-import com.qmetry.qaf.automation.core.TestBaseProvider;
-import com.qmetry.qaf.automation.integration.ResultUpdator;
-import com.qmetry.qaf.automation.keys.ApplicationProperties;
+import com.qmetry.qaf.automation.testng.TestNGTestCase;
 import com.qmetry.qaf.automation.ui.api.UiTestBase;
 import com.qmetry.qaf.automation.util.PropertyUtil;
 
@@ -62,14 +46,15 @@ import com.qmetry.qaf.automation.util.PropertyUtil;
  * 
  * @author chirag.jayswal
  */
-public abstract class AbstractTestCase<D, B extends UiTestBase<D>> {
+public abstract class AbstractTestCase<D, B extends UiTestBase<D>> extends TestNGTestCase {
+	/**
+	 * @deprecated use {@link #getProps()} instead
+	 */
 	protected PropertyUtil props;
-	protected final Log logger;
-	protected ITestContext context;
+
 
 	public AbstractTestCase() {
 		props = ConfigurationManager.getBundle();
-		logger = LogFactoryImpl.getLog(this.getClass());
 	}
 
 	public abstract B getTestBase();
@@ -78,43 +63,6 @@ public abstract class AbstractTestCase<D, B extends UiTestBase<D>> {
 		return getTestBase().getDriver();
 	}
 
-	@BeforeGroups(alwaysRun = true)
-	@BeforeClass(alwaysRun = true)
-	final public void setup(ITestContext context) {
-
-		ConfigurationManager.getBundle()
-				.addProperty(ApplicationProperties.CURRENT_TEST_CONTEXT.key, context);
-		this.context = context;
-	}
-
-	@BeforeSuite(alwaysRun = true)
-	final public void setupSuit(ITestContext context) {
-		this.context = context;
-		ConfigurationManager.getBundle()
-				.addProperty(ApplicationProperties.CURRENT_TEST_CONTEXT.key, context);
-		LinkedHashMap<String, String> params = new LinkedHashMap<String, String>(
-				context.getSuite().getXmlSuite().getParameters());
-
-		ConfigurationManager.addAll(params);
-	}
-
-	@BeforeTest(alwaysRun = true)
-	final public void setupTest(ITestContext context) {
-		ConfigurationManager.getBundle()
-				.addProperty(ApplicationProperties.CURRENT_TEST_CONTEXT.key, context);
-		LinkedHashMap<String, String> params = new LinkedHashMap<String, String>(
-				context.getCurrentXmlTest().getAllParameters());
-
-		ConfigurationManager.addAll(params);
-		this.context = context;
-	}
-
-	@BeforeMethod(alwaysRun = true)
-	final public void setupMethod(Method m, ITestContext context) {
-		ConfigurationManager.getBundle()
-				.addProperty(ApplicationProperties.CURRENT_TEST_CONTEXT.key, context);
-		this.context = context;
-	}
 
 	@AfterMethod(alwaysRun = true)
 	final public void afterMethod(ITestContext testContext, ITestResult tr) {
@@ -148,47 +96,4 @@ public abstract class AbstractTestCase<D, B extends UiTestBase<D>> {
 			}
 		}
 	}
-
-	@AfterSuite
-	final public void afterSuit(ITestContext testContext) {
-		TestBaseProvider.instance().stopAll();
-		ResultUpdator.awaitTermination();
-	}
-
-	public static boolean verifyTrue(boolean condition, String failMessage,
-			String successMsg) {
-		if (condition) {
-			log(successMsg, MessageTypes.Pass);
-		} else {
-			log(failMessage, MessageTypes.Fail);
-		}
-		return condition;
-
-	}
-
-	public static boolean verifyFalse(boolean condition, String failMessage,
-			String successMsg) {
-		if (!condition) {
-			log(successMsg, MessageTypes.Pass);
-		} else {
-			log(failMessage, MessageTypes.Fail);
-		}
-		return !condition;
-
-	}
-
-	public static void assertTrue(boolean condition, String failMessage,
-			String successMsg) {
-		if (!verifyTrue(condition, failMessage, successMsg)) {
-			throw new AssertionError(failMessage);
-		}
-	}
-
-	public static void assertFalse(boolean condition, String failMessage,
-			String successMsg) {
-		if (!verifyFalse(condition, failMessage, successMsg)) {
-			throw new AssertionError(failMessage);
-		}
-	}
-
 }

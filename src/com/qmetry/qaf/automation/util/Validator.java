@@ -24,6 +24,8 @@
 
 package com.qmetry.qaf.automation.util;
 
+import static com.qmetry.qaf.automation.util.Reporter.log;
+
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.StringDescription;
@@ -78,4 +80,38 @@ public class Validator {
 		givenThat("", actual, matcher);
 	}
 
+	public static boolean verifyTrue(boolean condition, String failMessage,
+			String successMsg) {
+		if (condition) {
+			log(successMsg, MessageTypes.Pass);
+		} else {
+			log(failMessage, MessageTypes.Fail);
+		}
+		return condition;
+
+	}
+
+	public static boolean verifyFalse(boolean condition, String failMessage,
+			String successMsg) {
+		if (!condition) {
+			log(successMsg, MessageTypes.Pass);
+		} else {
+			log(failMessage, MessageTypes.Fail);
+		}
+		return !condition;
+
+	}
+	public static void assertTrue(boolean condition, String failMessage,
+			String successMsg) {
+		if (!verifyTrue(condition, failMessage, successMsg)) {
+			throw new AssertionError(failMessage);
+		}
+	}
+
+	public static void assertFalse(boolean condition, String failMessage,
+			String successMsg) {
+		if (!verifyFalse(condition, failMessage, successMsg)) {
+			throw new AssertionError(failMessage);
+		}
+	}
 }

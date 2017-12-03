@@ -21,7 +21,6 @@
  * For any inquiry or need additional information, please contact support-qaf@infostretch.com
  *******************************************************************************/
 
-
 package com.qmetry.qaf.automation.ws.rest;
 
 import java.io.ByteArrayInputStream;
@@ -136,10 +135,10 @@ public class RequestLogger extends ClientFilter implements OnStartConnectionList
 	}
 
 	private void log(String b) {
-		logger.info(b.toString());
-
 		if (loggingStream != null) {
 			loggingStream.print(b);
+		} else {
+			logger.info(b.toString());
 		}
 	}
 
@@ -152,15 +151,16 @@ public class RequestLogger extends ClientFilter implements OnStartConnectionList
 	public ClientResponse handle(ClientRequest request) throws ClientHandlerException {
 		long id = ++_id;
 
-		StringBuilder requestString = logRequest(id, request);
+		StringBuilder requestString = new StringBuilder();
+		logRequest(id, request, requestString);
 
 		LoggingBean loggingBean = new LoggingBean();
 		loggingBean.setCommandName(request.getMethod() + ":" + request.getURI());
+
 		loggingBean.setArgs(new String[] { request.getURI().getPath(), request.getURI().getQuery() });
 
 		ClientResponse response = getNext().handle(request);
 		loggingBean.setResult(response.toString());
-
 		StringBuilder responseString = logResponse(id, response);
 
 		LoggingBean detailsLoggingBean = new LoggingBean();
@@ -174,18 +174,15 @@ public class RequestLogger extends ClientFilter implements OnStartConnectionList
 		return response;
 	}
 
-	private StringBuilder logRequest(long id, ClientRequest request) {
-		StringBuilder b = new StringBuilder();
+	private void logRequest(long id, ClientRequest request, StringBuilder b) {
 
 		printRequestLine(b, id, request);
 		printRequestHeaders(b, id, request.getHeaders());
-
 		if (request.getEntity() != null) {
+			prefixId(b, id).append(REQUEST_PREFIX).append(request.getEntity());
 			request.setAdapter(new Adapter(request.getAdapter(), b));
-		} else {
-			log(b.toString());
 		}
-		return b;
+		log(b.toString());
 	}
 
 	private void printRequestLine(StringBuilder b, long id, ClientRequest request) {

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+  <SOAP-ENV:Envelope
+   xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+   xmlns:xsi="http://www.w3.org/1999/XMLSchema-instance"
+   xmlns:xsd="http://www.w3.org/1999/XMLSchema">
+	<SOAP-ENV:Body>
+		<ns1:doubleAnIntegerResponse
+		 xmlns:ns1="urn:MySoapServices"
+		 SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+			<return xsi:type="xsd:int">246</return>
+		</ns1:doubleAnIntegerResponse>
+	</SOAP-ENV:Body>
+  </SOAP-ENV:Envelope>

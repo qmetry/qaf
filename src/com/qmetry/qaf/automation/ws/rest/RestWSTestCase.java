@@ -24,7 +24,7 @@
 
 package com.qmetry.qaf.automation.ws.rest;
 
-import com.qmetry.qaf.automation.util.Validator;
+import com.qmetry.qaf.automation.testng.TestNGTestCase;
 import com.qmetry.qaf.automation.ws.Response;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
@@ -34,7 +34,7 @@ import com.sun.jersey.api.client.WebResource;
  * 
  * @author chirag
  */
-public class RestWSTestCase extends Validator {
+public class RestWSTestCase extends TestNGTestCase {
 	private RestTestBase testBase;
 
 	public RestWSTestCase() {
