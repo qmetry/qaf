@@ -12,5 +12,6 @@ before_install:
 script: ant test -Dskip.download=true
 jdk:
   - oraclejdk8
+ #- oraclejdk7 #  Jdk7 broken on container based trusty travis-ci#7019 
   - openjdk7
 
