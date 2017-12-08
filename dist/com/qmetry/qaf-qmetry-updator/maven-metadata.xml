@@ -3,7 +3,7 @@
   <groupId>com.qmetry</groupId>
   <artifactId>qaf-qmetry-updator</artifactId>
   <versioning>
-    <latest>2.1.11-RC1</latest>
+    <latest>2.1.12</latest>
     <release>2.1.10</release>
     <versions>
       <version>2.1.10</version>
