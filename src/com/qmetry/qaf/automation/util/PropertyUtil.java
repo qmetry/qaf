@@ -21,7 +21,6 @@
  * For any inquiry or need additional information, please contact support-qaf@infostretch.com
  *******************************************************************************/
 
-
 package com.qmetry.qaf.automation.util;
 
 import java.io.File;
@@ -32,17 +31,15 @@ import java.io.InputStream;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
-
 import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.MapConfiguration;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.LogFactoryImpl;
 
-import com.qmetry.qaf.automation.core.ConfigurationManager;
 import com.qmetry.qaf.automation.keys.ApplicationProperties;
- 
+
 /**
  * com.qmetry.qaf.automation.util.PropUtil.java
  * 
@@ -58,6 +55,7 @@ public class PropertyUtil extends XMLConfiguration {
 	public PropertyUtil() {
 		super();
 		setLogger(logger);
+		setDelimiterParsingDisabled(true);
 		Iterator<Entry<Object, Object>> iterator = System.getProperties().entrySet().iterator();
 
 		while (iterator.hasNext()) {
@@ -71,10 +69,8 @@ public class PropertyUtil extends XMLConfiguration {
 				for (Object val : vals) {
 					super.addPropertyDirect(skey, val);
 				}
-
 			}
 		}
-
 	}
 
 	@Override
@@ -102,18 +98,12 @@ public class PropertyUtil extends XMLConfiguration {
 
 	public PropertyUtil(String... file) {
 		this();
-
 		load(file);
 	}
 
-	public void addAll(Map<String, String> props) {
-		Set<String> keys = props.keySet();
-		keys.removeAll(System.getProperties().keySet());
-		Iterator<String> iterator = keys.iterator();
-		while (iterator.hasNext()) {
-			String key = iterator.next();
-			ConfigurationManager.getBundle().setProperty(key, props.get(key));
-		}
+	public void addAll(Map<String, ?> props) {
+		props.keySet().removeAll(System.getProperties().keySet());
+		copy(new MapConfiguration(props));
 	}
 
 	public PropertyUtil(File... file) {
@@ -143,17 +133,13 @@ public class PropertyUtil extends XMLConfiguration {
 	private boolean loadFile(File file) {
 		try {
 			if (file.getName().endsWith("xml") || file.getName().contains(".xml.")) {
-				super.load(new FileInputStream(file));
-				XMLConfiguration xmlConfiguration = new XMLConfiguration(file);
-				copy(xmlConfiguration);
-				xmlConfiguration.clear();
+				load(new FileInputStream(file));
 			} else {
 				PropertiesConfiguration propertiesConfiguration = new PropertiesConfiguration();
 				propertiesConfiguration.setEncoding(getString(ApplicationProperties.LOCALE_CHAR_ENCODING.key, "UTF-8"));
 				propertiesConfiguration.load(new FileInputStream(file));
 				copy(propertiesConfiguration);
 				propertiesConfiguration.clear();
-				// super.load(new FileInputStream(file));
 			}
 			return true;
 		} catch (ConfigurationException e) {

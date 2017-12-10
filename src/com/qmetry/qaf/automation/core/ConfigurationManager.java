@@ -105,6 +105,8 @@ public class ConfigurationManager {
 							System.getProperty("application.properties.file",
 									"resources/application.properties"));
 					p.setProperty("isfw.build.info", getBuildInfo());
+					p.setEncoding(p.getString(ApplicationProperties.LOCALE_CHAR_ENCODING.key, "UTF-8"));
+
 					File prjDir = new File(".").getAbsoluteFile().getParentFile();
 					p.setProperty("project.path", prjDir.getAbsolutePath());
 					if(!p.containsKey("project.name"))
@@ -114,7 +116,6 @@ public class ConfigurationManager {
 					String[] resources = p.getStringArray("env.resources", "resources");
 					for (String resource : resources) {
 						addBundle(p, resource);
-
 					}
 					ConfigurationListener cl = new PropertyConfigurationListener();
 					p.addConfigurationListener(cl);
@@ -261,7 +262,7 @@ public class ConfigurationManager {
 		}
 	}
 
-	public static void addAll(Map<String, String> props) {
+	public static void addAll(Map<String, ?> props) {
 		ConfigurationManager.getBundle().addAll(props);
 	}
 
