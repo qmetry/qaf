@@ -49,7 +49,7 @@ public class TestNGScenario extends TestNGMethod {
 	private Scenario scenario;
 	private Map<String, Object> metadata;
 	private String qualifiledName;
-	
+
 	public TestNGScenario(Method method, IAnnotationFinder finder, XmlTest xmlTest, Object instance) {
 		super(method, finder, xmlTest, instance);
 		init(instance);
@@ -71,6 +71,8 @@ public class TestNGScenario extends TestNGMethod {
 			setIgnoreMissingDependencies(scenario.getIgnoreMissingDependencies());
 			metadata = scenario.getMetadata();
 			qualifiledName = scenario.getTestName();
+			setTimeOut(scenario.getTimeOut());
+			
 		} else {
 			metadata = getMetadata(getMethod(), true);
 			qualifiledName = getRealClass().getName() + "." + getMethodName();
@@ -106,7 +108,7 @@ public class TestNGScenario extends TestNGMethod {
 		m_currentInvocationCount = new AtomicInteger(getCurrentInvocationCount() - 1);
 		return super.getCurrentInvocationCount();
 	}
-	
+
 	@Override
 	public String getQualifiedName() {
 		return qualifiledName;

@@ -25,6 +25,7 @@
 package com.qmetry.qaf.automation.testng.report;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -220,7 +221,7 @@ public class MethodInfo {
 		}
 		MethodInfo another = (MethodInfo) obj;
 		return metaData.get("name").toString().equalsIgnoreCase(another.metaData.get("name").toString())
-				&& (index == another.index) && (startTime == another.startTime);
+				&& (index == another.index) && (startTime == another.startTime) && Arrays.deepEquals(args, another.args);
 	}
 
 }

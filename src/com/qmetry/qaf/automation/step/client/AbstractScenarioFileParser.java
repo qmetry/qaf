@@ -37,7 +37,9 @@ import org.apache.commons.logging.impl.LogFactoryImpl;
 import org.json.JSONException;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
+import com.qmetry.qaf.automation.gson.GsonObjectDeserializer;
 import com.qmetry.qaf.automation.step.StringTestStep;
 import com.qmetry.qaf.automation.step.TestStep;
 import com.qmetry.qaf.automation.testng.dataprovider.QAFDataProvider.params;
@@ -64,7 +66,7 @@ public abstract class AbstractScenarioFileParser implements ScenarioFileParser {
 
 	public AbstractScenarioFileParser() {
 		logger = LogFactoryImpl.getLog(getClass());
-		gson = new Gson();
+		gson = new GsonBuilder().registerTypeAdapter(Map.class, new GsonObjectDeserializer()).create();
 		this.includeGroups = new ArrayList<String>();
 		this.excludeGroups = new ArrayList<String>();
 	}

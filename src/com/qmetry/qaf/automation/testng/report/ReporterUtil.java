@@ -245,7 +245,7 @@ public class ReporterUtil {
 
 			updateOverview(context, result);
 
-			String fileName = getMethodName(result).replaceAll("[^a-zA-Z0-9\\-]", "_");
+			String fileName = StringUtil.toTitleCaseIdentifier(getMethodName(result));
 			String methodResultFile = dir + "/" + fileName;
 
 			File f = new File(methodResultFile + ".json");

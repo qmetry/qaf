@@ -75,6 +75,7 @@ public class Scenario extends WebDriverTestCase
 	protected String[] m_methodsDependedUpon = {};
 	protected String[] m_beforeGroups = {};
 	protected String[] m_afterGroups = {};
+	protected long timeOut;
 	private String signature;
 	protected String status = "";
 	private Map<String, Object> metadata =
@@ -118,6 +119,9 @@ public class Scenario extends WebDriverTestCase
 
 		if (metadata.containsKey("priority")) {
 			priority = ((Number) metadata.get("priority")).intValue();
+		}
+		if (metadata.containsKey("timeOut")) {
+			timeOut = ((Number) metadata.get("timeOut")).longValue();
 		}
 
 	}
@@ -252,6 +256,9 @@ public class Scenario extends WebDriverTestCase
 		return m_methodsDependedUpon;
 	}
 
+	public long getTimeOut() {
+		return timeOut;
+	}
 	public boolean isM_isAlwaysRun() {
 		return !metadata.containsKey("alwaysRun") || (Boolean) metadata.get("alwaysRun");// m_isAlwaysRun;
 	}

@@ -41,6 +41,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.LogFactoryImpl;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.support.ui.FluentWait;
+import org.testng.ITestResult;
+import org.testng.Reporter;
 
 import com.google.common.base.Supplier;
 import com.qmetry.qaf.automation.keys.ApplicationProperties;
@@ -64,33 +66,30 @@ import com.qmetry.qaf.automation.util.StringUtil;
  * @author chirag
  */
 public class QAFTestBase {
-	private PropertyUtil context;
+	private static final String COMMAND_LOG = "commandLog";
+	private static final String CHECKPOINTS = "checkPointResults";
+	private static final String  CONTEXT= "qafcontext";
+	private static final String  VERIFICATION_ERRORS= "verificationErrors";
+	public static final String SELENIUM_DEFAULT_TIMEOUT = "selenium.wait.timeout";
 	private Map<String, UiDriver> driverContext;
 
 	private final Log logger = LogFactoryImpl.getLog(QAFTestBase.class);
-	public static final String SELENIUM_DEFAULT_TIMEOUT = "selenium.wait.timeout";
 	private boolean prepareForShutdown;
 	/** Use this object to run all of your uiDriver tests */
-	private ArrayList<LoggingBean> commandLog;
-	private List<CheckpointResultBean> checkPointResults;
 	private String[] stb;
-	private int verificationErrors = 0;
 	private boolean alwaysCaptureScreenShot = false;
 	private boolean captureScreenShotOnFailure = false;
 	private String lastCapturedScreenShot;
 	private String screenShotDir;
 	private String reportDir;
-
+	private PropertyUtil context;
 	/**
 	 * QAFTestBase setup arguments
 	 * 
 	 * @author chirag.jayswal
 	 */
 	public enum STBArgs {
-		browser_str("firefoxDriver"),
-		base_url("http://localhost"),
-		sel_server("localhost"),
-		port("4444");
+		browser_str("firefoxDriver"), base_url("http://localhost"), sel_server("localhost"), port("4444");
 		public String defaultVal;
 
 		private STBArgs(String def) {
@@ -99,8 +98,7 @@ public class QAFTestBase {
 
 		public String getFrom(String... args) {
 			if ((args != null) && (args.length > ordinal())) {
-				return ConfigurationManager.getBundle().getSubstitutor()
-						.replace(args[ordinal()]);
+				return ConfigurationManager.getBundle().getSubstitutor().replace(args[ordinal()]);
 			}
 			return "";
 		}
@@ -142,24 +140,26 @@ public class QAFTestBase {
 	}
 
 	protected QAFTestBase() {
-		commandLog = new ArrayList<LoggingBean>();
-		checkPointResults = new ArrayList<CheckpointResultBean>();
 		context = new PropertyUtil();
+		context.setDelimiterParsingDisabled(true);
+		context.setProperty(COMMAND_LOG, new ArrayList<LoggingBean>());
+		context.setProperty(CHECKPOINTS, new ArrayList<CheckpointResultBean>());
+		context.setProperty(VERIFICATION_ERRORS, 0);
 		driverContext = new HashMap<String, UiDriver>();
 
-		setAlwaysCaptureScreenShot(
-				ApplicationProperties.SUCEESS_SCREENSHOT.getBoolenVal());
+		setAlwaysCaptureScreenShot(ApplicationProperties.SUCEESS_SCREENSHOT.getBoolenVal());
 
 		setScreenShotDir(ApplicationProperties.SCREENSHOT_DIR.getStringVal("./img"));
 		setReportDir(ApplicationProperties.REPORT_DIR.getStringVal("./"));
 	}
 
 	public String getHTMLFormattedLog() {
-		return new HtmlCommandLogFormatter().getLog(commandLog);
+		return new HtmlCommandLogFormatter().getLog(getLog());
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<LoggingBean> getLog() {
-		return commandLog;
+		return (List<LoggingBean>) getContext().getObject(COMMAND_LOG);
 	}
 
 	/**
@@ -169,10 +169,11 @@ public class QAFTestBase {
 	public String getBrowser() {
 		return STBArgs.browser_str.getFrom(stb);
 	}
-	
+
 	/**
 	 * @since 2.1.13
-	 * @return current driver name with active session or session will be created on next {@link #getUiDriver()} call.
+	 * @return current driver name with active session or session will be
+	 *         created on next {@link #getUiDriver()} call.
 	 */
 	public String getDriverName() {
 		return STBArgs.browser_str.getFrom(stb);
@@ -181,7 +182,7 @@ public class QAFTestBase {
 	/** checks for verification errors and stops the browser */
 	public void tearDown() {
 		Map<String, UiDriver> drivercontext = getDriverContext();
-		String[] drivers = drivercontext.keySet().toArray(new String[]{});
+		String[] drivers = drivercontext.keySet().toArray(new String[] {});
 		for (String driver : drivers) {
 			UiDriver uiDriver = (UiDriver) drivercontext.get(driver);
 			if (null != uiDriver) {
@@ -200,10 +201,11 @@ public class QAFTestBase {
 			new UiDriverFactory().tearDown(uiDriver);
 		}
 		drivercontext.remove(driverName);
-		if(getBaseUrl().equalsIgnoreCase(driverName)){
+		if (getBaseUrl().equalsIgnoreCase(driverName)) {
 			setDriver("");
 		}
 	}
+
 	public void setDriver(String driverName) {
 		stb = STBArgs.browser_str.set(driverName);
 	}
@@ -219,27 +221,31 @@ public class QAFTestBase {
 
 	/**
 	 * Method to check driver session exist or not.
+	 * 
 	 * @param driverName
 	 * @return whether given driver session is running or not.
 	 */
-	public boolean hasDriver(String driverName){
+	public boolean hasDriver(String driverName) {
 		return getDriverContext().containsKey(driverName);
 	}
-	
+
 	/**
-	 * Method to check driver session exist or not. If you want to query current driver name use {@link #getDriverName()}
+	 * Method to check driver session exist or not. If you want to query current
+	 * driver name use {@link #getDriverName()}
+	 * 
 	 * @return whether configured driver session is running or not.
 	 * @see #hasDriver(String)
 	 */
-	public boolean hasDriver(){
-		String driverName = getBrowser();
+	public boolean hasDriver() {
+		String driverName = getDriverName();
 		return hasDriver(driverName);
 	}
+
 	public UiDriver getUiDriver() {
 		if (!hasUiDriver()) {
 			init();
 		}
-		return getDriverContext().get(getBrowser());
+		return getDriverContext().get(getDriverName());
 	}
 
 	/** Sleeps for the specified number of milliseconds */
@@ -255,8 +261,7 @@ public class QAFTestBase {
 	}
 
 	public void setMethod(Method method) {
-		ConfigurationManager.getBundle().addProperty(
-				ApplicationProperties.CURRENT_TEST_NAME.key, method.getName());
+		ConfigurationManager.getBundle().addProperty(ApplicationProperties.CURRENT_TEST_NAME.key, method.getName());
 	}
 
 	public void setPrepareForShutdown(boolean prepareForShutdown) {
@@ -267,8 +272,8 @@ public class QAFTestBase {
 		if (!hasDriver() || StringUtil.isBlank(lastCapturedScreenShot)) {
 			return "";
 		}
-		String dir = ApplicationProperties.SCREENSHOT_RELATIVE_PATH.getStringVal(FileUtil
-				.getReletivePath(ApplicationProperties.REPORT_DIR.getStringVal("./"),
+		String dir = ApplicationProperties.SCREENSHOT_RELATIVE_PATH
+				.getStringVal(FileUtil.getReletivePath(ApplicationProperties.REPORT_DIR.getStringVal("./"),
 						ApplicationProperties.SCREENSHOT_DIR.getStringVal("./img/")));
 		if (!dir.endsWith("/")) {
 			dir = dir + "/";
@@ -281,7 +286,7 @@ public class QAFTestBase {
 	}
 
 	public boolean isVerificationFailed() {
-		return verificationErrors > 0;
+		return getVerificationErrors() > 0;
 	}
 
 	/**
@@ -289,8 +294,8 @@ public class QAFTestBase {
 	 * failing immediately if any are found
 	 */
 	public void checkForVerificationErrors() {
-		if (verificationErrors > 0) {
-			fail(verificationErrors + " Verification Errors");
+		if (isVerificationFailed()) {
+			fail(getVerificationErrors() + " Verification Errors");
 		}
 	}
 
@@ -300,29 +305,31 @@ public class QAFTestBase {
 
 	public void claerAssertionsLog() {
 		clearVerificationErrors();
-		checkPointResults = new ArrayList<CheckpointResultBean>();
-		commandLog = new ArrayList<LoggingBean>();
+		getCheckPointResults().clear();
+		getLog().clear();
 		lastCapturedScreenShot = "";
 	}
 
 	/** Clears out the list of verification errors */
 	public void clearVerificationErrors() {
-		verificationErrors = 0;
+		getContext().setProperty(VERIFICATION_ERRORS, 0);
 	}
 
 	public int getVerificationErrors() {
-		return verificationErrors;
+		return getContext().getInt(VERIFICATION_ERRORS);
 	}
 
 	public String getAssertionsLog() {
-		return new HtmlCheckpointResultFormatter().getResults(checkPointResults);
+		return new HtmlCheckpointResultFormatter().getResults(getCheckPointResults());
 	}
 
 	/**
 	 * @return the checkPointResults
 	 */
+	@SuppressWarnings("unchecked")
 	public List<CheckpointResultBean> getCheckPointResults() {
-		return checkPointResults;
+		return (List<CheckpointResultBean>) getContext().getObject(CHECKPOINTS);
+
 	}
 
 	public String getLastCapturedScreenShotFile() {
@@ -351,7 +358,8 @@ public class QAFTestBase {
 		addAssertionLog(e.getMessage(), MessageTypes.Fail);
 		if (!logger.isDebugEnabled())
 			logger.error(MessageTypes.Fail.formatText(e.getMessage()));
-		else logger.debug(e.getMessage(), e);
+		else
+			logger.debug(e.getMessage(), e);
 
 	}
 
@@ -374,11 +382,9 @@ public class QAFTestBase {
 		boolean added = addCheckpoint(bean);
 
 		if (added && StringUtil.isBlank(getLastCapturedScreenShot())
-				&& ((ApplicationProperties.FAILURE_SCREENSHOT.getBoolenVal(true)
-						&& (type.isFailure()))
+				&& ((ApplicationProperties.FAILURE_SCREENSHOT.getBoolenVal(true) && (type.isFailure()))
 						|| ((type != MessageTypes.Info)
-								&& ApplicationProperties.SUCEESS_SCREENSHOT
-										.getBoolenVal(false)))) {
+								&& ApplicationProperties.SUCEESS_SCREENSHOT.getBoolenVal(false)))) {
 
 			takeScreenShot();
 		}
@@ -386,13 +392,23 @@ public class QAFTestBase {
 		setLastCapturedScreenShot("");
 
 		if (type == MessageTypes.Fail) {
-			verificationErrors++;
+			int verificationErrors = getVerificationErrors() +1;
+			getContext().setProperty(VERIFICATION_ERRORS, verificationErrors);
 		}
 
 	}
 
 	public PropertyUtil getContext() {
-		return context;
+		ITestResult tr = Reporter.getCurrentTestResult();
+		if(null!=tr){
+			PropertyUtil contextFromTr = (PropertyUtil) Reporter.getCurrentTestResult().getAttribute(CONTEXT);
+			if(null==contextFromTr){
+				Reporter.getCurrentTestResult().setAttribute(CONTEXT,context);
+				return context;
+			}
+			return contextFromTr;
+		}
+		return 	context;//(PropertyUtil) Reporter.getCurrentTestResult().getAttribute(CONTEXT);
 	}
 
 	// base logging and checkpoint
@@ -434,25 +450,22 @@ public class QAFTestBase {
 
 	private void init() {
 		if (ApplicationProperties.DRIVER_NAME.getStringVal("").equalsIgnoreCase("")) {
-			System.err.println("Driver not configured!... \nUsing "
-					+ STBArgs.browser_str.getDefaultVal()
+			System.err.println("Driver not configured!... \nUsing " + STBArgs.browser_str.getDefaultVal()
 					+ " as default value. Please configure driver to be used using '"
 					+ ApplicationProperties.DRIVER_NAME.key + "' property");
 		}
 		stb = initStbArgs();
 		logger.info("Initializing Driver..." + STBArgs.allToString(stb));
 		// uiDriver = new UiDriverFactory().get(commandLog, stb);
-		DriverInitExpectedCondition driverInitExpectedCondition =
-				new DriverInitExpectedCondition(commandLog, stb);
+		DriverInitExpectedCondition driverInitExpectedCondition = new DriverInitExpectedCondition(
+				(ArrayList<LoggingBean>) getLog(), stb);
 		UiDriver uiDriver = new UiDriverInitializer()
-				.withTimeout(ApplicationProperties.DRIVER_INIT_TIMEOUT.getIntVal(0),
-						TimeUnit.SECONDS)
-				.pollingEvery(10, TimeUnit.SECONDS)
-				.withMessage(driverInitExpectedCondition)
+				.withTimeout(ApplicationProperties.DRIVER_INIT_TIMEOUT.getIntVal(0), TimeUnit.SECONDS)
+				.pollingEvery(10, TimeUnit.SECONDS).withMessage(driverInitExpectedCondition)
 				.ignoring(WebDriverException.class).until(driverInitExpectedCondition);
 
 		setUiDriver(uiDriver);
-		System.out.println("driver init done");
+		logger.info("driver init done");
 	}
 
 	private boolean hasFailure(List<CheckpointResultBean> subSteps) {
@@ -465,28 +478,20 @@ public class QAFTestBase {
 	}
 
 	private boolean addCheckpoint(CheckpointResultBean bean) {
-		int checkPoints = checkPointResults.size();
-		CheckpointResultBean lastCheckpoint =
-				checkPoints > 1 ? checkPointResults.get(checkPoints - 1) : null;
+		int checkPoints = getCheckPointResults().size();
+		CheckpointResultBean lastCheckpoint = checkPoints > 1 ? getCheckPointResults().get(checkPoints - 1) : null;
 
-		List<CheckpointResultBean> parent =
-				MessageTypes.TestStep.name().equalsIgnoreCase(bean.getType())
-						|| (lastCheckpoint == null)
-						|| !MessageTypes.TestStep.name()
-								.equalsIgnoreCase(lastCheckpoint.getType())
-										? checkPointResults
-										: lastCheckpoint.getSubCheckPoints();
+		List<CheckpointResultBean> parent = MessageTypes.TestStep.name().equalsIgnoreCase(bean.getType())
+				|| (lastCheckpoint == null) || !MessageTypes.TestStep.name().equalsIgnoreCase(lastCheckpoint.getType())
+						? getCheckPointResults() : lastCheckpoint.getSubCheckPoints();
 
-		CheckpointResultBean prevCheckpointResultBean =
-				!parent.isEmpty() ? parent.get(parent.size() - 1) : null;
+		CheckpointResultBean prevCheckpointResultBean = !parent.isEmpty() ? parent.get(parent.size() - 1) : null;
 
-		if ((prevCheckpointResultBean == null)
-				|| !prevCheckpointResultBean.equals(bean)) {
+		if ((prevCheckpointResultBean == null) || !prevCheckpointResultBean.equals(bean)) {
 			parent.add(bean);
-			if ((lastCheckpoint != null) && MessageTypes.TestStep.name()
-					.equalsIgnoreCase(lastCheckpoint.getType())) {
-				lastCheckpoint.setType(hasFailure(lastCheckpoint.getSubCheckPoints())
-						? MessageTypes.TestStepFail : MessageTypes.TestStepPass);
+			if ((lastCheckpoint != null) && MessageTypes.TestStep.name().equalsIgnoreCase(lastCheckpoint.getType())) {
+				lastCheckpoint.setType(hasFailure(lastCheckpoint.getSubCheckPoints()) ? MessageTypes.TestStepFail
+						: MessageTypes.TestStepPass);
 			}
 			return true;
 		}
@@ -503,9 +508,10 @@ public class QAFTestBase {
 		String filename = "";
 		try {
 			filename = FileUtil.saveImageFile(base64Image,
-					StringUtil.createRandomString(getTestCaseName().replaceAll("[^a-zA-Z0-9\\-]", "_")), getScreenShotDir());
+					StringUtil.createRandomString(StringUtil.toTitleCaseIdentifier(getTestCaseName())),
+					getScreenShotDir());
 			lastCapturedScreenShot = filename;
-			logger.info("Capturing screen shot" + lastCapturedScreenShot);
+			logger.debug("Capturing screen shot" + lastCapturedScreenShot);
 
 		} catch (Exception e) {
 			logger.error("Error in capturing screenshot\n" + e.getMessage());
@@ -515,38 +521,31 @@ public class QAFTestBase {
 	}
 
 	private String[] initStbArgs(String... args) {
-		//String browser = stb
-		args = STBArgs.browser_str.setIfEmpty(getBrowser(),args);
+		args = STBArgs.browser_str.setIfEmpty(getBrowser(), args);
 		return STBArgs.browser_str.setIfEmpty(
-				ApplicationProperties.DRIVER_NAME
-						.getStringVal(STBArgs.browser_str.defaultVal),
+				ApplicationProperties.DRIVER_NAME.getStringVal(STBArgs.browser_str.defaultVal),
 				STBArgs.base_url.setIfEmpty(
-						ApplicationProperties.SELENIUM_BASE_URL
-								.getStringVal(STBArgs.base_url.defaultVal),
+						ApplicationProperties.SELENIUM_BASE_URL.getStringVal(STBArgs.base_url.defaultVal),
 						STBArgs.port.setIfEmpty(
 
-								ApplicationProperties.REMOTE_PORT
-										.getStringVal(STBArgs.port.defaultVal),
+								ApplicationProperties.REMOTE_PORT.getStringVal(STBArgs.port.defaultVal),
 								STBArgs.sel_server.setIfEmpty(
-										ApplicationProperties.REMOTE_SERVER.getStringVal(
-												STBArgs.sel_server.defaultVal),
+										ApplicationProperties.REMOTE_SERVER.getStringVal(STBArgs.sel_server.defaultVal),
 										args))));
 
 	}
 
 	private class DriverInitExpectedCondition
-			implements
-				ExpectedCondition<UiDriverFactory, UiDriver>,
-				Supplier<String> {
+			implements ExpectedCondition<UiDriverFactory, UiDriver>, Supplier<String> {
 		int count = 0;
 		private ArrayList<LoggingBean> commandLog;
 		private String[] stb;
 
-		public DriverInitExpectedCondition(ArrayList<LoggingBean> commandLog,
-				String[] stb) {
+		public DriverInitExpectedCondition(ArrayList<LoggingBean> commandLog, String[] stb) {
 			this.commandLog = commandLog;
 			this.stb = stb;
 		}
+
 		public UiDriver apply(UiDriverFactory driverFectory) {
 			try {
 				count++;
@@ -560,12 +559,9 @@ public class QAFTestBase {
 
 		@Override
 		public String get() {
-			return "Unable to create driver instance in "
-					+ StringUtil.toStringWithSufix(count)
-					+ " attempt with retry timeout of "
-					+ ApplicationProperties.DRIVER_INIT_TIMEOUT.getIntVal(0)
-					+ " seconds. You can check/set value of '"
-					+ ApplicationProperties.DRIVER_INIT_TIMEOUT.key
+			return "Unable to create driver instance in " + StringUtil.toStringWithSufix(count)
+					+ " attempt with retry timeout of " + ApplicationProperties.DRIVER_INIT_TIMEOUT.getIntVal(0)
+					+ " seconds. You can check/set value of '" + ApplicationProperties.DRIVER_INIT_TIMEOUT.key
 					+ "' appropriately to set retry timeout on driver initialization failure.";
 		}
 
@@ -576,11 +572,10 @@ public class QAFTestBase {
 		public UiDriverInitializer() {
 			super(new UiDriverFactory());
 		}
+
 		@Override
-		protected RuntimeException timeoutException(String message,
-				Throwable lastException) {
-			AutomationError ae = new AutomationError(
-					message + "\n" + lastException.getCause().getMessage());
+		protected RuntimeException timeoutException(String message, Throwable lastException) {
+			AutomationError ae = new AutomationError(message + "\n" + lastException.getCause().getMessage());
 			ae.setStackTrace(lastException.getCause().getStackTrace());
 			return ae;
 		}
@@ -589,11 +584,11 @@ public class QAFTestBase {
 
 	private boolean hasUiDriver() {
 
-		return null!= driverContext.get(getBrowser());
+		return null != driverContext.get(getDriverName());
 	}
 
 	private void setUiDriver(UiDriver uiDriver) {
-		driverContext.put(getBrowser(), uiDriver);
+		driverContext.put(getDriverName(), uiDriver);
 	}
 
 	private Map<String, UiDriver> getDriverContext() {
@@ -608,20 +603,18 @@ public class QAFTestBase {
 		new WebDriverTestBase().getDriver().get("http://www.google.com");
 		pause(5000);
 
-		System.out.println(TestBaseProvider.instance().get().getBrowser());
+		System.out.println(TestBaseProvider.instance().get().getDriverName());
 
 		TestBaseProvider.instance().get().setDriver("chrome2Driver");
-		System.out.println(TestBaseProvider.instance().get().getBrowser());
+		System.out.println(TestBaseProvider.instance().get().getDriverName());
 		new WebDriverTestBase().getDriver().get("http://www.google.com");
 		new WebDriverTestBase().getDriver().findElement("name=q").sendKeys("firefoxDriver");
 
 		TestBaseProvider.instance().get().setDriver("chromeDriver");
-		System.out.println(TestBaseProvider.instance().get().getBrowser());
+		System.out.println(TestBaseProvider.instance().get().getDriverName());
 		new WebDriverTestBase().getDriver().findElement("name=q").sendKeys("chromeDriver");
 
-
 		pause(50000);
-
 
 		System.exit(0);
 
