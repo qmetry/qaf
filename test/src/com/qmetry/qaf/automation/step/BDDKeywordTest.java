@@ -49,7 +49,7 @@ public class BDDKeywordTest {
 
 	@Test
 	public void keywordSynonymTest() {
-		ConfigurationManager.getBundle().addProperty("Given",
+		ConfigurationManager.getBundle().setProperty("Given",
 				"Assume;Provided;धारणा;यदि");
 
 		List<String> sysnonyms = BDDKeyword.Given.getSynonyms();
