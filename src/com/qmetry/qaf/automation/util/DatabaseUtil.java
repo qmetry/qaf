@@ -21,7 +21,6 @@
  * For any inquiry or need additional information, please contact support-qaf@infostretch.com
  *******************************************************************************/
 
-
 package com.qmetry.qaf.automation.util;
 
 import java.sql.Connection;
@@ -32,7 +31,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.configuration.Configuration;
 import org.apache.log4j.Logger;
 
 import com.qmetry.qaf.automation.core.ConfigurationManager;
@@ -99,7 +101,7 @@ public class DatabaseUtil {
 	}
 
 	/**
-	 * Creates data base connection using following properties:
+	 * For default data base configuration, Creates data base connection using following properties:
 	 * <ol>
 	 * <li>db.driver.class</li>
 	 * <li>db.connection.url</li>
@@ -112,6 +114,37 @@ public class DatabaseUtil {
 	 */
 	public static Connection getConnection() throws Exception {
 		PropertyUtil props = ConfigurationManager.getBundle();
+		String url = props.getString("db.connection.url");
+		String driverclass = props.getString("db.driver.class");
+		String user = props.getString("db.user");
+		String pwd = props.getString("db.pwd");
+		return getConnection(driverclass, url, user, pwd);
+	}
+
+	/**
+	 * If you want to use multiple data bases in the project. provide different configuration with different prefix. For example
+	 * <p>defualt</p>
+	 * <ol>
+	 * <li>db.driver.class</li>
+	 * <li>db.connection.url</li>
+	 * <li>db.user</li>
+	 * <li>db.pwd</li>
+	 * </ol>
+	 * <p>another database configuration</p>
+	 * <ol>
+	 * <li>con1.db.driver.class</li>
+	 * <li>con1.db.connection.url</li>
+	 * <li>con1.db.user</li>
+	 * <li>con1.db.pwd</li>
+	 * </ol>
+	 * to use another configuration: <code>{@link #getConnection(String) getConnection("con1")}
+	 * @param prefix - prefix of the database configuration to be used
+	 * @return
+	 * @throws Exception
+	 */
+	public static Connection getConnection(String prefix) throws Exception {
+		Configuration props = StringUtil.isBlank(prefix) ? ConfigurationManager.getBundle()
+				: ConfigurationManager.getBundle().subset(prefix);
 		String url = props.getString("db.connection.url");
 		String driverclass = props.getString("db.driver.class");
 		String user = props.getString("db.user");
@@ -190,5 +223,50 @@ public class DatabaseUtil {
 			DatabaseUtil.close(con);
 		}
 		return rows.toArray(new Object[][] {});
+	}
+	
+	/**
+	 * use this method when you want to run query using default database configuration
+	 * @param query
+	 * @return
+	 */
+	public static List<Map<String, Object>> getRecordAsMap(String query) {
+		return getRecordAsMap("", query);
+	}
+
+	/**
+	 * Use this method if you have multiple database configuration. Provide prefix of the configuration to be used. 
+	 * @see #getConnection(String)
+	 * @param connectionPrefix
+	 * @param query
+	 * @return
+	 */
+	public static List<Map<String, Object>> getRecordAsMap(String connectionPrefix,String query) {
+		ArrayList<Map<String, Object>> rows = new ArrayList<Map<String, Object>>();
+		Connection con = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			con = DatabaseUtil.getConnection(connectionPrefix);
+			stmt = con.createStatement();
+			rs = stmt.executeQuery(query);
+
+			while (rs.next()) {
+				HashMap<String, Object> map = new HashMap<String, Object>();
+
+				int colsCnt = rs.getMetaData().getColumnCount();
+				for (int indx = 1; indx <= colsCnt; indx++) {
+					map.put(rs.getMetaData().getColumnLabel(indx), rs.getObject(indx));
+				}
+				rows.add(map);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DatabaseUtil.close(stmt, rs);
+			DatabaseUtil.close(con);
+		}
+		return rows;
 	}
 }

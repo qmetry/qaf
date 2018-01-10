@@ -23,11 +23,15 @@
 
 package com.qmetry.qaf.automation.ui.webdriver;
 
+import java.lang.reflect.Constructor;
 import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
+
+import com.qmetry.qaf.automation.core.AutomationError;
+import com.qmetry.qaf.automation.core.ConfigurationManager;
 
 /**
  * @author Chirag
@@ -37,9 +41,12 @@ public class ByCustom extends By {
 	private String stretegy;
 	private String loc;
 
+	private By by;
+
 	public ByCustom(String stretegy, String loc) {
 		this.loc = loc;
 		this.stretegy = stretegy;
+		by = getBy(stretegy, loc);
 	}
 
 	/*
@@ -50,7 +57,27 @@ public class ByCustom extends By {
 	 */
 	@Override
 	public List<WebElement> findElements(SearchContext context) {
+		if (null != by){
+			return by.findElements(context);
+		}
 		return ((FindsByCustomStretegy) context).findElementsByCustomStretegy(stretegy, loc);
 	}
 
+	private By getBy(String s, String loc) {
+		s = ConfigurationManager.getBundle().getString(s, s);
+		try {
+			@SuppressWarnings("unchecked")
+			Class<? extends By> cls = (Class<? extends By>) Class.forName(s);
+			try {
+				Constructor<? extends By> con = cls.getConstructor(String.class);
+				con.setAccessible(true);
+				return con.newInstance(loc);
+			} catch (Exception e) {
+				throw new AutomationError("Unable to create by using class" + s + " for locator " + loc, e);
+			}
+		} catch (ClassNotFoundException e) {
+			System.out.println("No class registerd for stretegy" + s + ". Will use '" + s + "' as custom stretegy");
+		}
+		return null;
+	}
 }
