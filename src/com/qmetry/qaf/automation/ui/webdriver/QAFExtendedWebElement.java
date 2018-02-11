@@ -21,9 +21,9 @@
  * For any inquiry or need additional information, please contact support-qaf@infostretch.com
  *******************************************************************************/
 
-
 package com.qmetry.qaf.automation.ui.webdriver;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -101,13 +101,12 @@ public class QAFExtendedWebElement extends RemoteWebElement implements QAFWebEle
 		for (String listenr : listners) {
 			registerListeners(listenr);
 		}
-		listners = ConfigurationManager.getBundle()
-				.getStringArray(ApplicationProperties.QAF_LISTENERS.key);
+		listners = ConfigurationManager.getBundle().getStringArray(ApplicationProperties.QAF_LISTENERS.key);
 		for (String listener : listners) {
 			try {
 				QAFListener cls = (QAFListener) Class.forName(listener).newInstance();
-				if(QAFWebElementCommandListener.class.isAssignableFrom(cls.getClass()))
-				this.listners.add((QAFWebElementCommandListener)cls);
+				if (QAFWebElementCommandListener.class.isAssignableFrom(cls.getClass()))
+					this.listners.add((QAFWebElementCommandListener) cls);
 			} catch (Exception e) {
 				logger.error("Unable to register class as element listener:  " + listener, e);
 			}
@@ -142,7 +141,7 @@ public class QAFExtendedWebElement extends RemoteWebElement implements QAFWebEle
 		this(parentElement, (By) null);
 		initLoc(locator);
 	}
-	
+
 	/**
 	 * 
 	 * @param driver
@@ -385,10 +384,10 @@ public class QAFExtendedWebElement extends RemoteWebElement implements QAFWebEle
 			}
 
 			result = super.apply(result);
-			if(result instanceof RemoteWebElement){
-				if(!(result instanceof QAFExtendedWebElement)){
+			if (result instanceof RemoteWebElement) {
+				if (!(result instanceof QAFExtendedWebElement)) {
 					QAFExtendedWebElement ele = newRemoteWebElement();
-					ele.setId(((RemoteWebElement)result).getId());
+					ele.setId(((RemoteWebElement) result).getId());
 					return ele;
 				}
 			}
@@ -415,6 +414,17 @@ public class QAFExtendedWebElement extends RemoteWebElement implements QAFWebEle
 		QAFExtendedWebElement ele = findElement(LocatorUtil.getBy(loc));
 		ele.initLoc(loc);
 		return ele;
+	}
+
+	public List<WebElement> findElements(By by) {
+		try {
+			return super.findElements(by);
+		} catch (Exception e) {
+			// may be this element present earlier and now not present so
+			// returning element not found exception instead of returning empty
+			// array.
+			return new ArrayList<WebElement>();
+		}
 	}
 
 	@SuppressWarnings("unchecked")

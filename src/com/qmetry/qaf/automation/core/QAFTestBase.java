@@ -187,10 +187,12 @@ public class QAFTestBase {
 			UiDriver uiDriver = (UiDriver) drivercontext.get(driver);
 			if (null != uiDriver) {
 				new UiDriverFactory().tearDown(uiDriver);
+				if (getBaseUrl().equalsIgnoreCase(driver)) {
+					setDriver("");
+				}
 			}
 			drivercontext.remove(driver);
 		}
-		setDriver("");
 	}
 
 	/** checks for verification errors and stops the browser */

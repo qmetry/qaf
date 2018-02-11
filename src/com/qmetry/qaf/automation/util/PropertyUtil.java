@@ -245,7 +245,9 @@ public class PropertyUtil extends XMLConfiguration {
 	public void setProperty(String key, Object value) {
 		//allow List Delimiter for string value
 		if(null!=value && value instanceof String){
-			value = PropertyConverter.split(value.toString(),getListDelimiter());
+			if(value.toString().indexOf(getListDelimiter())>0){
+				value = PropertyConverter.split(value.toString(),getListDelimiter());
+			}
 		}
 		super.setProperty(key, value);
 	}

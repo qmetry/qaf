@@ -1,9 +1,16 @@
 
 
-Scenario: add amount
-META-DATA: {}
+SCENARIO: add amount
+META-DATA: {'desc':'sharing calss objct for steps'}
 Given i have 10 rupees
 When i add 5 rupees
 And i should have 15 rupees
+
+END
+
+SCENARIO: testStepFromClassWithConstuctorArg 
+META-DATA: {'desc':'test Step From Class With Constuctor Arg and injectction'}
+When i have object with 'test'
+Then assert property
 
 END

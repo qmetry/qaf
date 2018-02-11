@@ -35,12 +35,16 @@ import static org.apache.commons.lang.StringUtils.isBlank;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.configuration.ConfigurationMap;
@@ -90,19 +94,18 @@ public class JavaStep extends BaseTestStep {
 	public boolean isQafStepImpl() {
 		return qafStepImpl;
 	}
+
 	private void init() {
 		fileName = method.getDeclaringClass().getName();
 		MetaData stepMetaData = getAnnotation(method, MetaData.class);
-		MetaData classMetaData =
-				getAnnotation(method.getDeclaringClass(), MetaData.class);
+		MetaData classMetaData = getAnnotation(method.getDeclaringClass(), MetaData.class);
 		QAFTestStep step = getAnnotation(method, QAFTestStep.class);
 
 		if (null != classMetaData && isNotBlank(classMetaData.value())) {
 			try {
 				metaData = JSONUtil.toMap(classMetaData.value());
 			} catch (JSONException e) {
-				System.err
-						.println(metaData + " is not valid json map for step meta-data");
+				System.err.println(metaData + " is not valid json map for step meta-data");
 			}
 		}
 
@@ -113,19 +116,15 @@ public class JavaStep extends BaseTestStep {
 				// common
 				metaData.putAll(JSONUtil.toMap(stepMetaData.value()));
 			} catch (JSONException e) {
-				System.err
-						.println(metaData + " is not valid json map for step meta-data");
+				System.err.println(metaData + " is not valid json map for step meta-data");
 			}
 		}
 
 		if (isBlank(name)) {
-			QAFTestStepProvider provider =
-					method.getDeclaringClass().getAnnotation(QAFTestStepProvider.class);
+			QAFTestStepProvider provider = method.getDeclaringClass().getAnnotation(QAFTestStepProvider.class);
 
-			String prefix = (provider != null) && isNotBlank(provider.prefix())
-					? provider.prefix() + "." : "";
-			name = prefix + ((step != null) && isNotBlank(step.stepName())
-					? step.stepName() : method.getName());
+			String prefix = (provider != null) && isNotBlank(provider.prefix()) ? provider.prefix() + "." : "";
+			name = prefix + ((step != null) && isNotBlank(step.stepName()) ? step.stepName() : method.getName());
 
 		}
 		if (step != null) {
@@ -145,6 +144,7 @@ public class JavaStep extends BaseTestStep {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.qmetry.qaf.automation.step.TestStep#execute(java.lang.Object[])
 	 */
 	@Override
@@ -152,22 +152,18 @@ public class JavaStep extends BaseTestStep {
 		try {
 			Object stepProvider = getStepProvider();
 			// block joint-point listener
-			TestBaseProvider.instance().get().getContext().setProperty(ATTACH_LISTENER,
-					false);
-			TestBaseProvider.instance().get().getContext().setProperty("current.teststep",
-					this);
+			TestBaseProvider.instance().get().getContext().setProperty(ATTACH_LISTENER, false);
+			TestBaseProvider.instance().get().getContext().setProperty("current.teststep", this);
 			method.setAccessible(true);
-			return method.invoke(stepProvider, processArgs(method, actualArgs));
+			Object[] args = processArgs(method, actualArgs);
+			return method.invoke(stepProvider, args);
 		} catch (IllegalArgumentException e) {
-			throw new StepInvocationException(this,
-					"Unable to invoke JavaStep with given arguments: " + getName()
-							+ Arrays.toString(actualArgs) + "\nat " + getSignature(),
-					true);
+			throw new StepInvocationException(this, "Unable to invoke JavaStep with given arguments: " + getName()
+					+ Arrays.toString(actualArgs) + "\nat " + getSignature(), true);
 
 		} catch (IllegalAccessException e) {
 			throw new StepInvocationException(this,
-					"Unable to invoke JavaStep: " + getName()
-							+ Arrays.toString(actualArgs) + "\nat " + getSignature(),
+					"Unable to invoke JavaStep: " + getName() + Arrays.toString(actualArgs) + "\nat " + getSignature(),
 					true);
 
 		} catch (InvocationTargetException e) {
@@ -179,15 +175,14 @@ public class JavaStep extends BaseTestStep {
 			}
 			throw new StepInvocationException(this, e.getCause());
 		} catch (InstantiationException e) {
-			throw new StepInvocationException(this, "Unable to Instantiate JavaStep: "
-					+ getName() + Arrays.toString(actualArgs) + getSignature(), true);
+			throw new StepInvocationException(this,
+					"Unable to Instantiate JavaStep: " + getName() + Arrays.toString(actualArgs) + getSignature(),
+					true);
 		}
 	}
 
-	protected Object getStepProvider()
-			throws InstantiationException, IllegalAccessException {
-
-		return stepProvider == null ? getClassInstance() : stepProvider;
+	protected Object getStepProvider() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		return stepProvider == null ? getClassInstance(method.getDeclaringClass()) : stepProvider;
 	}
 
 	/**
@@ -211,8 +206,7 @@ public class JavaStep extends BaseTestStep {
 		Map<String, Object> context = getStepExecutionTracker().getContext();
 
 		try {
-			if ((noOfParams == (objects.length - 1))
-					&& method.getParameterTypes()[noOfParams - 1].isArray()) {
+			if ((noOfParams == (objects.length - 1)) && method.getParameterTypes()[noOfParams - 1].isArray()) {
 				// case of optional arguments!...
 				System.arraycopy(objects, 0, params, 0, objects.length);
 				params[noOfParams - 1] = "[]";
@@ -220,17 +214,17 @@ public class JavaStep extends BaseTestStep {
 				System.arraycopy(objects, 0, params, 0, noOfParams);
 			}
 		} catch (Exception e) {
-			throw new RuntimeException("Wrong number of parameters, Expected "
-					+ noOfParams + " parameters but Actual is "
-					+ (objects == null ? "0" : objects.length));
+			throw new RuntimeException("Wrong number of parameters, Expected " + noOfParams
+					+ " parameters but Actual is " + (objects == null ? "0" : objects.length));
 		}
 
-		Gson gson = new GsonBuilder().setDateFormat("dd-MM-yyyy").registerTypeAdapter(
-				ObjectWrapper.class, new GsonDeserializerObjectWrapper()).create();
+		Gson gson = new GsonBuilder().setDateFormat("dd-MM-yyyy")
+				.registerTypeAdapter(ObjectWrapper.class, new GsonDeserializerObjectWrapper()).create();
 
 		description = StrSubstitutor.replace(description, context);
 		description = getBundle().getSubstitutor().replace(description);
 		for (int i = 0; i < noOfParams; i++) {
+			Class<?> paramType = method.getParameterTypes()[i];
 
 			if ((params[i] instanceof String)) {
 				String pstr = (String) params[i];
@@ -239,16 +233,13 @@ public class JavaStep extends BaseTestStep {
 					String pname = pstr.substring(2, pstr.length() - 1);
 					params[i] = context.containsKey(pstr) ? context.get(pstr)
 							: context.containsKey(pname) ? context.get(pname)
-									: getBundle().containsKey(pstr)
-											? getBundle().getObject(pstr)
-											: getPropValue(pname);
+									: getBundle().containsKey(pstr) ? getObject(pstr, paramType) : getPropValue(pname,paramType);
 				} else if (pstr.indexOf("$") >= 0) {
-					pstr = getBundle().getSubstitutor().replace(pstr);
-					params[i] = StrSubstitutor.replace(pstr, context);
+					pstr = StrSubstitutor.replace(pstr, context);
+					params[i] = getBundle().getSubstitutor().replace(pstr);
 				}
 
 			}
-			Class<?> paramType = method.getParameterTypes()[i];
 			if (String.class.isAssignableFrom(paramType)) {
 				continue;
 			}
@@ -295,26 +286,58 @@ public class JavaStep extends BaseTestStep {
 		}
 	}
 
-	private Object getClassInstance()
-			throws InstantiationException, IllegalAccessException {
-		Class<?> cls = method.getDeclaringClass();
-		if (getBundle().getBoolean("step.provider.sharedinstance", false)
-				&& isSharableInstance(cls)) {
+	private Object getClassInstance(Class<?> cls) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		if (getBundle().getBoolean("step.provider.sharedinstance", false) && isSharableInstance(cls)) {
 			// allow class variable sharing among steps
 			Object obj = getBundle().getObject(cls.getName());
 			if (null == obj) {
-				obj = cls.newInstance();
+				obj = createInstance(cls);
+				inject(obj);
 				getBundle().setProperty(cls.getName(), obj);
 			}
 			return obj;
 		}
-		return cls.newInstance();
+		Object obj = createInstance(cls);
+		inject(obj);
+		return obj;
+	}
+
+	private void inject(Object obj) {
+		try {
+			//new ElementFactory().initFields(obj);
+			Field[] flds = obj.getClass().getDeclaredFields();
+			for(Field fld : flds){
+				if (fld.isAnnotationPresent(Inject.class)) {
+					fld.setAccessible(true);
+					Object value = getClassInstance(fld.getType());
+					fld.set(obj, value);
+				}
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			
+		}
+	}
+
+	private Object createInstance(Class<?> cls) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		try {
+			return cls.newInstance();
+		} catch (Exception e) {
+				//only public constructors with or without parameter(s) to be considered!...
+				Constructor<?> con = cls.getConstructors()[0];
+				con.setAccessible(true);
+				ArrayList<Object> args = new ArrayList<Object>();
+				for (Class<?> param : con.getParameterTypes()) {
+					args.add(getClassInstance(param));
+				}
+			return	con.newInstance(args.toArray(new Object[args.size()]));
+				
+		}
 	}
 
 	private boolean isSharableInstance(Class<?> cls) {
 
-		if (TestPage.class.isAssignableFrom(cls)
-				|| QAFWebElement.class.isAssignableFrom(cls)) {
+		if (TestPage.class.isAssignableFrom(cls) || QAFWebElement.class.isAssignableFrom(cls)) {
 			return false;
 		}
 		return true;
@@ -334,8 +357,7 @@ public class JavaStep extends BaseTestStep {
 					objVal = annotationMethod.invoke(annotation);
 					String key = annotationMethod.getName();
 					metaData.put(key, objVal);
-					if (key.equalsIgnoreCase("value")
-							&& isTestStepAnnotation(annotation)) {
+					if (key.equalsIgnoreCase("value") && isTestStepAnnotation(annotation)) {
 						description = (String) objVal;
 						qafStepImpl = false;
 
@@ -349,8 +371,7 @@ public class JavaStep extends BaseTestStep {
 
 	@SuppressWarnings("unchecked")
 	private boolean isTestStepAnnotation(Annotation annotation) {
-		List<String> annotationPkgs = getBundle().getList("step.annotation.pkgs",
-				Arrays.asList("cucumber.api.java"));
+		List<String> annotationPkgs = getBundle().getList("step.annotation.pkgs", Arrays.asList("cucumber.api.java"));
 
 		for (String pkg : annotationPkgs) {
 			if (annotation.annotationType().getName().indexOf(pkg) >= 0) {
@@ -360,12 +381,26 @@ public class JavaStep extends BaseTestStep {
 		return false;
 	}
 
-	private Object getPropValue(String pname) {
+	private Object getPropValue(String pname,  Class<?> paramType) {
 		Object o = getBundle().subset(pname);
 		if (o instanceof HierarchicalConfiguration && ((HierarchicalConfiguration) o).getRoot().getValue() == null
 				&& ((HierarchicalConfiguration) o).getRoot().getChildrenCount() > 0) {
 			return new ConfigurationMap(getBundle().subset(pname));
 		}
-		return getBundle().getObject(pname);
+		return getObject(pname, paramType);
+	}
+	
+	private Object getObject(String key, Class<?> paramType){
+		Object o = getBundle().getProperty(key);
+		if(o.getClass().isAssignableFrom(paramType)){
+			return o;
+		}
+		if(paramType.isArray()){
+			return getBundle().getList(key).toArray();
+		}
+		if(o instanceof List){
+			return ((List<?>)o).get(0);
+		}
+		return o;
 	}
 }
