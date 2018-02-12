@@ -31,6 +31,7 @@ import org.testng.ITestResult;
 import com.qmetry.qaf.automation.core.ConfigurationManager;
 import com.qmetry.qaf.automation.core.QAFListener;
 import com.qmetry.qaf.automation.data.BaseDataBean;
+import com.qmetry.qaf.automation.data.PasswordDecryptor;
 import com.qmetry.qaf.automation.step.QAFTestStepListener;
 import com.qmetry.qaf.automation.ui.selenium.SeleniumCommandListener;
 import com.qmetry.qaf.automation.ui.selenium.WaitService;
@@ -528,7 +529,26 @@ public enum ApplicationProperties {
 	 *        <b>value</b>: full qualified name of the class that extends
 	 *        {@link RestClientFactory}.
 	 */
-	REST_CLIENT_FACTORY_IMPL("rest.client.impl");
+	REST_CLIENT_FACTORY_IMPL("rest.client.impl"),
+
+	/**
+	 * @since 2.1.13 <b>key</b>: <code>password.decryptor.impl</code><br/>
+	 *        <b>value</b>: full qualified name of the class that implements
+	 *        {@link PasswordDecryptor}. This implementation will be used to
+	 *        decrypt password. When configuration manager found any key starts
+	 *        with {@link #ENCRYPTED_PASSWOED_KEY_PREFIX}
+	 */
+	PASSWOED_DECRYPTOR_IMPL("password.decryptor.impl"),
+
+	/**
+	 * @since 2.1.13 <b>key</b>: <code>encrypted</code><br/>
+	 *        <b>value</b>: property with prefix 'encrypted'. When configuration
+	 *        manager found any key starts with 'encrypted' prefix, for example
+	 *        'encripted.db.pwd', then it will store decrypted value without
+	 *        prefix, 'db.pwd' in this example. So you can reference decrypted value anywhere in the code with key without this prefix ('db.pwd' in this example).
+	 *        
+	 */
+	ENCRYPTED_PASSWOED_KEY_PREFIX("encrypted.");
 
 	public String key;
 
