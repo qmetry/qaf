@@ -52,6 +52,11 @@ public abstract class QAFWebComponent extends QAFExtendedWebElement {
 		logger = LogFactory.getLog(this.getClass());
 		initFields();
 	}
+	
+	protected QAFWebComponent(QAFExtendedWebDriver driver){
+		super(driver);
+		logger = LogFactory.getLog(this.getClass());
+	}
 
 	/**
 	 * call this constructor for component having parent element. Such component

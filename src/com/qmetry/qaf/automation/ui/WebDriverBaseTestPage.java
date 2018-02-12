@@ -24,11 +24,11 @@
 
 package com.qmetry.qaf.automation.ui;
 
+import static com.qmetry.qaf.automation.ui.webdriver.ElementFactory.$;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.openqa.selenium.By;
 
 import com.qmetry.qaf.automation.ui.api.WebDriverTestPage;
 import com.qmetry.qaf.automation.ui.webdriver.ComponentFactory;
@@ -64,7 +64,7 @@ public abstract class WebDriverBaseTestPage<P extends WebDriverTestPage>
 
 	@Override
 	public String getText() {
-		return driver.createElement(By.tagName("body")).getText();
+		return $("tagName=body").getText();
 	}
 
 	@Override
@@ -109,6 +109,6 @@ public abstract class WebDriverBaseTestPage<P extends WebDriverTestPage>
 	}
 	
 	public void waitForTextPresent(String text) {
-		new QAFExtendedWebElement(By.partialLinkText(text)).waitForPresent();
+		$("partialLinkText=text").waitForPresent();
 	}
 }

@@ -23,6 +23,7 @@
 
 package com.qmetry.qaf.automation.ui.webdriver;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -52,6 +53,7 @@ import org.testng.SkipException;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.qmetry.qaf.automation.core.AutomationError;
 import com.qmetry.qaf.automation.core.ConfigurationManager;
 import com.qmetry.qaf.automation.core.MessageTypes;
 import com.qmetry.qaf.automation.core.QAFListener;
@@ -396,10 +398,23 @@ public class QAFExtendedWebElement extends RemoteWebElement implements QAFWebEle
 
 		@Override
 		protected QAFExtendedWebElement newRemoteWebElement() {
-			QAFExtendedWebElement toReturn = new QAFExtendedWebElement((QAFExtendedWebDriver) driver);
-			return toReturn;
+			String elemImpl = ConfigurationManager.getBundle().getString("default.element.impl");
+			if(StringUtils.isBlank(elemImpl)){
+				QAFExtendedWebElement toReturn = new QAFExtendedWebElement((QAFExtendedWebDriver) driver);
+				return toReturn;
+			}
+			try {
+				Class<?> cls = Class.forName(ConfigurationManager.getBundle().getString("default.element.impl", QAFExtendedWebElement.class.getCanonicalName()));
+				Constructor<?> con = cls.getDeclaredConstructor(QAFExtendedWebDriver.class);
+				con.setAccessible(true);
+				Object toReturn = con.newInstance(driver);
+				return (QAFExtendedWebElement) toReturn;
+			} catch (ClassNotFoundException e) {
+				throw new AutomationError("Unable to find class "+elemImpl+" to create element. ", e);
+			} catch (Exception e) {
+				throw new AutomationError("Unable to create element using "+elemImpl+". Make sure it is subclass of QAFExtendedWebElement and has consrtuctor excepting QAFExtendedWebDriver argument", e);
+			}
 		}
-
 	}
 
 	@Override

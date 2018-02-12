@@ -94,7 +94,7 @@ public class ElementFactory {
 										context);
 
 							} else {
-								value = new QAFExtendedWebElement(findBy.locator());
+								value = $(findBy.locator());
 
 								if (context instanceof QAFExtendedWebElement) {
 									((QAFExtendedWebElement) value).parentElement = (QAFExtendedWebElement) context;
@@ -131,8 +131,7 @@ public class ElementFactory {
 
 	@SuppressWarnings("unchecked")
 	private boolean isDecoratable(Field field) {
-		if (!hasAnnotation(field, com.qmetry.qaf.automation.ui.annotations.FindBy.class, FindBy.class,
-				FindBys.class)) {
+		if (!hasAnnotation(field, com.qmetry.qaf.automation.ui.annotations.FindBy.class, FindBy.class, FindBys.class)) {
 			return false;
 		}
 		if (WebElement.class.isAssignableFrom(field.getType())) {
@@ -168,14 +167,16 @@ public class ElementFactory {
 		Class<? extends QAFExtendedWebElement> cls = (Class<? extends QAFExtendedWebElement>) getListType(field);
 		InvocationHandler iHandler = QAFWebComponent.class.isAssignableFrom(cls)
 				? new ComponentListHandler(context, loc, cls, clsObject)
-				: new ComponentListHandler(context, loc, QAFExtendedWebElement.class, clsObject);
+				: new ComponentListHandler(context, loc, getElemenetClass(), clsObject);
 		return Proxy.newProxyInstance(this.getClass().getClassLoader(), new Class[] { List.class }, iHandler);
 	}
-	
+
 	public static QAFWebElement $(String loc) {
 		QAFExtendedWebElement eleToReturn = new QAFExtendedWebElement(loc);
-		String compClass = (String) eleToReturn.getMetaData().get("component-class");
-		if(StringUtil.isNotBlank(compClass)){
+		String compClass = eleToReturn.getMetaData().containsKey("component-class")
+				? (String) eleToReturn.getMetaData().get("component-class")
+				: ConfigurationManager.getBundle().getString("default.element.impl");
+		if (StringUtil.isNotBlank(compClass)) {
 			try {
 				return (QAFWebElement) ComponentFactory.getObject(Class.forName(compClass), loc, null);
 			} catch (Exception e) {
@@ -183,5 +184,16 @@ public class ElementFactory {
 			}
 		}
 		return eleToReturn;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static Class<? extends QAFExtendedWebElement> getElemenetClass(){
+		try {
+			Class<?> cls = Class.forName(ConfigurationManager.getBundle().getString("default.element.impl", QAFExtendedWebElement.class.getCanonicalName()));
+			return (Class<? extends QAFExtendedWebElement>) cls;
+		} catch (Exception e) {
+			return QAFExtendedWebElement.class;
+		}
+
 	}
 }
