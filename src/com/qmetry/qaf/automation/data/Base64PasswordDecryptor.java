@@ -4,7 +4,8 @@
 package com.qmetry.qaf.automation.data;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Base64;
+
+import org.apache.commons.codec.binary.Base64;
 
 import com.qmetry.qaf.automation.core.AutomationError;
 
@@ -23,7 +24,7 @@ public class Base64PasswordDecryptor implements PasswordDecryptor {
 	 */
 	@Override
 	public String getDecryptedPassword(String encriptedPassword) {
-		byte[] decoded = Base64.getDecoder().decode(encriptedPassword);
+		byte[] decoded = Base64.decodeBase64(encriptedPassword);
 		String decrypted;
 		try {
 			decrypted = new String(decoded, "UTF-8");
@@ -36,7 +37,7 @@ public class Base64PasswordDecryptor implements PasswordDecryptor {
 	public static String getEncryptedPassword(String plainPassword) {
 		String encryptedPassword = "";
 		try {
-			encryptedPassword = Base64.getEncoder().encodeToString(plainPassword.getBytes("UTF-8"));
+			encryptedPassword = Base64.encodeBase64String(plainPassword.getBytes("UTF-8"));
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
