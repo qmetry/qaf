@@ -47,6 +47,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.TreeMap;
 
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.logging.Log;
@@ -244,8 +245,7 @@ public class ReporterUtil {
 			methodResult.setThrowable(result.getThrowable());
 
 			updateOverview(context, result);
-
-			String fileName = StringUtil.toTitleCaseIdentifier(getMethodName(result));
+			String fileName = getMethodIdentifier(result);//StringUtil.toTitleCaseIdentifier(getMethodName(result));
 			String methodResultFile = dir + "/" + fileName;
 
 			File f = new File(methodResultFile + ".json");
@@ -255,6 +255,8 @@ public class ReporterUtil {
 				fileName += StringUtil.getRandomString("aaaaaaaaaa");
 				// add updated file name as 'resultFileName' key in metaData
 				methodResultFile = dir + "/" + fileName;
+				result.setAttribute("qaf_test_identifier",fileName);
+
 				updateClassMetaInfo(context, result, fileName);
 			} else {
 				updateClassMetaInfo(context, result, fileName);
@@ -357,6 +359,40 @@ public class ReporterUtil {
 
 	private static String getMethodName(ITestResult result) {
 		return result.getName();
+	}
+	
+	@SuppressWarnings("unchecked")
+	private static String getMethodIdentifier(ITestResult result){
+
+		if(result.getAttribute("qaf_test_identifier")!=null){
+			return (String) result.getAttribute("qaf_test_identifier");
+		}
+		
+		String id = getMethodName(result);
+		String identifierKey = getBundle().getString("tc.identifier.key","testCaseId");
+
+		Map<String, Object> metadata =
+				new TreeMap<String, Object>(String.CASE_INSENSITIVE_ORDER);
+	
+		if (result.getMethod() instanceof TestNGScenario) {
+			TestNGScenario scenario = (TestNGScenario) result.getMethod();
+			metadata.putAll(scenario.getMetaData());
+		}
+		if(result.getParameters()!=null && result.getParameters().length>0){
+			if(result.getParameters()[0] instanceof Map<?, ?>){
+				metadata.putAll((Map<String, Object>)result.getParameters()[0]);
+			}
+		}
+		if(metadata.containsKey(identifierKey)){
+			id=(String) metadata.get(identifierKey);
+		}
+		id=StringUtil.toTitleCaseIdentifier(id);
+		
+		if(id.length()>50){
+			id=id.substring(0, 50);
+		}
+		result.setAttribute("qaf_test_identifier",id);
+		return (String) result.getAttribute("qaf_test_identifier");
 	}
 
 	private static String getClassDir(ITestContext context, ITestResult result) {

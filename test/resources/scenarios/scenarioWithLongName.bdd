@@ -1,0 +1,27 @@
+
+Feature: Long Scenario Name
+
+SCENARIO: This is my scenario with long name having more than 50 chars, you should avoid such scenario names.
+META-DATA: {"desc":"Scenario with long name"}
+ 
+ When I search for "something"
+ Then it should have "something" in search results
+
+END
+
+SCENARIO: This is my scenario with long name having more than 50 chars and testcaseid, you should avoid such scenario names.
+META-DATA: {"desc":"Scenario with long name and testcaseid in meta-data", "testcaseid":"TC-1001"}
+ 
+ When I search for "something"
+ Then it should have "something" in search results
+
+END
+
+
+SCENARIO: This is my scenario with long name having more than 50 chars and testcaseid in datafile, you should avoid such scenario names.
+META-DATA: {"desc":"Scenario with long name and testcaseid in data file", "dataFile":"resources/testdata.txt"}
+ 
+ When I search for "${searchKey}"
+ Then it should have "${searchResult}" in search results
+
+END

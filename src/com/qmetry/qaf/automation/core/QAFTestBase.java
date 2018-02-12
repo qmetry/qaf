@@ -509,8 +509,13 @@ public class QAFTestBase {
 	private String base64ImageToFile(String base64Image) {
 		String filename = "";
 		try {
+			String tcname = StringUtil.toTitleCaseIdentifier(getTestCaseName());
+			//too long file name may not supported in some os
+			if(tcname.length()>25){
+				tcname.substring(0, 25);
+			}
 			filename = FileUtil.saveImageFile(base64Image,
-					StringUtil.createRandomString(StringUtil.toTitleCaseIdentifier(getTestCaseName())),
+					StringUtil.createRandomString(tcname),
 					getScreenShotDir());
 			lastCapturedScreenShot = filename;
 			logger.debug("Capturing screen shot" + lastCapturedScreenShot);
