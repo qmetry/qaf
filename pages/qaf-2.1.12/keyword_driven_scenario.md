@@ -2,7 +2,7 @@
 title: Keyword driven scenario
 sidebar: qaf_2_1_12-sidebar
 permalink: qaf-2.1.12/keyword_driven_scenario.html
-folder: latest
+folder: qaf-2.1.12
 ---
 
 ## Scenario

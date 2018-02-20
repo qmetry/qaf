@@ -31,9 +31,24 @@ entries:
     - title: Release Notes
       url: release_notes.html
       output: web, pdf
-    - title: Latest Version Docs
+    - title: Latest QAF 2.1.12 Docs
       url: ../latest/docs.html
+      output: web, pdf 
+    - title: QAF 2.1.11 Docs
+      url: ../qaf-2.1.11/docs.html
+      output: web, pdf 
+    - title: QAF 2.1.10 Docs
+      url: ../qaf-2.1.10/docs.html
+      output: web, pdf  
+    - title: QAF 2.1.9 Docs
+      url: ../qaf-2.1.9/docs.html
+      output: web, pdf  
+    - title: QAF 2.1.8 Docs
+      url: ../qaf-2.1.8/docs.html
       output: web, pdf
+    - title: QAF 2.1.7b Docs
+      url: ../qaf-2.1.7b/docs.html
+      output: web, pdf  
   - title:
     output: pdf
     type: frontmatter
@@ -141,11 +156,14 @@ entries:
     - title: Page Launch Strategy
       url: page_launch_strategy.html
       output: web, pdf
-      
+
     - title: Locating Elements
       url: locating_elements.html
       output: web, pdf
-
+      
+    - title: Locator Repository
+      url: locator_repository.html
+      output: web, pdf
     - title: Web Services Testing
       url: web_services.html
       output: web, pdf
@@ -186,6 +204,10 @@ entries:
             - title: Custom Step Definition
               output: web, pdf
               url: KWD_Custom_Step_Definition.html
+      
+    - title: Gherkin
+      url: gherkin_client.html
+      output: web, pdf
               
   - title: Listeners
     output: web, pdf

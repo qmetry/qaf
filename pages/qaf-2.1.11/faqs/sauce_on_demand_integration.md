@@ -2,7 +2,7 @@
 title: Sauce on demand Integration
 sidebar: faq_sidebar
 permalink: qaf-2.1.11/sauce_on_demand_integration.html
-folder: latest
+folder: qaf-2.1.11
 ---
 
 To run test on cloud with Qmetry Automation Framework, all you need to change is the server, port and browser info provided by sauce labs. You can run your test in one or more environments without having your own infrastructure. The most powerful feature of QMetry Automation Framework is that it provides parallel-ready test harness to connect tests to Sauce Labs’ service.

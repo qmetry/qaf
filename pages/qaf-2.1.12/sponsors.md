@@ -1,7 +1,7 @@
 ---
 title: Sponsors
 permalink: qaf-2.1.12/sponsors.html
-folder: latest
+folder: qaf-2.1.12
 
 ---
 

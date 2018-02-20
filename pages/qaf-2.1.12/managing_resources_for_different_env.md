@@ -2,7 +2,7 @@
 title: Managing resources for Different Environments
 sidebar: qaf_2_1_12-sidebar
 permalink: qaf-2.1.12/managing_resources_for_different_env.html
-folder: latest
+folder: qaf-2.1.12
 ---
 
 Assume that AUT has multiple environments to target. Assume that there are few locator, translation data, and property difference for each environment and others are common. Consider the dir structure below, where we have common dir as well as environment specific dir. While providing property/locator/translation data, we will put common data under appropriate file in common dir and provide environment specific values in files under environment specific dir.

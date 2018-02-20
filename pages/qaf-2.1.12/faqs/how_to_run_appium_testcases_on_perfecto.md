@@ -2,7 +2,7 @@
 title: How to run existing Appium testcases on Perfecto?
 sidebar: faq_sidebar
 permalink: qaf-2.1.12/how_to_run_appium_testcases_on_perfecto.html
-folder: latest
+folder: qaf-2.1.12
 ---
 
 Follow the below steps to execute Appium scripts on Perfecto.

@@ -2,7 +2,7 @@
 title: Creating Test Pages
 sidebar: qaf_2_1_12-sidebar
 permalink: qaf-2.1.12/creatingtestpages.html
-folder: latest
+folder: qaf-2.1.12
 tags: [java,page]
 ---
 

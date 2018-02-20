@@ -4,7 +4,7 @@ search: exclude
 tagName: mobile
 permalink: qaf-2.1.11/tag_mobile.html
 sidebar: qaf_2_1_11-sidebar
-folder: latest
+folder: qaf-2.1.11
 ---
 {% include taglogic.html %}
 

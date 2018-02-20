@@ -2,7 +2,7 @@
 title: Development with QAF
 sidebar: qaf_2_1_12-sidebar
 permalink: qaf-2.1.12/development_overview.html
-folder: latest
+folder: qaf-2.1.12
 next: Creating_test_cases.html
 ---
 

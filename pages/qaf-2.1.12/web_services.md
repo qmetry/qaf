@@ -2,7 +2,7 @@
 title: Web Services Testing
 sidebar: qaf_2_1_12-sidebar
 permalink: qaf-2.1.12/web_services.html
-folder: latest
+folder: qaf-2.1.12
 tags: [java]
 ---
 

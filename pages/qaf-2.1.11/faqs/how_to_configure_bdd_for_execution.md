@@ -2,7 +2,7 @@
 title: How to configure BDD for execution
 sidebar: faq_sidebar
 permalink: qaf-2.1.11/how_to_configure_bdd_for_execution.html
-folder: latest
+folder: qaf-2.1.11
 ---
 
 **Please refer xml configuration examples provided here.**

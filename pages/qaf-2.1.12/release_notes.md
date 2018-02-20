@@ -3,7 +3,7 @@ title: Release Notes
 sidebar: qaf_2_1_12-sidebar
 
 permalink: qaf-2.1.12/release_notes.html
-folder: latest
+folder: qaf-2.1.12
 ---
 ## VER-2.1.11 Release Notes:
 
