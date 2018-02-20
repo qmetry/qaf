@@ -3,7 +3,7 @@
 entries:
 - title: sidebar
   product: QMetry Automation Framework
-  version: 2.1.11
+  version: 2.1.13
   folders:
   - title:
     output: pdf
@@ -31,6 +31,12 @@ entries:
     - title: Release Notes
       url: release_notes.html
       output: web, pdf
+    - title: QAF 2.1.12 Docs
+      url: ../qaf-2.1.12/docs.html
+      output: web, pdf 
+    - title: QAF 2.1.11 Docs
+      url: ../qaf-2.1.11/docs.html
+      output: web, pdf 
     - title: QAF 2.1.10 Docs
       url: ../qaf-2.1.10/docs.html
       output: web, pdf  
