@@ -1,7 +1,7 @@
 ---
 title: Sauce on demand Integration
 sidebar: faq_sidebar
-permalink: latest/sauce_on_demand_integration.html
+permalink: qaf-2.1.12/sauce_on_demand_integration.html
 folder: latest
 ---
 

@@ -1,8 +1,8 @@
 ---
 title: License
-sidebar: qaf_latest-sidebar
+sidebar: qaf_2_1_11-sidebar
 
-permalink: latest/license.html
+permalink: qaf-2.1.11/license.html
 folder: latest
 ---
                     GNU GENERAL PUBLIC LICENSE

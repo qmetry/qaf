@@ -1,7 +1,7 @@
 ---
 title: Integration
-sidebar: qaf_latest-sidebar
-permalink: latest/integration_with_other_tools.html
+sidebar: qaf_2_1_11-sidebar
+permalink: qaf-2.1.11/integration_with_other_tools.html
 folder: latest
 ---
 

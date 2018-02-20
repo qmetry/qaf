@@ -1,7 +1,7 @@
 ---
 title: Managing resources for Different Environments
-sidebar: qaf_latest-sidebar
-permalink: latest/managing_resources_for_different_env.html
+sidebar: qaf_2_1_11-sidebar
+permalink: qaf-2.1.11/managing_resources_for_different_env.html
 folder: latest
 ---
 

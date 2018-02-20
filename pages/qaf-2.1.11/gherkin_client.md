@@ -1,7 +1,7 @@
 ---
 title: QAF Gherkin Scenario Factory
-sidebar: qaf_latest-sidebar
-permalink: latest/gherkin_client.html
+sidebar: qaf_2_1_11-sidebar
+permalink: qaf-2.1.11/gherkin_client.html
 summary: "Author tests in standard Gherkin format that Cucumber understands with power of QAF as back-end"
 folder: latest
 tags: [bdd,scenario,cucumber,gherkin]

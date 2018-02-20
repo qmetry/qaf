@@ -1,7 +1,7 @@
 ---
 title: QAF KWD Reference
-sidebar: qaf_latest-sidebar
-permalink: latest/qaf_kwd_reference.html
+sidebar: qaf_2_1_11-sidebar
+permalink: qaf-2.1.11/qaf_kwd_reference.html
 folder: latest
 ---
 

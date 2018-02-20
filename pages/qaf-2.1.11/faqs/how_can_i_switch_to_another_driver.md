@@ -1,7 +1,7 @@
 ---
 title: How can I switch to another driver during same testcase execution.
 sidebar: faq_sidebar
-permalink: latest/how_can_i_switch_to_another_driver.html
+permalink: qaf-2.1.11/how_can_i_switch_to_another_driver.html
 folder: latest
 ---
 

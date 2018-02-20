@@ -1,7 +1,7 @@
 ---
 title: How to run on Native application on appium?
 sidebar: faq_sidebar
-permalink: latest/how_to_run_on_native_app_on_appium.html
+permalink: qaf-2.1.12/how_to_run_on_native_app_on_appium.html
 folder: latest
 ---
 

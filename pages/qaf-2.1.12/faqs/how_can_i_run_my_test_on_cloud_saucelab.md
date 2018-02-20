@@ -1,7 +1,7 @@
 ---
 title: How can I run my test on cloud (Sauce Lab)?
 sidebar: faq_sidebar
-permalink: latest/how_can_i_run_my_test_on_cloud_saucelab.html
+permalink: qaf-2.1.12/how_can_i_run_my_test_on_cloud_saucelab.html
 folder: latest
 ---
 

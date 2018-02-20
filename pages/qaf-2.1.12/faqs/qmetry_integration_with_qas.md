@@ -1,7 +1,7 @@
 ---
 title: Qmetry6 Test Management Tool Integration with Qmetry Automation framework
 sidebar: faq_sidebar
-permalink: latest/qmetry_integration_with_qas.html
+permalink: qaf-2.1.12/qmetry_integration_with_qas.html
 folder: latest
 ---
 

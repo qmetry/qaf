@@ -1,7 +1,7 @@
 ---
 title: QAF cucumber
-sidebar: qaf_latest-sidebar
-permalink: latest/qaf_cucumber.html
+sidebar: qaf_2_1_11-sidebar
+permalink: qaf-2.1.11/qaf_cucumber.html
 folder: latest
 ---
 

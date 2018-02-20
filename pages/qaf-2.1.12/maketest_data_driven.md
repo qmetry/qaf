@@ -1,7 +1,7 @@
 ---
 title: Make Tests Data driven
-sidebar: qaf_latest-sidebar
-permalink: latest/maketest_data_driven.html
+sidebar: qaf_2_1_12-sidebar
+permalink: qaf-2.1.12/maketest_data_driven.html
 tags: [getting_started,datadriven]
 folder: latest
 ---

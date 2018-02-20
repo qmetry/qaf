@@ -2,8 +2,8 @@
 title: "Test Page Related Pages"
 tagName: page
 search: exclude
-permalink: latest/tag_page.html
-sidebar: qaf_latest-sidebar
+permalink: qaf-2.1.12/tag_page.html
+sidebar: qaf_2_1_12-sidebar
 folder: latest
 ---
 {% include taglogic.html %}

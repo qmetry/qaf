@@ -1,7 +1,7 @@
 ---
 title: Creating test cases
-sidebar: qaf_latest-sidebar
-permalink: latest/Creating_test_cases.html
+sidebar: qaf_2_1_11-sidebar
+permalink: qaf-2.1.11/Creating_test_cases.html
 folder: latest
 ---
 

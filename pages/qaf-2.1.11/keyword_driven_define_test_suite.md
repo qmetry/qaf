@@ -1,7 +1,7 @@
 ---
 title: Keyword Driven Define Test Suite
-sidebar: qaf_latest-sidebar
-permalink: latest/keyword_driven_define_test_suite.html
+sidebar: qaf_2_1_11-sidebar
+permalink: qaf-2.1.11/keyword_driven_define_test_suite.html
 folder: latest
 ---
 

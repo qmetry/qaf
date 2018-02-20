@@ -1,7 +1,7 @@
 ---
 title: Data Beans
-sidebar: qaf_latest-sidebar
-permalink: latest/databeans.html
+sidebar: qaf_2_1_11-sidebar
+permalink: qaf-2.1.11/databeans.html
 folder: latest
 tags: [java,testdata]
 ---

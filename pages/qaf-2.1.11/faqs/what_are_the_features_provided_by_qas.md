@@ -1,7 +1,7 @@
 ---
 title: What are the features provided by Qmetry Automation Framework?
 sidebar: faq_sidebar
-permalink: latest/what_are_the_features_provided_by_qas.html
+permalink: qaf-2.1.11/what_are_the_features_provided_by_qas.html
 folder: latest
 ---
 

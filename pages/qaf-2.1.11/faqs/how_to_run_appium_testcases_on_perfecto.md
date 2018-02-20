@@ -1,7 +1,7 @@
 ---
 title: How to run existing Appium testcases on Perfecto?
 sidebar: faq_sidebar
-permalink: latest/how_to_run_appium_testcases_on_perfecto.html
+permalink: qaf-2.1.11/how_to_run_appium_testcases_on_perfecto.html
 folder: latest
 ---
 

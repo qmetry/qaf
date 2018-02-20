@@ -1,7 +1,7 @@
 ---
 title: How can I create custom component/element?
 sidebar: faq_sidebar
-permalink: latest/how_can_i_create_custom_component.html
+permalink: qaf-2.1.11/how_can_i_create_custom_component.html
 folder: latest
 tags: [java,component,locator,testdata]
 ---

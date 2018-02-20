@@ -1,7 +1,7 @@
 ---
 title: Qmetry5 Test Management Tool Integration with Qmetry Automation framework
 sidebar: faq_sidebar
-permalink: latest/qmetry5_test_management_tool_tntegration_with_qas.html
+permalink: qaf-2.1.11/qmetry5_test_management_tool_tntegration_with_qas.html
 folder: latest
 ---
 

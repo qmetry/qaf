@@ -1,7 +1,7 @@
 ---
 title: How can I provide desired capabilities when using Qmetry Automation Framework?
 sidebar: faq_sidebar
-permalink: latest/how_can_i_provide_desired_capabilities_when_using_qas.html
+permalink: qaf-2.1.11/how_can_i_provide_desired_capabilities_when_using_qas.html
 folder: latest
 ---
 

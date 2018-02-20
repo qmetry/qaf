@@ -1,7 +1,7 @@
 ---
 title: I am getting License error during execution
 sidebar: faq_sidebar
-permalink: latest/i_am_getting_license_error_during_execution.html
+permalink: qaf-2.1.12/i_am_getting_license_error_during_execution.html
 folder: latest
 ---
 

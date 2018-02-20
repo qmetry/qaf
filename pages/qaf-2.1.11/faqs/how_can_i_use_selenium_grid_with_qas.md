@@ -1,7 +1,7 @@
 ---
 title: How can I Use Selenium grid with Qmetry Automation Framework?
 sidebar: faq_sidebar
-permalink: latest/how_can_i_use_selenium_grid_with_qas.html
+permalink: qaf-2.1.11/how_can_i_use_selenium_grid_with_qas.html
 folder: latest
 ---
 

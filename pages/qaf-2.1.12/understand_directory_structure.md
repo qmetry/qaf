@@ -1,7 +1,7 @@
 ---
 title: Understating Directory Structure
-sidebar: qaf_latest-sidebar
-permalink: latest/understand_dirstructure.html
+sidebar: qaf_2_1_12-sidebar
+permalink: qaf-2.1.12/understand_dirstructure.html
 folder: latest
 tags: [getting_started]
 ---

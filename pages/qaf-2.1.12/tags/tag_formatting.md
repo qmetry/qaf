@@ -2,8 +2,8 @@
 title: "Formatting pages"
 tagName: formatting
 search: exclude
-permalink: latest/tag_formatting.html
-sidebar: qaf_latest-sidebar
+permalink: qaf-2.1.12/tag_formatting.html
+sidebar: qaf_2_1_12-sidebar
 folder: latest
 ---
 {% include taglogic.html %}

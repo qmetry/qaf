@@ -1,7 +1,7 @@
 ---
 title: Wait Service
-sidebar: qaf_latest-sidebar
-permalink: latest/wait_service.html
+sidebar: qaf_2_1_12-sidebar
+permalink: qaf-2.1.12/wait_service.html
 folder: latest
 tags: [java,webelement,webdriver]
 ---

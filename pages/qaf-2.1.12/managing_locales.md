@@ -1,7 +1,7 @@
 ---
 title: Managing Locales
-sidebar: qaf_latest-sidebar
-permalink: latest/managing_locales.html
+sidebar: qaf_2_1_12-sidebar
+permalink: qaf-2.1.12/managing_locales.html
 folder: latest
 ---
 

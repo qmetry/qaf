@@ -1,7 +1,7 @@
 ---
 title: Debugging
-sidebar: qaf_latest-sidebar
-permalink: latest/debugging.html
+sidebar: qaf_2_1_12-sidebar
+permalink: qaf-2.1.12/debugging.html
 folder: latest
 ---
 

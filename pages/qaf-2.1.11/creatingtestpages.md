@@ -1,7 +1,7 @@
 ---
 title: Creating Test Pages
-sidebar: qaf_latest-sidebar
-permalink: latest/creatingtestpages.html
+sidebar: qaf_2_1_11-sidebar
+permalink: qaf-2.1.11/creatingtestpages.html
 folder: latest
 tags: [java,page]
 ---

@@ -1,7 +1,7 @@
 ---
 title: How can I implement dynamic page flow using page hierarchy design?
 sidebar: faq_sidebar
-permalink: latest/how_can_i_implement_dynamic_page_flow.html
+permalink: qaf-2.1.12/how_can_i_implement_dynamic_page_flow.html
 folder: latest
 ---
 

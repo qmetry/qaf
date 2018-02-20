@@ -1,7 +1,7 @@
 ---
 title: Test Data
-sidebar: qaf_latest-sidebar
-permalink: latest/testdata.html
+sidebar: qaf_2_1_11-sidebar
+permalink: qaf-2.1.11/testdata.html
 folder: latest
 tags: [scenario,testdata]
 ---

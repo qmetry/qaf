@@ -1,7 +1,7 @@
 ---
 title: Custom Retry Analyzer
-sidebar: qaf_latest-sidebar
-permalink: latest/custom_retry_analyzer.html
+sidebar: qaf_2_1_12-sidebar
+permalink: qaf-2.1.12/custom_retry_analyzer.html
 folder: latest
 ---
 

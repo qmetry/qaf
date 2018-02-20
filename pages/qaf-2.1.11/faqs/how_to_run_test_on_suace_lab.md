@@ -1,7 +1,7 @@
 ---
 title: How to run test on suace lab?
 sidebar: faq_sidebar
-permalink: latest/how_to_run_test_on_suace_lab.html
+permalink: qaf-2.1.11/how_to_run_test_on_suace_lab.html
 folder: latest
 ---
 

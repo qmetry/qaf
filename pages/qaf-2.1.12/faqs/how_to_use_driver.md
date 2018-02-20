@@ -1,7 +1,7 @@
 ---
 title: How to use driver?
 sidebar: faq_sidebar
-permalink: latest/how_to_use_driver.html
+permalink: qaf-2.1.12/how_to_use_driver.html
 folder: latest
 ---
 

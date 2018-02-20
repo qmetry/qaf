@@ -1,7 +1,7 @@
 ---
 title: Java
-sidebar: qaf_latest-sidebar
-permalink: latest/prerequisite_java.html
+sidebar: qaf_2_1_12-sidebar
+permalink: qaf-2.1.12/prerequisite_java.html
 folder: latest
 tags: [getting_started]
 ---

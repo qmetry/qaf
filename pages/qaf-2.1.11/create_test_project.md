@@ -1,7 +1,7 @@
 ---
 title: Creating Test Project
-sidebar: qaf_latest-sidebar
-permalink: latest/create_test_project.html
+sidebar: qaf_2_1_11-sidebar
+permalink: qaf-2.1.11/create_test_project.html
 folder: latest
 tags: [getting_started]
 next: understand_dirstructure.html

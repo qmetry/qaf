@@ -2,8 +2,8 @@
 title: "KWD Related Pages"
 tagName: kwd
 search: exclude
-permalink: latest/tag_kwd.html
-sidebar: qaf_latest-sidebar
+permalink: qaf-2.1.11/tag_kwd.html
+sidebar: qaf_2_1_11-sidebar
 folder: latest
 ---
 {% include taglogic.html %}

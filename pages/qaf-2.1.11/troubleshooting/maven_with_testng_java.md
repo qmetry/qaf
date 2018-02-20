@@ -1,7 +1,7 @@
 ---
 title: Maven With TestNG Suite Not Working For Java Test.
 sidebar: troubleshoot_sidebar
-permalink: latest/maven_with_testng_java.html
+permalink: qaf-2.1.11/maven_with_testng_java.html
 folder: latest
 ---
 

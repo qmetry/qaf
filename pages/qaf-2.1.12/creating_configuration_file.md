@@ -1,7 +1,7 @@
 ---
 title: Creating configuration file
-sidebar: qaf_latest-sidebar
-permalink: latest/creating_configuration_file.html
+sidebar: qaf_2_1_12-sidebar
+permalink: qaf-2.1.12/creating_configuration_file.html
 folder: latest
 ---
 

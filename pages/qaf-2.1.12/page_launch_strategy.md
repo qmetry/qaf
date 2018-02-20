@@ -1,7 +1,7 @@
 ---
 title: Page launch strategy
-sidebar: qaf_latest-sidebar
-permalink: latest/page_launch_strategy.html
+sidebar: qaf_2_1_12-sidebar
+permalink: qaf-2.1.12/page_launch_strategy.html
 folder: latest
 tags: [page,testng,java]
 ---

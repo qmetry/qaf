@@ -1,7 +1,7 @@
 ---
 title: How can I make a test Data driven?
 sidebar: faq_sidebar
-permalink: latest/how_can_i_make_a_test_data_driven.html
+permalink: qaf-2.1.11/how_can_i_make_a_test_data_driven.html
 folder: latest
 ---
 
