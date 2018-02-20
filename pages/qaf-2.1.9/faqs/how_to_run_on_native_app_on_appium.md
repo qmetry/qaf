@@ -26,7 +26,7 @@ driver.name=appiumDriver
 Appium server capabilities:
 
 ```properties
-appium.additional.capabilities= {'browser_name':'','deviceName':'emulator-5554','platformName':'Android','automationName':'Appium','driver.class':'io.appium.java_client.android.AndroidDriver'}
+appium.additional.capabilities= {'browser_name':'','deviceName':'emulator-5554','platformName':'Android','automationName':'Appium','driverClass':'io.appium.java_client.android.AndroidDriver'}
 ```
 
 User need to set additional capabilities as per application environment. Detailed list of appium capabilities you can find here: [Appium Server Capabilities](http://appium.io/slate/en/master/?java#appium-server-capabilities)

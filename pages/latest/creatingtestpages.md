@@ -84,7 +84,43 @@ Override before launch and after launch method to provide before/after launch st
 
 {% include inline_image.html file="testpageflow.png" alt="Test Page Flow" %}
 
-To create test page using webdriver API you need to extend **WebdriverBaseTestPage<P>** class. It supports all the above features and provide handle of webdriver instead of selenium, taking care to initialize webelement annotated with **@FindBy** annotation provided by selenium or InfoStretch. It also supports custom components. Below is sample test page to use webdriver.
+To create test page using webdriver API you need to extend **WebdriverBaseTestPage<P>** class. It supports all the above features and provide handle of webdriver instead of selenium, taking care to initialize webelement annotated with **@FindBy** annotation provided by selenium or QAF. It also supports custom components.
+
+
+## Using @FindBy
+```
+@FindBy(locator = "<Element Locator>")
+@FindBy(locator = "css=<css locator>")
+@FindBy(locator = "xpath=<xpath locator>")
+@FindBy(locator = "id=<element id>")
+@FindBy(locator = "name=<element name>")
+@FindBy(locator = "link=<link text>")
+@FindBy(locator = "partialLink=<partial link text>")
+@FindBy(locator = "className=<class name>")
+@FindBy(locator = "tagName=<tagName>")
+@FindBy(locator = "<attribute-name>=<attribute-value>")
+@FindBy(locator = "key=<property that holds actual locator>")
+@FindBy(locator = "property that holds actual locator")
+
+```
+When you are using @FindBy annotation in page or in component following element meta-data will be added to element by the QAF:
+
+	* pageClass : name of the class that declares the element (e.g: HomePage in example below)
+	* objectName : name of the object (e.g: header in example below for HomePage.header)
+
+Below interface holds locators that are used in "HomePage". Here locators are self descriptive locators.
+
+```java
+public interface HomePageLocators {
+ static final String HEADER_LOC = "{'locator':'css=.header';'desc':'Header of Page'}";
+    static final String MENU_LOC = "{'locator':'css=.menu_area';'desc':'Menu of Page'}";
+    static final String SLIDER_LOC = "{'locator':'css=.nivoSlider';'desc':'Slid Show in Home Page'}";
+    static final String SEARCH_TEXTBOX_LOC = "{'locator':'css=#q';'desc':'Search Text Box'}";
+    static final String SEARCH_BUTTON_LOC = "{'locator':'css=.search_bg a';'desc':'Search Button'}";
+}
+```
+
+Below is sample test page:
 
 ```java	
 import com.qmetry.qaf.automation.ui.annotations.FindBy;
@@ -127,3 +163,33 @@ public class HomePage extends WebDriverBaseTestPage<WebDriverTestPage>
     }
 }
 ```
+
+### Page identifiers (since 2.1.13)
+
+You can annotate webelement with `@Qualifier` annotation. All element with `@Qualifier` Annotation will be considered as page identifier. It will be used by `waitForPageToLoad()` and `isPageActive()` to check page is active or to wait for to page load.
+
+```java	
+import javax.inject.Qualifier;
+...
+public class HomePage extends WebDriverBaseTestPage<WebDriverTestPage>
+        implements
+            HomePageLocators {
+    
+    @FindBy(locator = HEADER_LOC)
+    private TopHeader header;
+    
+    ...
+    
+    @Qualifier
+    @FindBy(locator = SEARCH_TEXTBOX_LOC)
+    private QAFWebElement searchTextbox;
+    
+    @Qualifier
+    @FindBy(locator = SEARCH_BUTTON_LOC)
+    private QAFWebElement searchButton;
+    
+    ...
+}
+
+```
+    

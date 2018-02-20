@@ -24,7 +24,7 @@ appium.additional.capabilities={
 
 'platformName':'Android',
 
-'driver.class':'io.appium.java_client.android.AndroidDriver'
+'driverClass':'io.appium.java_client.android.AndroidDriver'
 
 }
 ```

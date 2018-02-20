@@ -43,39 +43,47 @@ accessibility id=<accessibilityId for element>
 ```
 
 
-## Using @FindBy
-```
-@FindBy(locator = "<Element Locator>")
-@FindBy(locator = "css=<css locator>")
-@FindBy(locator = "xpath=<xpath locator>")
-@FindBy(locator = "id=<element id>")
-@FindBy(locator = "name=<element name>")
-@FindBy(locator = "link=<link text>")
-@FindBy(locator = "partialLink=<partial link text>")
-@FindBy(locator = "className=<class name>")
-@FindBy(locator = "tagName=<tagName>")
-@FindBy(locator = "<attribute-name>=<attribute-value>")
-@FindBy(locator = "key=<property that holds actual locator>")
-@FindBy(locator = "property that holds actual locator")
-
-```
-
 ## Self-descriptive locator
 Self-descriptive locator holds locator for element along with description of the element. Description will be used by the framework in assertion/verification messages for the element. You also can take advantage of self-descriptive locator to provide additional custom meta-data with element locator. 
 
 ### Self-descriptive locator syntax
-Self-descriptive locator expects JSON map of _locator-matadata-key_ and _locator-metadata-value_ pair:
+Self-descriptive locator expects JSON map of _locator-mata-key_ and _locator-metadata-value_ pair:
 
 **Syntax:**
 
 ``` javascript
-{'locator':'<locator strategy>=<locator value>','<locator-matadata-key1>' = '<locator-matadata-value1>','<locator-matadata-keyN>' = '<locator-matadata-valueN>'}
+{'locator':'<locator strategy>=<locator value>','<locator-mata-key1>' = '<locator-mata-value1>','<locator-mata-keyN>' = '<locator-mata-valueN>'}
 ```
 
-Following are reservered  _locator-matadata-keys_
+Following are reservered  _locator-mata-keys_
   * locator: actual locator of element (**mandatory**)
   * desc: description of the locator (optinal)
   * cacheable: flag to indicate is element is cashable or not (optional)
+  * component-class: to specify object to be created of. Possible value fully qualified class name that extends QAFWebComponent 
+
+Following  _locator-mata-keys_ is used by `ElementMetaDataListener`
+  * type: for send-keys to specify element type, possible values:
+	 * password/encrypted - required to decode before send keys
+	 * select - specify this is select (basic support only) with options and choose option
+	 * Examples:
+	 	* {'type': 'password'}
+	 	* {'type': 'select'}
+  * scroll: to specify scroll behavior, possible values:
+	   * Always/true - always scroll before commands required scroll
+	   * OnFail - retry with scroll on failure for commands required scroll
+  * scroll-options: to specify scroll options, A value that indicates the type of the align Examples:
+	 	* {'scroll-options': 'true'}
+	 	* {'scroll-options': 'false'}
+	 	* {'scroll-options': '{block: \'center\'}'}
+	  Refer https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
+  * sendkeys-options: to specify one or more send-keys options, possible values:
+	 * click: to specify click before send-keys
+	 * clear: to specify clear before send-keys
+	 * Examples:
+	 	* {'sendkeys-options': 'clear'}
+	 	* {'sendkeys-options': 'click'}
+	 	* {'sendkeys-options': 'click clear'}
+	 
 
 **Examples:**
 ```
@@ -89,17 +97,6 @@ Where <locator strategy> is any of the strategy supported by underlying web-driv
 {"locator":"xpath=//*[@name='Result']","desc":"Input box"}
 ```
 
-Below interface holds locators that are used in "HomePage". Here locators are self descriptive locators.
-
-```java
-public interface HomePageLocators {
- static final String HEADER_LOC = "{'locator':'css=.header';'desc':'Header of Page'}";
-    static final String MENU_LOC = "{'locator':'css=.menu_area';'desc':'Menu of Page'}";
-    static final String SLIDER_LOC = "{'locator':'css=.nivoSlider';'desc':'Slid Show in Home Page'}";
-    static final String SEARCH_TEXTBOX_LOC = "{'locator':'css=#q';'desc':'Search Text Box'}";
-    static final String SEARCH_BUTTON_LOC = "{'locator':'css=.search_bg a';'desc':'Search Button'}";
-}
-```
 
 **Custom meta-data example:**
 

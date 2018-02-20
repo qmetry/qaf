@@ -5,6 +5,60 @@ sidebar: qaf_latest-sidebar
 permalink: latest/release_notes.html
 folder: latest
 ---
+## VER-2.1.13 Release Notes:
+
+**New Features**
+
+ 1. [#171](https://github.com/qmetry/qaf/issues/171) Support to have encripted password
+ 2. [#168](https://github.com/qmetry/qaf/issues/168)  Support to specify default webelement implementation
+ 3. [#160](https://github.com/qmetry/qaf/issues/160) Timeout support in BDD Scenario 
+ 4. Default element listener for password field and element scroll behavior
+ 5. Support of @Inject annotation in step library class
+ 6. Added support for custom by
+ 
+**Enahancements**
+ 
+ 1. Page identifier support in Test page
+ 2. [#131](https://github.com/qmetry/qaf/issues/131) Ability to teardown driver by name 
+ 3. Support to provide default element meta-data using property `element.default.metadata`
+ 4. Support to allow all certificates and ignore host name verification for web-services using property `https.accept.all.cert` 
+ 5. Disabled Delimiter Parsing for xml configuration
+ 6. Web service request entity logging
+ 7. Added methods in DatabaseUtils to support multiple database 
+ 
+
+
+**Bug Fixes**
+
+ 1. [#169](https://github.com/qmetry/qaf/issues/169) With long bdd scenario name, not able to open captured images on windows
+ 2. [#159](https://github.com/qmetry/qaf/issues/159) Checkpoints and command log not available in report for test case with timeout
+ 3. [#154](https://github.com/qmetry/qaf/issues/75)  Not able to override step.provider.pkg property for data driven scenario
+ 4. [#153](https://github.com/qmetry/qaf/issues/153) result file generation for scenario name with some special characters is not working
+ 5. [#139](https://github.com/qmetry/qaf/issues/139) Optional parameter in step
+ 6. [#108](https://github.com/qmetry/qaf/issues/108) exclude capture screen shot for web-service failure 
+ 7. Fixed element not found exception from isPresent called by element from component
+ 
+ 
+
+## VER-2.1.12 Release Notes:
+
+**New Features**
+ 1. [#102](https://github.com/qmetry/qaf/issues/102) Adding env.resourse property per driver 
+ 2. [#82](https://github.com/qmetry/qaf/issues/82) Custom Data Provider support for BDD Scenarios 
+
+ 
+**Enahancements**
+ 1. Added project name and project path as `project.name` and `project.path` properties
+
+
+**Bug Fixes**
+ 1. [#129](https://github.com/qmetry/qaf/issues/129) changing driver.name property doesn't take effect
+ 1. [#126](https://github.com/qmetry/qaf/issues/126) Wait for ajax throws exception `dojo is not defined`
+ 2. [#124](https://github.com/qmetry/qaf/issues/124) Test-NG [#1480](https://github.com/cbeust/testng/issues/1480) impact on parallel execution
+ 3. [#119](https://github.com/qmetry/qaf/issues/119) Selenium 3+ causes unable to cast error 
+ 4. [#106](https://github.com/qmetry/qaf/issues/106) Fixed issue of parameter having property with subnode
+ 5. [#94](https://github.com/qmetry/qaf/issues/94) parameter support in BDD meta-data for data-provider 
+
 ## VER-2.1.11 Release Notes:
 
 **New Features**

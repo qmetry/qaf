@@ -24,10 +24,15 @@ tags: [getting_started]
 | wd.command.listeners | | list of qualified class name that implements [WebDriver Listener](qaf_listeners.html). From 2.1.9 You can use `qaf.listeners` as well instead of this property to register webdriver command listener.
 | we.command.listeners	 | | list of qualified class name that implements [WebElement Listener](qaf_listeners.html). From 2.1.9 You can use `qaf.listeners` as well instead of this property to register webelement command listener.
 | teststep.listeners | | list of qualified class name that implements [TestStep Listener](qaf_listeners.html). From 2.1.9 You can use `qaf.listeners` as well instead of this property to register teststep listener.
-| qaf.listeners | | list of qualified class name that implements any of the QAF listener . Single property that can be used to registe any of the qaf listener (webdriver, webelement to teststep). (:new:since 2.1.9)
+| qaf.listeners | | list of qualified class name that implements any of the QAF listener . Single property that can be used to registe any of the qaf listener (webdriver, webelement to teststep). (:since 2.1.9)
 | retry.count	| 0	| To retry testcase if testcase failed cause of any exception.<br> **Note**: testcase will not retry if there is any checkpoint failure.
 | bean.populate.random | 	false	| Set true to fill bean randomly from available data sets, more details [fill Databean from multiple dataset.](databeans.html)
 | selenium.singletone | |	To define driver instance scope.Possible value can be Tests or Methods or Groups.
-|driver.init.retry.timeout|0|Duration in multiplication of 10 seconds for example 50. Set time out for retry driver initialization when driver initialization fail (:new:since 2.1.9).
-|step.provider.sharedinstance|false|specify wherether to share class object among step in the same class. (:new:since 2.1.9)
+|driver.init.retry.timeout|0|Duration in multiplication of 10 seconds for example 50. Set time out for retry driver initialization when driver initialization fail (:since 2.1.9).
+|step.provider.sharedinstance|false|specify wherether to share class object among step in the same class. (:since 2.1.9)
+|https.accept.all.cert|false|Set true to trust all certificates and ignore host name verification  for web-services (:new:since 2.1.13)
+|element.default.listener|true|Specify weather to attach `ElementMetaDataListener` or not. (:new:since 2.1.13)
+|element.default.metadata||To set default meta-data for webelement. Meta-data provided with locator has higher preference than default values. (:new:since 2.1.13)
+|password.decryptor.impl||full qualified name of the class that implements `PasswordDecryptor`. This implementation will be used to decrypt password. When configuration manager found any key starts with `encrypted` (:new:since 2.1.13)
+|tc.identifier.key|testCaseId|test case identifier meta-key which will be used to as file name of test case result json file. (:new:since 2.1.13)
 

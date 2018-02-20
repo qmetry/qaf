@@ -51,7 +51,7 @@ Following are possible ways for mobile web for android platform.
 3.Set additional capabilities, you need to provide "app" value "Chrome". Here is the sample
 
 ```properties	
-    appium.additional.capabilities={'deviceName':'<device_id>','platformName':'Android','automationName':'Appium','browserName': 'Chrome', 'driver.class' : 'io.appium.java_client.android.AndroidDriver'}
+    appium.additional.capabilities={'deviceName':'<device_id>','platformName':'Android','automationName':'Appium','browserName': 'Chrome', 'driverClass' : 'io.appium.java_client.android.AndroidDriver'}
 ```	
 
 4.Start emulator or connect device where appium server is running
