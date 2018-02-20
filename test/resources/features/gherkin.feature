@@ -26,7 +26,7 @@ Scenario Outline: Search Keyword
 
 Examples:
  | searchKey | searchResult | number |
- | QMetry QAF | QMetry Automation Framework | 10 |
+ | QMetry & QAF | QMetry Automation Framework | 10 |
  | Selenium ISFW | Infostretch Test Automation Framework | 20 |
 
 Scenario Outline: Search Keyword using data from file

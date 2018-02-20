@@ -77,6 +77,7 @@ import com.qmetry.qaf.automation.util.StringUtil;
  */
 public class ReporterUtil {
 	private static final Log logger = LogFactoryImpl.getLog(ReporterUtil.class);
+	private static final String QAF_TEST_IDENTIFIER = "qaf_test_identifier";
 
 	public static void updateMetaInfo(ISuite suite) {
 		createMetaInfo(suite, false);
@@ -255,7 +256,7 @@ public class ReporterUtil {
 				fileName += StringUtil.getRandomString("aaaaaaaaaa");
 				// add updated file name as 'resultFileName' key in metaData
 				methodResultFile = dir + "/" + fileName;
-				result.setAttribute("qaf_test_identifier",fileName);
+				result.setAttribute(QAF_TEST_IDENTIFIER,fileName);
 
 				updateClassMetaInfo(context, result, fileName);
 			} else {
@@ -364,12 +365,12 @@ public class ReporterUtil {
 	@SuppressWarnings("unchecked")
 	private static String getMethodIdentifier(ITestResult result){
 
-		if(result.getAttribute("qaf_test_identifier")!=null){
-			return (String) result.getAttribute("qaf_test_identifier");
+		if(result.getAttribute(QAF_TEST_IDENTIFIER)!=null){
+			return (String) result.getAttribute(QAF_TEST_IDENTIFIER);
 		}
 		
 		String id = getMethodName(result);
-		String identifierKey = getBundle().getString("tc.identifier.key","testCaseId");
+		String identifierKey = ApplicationProperties.TESTCASE_IDENTIFIER_KEY.getStringVal("testCaseId");
 
 		Map<String, Object> metadata =
 				new TreeMap<String, Object>(String.CASE_INSENSITIVE_ORDER);
@@ -391,8 +392,8 @@ public class ReporterUtil {
 		if(id.length()>50){
 			id=id.substring(0, 50);
 		}
-		result.setAttribute("qaf_test_identifier",id);
-		return (String) result.getAttribute("qaf_test_identifier");
+		result.setAttribute(QAF_TEST_IDENTIFIER,id);
+		return (String) result.getAttribute(QAF_TEST_IDENTIFIER);
 	}
 
 	private static String getClassDir(ITestContext context, ITestResult result) {

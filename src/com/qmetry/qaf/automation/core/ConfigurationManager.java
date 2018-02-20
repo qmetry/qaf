@@ -52,8 +52,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.LogFactoryImpl;
 import org.hamcrest.Matchers;
 
-import com.qmetry.qaf.automation.data.Base64PasswordDecryptor;
-import com.qmetry.qaf.automation.data.PasswordDecryptor;
 import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.step.JavaStepFinder;
 import com.qmetry.qaf.automation.step.TestStep;
@@ -341,18 +339,7 @@ public class ConfigurationManager {
 				new KwdTestFactory(Arrays.asList("kwl")), new ExcelTestFactory()};
 	}
 
-	public static PasswordDecryptor getPasswordDecryptor(){
-		 String implName = getBundle().getString(ApplicationProperties.PASSWOED_DECRYPTOR_IMPL.key);
-		 if(StringUtil.isBlank(implName)){
-			 return new Base64PasswordDecryptor();
-		 }else{
-			 try {
-				return (PasswordDecryptor) Class.forName(implName).newInstance();
-			} catch (Exception e) {
-				throw new AutomationError("Unable to get instance of PasswordDecryptor implementation",e);
-			} 
-		 }
-	}
+
 	private static class PropertyConfigurationListener implements ConfigurationListener {
 		String oldValue;
 
@@ -389,12 +376,6 @@ public class ConfigurationManager {
 					}
 				}
 				String[] bundles = null;
-
-				if (key.startsWith(ApplicationProperties.ENCRYPTED_PASSWOED_KEY_PREFIX.key)){
-					String decryptedValueKey = key.substring(ApplicationProperties.ENCRYPTED_PASSWOED_KEY_PREFIX.key.length());
-					String decryptedValue = getPasswordDecryptor().getDecryptedPassword((String) value);
-					ConfigurationManager.getBundle().setProperty(decryptedValueKey, decryptedValue);
-				}
 				// Resource loading
 				if (key.equalsIgnoreCase("env.resources")) {
 

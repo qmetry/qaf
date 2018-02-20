@@ -21,7 +21,6 @@
  * For any inquiry or need additional information, please contact support-qaf@infostretch.com
  *******************************************************************************/
 
-
 package com.qmetry.qaf.automation.ui;
 
 import static com.qmetry.qaf.automation.ui.webdriver.ElementFactory.$;
@@ -30,12 +29,16 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Qualifier;
+
+import com.qmetry.qaf.automation.ui.api.PageLocator;
 import com.qmetry.qaf.automation.ui.api.WebDriverTestPage;
 import com.qmetry.qaf.automation.ui.webdriver.ComponentFactory;
 import com.qmetry.qaf.automation.ui.webdriver.QAFExtendedWebDriver;
 import com.qmetry.qaf.automation.ui.webdriver.QAFExtendedWebElement;
 import com.qmetry.qaf.automation.ui.webdriver.QAFWebComponent;
 import com.qmetry.qaf.automation.ui.webdriver.QAFWebElement;
+import com.qmetry.qaf.automation.util.ClassUtil;
 
 /**
  * com.qmetry.qaf.automation.core.ui.WebDriverBaseTestPage.java
@@ -54,12 +57,16 @@ import com.qmetry.qaf.automation.ui.webdriver.QAFWebElement;
  */
 public abstract class WebDriverBaseTestPage<P extends WebDriverTestPage>
 		extends AbstractTestPage<P, QAFExtendedWebDriver> implements WebDriverTestPage {
+	
+	protected List<QAFWebElement> pageIdentifiers;
+
 	public WebDriverBaseTestPage() {
 		this(null);
 	}
 
 	public WebDriverBaseTestPage(P parent) {
 		super(new WebDriverTestBase(), parent);
+		pageIdentifiers = getPageIdentifiers();
 	}
 
 	@Override
@@ -73,8 +80,16 @@ public abstract class WebDriverBaseTestPage<P extends WebDriverTestPage>
 	}
 
 	@Override
+	public boolean isPageActive(PageLocator loc, Object... args) {
+		for(QAFWebElement element:pageIdentifiers){
+			if(!element.isPresent())
+				return false;
+		}
+		return pageIdentifiers.size()>0;
+	}
+	@Override
 	public void waitForPageToLoad() {
-
+		driver.waitForAllElementPresent(pageIdentifiers.toArray(new QAFWebElement[]{}));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -102,13 +117,32 @@ public abstract class WebDriverBaseTestPage<P extends WebDriverTestPage>
 		obj.getId();
 		return obj;
 	}
-	
+
 	@Override
 	public void waitForAjaxToComplete() {
 		getTestBase().getDriver().waitForAjax();
 	}
-	
+
 	public void waitForTextPresent(String text) {
 		$("partialLinkText=text").waitForPresent();
+	}
+
+	private List<QAFWebElement> getPageIdentifiers() {
+		List<QAFWebElement> identifiers = new ArrayList<QAFWebElement>();
+
+		Field[] flds = ClassUtil.getAllFields(this.getClass(), WebDriverBaseTestPage.class);
+		for (Field fld : flds) {
+			if(fld.isAnnotationPresent(Qualifier.class) && QAFWebElement.class.isAssignableFrom(fld.getType())){
+				try {
+					fld.setAccessible(true);
+					identifiers.add((QAFWebElement) fld.get(this));
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return identifiers;
 	}
 }

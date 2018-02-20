@@ -21,13 +21,13 @@
  * For any inquiry or need additional information, please contact support-qaf@infostretch.com
  *******************************************************************************/
 
-
 package com.qmetry.qaf.automation.ui.util;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 
 import com.qmetry.qaf.automation.ui.webdriver.QAFExtendedWebDriver;
+import com.qmetry.qaf.automation.ui.webdriver.QAFWebElement;
 
 /**
  * com.qmetry.qaf.automation.core.ui.ExpectedConditions.java
@@ -64,7 +64,7 @@ public class QAFWebDriverExpectedConditions {
 					return true;
 				} catch (RuntimeException e) {
 					return false;
-				} 
+				}
 			}
 		};
 	}
@@ -78,7 +78,7 @@ public class QAFWebDriverExpectedConditions {
 
 				} catch (RuntimeException e) {
 					return true;
-				} 
+				}
 				return false;
 			}
 		};
@@ -95,6 +95,32 @@ public class QAFWebDriverExpectedConditions {
 				} catch (NullPointerException e) {
 				}
 				return null;
+			}
+		};
+	}
+
+	public static ExpectedCondition<QAFExtendedWebDriver, Boolean> noOfwindowsPresent(final int count) {
+		return new ExpectedCondition<QAFExtendedWebDriver, Boolean>() {
+			@Override
+			public Boolean apply(QAFExtendedWebDriver driver) {
+				try {
+					return driver.getWindowHandles().size()>=count;
+				} catch (Exception e) {
+				}
+				return false;
+			}
+		};
+	}
+	
+	public static ExpectedCondition<QAFExtendedWebDriver, Boolean> windowTitle(final String title) {
+		return new ExpectedCondition<QAFExtendedWebDriver, Boolean>() {
+			@Override
+			public Boolean apply(QAFExtendedWebDriver driver) {
+				try {
+					return title.equalsIgnoreCase(driver.getTitle());
+				} catch (Exception e) {
+				}
+				return false;
 			}
 		};
 	}

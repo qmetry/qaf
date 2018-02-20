@@ -12,7 +12,7 @@ public class PasswordDecryptorTest {
 
 	@Test
 	public void defaultDecryptorTest() {
-		ConfigurationManager.getBundle().setProperty(ApplicationProperties.PASSWOED_DECRYPTOR_IMPL.key, "");
+		ConfigurationManager.getBundle().setProperty(ApplicationProperties.PASSWORD_DECRYPTOR_IMPL.key, "");
 
 		ConfigurationManager.getBundle().setProperty("encrypted.my.password",
 				Base64PasswordDecryptor.getEncryptedPassword("Test@123#"));
@@ -25,7 +25,7 @@ public class PasswordDecryptorTest {
 
 	@Test
 	public void customDecryptorTest() {
-		ConfigurationManager.getBundle().setProperty(ApplicationProperties.PASSWOED_DECRYPTOR_IMPL.key,
+		ConfigurationManager.getBundle().setProperty(ApplicationProperties.PASSWORD_DECRYPTOR_IMPL.key,
 				CustomPassWordDecryptorImpl.class.getCanonicalName());
 
 		ConfigurationManager.getBundle().setProperty("encrypted.my.password", StringUtil.reverse("Test@123#"));
@@ -34,5 +34,9 @@ public class PasswordDecryptorTest {
 
 		Validator.assertThat(ConfigurationManager.getBundle().getString("my.password"),
 				Matchers.equalToIgnoringCase("Test@123#"));
+		System.out.println("encrypted prop: " +ConfigurationManager.getBundle().getString("encrypted.my.pwd"));
+
+		System.out.println("pass:" + ConfigurationManager.getBundle().getString("my.pwd"));
+
 	}
 }

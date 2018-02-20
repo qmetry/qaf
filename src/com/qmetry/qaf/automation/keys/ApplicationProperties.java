@@ -536,19 +536,72 @@ public enum ApplicationProperties {
 	 *        <b>value</b>: full qualified name of the class that implements
 	 *        {@link PasswordDecryptor}. This implementation will be used to
 	 *        decrypt password. When configuration manager found any key starts
-	 *        with {@link #ENCRYPTED_PASSWOED_KEY_PREFIX}
+	 *        with {@link #ENCRYPTED_PASSWORD_KEY_PREFIX}
 	 */
-	PASSWOED_DECRYPTOR_IMPL("password.decryptor.impl"),
+	PASSWORD_DECRYPTOR_IMPL("password.decryptor.impl"),
 
 	/**
-	 * @since 2.1.13 <b>key</b>: <code>encrypted</code><br/>
-	 *        <b>value</b>: property with prefix 'encrypted'. When configuration
-	 *        manager found any key starts with 'encrypted' prefix, for example
-	 *        'encripted.db.pwd', then it will store decrypted value without
-	 *        prefix, 'db.pwd' in this example. So you can reference decrypted value anywhere in the code with key without this prefix ('db.pwd' in this example).
-	 *        
+	 * <b>key</b>: <code>encrypted</code><br/>
+	 * <b>value</b>: property with prefix 'encrypted'. When configuration
+	 * manager found any key starts with 'encrypted' prefix, for example
+	 * 'encripted.db.pwd', then it will store decrypted value without prefix,
+	 * 'db.pwd' in this example. So you can reference decrypted value anywhere
+	 * in the code with key without this prefix ('db.pwd' in this example).
+	 * 
+	 * @since 2.1.13
 	 */
-	ENCRYPTED_PASSWOED_KEY_PREFIX("encrypted.");
+	ENCRYPTED_PASSWORD_KEY_PREFIX("encrypted."),
+	/**
+	 * <p>
+	 * To set default meta-data for all element. Meta-data provided with
+	 * locator has higher preference than default values.
+	 * </p>
+	 * <b>key</b>:
+	 * <code>element.default.metadata</code><br/>
+	 * <b>value</b>: JSON map of meta data to be set as default for element.
+	 * 
+	 * @since 2.1.13
+	 * 
+	 */
+	ELEMENT_GLOBAL_METADATA("element.default.metadata"),
+	/**
+	 * <p>
+	 * Specify weather to attach default element listener or not.
+	 * </p>
+	 * <b>key</b>:
+	 * <code>element.default.listener</code><br/>
+	 * <b>value</b>: boolean true/false.
+	 * 
+	 * @since 2.1.13
+	 * 
+	 */
+	ELEMENT_ATTACH_DEFAULT_LISTENER("element.default.listener"),
+	/**
+	 * <p>
+	 * Set true to trust all certificates and ignore host name verification  for web-services.
+	 * </p>
+	 * <b>key</b>:
+	 * <code>https.accept.all.cert</code><br/>
+	 * <b>value</b>: boolean true/false.
+	 * 
+	 * @since 2.1.13
+	 * 
+	 */
+	HTTPS_ACCEPT_ALL_CERT("https.accept.all.cert"),
+	
+	/**
+	 * <p>
+	 * Set test case identifier meta-key which will be used to as file name of test case result json file.
+	 * </p>
+	 * <b>key</b>:
+	 * <code>tc.identifier.key</code><br/>
+	 * <b>value</b>: String test-case meta-key.
+	 * 
+	 * @since 2.1.13
+	 * 
+	 */
+	TESTCASE_IDENTIFIER_KEY("tc.identifier.key")
+	;
 
 	public String key;
 

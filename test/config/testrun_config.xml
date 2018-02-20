@@ -20,11 +20,14 @@
 	information, please contact support-qaf@infostretch.com -->
 
 <suite name="QAF Tests" verbose="0">
+<!-- 	<groups>
+		<run>
+			<exclude name="ui-driver"/>
+		</run>
+	</groups> -->
 	<parameter name="step.provider.sharedinstance" value="false" />
-
 	<test name="QAF-BDD">
 		<parameter name="step.provider.sharedinstance" value="true" />
-
 		<parameter name="step.provider.pkg" value="com.qmetry.qaf.automation.impl.step.qaf" />
 		<parameter name="scenario.file.loc" value="resources/scenarios" />
 
@@ -87,6 +90,11 @@
 	<test name="TestData">
 		<packages>
 			<package name="com.qmetry.qaf.automation.data" />
+		</packages>
+	</test>
+		<test name="Test-UI">
+		<packages>
+			<package name="com.qmetry.qaf.automation.ui" />
 		</packages>
 	</test>
 	<!-- -->

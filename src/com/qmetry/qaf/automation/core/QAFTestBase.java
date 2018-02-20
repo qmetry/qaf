@@ -68,8 +68,8 @@ import com.qmetry.qaf.automation.util.StringUtil;
 public class QAFTestBase {
 	private static final String COMMAND_LOG = "commandLog";
 	private static final String CHECKPOINTS = "checkPointResults";
-	private static final String  CONTEXT= "qafcontext";
-	private static final String  VERIFICATION_ERRORS= "verificationErrors";
+	private static final String CONTEXT = "qafcontext";
+	private static final String VERIFICATION_ERRORS = "verificationErrors";
 	public static final String SELENIUM_DEFAULT_TIMEOUT = "selenium.wait.timeout";
 	private Map<String, UiDriver> driverContext;
 
@@ -83,6 +83,7 @@ public class QAFTestBase {
 	private String screenShotDir;
 	private String reportDir;
 	private PropertyUtil context;
+
 	/**
 	 * QAFTestBase setup arguments
 	 * 
@@ -210,6 +211,11 @@ public class QAFTestBase {
 
 	public void setDriver(String driverName) {
 		stb = STBArgs.browser_str.set(driverName);
+		// make sure driver specific resource are loaded when switch between
+		// driver
+		if (StringUtil.isNotBlank(driverName) && hasDriver()) {
+			UiDriverFactory.loadDriverResouces(driverName);
+		}
 	}
 
 	public void setDriver(String driverName, UiDriver driver) {
@@ -394,7 +400,7 @@ public class QAFTestBase {
 		setLastCapturedScreenShot("");
 
 		if (type == MessageTypes.Fail) {
-			int verificationErrors = getVerificationErrors() +1;
+			int verificationErrors = getVerificationErrors() + 1;
 			getContext().setProperty(VERIFICATION_ERRORS, verificationErrors);
 		}
 
@@ -402,15 +408,16 @@ public class QAFTestBase {
 
 	public PropertyUtil getContext() {
 		ITestResult tr = Reporter.getCurrentTestResult();
-		if(null!=tr){
+		if (null != tr) {
 			PropertyUtil contextFromTr = (PropertyUtil) Reporter.getCurrentTestResult().getAttribute(CONTEXT);
-			if(null==contextFromTr){
-				Reporter.getCurrentTestResult().setAttribute(CONTEXT,context);
+			if (null == contextFromTr) {
+				Reporter.getCurrentTestResult().setAttribute(CONTEXT, context);
 				return context;
 			}
 			return contextFromTr;
 		}
-		return 	context;//(PropertyUtil) Reporter.getCurrentTestResult().getAttribute(CONTEXT);
+		return context;// (PropertyUtil)
+						// Reporter.getCurrentTestResult().getAttribute(CONTEXT);
 	}
 
 	// base logging and checkpoint
@@ -510,13 +517,11 @@ public class QAFTestBase {
 		String filename = "";
 		try {
 			String tcname = StringUtil.toTitleCaseIdentifier(getTestCaseName());
-			//too long file name may not supported in some os
-			if(tcname.length()>25){
+			// too long file name may not supported in some os
+			if (tcname.length() > 25) {
 				tcname.substring(0, 25);
 			}
-			filename = FileUtil.saveImageFile(base64Image,
-					StringUtil.createRandomString(tcname),
-					getScreenShotDir());
+			filename = FileUtil.saveImageFile(base64Image, StringUtil.createRandomString(tcname), getScreenShotDir());
 			lastCapturedScreenShot = filename;
 			logger.debug("Capturing screen shot" + lastCapturedScreenShot);
 

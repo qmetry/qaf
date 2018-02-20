@@ -54,5 +54,18 @@ public class QAFWebElementCommandAdapter implements QAFWebElementCommandListener
 			commandTracker.setResponce(element.execute(commandTracker.getCommand(), commandTracker.getParameters()));
 		}
 	}
+	
+	/**
+	 * enables to execute command on element.
+	 * 
+	 * @param element
+	 * @param commandTracker
+	 * @return
+	 */
+	protected void executeWithoutLog(QAFExtendedWebElement element, CommandTracker commandTracker) {
+		if (null != commandTracker.getResponce()) {
+			commandTracker.setResponce(element.execute(commandTracker.getCommand(), commandTracker.getParameters()));
+		}
+	}
 
 }

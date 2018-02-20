@@ -28,9 +28,21 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.MapConfiguration;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -39,6 +51,9 @@ import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.LogFactoryImpl;
 
+import com.qmetry.qaf.automation.core.AutomationError;
+import com.qmetry.qaf.automation.data.Base64PasswordDecryptor;
+import com.qmetry.qaf.automation.data.PasswordDecryptor;
 import com.qmetry.qaf.automation.keys.ApplicationProperties;
 
 /**
@@ -85,16 +100,49 @@ public class PropertyUtil extends XMLConfiguration {
 			super.addPropertyDirect(key, value);
 		} else {
 			String sysVal = System.getProperty(key);
-			if (!sysVal.equalsIgnoreCase(value.toString()))
+			if (!sysVal.equalsIgnoreCase(value.toString())) {
 				logger.debug("property [" + key + "] value [" + value
 						+ "] ignored! It is overriden with System provided value: [" + sysVal + "]");
+			}
+		}
+
+		if (key.toLowerCase().startsWith(ApplicationProperties.ENCRYPTED_PASSWORD_KEY_PREFIX.key)) {
+			String decryptedValueKey = key.substring(ApplicationProperties.ENCRYPTED_PASSWORD_KEY_PREFIX.key.length());
+			PasswordDecryptor passwordDecryptor = getPasswordDecryptor();
+			String decryptedValue = passwordDecryptor.getDecryptedPassword((String) value);
+			addPropertyDirect(decryptedValueKey, decryptedValue);
+			logger.info("Added property [" + decryptedValueKey + "] with decrypted value using "
+					+ passwordDecryptor.getClass().getSimpleName());
+		} else if (ApplicationProperties.PASSWORD_DECRYPTOR_IMPL.key.equalsIgnoreCase(key)) {
+			// update decrypted value for encrypted keys for existing keyes
+			String prefix = ApplicationProperties.ENCRYPTED_PASSWORD_KEY_PREFIX.key.replace(".", "");
+			Iterator<?> encryptedValueKeys = getKeys(prefix);
+			while (encryptedValueKeys.hasNext()) {
+				PasswordDecryptor passwordDecryptor = getPasswordDecryptor();
+
+				String encryptedValueKey = (String) encryptedValueKeys.next();
+				String decryptedValueKey = encryptedValueKey
+						.substring(ApplicationProperties.ENCRYPTED_PASSWORD_KEY_PREFIX.key.length());
+				String decryptedValue = passwordDecryptor.getDecryptedPassword(getString(encryptedValueKey));
+				addPropertyDirect(decryptedValueKey, decryptedValue);
+				logger.info("Updated property [" + decryptedValueKey + "] with decrypted value using "
+						+ passwordDecryptor.getClass().getSimpleName());
+			}
+		}else if(ApplicationProperties.HTTPS_ACCEPT_ALL_CERT.key.equalsIgnoreCase(key) && getBoolean(key)){
+			try {
+				logger.info("Seeting behavior to accept all certitificate and host name");
+				ignoreSSLCetrificatesAndHostVerification();
+			} catch (KeyManagementException e) {
+				logger.error("Unable to set behavior to ignore certificate and host name verification", e);
+			} catch (NoSuchAlgorithmException e) {
+				logger.error("Unable to find Algorithm while setting ignore certificate and host name verification", e);
+			}
 		}
 	}
 
 	public PropertyUtil(PropertyUtil prop) {
 		this();
 		append(prop);
-
 	}
 
 	public PropertyUtil(String... file) {
@@ -104,7 +152,7 @@ public class PropertyUtil extends XMLConfiguration {
 
 	public void addAll(Map<String, ?> props) {
 		boolean b = props.keySet().removeAll(System.getProperties().keySet());
-		if(b){
+		if (b) {
 			logger.debug("Found one or more system properties which will not modified");
 		}
 		copy(new MapConfiguration(props));
@@ -243,14 +291,15 @@ public class PropertyUtil extends XMLConfiguration {
 
 	@Override
 	public void setProperty(String key, Object value) {
-		//allow List Delimiter for string value
-		if(null!=value && value instanceof String){
-			if(value.toString().indexOf(getListDelimiter())>0){
-				value = PropertyConverter.split(value.toString(),getListDelimiter());
+		// allow List Delimiter for string value
+		if (null != value && value instanceof String) {
+			if (value.toString().indexOf(getListDelimiter()) > 0) {
+				value = PropertyConverter.split(value.toString(), getListDelimiter());
 			}
 		}
 		super.setProperty(key, value);
 	}
+
 	/**
 	 * Add a property to the configuration. If it already exists then the value
 	 * stated here will be added to the configuration entry. For example, if the
@@ -275,5 +324,48 @@ public class PropertyUtil extends XMLConfiguration {
 		} else {
 			logger.debug("clear system property ignored:" + key);
 		}
+	}
+
+	public PasswordDecryptor getPasswordDecryptor() {
+		String implName = getString(ApplicationProperties.PASSWORD_DECRYPTOR_IMPL.key);
+		if (StringUtil.isBlank(implName)) {
+			return new Base64PasswordDecryptor();
+		} else {
+			try {
+				return (PasswordDecryptor) Class.forName(implName).newInstance();
+			} catch (Exception e) {
+				throw new AutomationError("Unable to get instance of PasswordDecryptor implementation", e);
+			}
+		}
+	}
+
+	private static void ignoreSSLCetrificatesAndHostVerification() throws NoSuchAlgorithmException, KeyManagementException {
+		SSLContext sslContext = SSLContext.getInstance("SSL");
+
+		// set up a TrustManager that trusts everything
+		sslContext.init(null, new TrustManager[] { new X509TrustManager() {
+			public X509Certificate[] getAcceptedIssuers() {
+				System.out.println("======== AcceptedIssuers =============");
+				return null;
+			}
+
+			public void checkClientTrusted(X509Certificate[] certs, String authType) {
+				System.out.println("========= ClientTrusted =============");
+			}
+
+			public void checkServerTrusted(X509Certificate[] certs, String authType) {
+				System.out.println("======== ServerTrusted =============");
+			}
+		} }, new SecureRandom());
+
+		HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
+
+		HostnameVerifier hostnameVerifier = new HostnameVerifier() {
+			@Override
+			public boolean verify(String hostname, SSLSession session) {
+				return true;
+			}
+		};
+		HttpsURLConnection.setDefaultHostnameVerifier(hostnameVerifier);
 	}
 }

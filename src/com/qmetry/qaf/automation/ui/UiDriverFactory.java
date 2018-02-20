@@ -81,8 +81,8 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 
 	/*
 	 * (non-Javadoc)
-	 * @see
-	 * com.qmetry.qaf.automation.core.DriverFactory#get(java.lang.String[])
+	 * 
+	 * @see com.qmetry.qaf.automation.core.DriverFactory#get(java.lang.String[])
 	 */
 	@Override
 	public UiDriver get(ArrayList<LoggingBean> commandLog, String[] stb) {
@@ -118,19 +118,18 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 	public static DesiredCapabilities getDesiredCapabilities(String driverName) {
 		return Browsers.getBrowser(driverName).getDesiredCapabilities();
 	}
+
 	public static String[] checkAndStartServer(String... args) {
 		if (!isServerRequired(args)) {
 			return args;
 		}
-		if (isSeverRunning(STBArgs.sel_server.getFrom(args),
-				Integer.parseInt(STBArgs.port.getFrom(args)))) {
+		if (isSeverRunning(STBArgs.sel_server.getFrom(args), Integer.parseInt(STBArgs.port.getFrom(args)))) {
 			return args;
 		}
 
 		// override args values to default
 		args = STBArgs.sel_server.set(STBArgs.sel_server.getDefaultVal(), args);
-		if (isSeverRunning(STBArgs.sel_server.getFrom(args),
-				Integer.parseInt(STBArgs.port.getFrom(args)))) {
+		if (isSeverRunning(STBArgs.sel_server.getFrom(args), Integer.parseInt(STBArgs.port.getFrom(args)))) {
 			logger.info("Assigning server running on localhost");
 
 			return args;
@@ -173,8 +172,8 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 		}
 	}
 
-	private static void onInitializationFailure(DesiredCapabilities desiredCapabilities,
-			Throwable e, Collection<QAFWebDriverCommandListener> listners) {
+	private static void onInitializationFailure(DesiredCapabilities desiredCapabilities, Throwable e,
+			Collection<QAFWebDriverCommandListener> listners) {
 		if ((listners != null) && !listners.isEmpty()) {
 			for (QAFWebDriverCommandListener listener : listners) {
 				listener.onInitializationFailure(desiredCapabilities, e);
@@ -184,97 +183,97 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 	}
 
 	private static Collection<QAFWebDriverCommandListener> getDriverListeners() {
-		LinkedHashSet<QAFWebDriverCommandListener> listners =
-				new LinkedHashSet<QAFWebDriverCommandListener>();
+		LinkedHashSet<QAFWebDriverCommandListener> listners = new LinkedHashSet<QAFWebDriverCommandListener>();
 		String[] clistners = ConfigurationManager.getBundle()
 				.getStringArray(ApplicationProperties.WEBDRIVER_COMMAND_LISTENERS.key);
 		for (String listenr : clistners) {
 			try {
-				QAFWebDriverCommandListener cls = (QAFWebDriverCommandListener) Class
-						.forName(listenr).newInstance();
+				QAFWebDriverCommandListener cls = (QAFWebDriverCommandListener) Class.forName(listenr).newInstance();
 				listners.add(cls);
 			} catch (Exception e) {
 				logger.error("Unable to register listener class " + listenr, e);
 			}
 		}
-		clistners = ConfigurationManager.getBundle()
-				.getStringArray(ApplicationProperties.QAF_LISTENERS.key);
+		clistners = ConfigurationManager.getBundle().getStringArray(ApplicationProperties.QAF_LISTENERS.key);
 		for (String listener : clistners) {
 			try {
 				QAFListener cls = (QAFListener) Class.forName(listener).newInstance();
 				if (QAFWebDriverCommandListener.class.isAssignableFrom(cls.getClass()))
 					listners.add((QAFWebDriverCommandListener) cls);
 			} catch (Exception e) {
-				logger.error("Unable to register class as driver listener:  " + listener,
-						e);
+				logger.error("Unable to register class as driver listener:  " + listener, e);
 			}
 		}
 		return listners;
 	}
-	private static QAFExtendedWebDriver getDriver(WebDriverCommandLogger reporter,
-			String... args) {
+
+	private static QAFExtendedWebDriver getDriver(WebDriverCommandLogger reporter, String... args) {
 		String b = STBArgs.browser_str.getFrom(args).toLowerCase();
-		String urlStr = STBArgs.sel_server.getFrom(args).startsWith("http")
-				? STBArgs.sel_server.getFrom(args) : String.format("http://%s:%s/wd/hub",
-						STBArgs.sel_server.getFrom(args), STBArgs.port.getFrom(args));
+		String urlStr = STBArgs.sel_server.getFrom(args).startsWith("http") ? STBArgs.sel_server.getFrom(args)
+				: String.format("http://%s:%s/wd/hub", STBArgs.sel_server.getFrom(args), STBArgs.port.getFrom(args));
 
 		Browsers browser = Browsers.getBrowser(b);
-		loadDriverResouces(browser.browserName);
+		loadDriverResouces(browser);
 
 		ConfigurationManager.getBundle().setProperty("driver.desiredCapabilities",
 				browser.getDesiredCapabilities().asMap());
-		QAFExtendedWebDriver driver =
-				b.contains("remote") ? browser.getDriver(urlStr, reporter)
-						: browser.getDriver(reporter, urlStr);
-		ConfigurationManager.getBundle().setProperty("driver.actualCapabilities",
-				driver.getCapabilities().asMap());
+		QAFExtendedWebDriver driver = b.contains("remote") ? browser.getDriver(urlStr, reporter)
+				: browser.getDriver(reporter, urlStr);
+		ConfigurationManager.getBundle().setProperty("driver.actualCapabilities", driver.getCapabilities().asMap());
 		return driver;
 
 	}
 
-	private static void loadDriverResouces(String browserName){
-		String driverResourcesKey = String.format(
-				ApplicationProperties.DRIVER_RESOURCES_FORMAT.key,
-				browserName);
-		String driverResources = ConfigurationManager.getBundle().getString(driverResourcesKey,"");
-		if(StringUtil.isNotBlank(driverResources)){
+	private static void loadDriverResouces(Browsers browser) {
+		String driverResourcesKey = String.format(ApplicationProperties.DRIVER_RESOURCES_FORMAT.key,
+				browser.browserName);
+		String driverResources = ConfigurationManager.getBundle().getString(driverResourcesKey, "");
+		if (StringUtil.isNotBlank(driverResources)) {
 			ConfigurationManager.addBundle(driverResources);
 		}
 	}
 
-	private static WebDriver getDriverObj(Class<? extends WebDriver> of,
-			Capabilities capabilities, String urlStr) {
+	public static void loadDriverResouces(String driverName) {
+		Browsers browser = Browsers.getBrowser(driverName);
+		loadDriverResouces(browser);
+	}
+
+	private static WebDriver getDriverObj(Class<? extends WebDriver> of, Capabilities capabilities, String urlStr) {
 		try {
-			Constructor<? extends WebDriver> constructor =
-					of.getConstructor(Capabilities.class);
-			return constructor.newInstance(capabilities);
-		} catch (Exception e) {
-			if (e.getCause() != null && e.getCause() instanceof WebDriverException) {
-				throw (WebDriverException) e.getCause();
-			}
+			//give it first try
+			Constructor<? extends WebDriver> constructor = of.getConstructor(URL.class, Capabilities.class);
+			return constructor.newInstance(new URL(urlStr), capabilities);
+		} catch (Exception ex) {
 			try {
-				return of.newInstance();
-			} catch (Exception e1) {
+				Constructor<? extends WebDriver> constructor = of.getConstructor(Capabilities.class);
+				return constructor.newInstance(capabilities);
+			} catch (Exception e) {
+				if (e.getCause() != null && e.getCause() instanceof WebDriverException) {
+					throw (WebDriverException) e.getCause();
+				}
 				try {
+					return of.newInstance();
+				} catch (Exception e1) {
+					try {
+						//give it another try
+						Constructor<? extends WebDriver> constructor = of.getConstructor(URL.class, Capabilities.class);
 
-					Constructor<? extends WebDriver> constructor =
-							of.getConstructor(URL.class, Capabilities.class);
-
-					return constructor.newInstance(new URL(urlStr), capabilities);
-				} catch (InvocationTargetException e2) {
-					throw new WebDriverException(e2);
-				} catch (InstantiationException e2) {
-					throw new WebDriverException(e2);
-				} catch (IllegalAccessException e2) {
-					throw new WebDriverException(e2);
-				} catch (IllegalArgumentException e2) {
-					throw new WebDriverException(e2);
-				} catch (MalformedURLException e2) {
-					throw new WebDriverException(e2);
-				} catch (NoSuchMethodException e2) {
-					throw new WebDriverException(e2);
-				} catch (SecurityException e2) {
-					throw new WebDriverException(e2);
+						return constructor.newInstance(new URL(urlStr), capabilities);
+					} catch (InvocationTargetException e2) {
+						throw new WebDriverException(e2);
+					} catch (InstantiationException e2) {
+						throw new WebDriverException(e2);
+					} catch (IllegalAccessException e2) {
+						throw new WebDriverException(e2);
+					} catch (IllegalArgumentException e2) {
+						throw new WebDriverException(e2);
+					} catch (MalformedURLException e2) {
+						throw new WebDriverException(e2);
+					} catch (NoSuchMethodException e2) {
+						throw new WebDriverException(e2);
+					} catch (SecurityException e2) {
+						throw new WebDriverException(e2);
+					}
 				}
 			}
 		}
@@ -283,26 +282,20 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 	private enum Browsers {
 		edge(DesiredCapabilities.edge(), EdgeDriver.class),
 
-		firefox(DesiredCapabilities.firefox(), FirefoxDriver.class),
-		iexplorer(DesiredCapabilities.internetExplorer(), InternetExplorerDriver.class),
-		chrome(DesiredCapabilities.chrome(), ChromeDriver.class),
-		opera(
-				new DesiredCapabilities("opera", "", Platform.ANY),
-				"com.opera.core.systems.OperaDriver"),
-		android(
-				DesiredCapabilities.android(),
-				"org.openqa.selenium.android.AndroidDriver"),
-		iphone(
-				new DesiredCapabilities("iPhone", "", Platform.MAC),
-				"org.openqa.selenium.iphone.IPhoneDriver"),
-		ipad(
-				new DesiredCapabilities("iPad", "", Platform.MAC),
-				"org.openqa.selenium.iphone.IPhoneDriver"),
-		safari(
-				new DesiredCapabilities("safari", "", Platform.ANY),
-				"org.openqa.selenium.safari.SafariDriver"),
-		appium(new DesiredCapabilities(), "io.appium.java_client.AppiumDriver"),
-		perfecto(new DesiredCapabilities()),
+		firefox(DesiredCapabilities.firefox(), FirefoxDriver.class), iexplorer(DesiredCapabilities.internetExplorer(),
+				InternetExplorerDriver.class), chrome(DesiredCapabilities.chrome(), ChromeDriver.class), opera(
+						new DesiredCapabilities("opera", "", Platform.ANY),
+						"com.opera.core.systems.OperaDriver"), android(DesiredCapabilities.android(),
+								"org.openqa.selenium.android.AndroidDriver"), iphone(
+										new DesiredCapabilities("iPhone", "", Platform.MAC),
+										"org.openqa.selenium.iphone.IPhoneDriver"), ipad(
+												new DesiredCapabilities("iPad", "", Platform.MAC),
+												"org.openqa.selenium.iphone.IPhoneDriver"), safari(
+														new DesiredCapabilities("safari", "", Platform.ANY),
+														"org.openqa.selenium.safari.SafariDriver"), appium(
+																new DesiredCapabilities(),
+																"io.appium.java_client.AppiumDriver"), perfecto(
+																		new DesiredCapabilities()),
 
 		/**
 		 * can with assumption that you have set desired capabilities using
@@ -322,8 +315,7 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 			this.desiredCapabilities = desiredCapabilities;
 			this.desiredCapabilities.setJavascriptEnabled(true);
 			this.desiredCapabilities.setCapability(CapabilityType.TAKES_SCREENSHOT, true);
-			this.desiredCapabilities.setCapability(CapabilityType.SUPPORTS_FINDING_BY_CSS,
-					true);
+			this.desiredCapabilities.setCapability(CapabilityType.SUPPORTS_FINDING_BY_CSS, true);
 
 		}
 
@@ -341,8 +333,7 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 
 		}
 
-		private Browsers(DesiredCapabilities desiredCapabilities,
-				Class<? extends WebDriver> driver) {
+		private Browsers(DesiredCapabilities desiredCapabilities, Class<? extends WebDriver> driver) {
 			this(desiredCapabilities);
 			if (null == driverCls) {
 				// not overridden by extra capability
@@ -352,14 +343,12 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 
 		@SuppressWarnings("unchecked")
 		private DesiredCapabilities getDesiredCapabilities() {
-			Map<String, Object> capabilities =
-					new HashMap<String, Object>(desiredCapabilities.asMap());
+			Map<String, Object> capabilities = new HashMap<String, Object>(desiredCapabilities.asMap());
 			Gson gson = new GsonBuilder().create();
 
 			// capabilities provided for all driver
-			Map<String, Object> extraCapabilities =
-					gson.fromJson(ApplicationProperties.DRIVER_ADDITIONAL_CAPABILITIES
-							.getStringVal("{}"), Map.class);
+			Map<String, Object> extraCapabilities = gson
+					.fromJson(ApplicationProperties.DRIVER_ADDITIONAL_CAPABILITIES.getStringVal("{}"), Map.class);
 			capabilities.putAll(extraCapabilities);
 
 			// individual capability property for all driver
@@ -367,34 +356,33 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 					.subset(ApplicationProperties.DRIVER_CAPABILITY_PREFIX.key);
 			capabilities.putAll(new ConfigurationMap(config));
 			// capabilities specific to this driver
-			String driverCapsKey = String.format(
-					ApplicationProperties.DRIVER_ADDITIONAL_CAPABILITIES_FORMAT.key,
+			String driverCapsKey = String.format(ApplicationProperties.DRIVER_ADDITIONAL_CAPABILITIES_FORMAT.key,
 					name());
-			extraCapabilities = gson.fromJson(
-					ConfigurationManager.getBundle().getString(driverCapsKey, "{}"),
+			extraCapabilities = gson.fromJson(ConfigurationManager.getBundle().getString(driverCapsKey, "{}"),
 					Map.class);
 			capabilities.putAll(extraCapabilities);
 			// individual capability property with driver name prefix
-			String driverCapKey = String.format(
-					ApplicationProperties.DRIVER_CAPABILITY_PREFIX_FORMAT.key,
-					browserName);
+			String driverCapKey = String.format(ApplicationProperties.DRIVER_CAPABILITY_PREFIX_FORMAT.key, browserName);
 			config = ConfigurationManager.getBundle().subset(driverCapKey);
 			capabilities.putAll(new ConfigurationMap(config));
 
-			Object driverclass = capabilities
-					.get(ApplicationProperties.CAPABILITY_NAME_DRIVER_CLASS.key);
+			Object driverclass = capabilities.get(ApplicationProperties.CAPABILITY_NAME_DRIVER_CLASS.key);
 			if (null == driverclass) {// backward compatibility only
 				driverclass = capabilities.get("driver.class");
 			}
 			if (null != driverclass) {
 				try {
-					driverCls = (Class<? extends WebDriver>) Class
-							.forName(String.valueOf(driverclass));
+					driverCls = (Class<? extends WebDriver>) Class.forName(String.valueOf(driverclass));
 				} catch (Exception e) {
 					// throw new AutomationError(e);
 				}
 			}
-
+			for(String key : capabilities.keySet()){
+				Object value = capabilities.get(key);
+				if(value instanceof String){
+					capabilities.put(key, ConfigurationManager.getBundle().getSubstitutor().replace(value));
+				}
+			}
 			return new DesiredCapabilities(capabilities);
 		}
 
@@ -409,20 +397,20 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 			b.setBrowserName(name);
 			return b;
 		}
+
 		private void setBrowserName(String name) {
-			//remove driver and remote from name
+			// remove driver and remote from name
 			browserName = name.replaceAll("(?i)remote|driver", "");
 		}
-		private QAFExtendedWebDriver getDriver(WebDriverCommandLogger reporter,
-				String urlstr) {
+
+		private QAFExtendedWebDriver getDriver(WebDriverCommandLogger reporter, String urlstr) {
 			DesiredCapabilities desiredCapabilities = getDesiredCapabilities();
 
 			Collection<QAFWebDriverCommandListener> listners = getDriverListeners();
 			beforeInitialize(desiredCapabilities, listners);
 			try {
 				if (this.name().equalsIgnoreCase("chrome")) {
-					return new QAFExtendedWebDriver(
-							ChromeDriverHelper.getService().getUrl(), desiredCapabilities,
+					return new QAFExtendedWebDriver(ChromeDriverHelper.getService().getUrl(), desiredCapabilities,
 							reporter);
 				}
 				WebDriver driver = getDriverObj(driverCls, desiredCapabilities, urlstr);// driverCls.newInstance();
@@ -430,39 +418,31 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 			} catch (Throwable e) {
 				onInitializationFailure(desiredCapabilities, e, listners);
 
-				throw new AutomationError("Unable to Create Driver Instance for "
-						+ browserName + ": " + e.getMessage(), e);
+				throw new AutomationError("Unable to Create Driver Instance for " + browserName + ": " + e.getMessage(),
+						e);
 			}
 		}
 
-		private QAFExtendedWebDriver getDriver(String url,
-				WebDriverCommandLogger reporter) {
+		private QAFExtendedWebDriver getDriver(String url, WebDriverCommandLogger reporter) {
 			DesiredCapabilities desiredCapabilities = getDesiredCapabilities();
 			Collection<QAFWebDriverCommandListener> listners = getDriverListeners();
 
 			beforeInitialize(desiredCapabilities, listners);
 			try {
-				if (StringUtil
-						.isNotBlank(ApplicationProperties.WEBDRIVER_REMOTE_SESSION
-								.getStringVal())
-						|| desiredCapabilities.asMap().containsKey(
-								ApplicationProperties.WEBDRIVER_REMOTE_SESSION.key)) {
+				if (StringUtil.isNotBlank(ApplicationProperties.WEBDRIVER_REMOTE_SESSION.getStringVal())
+						|| desiredCapabilities.asMap()
+								.containsKey(ApplicationProperties.WEBDRIVER_REMOTE_SESSION.key)) {
 
 					Constructor<?> constructor = Class
-							.forName(
-									"com.qmetry.qaf.automation.ui.webdriver.LiveIsExtendedWebDriver")
-							.getDeclaredConstructor(URL.class, Capabilities.class,
-									WebDriverCommandLogger.class);
-					return (QAFExtendedWebDriver) constructor.newInstance(new URL(url),
-							desiredCapabilities, reporter);
+							.forName("com.qmetry.qaf.automation.ui.webdriver.LiveIsExtendedWebDriver")
+							.getDeclaredConstructor(URL.class, Capabilities.class, WebDriverCommandLogger.class);
+					return (QAFExtendedWebDriver) constructor.newInstance(new URL(url), desiredCapabilities, reporter);
 				}
-				return new QAFExtendedWebDriver(new URL(url), desiredCapabilities,
-						reporter);
+				return new QAFExtendedWebDriver(new URL(url), desiredCapabilities, reporter);
 			} catch (Throwable e) {
 				onInitializationFailure(desiredCapabilities, e, listners);
 
-				throw new AutomationError(
-						"Unable to Create Driver Instance " + e.getMessage(), e);
+				throw new AutomationError("Unable to Create Driver Instance " + e.getMessage(), e);
 			}
 		}
 	}

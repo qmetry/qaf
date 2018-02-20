@@ -21,15 +21,16 @@
  * For any inquiry or need additional information, please contact support-qaf@infostretch.com
  *******************************************************************************/
 
-
 package com.qmetry.qaf.automation.ui.webdriver;
 
 import java.lang.reflect.Proxy;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -54,6 +55,7 @@ import org.openqa.selenium.remote.Response;
 import org.openqa.selenium.remote.ScreenshotException;
 import org.openqa.selenium.remote.internal.WebElementToJsonConverter;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
@@ -66,6 +68,7 @@ import com.qmetry.qaf.automation.ui.WebDriverTestBase;
 import com.qmetry.qaf.automation.ui.JsToolkit;
 import com.qmetry.qaf.automation.ui.util.QAFWebDriverExpectedConditions;
 import com.qmetry.qaf.automation.ui.util.QAFWebDriverWait;
+import com.qmetry.qaf.automation.ui.util.QAFWebElementExpectedConditions;
 import com.qmetry.qaf.automation.ui.webdriver.CommandTracker.Stage;
 import com.qmetry.qaf.automation.util.LocatorUtil;
 
@@ -138,13 +141,12 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 			for (String listenr : listners) {
 				registerListeners(listenr);
 			}
-			listners = ConfigurationManager.getBundle()
-					.getStringArray(ApplicationProperties.QAF_LISTENERS.key);
+			listners = ConfigurationManager.getBundle().getStringArray(ApplicationProperties.QAF_LISTENERS.key);
 			for (String listener : listners) {
 				try {
 					QAFListener cls = (QAFListener) Class.forName(listener).newInstance();
-					if(QAFWebDriverCommandListener.class.isAssignableFrom(cls.getClass()))
-					this.listners.add((QAFWebDriverCommandListener)cls);
+					if (QAFWebDriverCommandListener.class.isAssignableFrom(cls.getClass()))
+						this.listners.add((QAFWebDriverCommandListener) cls);
 				} catch (Exception e) {
 					logger.error("Unable to register class as driver listener:  " + listener, e);
 				}
@@ -265,8 +267,7 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 	 */
 	@Override
 	public <X> X getScreenshotAs(OutputType<X> target) throws WebDriverException {
-		Object takeScreenshot =
-				getCapabilities().getCapability(CapabilityType.TAKES_SCREENSHOT);
+		Object takeScreenshot = getCapabilities().getCapability(CapabilityType.TAKES_SCREENSHOT);
 		if (null == takeScreenshot || (Boolean) takeScreenshot) {
 			String base64Str = execute(DriverCommand.SCREENSHOT).getValue().toString();
 			return target.convertFromBase64Png(base64Str);
@@ -342,8 +343,9 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 
 	@Override
 	public void onInitializationFailure(Capabilities desiredCapabilities, Throwable t) {
-		
+
 	}
+
 	private void registerListeners(String className) {
 		try {
 			QAFWebDriverCommandListener cls = (QAFWebDriverCommandListener) Class.forName(className).newInstance();
@@ -467,9 +469,47 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 				.until(QAFWebDriverExpectedConditions.jsCondition(toolkit.waitCondition()));
 	}
 
-	public void waitForAjax( long... timeout) {
+	public void waitForAjax(long... timeout) {
 		new QAFWebDriverWait(this, timeout).withMessage("AJAX load Wait time out.")
 				.until(QAFWebDriverExpectedConditions.jsCondition(JsToolkit.globalWaitCondition()));
+	}
+
+	public void waitForAnyElementPresent(QAFWebElement... elements) {
+		new FluentWait<List<QAFWebElement>>(Arrays.asList(elements))
+				.withTimeout(QAFWebDriverWait.getDefaultTimeout(), TimeUnit.MILLISECONDS)
+				.pollingEvery(QAFWebDriverWait.getDefaultInterval(), TimeUnit.MILLISECONDS)
+				.until(QAFWebElementExpectedConditions.anyElementPresent());
+	}
+
+	public void waitForAllElementPresent(QAFWebElement... elements) {
+		new FluentWait<List<QAFWebElement>>(Arrays.asList(elements))
+		.withTimeout(QAFWebDriverWait.getDefaultTimeout(), TimeUnit.MILLISECONDS)
+		.pollingEvery(QAFWebDriverWait.getDefaultInterval(), TimeUnit.MILLISECONDS)
+		.until(QAFWebElementExpectedConditions.allElementPresent());
+	}
+
+	public void waitForAnyElementVisible(QAFWebElement... elements) {
+		new FluentWait<List<QAFWebElement>>(Arrays.asList(elements))
+				.withTimeout(QAFWebDriverWait.getDefaultTimeout(), TimeUnit.MILLISECONDS)
+				.pollingEvery(QAFWebDriverWait.getDefaultInterval(), TimeUnit.MILLISECONDS)
+				.until(QAFWebElementExpectedConditions.anyElementVisible());
+	}
+
+	public void waitForAllElementVisible(QAFWebElement... elements) {
+		new FluentWait<List<QAFWebElement>>(Arrays.asList(elements))
+		.withTimeout(QAFWebDriverWait.getDefaultTimeout(), TimeUnit.MILLISECONDS)
+		.pollingEvery(QAFWebDriverWait.getDefaultInterval(), TimeUnit.MILLISECONDS)
+		.until(QAFWebElementExpectedConditions.allElementVisible());
+	}
+	
+	public void waitForWindowTitle(String title, long... timeout){
+		new QAFWebDriverWait(this, timeout).withMessage("Wait for window title time out.")
+		.until(QAFWebDriverExpectedConditions.windowTitle(title));
+	}
+
+	public void waitForNoOfWindows(int count, long... timeout){
+		new QAFWebDriverWait(this, timeout).withMessage("Wait for window title time out.")
+		.until(QAFWebDriverExpectedConditions.noOfwindowsPresent(count));
 	}
 	@Override
 	public void beforeInitialize(Capabilities desiredCapabilities) {
@@ -545,6 +585,5 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 
 		return execute(DriverCommand.EXECUTE_ASYNC_SCRIPT, params).getValue();
 	}
-
 
 }

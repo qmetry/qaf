@@ -31,6 +31,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -70,9 +71,15 @@ import com.qmetry.qaf.automation.util.StringMatcher;
 /**
  * com.qmetry.qaf.automation.ui.webdriver.extended.QAFExtendedWebElement.java
  * 
+ * @see ElementMetaDataListener 
+ * @see ApplicationProperties#ELEMENT_GLOBAL_METADATA
+ * @see ApplicationProperties#ELEMENT_ATTACH_DEFAULT_LISTENER 
+ * @see ApplicationProperties#QAF_LISTENERS
  * @author chirag.jayswal
  */
 public class QAFExtendedWebElement extends RemoteWebElement implements QAFWebElementCommandListener, QAFWebElement {
+	private static final Map<String, Object> GLOBAL_METADATA = JSONUtil
+			.toMap(ApplicationProperties.ELEMENT_GLOBAL_METADATA.getStringVal("{'scroll':'OnFail'}"));
 	protected final Log logger = LogFactory.getLog(getClass());
 	transient protected By by;
 	protected QAFExtendedWebElement parentElement;
@@ -88,15 +95,18 @@ public class QAFExtendedWebElement extends RemoteWebElement implements QAFWebEle
 	protected QAFExtendedWebElement(QAFExtendedWebDriver driver) {
 		setParent(driver);
 		id = "-1";
-		metaData = new HashMap<String, Object>();
+		metaData = new TreeMap<String, Object>(String.CASE_INSENSITIVE_ORDER);// new HashMap<String, Object>();
+		metaData.putAll(GLOBAL_METADATA);
 		listners.add(driver.getReporter());
+		if(ApplicationProperties.ELEMENT_ATTACH_DEFAULT_LISTENER.getBoolenVal(true)){
+			listners.add(new ElementMetaDataListener());
+		}
 
 		try {
 			setFileDetector(parent.getFileDetector());
 
 		} catch (Exception e) {
 			logger.debug("FileDetector not found!", e);
-			System.out.println("FileDetector not found! ");
 		}
 		String[] listners = ConfigurationManager.getBundle()
 				.getStringArray(ApplicationProperties.WEBELEMENT_COMMAND_LISTENERS.key);
@@ -274,6 +284,10 @@ public class QAFExtendedWebElement extends RemoteWebElement implements QAFWebEle
 		return commandTracker.getResponce();
 	}
 
+	protected Response executeWitoutLog(String command, Map<String, ?> parameters){
+		return ((QAFExtendedWebDriver) parent).executeWitoutLog(command,
+				parameters);
+	}
 	@Override
 	public void setId(String id) {
 		super.setId(id);

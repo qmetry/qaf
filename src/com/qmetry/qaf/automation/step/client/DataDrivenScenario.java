@@ -102,11 +102,11 @@ public class DataDrivenScenario extends Scenario {
 
 	@DataProvider(name = "scenariodp", parallel=true)
 	public Iterator<Object[]> dp(ITestNGMethod tm, ITestContext c) {
-		System.out.println(dataProviderDesc);
+		//System.out.println(dataProviderDesc);
 		dataProviderDesc = getBundle().getSubstitutor().replace(dataProviderDesc);
 		Map<String, String> param = StringUtil
 				.toMap(StringUtil.parseCSV(dataProviderDesc, getBundle().getListDelimiter()), true);
-		System.out.println(param);
+		//System.out.println(param);
 
 		if(param.containsKey(params.DATAPROVIDER.name())){
 			return invokeCustomDataProvider(tm,  c, param.get(params.DATAPROVIDER.name()), param.get(params.DATAPROVIDERCLASS.name()));
@@ -135,10 +135,9 @@ public class DataDrivenScenario extends Scenario {
 			return mapData.iterator();
 
 		}
-
 		if (dataproviderName.equalsIgnoreCase(dataproviders.isfw_json.name())) {
 			if(param.containsKey(params.JSON_DATA_TABLE.name()))
-				return new ArrayIterator(JSONUtil.getJsonArrayOfMaps(param.get(params.JSON_DATA_TABLE.name())));
+				return new ArrayIterator(JSONUtil.getJsonArrayOfMaps((String)getMetadata().get(params.JSON_DATA_TABLE.name())));
 			
 			return new ArrayIterator(JSONUtil.getJsonArrayOfMaps(param.get(params.DATAFILE.name())));
 		}

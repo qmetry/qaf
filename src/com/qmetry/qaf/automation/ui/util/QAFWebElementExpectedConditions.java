@@ -21,10 +21,12 @@
  * For any inquiry or need additional information, please contact support-qaf@infostretch.com
  *******************************************************************************/
 
-
 package com.qmetry.qaf.automation.ui.util;
 
+import java.util.List;
+
 import com.qmetry.qaf.automation.ui.webdriver.QAFExtendedWebElement;
+import com.qmetry.qaf.automation.ui.webdriver.QAFWebElement;
 import com.qmetry.qaf.automation.util.StringMatcher;
 import com.qmetry.qaf.automation.util.StringUtil;
 
@@ -48,6 +50,34 @@ public class QAFWebElementExpectedConditions {
 		};
 	}
 
+	public static ExpectedCondition<List<QAFWebElement>, Boolean> anyElementVisible() {
+		return new ExpectedCondition<List<QAFWebElement>, Boolean>() {
+			@Override
+			public Boolean apply(List<QAFWebElement> elements) {
+				for (QAFWebElement element : elements) {
+					if (element.isPresent() && element.isDisplayed()) {
+						return true;
+					}
+				}
+				return false;
+			}
+		};
+	}
+	
+	public static ExpectedCondition<List<QAFWebElement>, Boolean> allElementVisible() {
+		return new ExpectedCondition<List<QAFWebElement>, Boolean>() {
+			@Override
+			public Boolean apply(List<QAFWebElement> elements) {
+				for (QAFWebElement element : elements) {
+					if (!(element.isPresent() && element.isDisplayed())) {
+						return false;
+					}
+				}
+				return true;
+			}
+		};
+	}
+
 	public static ExpectedCondition<QAFExtendedWebElement, Boolean> elementPresent() {
 		return new ExpectedCondition<QAFExtendedWebElement, Boolean>() {
 			@Override
@@ -56,7 +86,33 @@ public class QAFWebElementExpectedConditions {
 			}
 		};
 	}
-
+	public static ExpectedCondition<List<QAFWebElement>, Boolean> anyElementPresent() {
+		return new ExpectedCondition<List<QAFWebElement>, Boolean>() {
+			@Override
+			public Boolean apply(List<QAFWebElement> elements) {
+				for (QAFWebElement element : elements) {
+					if (element.isPresent()) {
+						return true;
+					}
+				}
+				return false;
+			}
+		};
+	}
+	
+	public static ExpectedCondition<List<QAFWebElement>, Boolean> allElementPresent() {
+		return new ExpectedCondition<List<QAFWebElement>, Boolean>() {
+			@Override
+			public Boolean apply(List<QAFWebElement> elements) {
+				for (QAFWebElement element : elements) {
+					if (element.isPresent()) {
+						return false;
+					}
+				}
+				return true;
+			}
+		};
+	}
 	public static ExpectedCondition<QAFExtendedWebElement, Boolean> elementNotPresent() {
 		return new ExpectedCondition<QAFExtendedWebElement, Boolean>() {
 			@Override

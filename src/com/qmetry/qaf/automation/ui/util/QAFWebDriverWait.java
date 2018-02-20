@@ -146,12 +146,12 @@ public class QAFWebDriverWait extends FluentWait<QAFExtendedWebDriver> {
 		return timeout[1];
 	}
 
-	private static long getDefaultTimeout() {
+	public static long getDefaultTimeout() {
 		return getBundle().getLong("selenium.explicit.wait.timeout",
 				ApplicationProperties.SELENIUM_WAIT_TIMEOUT.getIntVal(5000));
 	}
 
-	private static long getDefaultInterval() {
+	public static long getDefaultInterval() {
 		return getBundle().getLong("selenium.explicit.wait.interval",
 				getBundle().getLong("selenium.wait.interval", 1000));
 	}
