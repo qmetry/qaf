@@ -2,7 +2,7 @@
 title: What is self-descriptive locator?
 sidebar: faq_sidebar
 permalink: qaf-2.1.12/what_is_self_descriptive_locator.html
-folder: latest
+folder: qaf-2.1.12
 ---
 
 

@@ -2,7 +2,7 @@
 title: I am getting License error during execution
 sidebar: faq_sidebar
 permalink: qaf-2.1.12/i_am_getting_license_error_during_execution.html
-folder: latest
+folder: qaf-2.1.12
 ---
 
 When you try to execute your test case and you receive error like below.

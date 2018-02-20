@@ -2,7 +2,7 @@
 title: Creating Test Project
 sidebar: qaf_2_1_11-sidebar
 permalink: qaf-2.1.11/create_test_project.html
-folder: latest
+folder: qaf-2.1.11
 tags: [getting_started]
 next: understand_dirstructure.html
 ---

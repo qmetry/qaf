@@ -2,7 +2,7 @@
 title: Creating configuration file
 sidebar: qaf_2_1_12-sidebar
 permalink: qaf-2.1.12/creating_configuration_file.html
-folder: latest
+folder: qaf-2.1.12
 ---
 
 To configure test run, you need to provide configuration file. As QAF is built upon TestNG you need to provide XML or YAML configuration file that is supported by TestNG. Please refer TestNG Documentation for syntax and sample of XML and YAML configuration file.

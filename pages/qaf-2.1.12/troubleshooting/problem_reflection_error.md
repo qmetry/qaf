@@ -2,7 +2,7 @@
 title: Reflection Error
 sidebar: troubleshoot_sidebar
 permalink: qaf-2.1.12/problem_reflection_error.html
-folder: latest
+folder: qaf-2.1.12
 ---
 You can solve reflection error by following steps.
 

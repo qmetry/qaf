@@ -4,7 +4,7 @@ tagName: single_sourcing
 search: exclude
 permalink: qaf-2.1.12/tag_single_sourcing.html
 sidebar: qaf_2_1_12-sidebar
-folder: latest
+folder: qaf-2.1.12
 ---
 {% include taglogic.html %}
 

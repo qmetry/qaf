@@ -2,7 +2,7 @@
 title: QAF KWD Reference
 sidebar: qaf_2_1_12-sidebar
 permalink: qaf-2.1.12/qaf_kwd_reference.html
-folder: latest
+folder: qaf-2.1.12
 ---
 
 [Keyword Driven Define Test Suite](keyword_driven_define_test_suite.html)

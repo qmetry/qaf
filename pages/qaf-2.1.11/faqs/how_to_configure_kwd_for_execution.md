@@ -2,7 +2,7 @@
 title: How to configure KWD for execution
 sidebar: faq_sidebar
 permalink: qaf-2.1.11/how_to_configure_kwd_for_execution.html
-folder: latest
+folder: qaf-2.1.11
 ---
 
 

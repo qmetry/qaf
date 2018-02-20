@@ -2,7 +2,7 @@
 title: Test Step Metadata
 sidebar: qaf_2_1_12-sidebar
 permalink: qaf-2.1.12/Test_Step_Metadata.html
-folder: latest
+folder: qaf-2.1.12
 tags: [bdd,scenario,java,kwd]
 ---
 
