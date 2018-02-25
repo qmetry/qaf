@@ -31,7 +31,7 @@ import com.qmetry.qaf.automation.util.StringMatcher;
 import com.qmetry.qaf.automation.util.StringUtil;
 
 /**
- * com.qmetry.qaf.automation.core.ui.IsWebElementExpectedConditions.java
+ * com.qmetry.qaf.automation.core.ui.QAFWebElementExpectedConditions.java
  * 
  * @author chirag.jayswal
  */
@@ -52,28 +52,44 @@ public class QAFWebElementExpectedConditions {
 
 	public static ExpectedCondition<List<QAFWebElement>, Boolean> anyElementVisible() {
 		return new ExpectedCondition<List<QAFWebElement>, Boolean>() {
+			String msg = "any of elements to be visible";
+
 			@Override
 			public Boolean apply(List<QAFWebElement> elements) {
+				msg = "any of elements to be visible";
 				for (QAFWebElement element : elements) {
 					if (element.isPresent() && element.isDisplayed()) {
 						return true;
 					}
+					msg = msg+" "+((QAFExtendedWebElement)element).getDescription();
 				}
 				return false;
+			}
+			@Override
+			public String toString() {
+				return msg;
 			}
 		};
 	}
 	
 	public static ExpectedCondition<List<QAFWebElement>, Boolean> allElementVisible() {
 		return new ExpectedCondition<List<QAFWebElement>, Boolean>() {
+			String msg = "elements to be visible";
+			
 			@Override
 			public Boolean apply(List<QAFWebElement> elements) {
 				for (QAFWebElement element : elements) {
 					if (!(element.isPresent() && element.isDisplayed())) {
+						msg = "elements to be visible "+((QAFExtendedWebElement)element).getDescription();
 						return false;
 					}
 				}
 				return true;
+			}
+			
+			@Override
+			public String toString() {
+				return msg;
 			}
 		};
 	}

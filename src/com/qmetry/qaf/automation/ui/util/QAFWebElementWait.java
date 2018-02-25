@@ -24,27 +24,17 @@
 
 package com.qmetry.qaf.automation.ui.util;
 
-import static com.qmetry.qaf.automation.core.ConfigurationManager.getBundle;
-
-import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.support.ui.Clock;
-import org.openqa.selenium.support.ui.FluentWait;
-import org.openqa.selenium.support.ui.Sleeper;
-import org.openqa.selenium.support.ui.SystemClock;
 
-import com.google.common.collect.ImmutableList;
-import com.qmetry.qaf.automation.core.ConfigurationManager;
-import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.ui.webdriver.QAFExtendedWebElement;
 
 /**
- * A specialization of {@link FluentWait} that uses WebDriver instances.
+ * A specialization of {@link DynamicWait} that uses WebDriver instances.
  */
-public class QAFWebElementWait extends FluentWait<QAFExtendedWebElement> {
+public class QAFWebElementWait extends DynamicWait<QAFExtendedWebElement> {
 
 	/**
 	 * Wait will ignore instances of NotFoundException that are encountered
@@ -59,8 +49,9 @@ public class QAFWebElementWait extends FluentWait<QAFExtendedWebElement> {
 	 * @see QAFWebElementWait#ignoring(Class[]) equals
 	 */
 	public QAFWebElementWait(QAFExtendedWebElement element, long timeOutInMiliSeconds) {
-		this(element, new SystemClock(), Sleeper.SYSTEM_SLEEPER, timeOutInMiliSeconds, getDefaultInterval());
-	}
+		super(element);
+		withTimeout(timeOutInMiliSeconds, TimeUnit.MILLISECONDS);
+		ignoring(NoSuchElementException.class, StaleElementReferenceException.class);	}
 
 	/**
 	 * Wait will ignore instances of NotFoundException that are encountered
@@ -77,42 +68,14 @@ public class QAFWebElementWait extends FluentWait<QAFExtendedWebElement> {
 	 * @see QAFWebElementWait#ignoring(Class[]) equals
 	 */
 	public QAFWebElementWait(QAFExtendedWebElement element, long timeOutInMiliSeconds, long sleepInMillis) {
-		this(element, new SystemClock(), Sleeper.SYSTEM_SLEEPER, timeOutInMiliSeconds, sleepInMillis);
+		this(element,timeOutInMiliSeconds);
+		pollingEvery(sleepInMillis, TimeUnit.MILLISECONDS);
 	}
 
 	public QAFWebElementWait(QAFExtendedWebElement QAFExtendedWebElement, long... timeout) {
 		this(QAFExtendedWebElement, getTimeout(timeout), getInterval(timeout));
 	}
 
-	/**
-	 * @param element
-	 *            The WebElement instance to pass to the expected conditions
-	 * @param clock
-	 *            The clock to use when measuring the timeout
-	 * @param sleeper
-	 *            Object used to make the current thread go to sleep.
-	 * @param timeOutInSeconds
-	 *            The timeout in seconds when an expectation is
-	 * @param sleepTimeOut
-	 *            The timeout used whilst sleeping. Defaults to 500ms called.
-	 */
-	@SuppressWarnings("unchecked")
-	protected QAFWebElementWait(QAFExtendedWebElement element, Clock clock, Sleeper sleeper, long timeOutInMiliSeconds,
-			long sleepTimeOut) {
-		super(element, clock, sleeper);
-		withTimeout(timeOutInMiliSeconds, TimeUnit.MILLISECONDS);
-		pollingEvery(sleepTimeOut, TimeUnit.MILLISECONDS);
-		ignore(NoSuchElementException.class, StaleElementReferenceException.class);
-	}
-
-	/**
-	 * @see #ignoreAll(Collection)
-	 */
-	@SuppressWarnings("unchecked")
-	public QAFWebElementWait ignore(Class<? extends RuntimeException>... exceptionType) {
-		return (QAFWebElementWait) this
-				.ignoreAll(ImmutableList.<Class<? extends RuntimeException>> copyOf(exceptionType));
-	}
 
 	private static long getTimeout(long... timeout) {
 		if ((null == timeout) || (timeout.length < 1) || (timeout[0] <= 0)) {
@@ -128,14 +91,5 @@ public class QAFWebElementWait extends FluentWait<QAFExtendedWebElement> {
 		return timeout[1];
 	}
 
-	private static long getDefaultTimeout() {
-		return ConfigurationManager.getBundle().getLong("selenium.explicit.wait.timeout",
-				ApplicationProperties.SELENIUM_WAIT_TIMEOUT.getIntVal(5000));
-	}
-
-	private static long getDefaultInterval() {
-		return getBundle().getLong("selenium.explicit.wait.interval",
-				getBundle().getLong("selenium.wait.interval", 1000));
-	}
 
 }

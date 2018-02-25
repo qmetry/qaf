@@ -506,10 +506,9 @@ public class QAFExtendedWebElement extends RemoteWebElement implements QAFWebEle
 	}
 
 	// Wait service
-	@SuppressWarnings("unchecked")
 	public void waitForVisible(long... timeout) {
 		new QAFWebElementWait(this, timeout)
-				.ignore(RuntimeException.class, NoSuchElementException.class, StaleElementReferenceException.class)
+				.ignoring(RuntimeException.class, NoSuchElementException.class, StaleElementReferenceException.class)
 				.withMessage("Wait time out for " + getDescription() + " to be visible")
 				.until(QAFWebElementExpectedConditions.elementVisible());
 	}

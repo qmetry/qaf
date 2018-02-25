@@ -55,7 +55,6 @@ import org.openqa.selenium.remote.Response;
 import org.openqa.selenium.remote.ScreenshotException;
 import org.openqa.selenium.remote.internal.WebElementToJsonConverter;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.FluentWait;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
@@ -63,9 +62,10 @@ import com.google.common.collect.Lists;
 import com.qmetry.qaf.automation.core.ConfigurationManager;
 import com.qmetry.qaf.automation.core.QAFListener;
 import com.qmetry.qaf.automation.keys.ApplicationProperties;
+import com.qmetry.qaf.automation.ui.JsToolkit;
 import com.qmetry.qaf.automation.ui.WebDriverCommandLogger;
 import com.qmetry.qaf.automation.ui.WebDriverTestBase;
-import com.qmetry.qaf.automation.ui.JsToolkit;
+import com.qmetry.qaf.automation.ui.util.DynamicWait;
 import com.qmetry.qaf.automation.ui.util.QAFWebDriverExpectedConditions;
 import com.qmetry.qaf.automation.ui.util.QAFWebDriverWait;
 import com.qmetry.qaf.automation.ui.util.QAFWebElementExpectedConditions;
@@ -211,7 +211,7 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 		if (elements != null) {
 			for (QAFExtendedWebElement element : elements) {
 				final By by = element.getBy();
-				element.setId(((QAFExtendedWebElement) new QAFWebDriverWait(this).ignore(NoSuchElementException.class,
+				element.setId(((QAFExtendedWebElement) new QAFWebDriverWait(this).ignoring(NoSuchElementException.class,
 						StaleElementReferenceException.class, RuntimeException.class)
 						.until(ExpectedConditions.presenceOfElementLocated(by))).getId());
 			}
@@ -475,30 +475,22 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 	}
 
 	public void waitForAnyElementPresent(QAFWebElement... elements) {
-		new FluentWait<List<QAFWebElement>>(Arrays.asList(elements))
-				.withTimeout(QAFWebDriverWait.getDefaultTimeout(), TimeUnit.MILLISECONDS)
-				.pollingEvery(QAFWebDriverWait.getDefaultInterval(), TimeUnit.MILLISECONDS)
+		new DynamicWait<List<QAFWebElement>>(Arrays.asList(elements))
 				.until(QAFWebElementExpectedConditions.anyElementPresent());
 	}
 
 	public void waitForAllElementPresent(QAFWebElement... elements) {
-		new FluentWait<List<QAFWebElement>>(Arrays.asList(elements))
-		.withTimeout(QAFWebDriverWait.getDefaultTimeout(), TimeUnit.MILLISECONDS)
-		.pollingEvery(QAFWebDriverWait.getDefaultInterval(), TimeUnit.MILLISECONDS)
+		new DynamicWait<List<QAFWebElement>>(Arrays.asList(elements))
 		.until(QAFWebElementExpectedConditions.allElementPresent());
 	}
 
 	public void waitForAnyElementVisible(QAFWebElement... elements) {
-		new FluentWait<List<QAFWebElement>>(Arrays.asList(elements))
-				.withTimeout(QAFWebDriverWait.getDefaultTimeout(), TimeUnit.MILLISECONDS)
-				.pollingEvery(QAFWebDriverWait.getDefaultInterval(), TimeUnit.MILLISECONDS)
+		new DynamicWait<List<QAFWebElement>>(Arrays.asList(elements))
 				.until(QAFWebElementExpectedConditions.anyElementVisible());
 	}
 
 	public void waitForAllElementVisible(QAFWebElement... elements) {
-		new FluentWait<List<QAFWebElement>>(Arrays.asList(elements))
-		.withTimeout(QAFWebDriverWait.getDefaultTimeout(), TimeUnit.MILLISECONDS)
-		.pollingEvery(QAFWebDriverWait.getDefaultInterval(), TimeUnit.MILLISECONDS)
+		new DynamicWait<List<QAFWebElement>>(Arrays.asList(elements))
 		.until(QAFWebElementExpectedConditions.allElementVisible());
 	}
 	

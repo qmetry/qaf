@@ -40,7 +40,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.LogFactoryImpl;
 import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.support.ui.FluentWait;
 import org.testng.ITestResult;
 import org.testng.Reporter;
 
@@ -49,6 +48,7 @@ import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.ui.UiDriver;
 import com.qmetry.qaf.automation.ui.UiDriverFactory;
 import com.qmetry.qaf.automation.ui.WebDriverTestBase;
+import com.qmetry.qaf.automation.ui.util.DynamicWait;
 import com.qmetry.qaf.automation.ui.util.ExpectedCondition;
 import com.qmetry.qaf.automation.util.FileUtil;
 import com.qmetry.qaf.automation.util.PropertyUtil;
@@ -257,7 +257,7 @@ public class QAFTestBase {
 	}
 
 	/** Sleeps for the specified number of milliseconds */
-	public static void pause(int millisecs) {
+	public static void pause(long millisecs) {
 		try {
 			Thread.sleep(millisecs);
 		} catch (InterruptedException e) {
@@ -579,18 +579,18 @@ public class QAFTestBase {
 
 	}
 
-	private class UiDriverInitializer extends FluentWait<UiDriverFactory> {
+	private class UiDriverInitializer extends DynamicWait<UiDriverFactory> {
 
 		public UiDriverInitializer() {
 			super(new UiDriverFactory());
 		}
 
-		@Override
-		protected RuntimeException timeoutException(String message, Throwable lastException) {
-			AutomationError ae = new AutomationError(message + "\n" + lastException.getCause().getMessage());
-			ae.setStackTrace(lastException.getCause().getStackTrace());
-			return ae;
-		}
+//		@Override
+//		protected RuntimeException timeoutException(String message, Throwable lastException) {
+//			AutomationError ae = new AutomationError(message + "\n" + lastException.getCause().getMessage());
+//			ae.setStackTrace(lastException.getCause().getStackTrace());
+//			return ae;
+//		}
 
 	}
 

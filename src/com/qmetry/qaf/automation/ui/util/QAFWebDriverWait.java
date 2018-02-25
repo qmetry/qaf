@@ -29,26 +29,17 @@
 
 package com.qmetry.qaf.automation.ui.util;
 
-import static com.qmetry.qaf.automation.core.ConfigurationManager.getBundle;
-
-import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.support.ui.Clock;
-import org.openqa.selenium.support.ui.FluentWait;
-import org.openqa.selenium.support.ui.Sleeper;
-import org.openqa.selenium.support.ui.SystemClock;
 
-import com.google.common.collect.ImmutableList;
-import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.ui.WebDriverTestBase;
 import com.qmetry.qaf.automation.ui.webdriver.QAFExtendedWebDriver;
 
 /**
- * A specialization of {@link FluentWait} that uses WebDriver instances.
+ * A specialization of {@link DynamicWait} that uses WebDriver instances.
  */
-public class QAFWebDriverWait extends FluentWait<QAFExtendedWebDriver> {
+public class QAFWebDriverWait extends DynamicWait<QAFExtendedWebDriver> {
 	/**
 	 * Wait will ignore instances of NotFoundException that are encountered
 	 * (thrown) by default in the 'until' condition, and immediately propagate
@@ -62,8 +53,9 @@ public class QAFWebDriverWait extends FluentWait<QAFExtendedWebDriver> {
 	 * @see QAFWebDriverWait#ignoring(Class[]) equals
 	 */
 	public QAFWebDriverWait(QAFExtendedWebDriver driver, long timeOutInMiliSeconds) {
-		this(driver, new SystemClock(), Sleeper.SYSTEM_SLEEPER, timeOutInMiliSeconds,
-				getDefaultInterval());
+		super(driver);
+		withTimeout(timeOutInMiliSeconds, TimeUnit.MILLISECONDS);
+		ignoring(StaleElementReferenceException.class);
 	}
 
 	/**
@@ -82,8 +74,8 @@ public class QAFWebDriverWait extends FluentWait<QAFExtendedWebDriver> {
 	 */
 	public QAFWebDriverWait(QAFExtendedWebDriver driver, long timeOutInMiliSeconds,
 			long sleepInMillis) {
-		this(driver, new SystemClock(), Sleeper.SYSTEM_SLEEPER, timeOutInMiliSeconds,
-				sleepInMillis);
+		this(driver,timeOutInMiliSeconds);
+		pollingEvery(sleepInMillis, TimeUnit.MILLISECONDS);
 	}
 
 	/**
@@ -104,33 +96,6 @@ public class QAFWebDriverWait extends FluentWait<QAFExtendedWebDriver> {
 		this(driver, getTimeout(timeout), getInterval(timeout));
 	}
 
-	/**
-	 * @param driver
-	 *            The WebDriver instance to pass to the expected conditions
-	 * @param clock
-	 *            The clock to use when measuring the timeout
-	 * @param sleeper
-	 *            Object used to make the current thread go to sleep.
-	 * @param timeOutInSeconds
-	 *            The timeout in seconds when an expectation is
-	 * @param sleepTimeOut
-	 *            The timeout used whilst sleeping. Defaults to 500ms called.
-	 */
-	protected QAFWebDriverWait(QAFExtendedWebDriver driver, Clock clock, Sleeper sleeper,
-			long timeOutInMiliSeconds, long sleepTimeOut) {
-		super(driver, clock, sleeper);
-		withTimeout(timeOutInMiliSeconds, TimeUnit.MILLISECONDS);
-		pollingEvery(sleepTimeOut, TimeUnit.MILLISECONDS);
-		ignoring(StaleElementReferenceException.class);
-	}
-
-	/**
-	 * @see #ignoreAll(Collection)
-	 */
-	public QAFWebDriverWait ignore(Class<? extends RuntimeException>... exceptionType) {
-		return (QAFWebDriverWait) this.ignoreAll(
-				ImmutableList.<Class<? extends RuntimeException>> copyOf(exceptionType));
-	}
 
 	private static long getTimeout(long... timeout) {
 		if ((null == timeout) || (timeout.length < 1) || (timeout[0] <= 0)) {
@@ -145,15 +110,4 @@ public class QAFWebDriverWait extends FluentWait<QAFExtendedWebDriver> {
 		}
 		return timeout[1];
 	}
-
-	public static long getDefaultTimeout() {
-		return getBundle().getLong("selenium.explicit.wait.timeout",
-				ApplicationProperties.SELENIUM_WAIT_TIMEOUT.getIntVal(5000));
-	}
-
-	public static long getDefaultInterval() {
-		return getBundle().getLong("selenium.explicit.wait.interval",
-				getBundle().getLong("selenium.wait.interval", 1000));
-	}
-
 }

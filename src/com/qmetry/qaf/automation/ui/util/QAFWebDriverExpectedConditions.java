@@ -27,10 +27,9 @@ import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 
 import com.qmetry.qaf.automation.ui.webdriver.QAFExtendedWebDriver;
-import com.qmetry.qaf.automation.ui.webdriver.QAFWebElement;
 
 /**
- * com.qmetry.qaf.automation.core.ui.ExpectedConditions.java
+ * com.qmetry.qaf.automation.core.ui.QAFWebDriverExpectedConditions.java
  * 
  * @author chirag
  */

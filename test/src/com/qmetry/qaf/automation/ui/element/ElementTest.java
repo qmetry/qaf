@@ -67,14 +67,19 @@ public class ElementTest{
 		QAFExtendedWebElement childEleFromList = (QAFExtendedWebElement) new WebDriverTestBase().getDriver().findElement("tagName=body").findElements(By.name("q")).get(0);
 		childEleFromList.verifyPresent();
 		Validator.verifyThat(childEleFromList, Matchers.instanceOf(UiElement.class));
+		childEleFromList.verifyVisible();
+		
 
 		System.out.println("child element From List is implementation of" + childEleFromList.getClass());
-		QAFWebElement ele1 = ElementFactory.$("name=q ");
+		QAFWebElement ele1 = ElementFactory.$("name=q");
 		Validator.verifyThat(ele1, Matchers.instanceOf(UiElement.class));
 
 		System.out.println("element is implementation of " + ele1.getClass());
 		ele1.verifyPresent();
-		
+		new WebDriverTestBase().getDriver().waitForAnyElementVisible(childEleFromList,ele,ele1);
+
+		new WebDriverTestBase().getDriver().waitForAllElementVisible(childEleFromList,ele,ele1);
+
 		SearchPage searchPage = new SearchPage();
 		System.out.println("element is implementation of " + searchPage.getSearchInput().getClass());
 		Validator.verifyThat(searchPage.getSearchInput(), Matchers.instanceOf(UiElement.class));
