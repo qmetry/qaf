@@ -29,8 +29,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Qualifier;
-
+import com.qmetry.qaf.automation.ui.annotations.PageIdentifier;
 import com.qmetry.qaf.automation.ui.api.PageLocator;
 import com.qmetry.qaf.automation.ui.api.WebDriverTestPage;
 import com.qmetry.qaf.automation.ui.webdriver.ComponentFactory;
@@ -132,7 +131,7 @@ public abstract class WebDriverBaseTestPage<P extends WebDriverTestPage>
 
 		Field[] flds = ClassUtil.getAllFields(this.getClass(), WebDriverBaseTestPage.class);
 		for (Field fld : flds) {
-			if(fld.isAnnotationPresent(Qualifier.class) && QAFWebElement.class.isAssignableFrom(fld.getType())){
+			if(fld.isAnnotationPresent(PageIdentifier.class) && QAFWebElement.class.isAssignableFrom(fld.getType())){
 				try {
 					fld.setAccessible(true);
 					identifiers.add((QAFWebElement) fld.get(this));

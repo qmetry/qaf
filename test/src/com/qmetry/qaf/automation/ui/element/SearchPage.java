@@ -27,6 +27,7 @@ import java.util.List;
 
 import com.qmetry.qaf.automation.ui.WebDriverBaseTestPage;
 import com.qmetry.qaf.automation.ui.annotations.FindBy;
+import com.qmetry.qaf.automation.ui.annotations.PageIdentifier;
 import com.qmetry.qaf.automation.ui.api.PageLocator;
 import com.qmetry.qaf.automation.ui.api.WebDriverTestPage;
 import com.qmetry.qaf.automation.ui.webdriver.QAFWebElement;
@@ -37,11 +38,17 @@ import com.qmetry.qaf.automation.ui.webdriver.QAFWebElement;
  */
 public class SearchPage extends WebDriverBaseTestPage<WebDriverTestPage>{
 	
+	@PageIdentifier
 	@FindBy(locator="name=q")
 	private QAFWebElement searchInput;
 
+	@PageIdentifier//will not considered as page identifier as it is list.
 	@FindBy(locator="name=q")
 	private List<QAFWebElement> searchInputList;
+	
+	@PageIdentifier//will not considered as page identifier as it is list.
+	@FindBy(locator="name=btnG")
+	private QAFWebElement searchBtn;
 	
 	public QAFWebElement getSearchInput() {
 		return searchInput;
@@ -56,7 +63,6 @@ public class SearchPage extends WebDriverBaseTestPage<WebDriverTestPage>{
 	@Override
 	protected void openPage(PageLocator locator, Object... args) {
 		// TODO Auto-generated method stub
-		
 	}
 	
 	

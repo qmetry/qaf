@@ -55,6 +55,10 @@ public class ElementTest{
 		QAFExtendedWebElement ele = new WebDriverTestBase().getDriver().findElement(By.name("q"));
 		ele.verifyPresent();
 
+		SearchPage spPage = new SearchPage();
+		System.out.println(spPage.isPageActive(null));
+
+		spPage.waitForPageToLoad();
 		Validator.verifyThat(ele, Matchers.instanceOf(UiElement.class));
 		System.out.println("element is implementation of" + ele.getClass());
 		

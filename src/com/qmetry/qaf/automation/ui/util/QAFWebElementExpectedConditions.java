@@ -104,28 +104,46 @@ public class QAFWebElementExpectedConditions {
 	}
 	public static ExpectedCondition<List<QAFWebElement>, Boolean> anyElementPresent() {
 		return new ExpectedCondition<List<QAFWebElement>, Boolean>() {
+			String msg = "any of elements to be present";
+
 			@Override
 			public Boolean apply(List<QAFWebElement> elements) {
+				msg = "any of elements to be present";
+
 				for (QAFWebElement element : elements) {
 					if (element.isPresent()) {
 						return true;
 					}
+					msg = " "+((QAFExtendedWebElement)element).getDescription();
 				}
 				return false;
+			}
+			
+			@Override
+			public String toString() {
+				return msg;
 			}
 		};
 	}
 	
 	public static ExpectedCondition<List<QAFWebElement>, Boolean> allElementPresent() {
 		return new ExpectedCondition<List<QAFWebElement>, Boolean>() {
+			String msg = "all of elements to be present";
+
 			@Override
 			public Boolean apply(List<QAFWebElement> elements) {
 				for (QAFWebElement element : elements) {
-					if (element.isPresent()) {
+					if (!element.isPresent()) {
+						msg = "elements to be present " + ((QAFExtendedWebElement)element).getDescription();
 						return false;
 					}
 				}
 				return true;
+			}
+			
+			@Override
+			public String toString() {
+				return msg;
 			}
 		};
 	}
