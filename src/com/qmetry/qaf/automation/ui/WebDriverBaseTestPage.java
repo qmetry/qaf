@@ -86,6 +86,11 @@ public abstract class WebDriverBaseTestPage<P extends WebDriverTestPage>
 		}
 		return pageIdentifiers.size()>0;
 	}
+	
+	/**
+	 * This method should be called to wait for page load. It will wait for all element annotated with {@link PageIdentifier} to be present. 
+	 * Override this method to provide page specific custom wait implementation. 
+	 */
 	@Override
 	public void waitForPageToLoad() {
 		driver.waitForAllElementPresent(pageIdentifiers.toArray(new QAFWebElement[]{}));
