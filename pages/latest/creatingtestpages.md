@@ -164,12 +164,12 @@ public class HomePage extends WebDriverBaseTestPage<WebDriverTestPage>
 }
 ```
 
-### Page identifiers (since 2.1.13)
+### Page identifiers (since 2.1.14)(next release)
 
-You can annotate webelement with `@Qualifier` annotation. All element with `@Qualifier` Annotation will be considered as page identifier. It will be used by `waitForPageToLoad()` and `isPageActive()` to check page is active or to wait for to page load.
+You can annotate webelement with `@PageIdentifier` annotation. All element with `@PageIdentifier` Annotation will be considered as page identifier. It will be used by `waitForPageToLoad()` and `isPageActive()` to check page is active or to wait for to page load.
 
 ```java	
-import javax.inject.Qualifier;
+import com.qmetry.qaf.automation.ui.annotations.PageIdentifier;
 ...
 public class HomePage extends WebDriverBaseTestPage<WebDriverTestPage>
         implements
@@ -180,11 +180,11 @@ public class HomePage extends WebDriverBaseTestPage<WebDriverTestPage>
     
     ...
     
-    @Qualifier
+    @PageIdentifier
     @FindBy(locator = SEARCH_TEXTBOX_LOC)
     private QAFWebElement searchTextbox;
     
-    @Qualifier
+    @PageIdentifier
     @FindBy(locator = SEARCH_BUTTON_LOC)
     private QAFWebElement searchButton;
     

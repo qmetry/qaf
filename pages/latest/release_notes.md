@@ -18,13 +18,12 @@ folder: latest
  
 **Enahancements**
  
- 1. Page identifier support in Test page
- 2. [#131](https://github.com/qmetry/qaf/issues/131) Ability to teardown driver by name 
- 3. Support to provide default element meta-data using property `element.default.metadata`
- 4. Support to allow all certificates and ignore host name verification for web-services using property `https.accept.all.cert` 
- 5. Disabled Delimiter Parsing for xml configuration
- 6. Web service request entity logging
- 7. Added methods in DatabaseUtils to support multiple database 
+ 1. [#131](https://github.com/qmetry/qaf/issues/131) Ability to teardown driver by name 
+ 2. Support to provide default element meta-data using property `element.default.metadata`
+ 3. Support to allow all certificates and ignore host name verification for web-services using property `https.accept.all.cert` 
+ 4. Disabled Delimiter Parsing for xml configuration
+ 5. Web service request entity logging
+ 6. Added methods in DatabaseUtils to support multiple database 
  
 
 

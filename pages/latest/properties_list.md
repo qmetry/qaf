@@ -28,8 +28,8 @@ tags: [getting_started]
 | retry.count	| 0	| To retry testcase if testcase failed cause of any exception.<br> **Note**: testcase will not retry if there is any checkpoint failure.
 | bean.populate.random | 	false	| Set true to fill bean randomly from available data sets, more details [fill Databean from multiple dataset.](databeans.html)
 | selenium.singletone | |	To define driver instance scope.Possible value can be Tests or Methods or Groups.
-|driver.init.retry.timeout|0|Duration in multiplication of 10 seconds for example 50. Set time out for retry driver initialization when driver initialization fail (:since 2.1.9).
-|step.provider.sharedinstance|false|specify wherether to share class object among step in the same class. (:since 2.1.9)
+|driver.init.retry.timeout|0|Duration in multiplication of 10 seconds for example 50. Set time out for retry driver initialization when driver initialization fail (since 2.1.9).
+|step.provider.sharedinstance|false|specify wherether to share class object among step in the same class. (since 2.1.9)
 |https.accept.all.cert|false|Set true to trust all certificates and ignore host name verification  for web-services (:new:since 2.1.13)
 |element.default.listener|true|Specify weather to attach `ElementMetaDataListener` or not. (:new:since 2.1.13)
 |element.default.metadata||To set default meta-data for webelement. Meta-data provided with locator has higher preference than default values. (:new:since 2.1.13)

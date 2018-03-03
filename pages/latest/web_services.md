@@ -5,6 +5,7 @@ permalink: latest/web_services.html
 folder: latest
 tags: [java]
 ---
+For advance usage please refer [qaf-suport-ws](https://github.com/qmetry/qaf-support-ws/wiki).
 
 QAF provides support classes for Webservice Testing. It displays all details of web services request/response in QAF Report.
 

@@ -61,6 +61,79 @@ Want to iterate with set of test data from file? You got it with data-driven Sce
 |priority|Number|Defines the order in which scenario should be executed. Higher the priority, earlier it will execute|
 |dependsOnGroups|Array of String|Scenarios of Groups, to be executed before|
 |dependsOnMethods|Array of String|Scenarios to be executed before|
+|dataProviderClass|Fully qualified class name|required if you want to use custom data provider (since 2.1.12)|
+|dataProvider|name of the data provider|required when you want to use custom data provider (since 2.1.12)|
  
+
+## Data-driven Scenario
+You can iterate your scenario with set of test data. Refer [make test data driven](maketest_data_driven.html), any of the @QAFDataProvider property you can set as meta-data. Below example demonstrates data-driven feature  
+
+
+```
+
+SCENARIO: Data-driven Example 
+META-DATA: {"dataFile":"resources/data/testdata.csv","description":"Data driven test that uses csv file to provide data"}
+	Given I am on fruits and colors activity
+	When i select '${fruit}'
+	Then the color should be '${color}'
+
+END
+
+```
+
+Below is csv data file and first row is column names.
+
+**testdata.csv**
+
+```csv
+fruit,color
+grapes,green
+banana,yellow
+
+```
+
+
+If you want to uses custom data set you need to provide data provider class and data provider name in meta-data.
+
+```
+SCENARIO: Custom Data provider Example 
+META-DATA: {"dataProvider":"my-custom-dp", "dataProviderClass":"my.project.impl.CustomDataProvider","description":"Data driven test that uses custom data provider"}
+	Given I am on fruits and colors activity
+	When i select '${fruit}'
+	Then the color should be '${color}'
+
+END
+
+```
+
  
- 
+```java
+
+package my.project.impl;
+
+import java.util.Map;
+import org.testng.annotations.DataProvider;
+import org.testng.collections.Maps;
+
+/**
+ * @author chirag.jayswal
+ *
+ */
+public class CustomDataProvider {
+	
+	@DataProvider(name="my-custom-dp")
+	public static Object[][] dataProviderForBDD(){
+		
+		Map<Object, Object> rec1 = Maps.newHashMap();
+		m.put("fruit", "grapes");
+		m.put("color", "green");
+		
+		Map<Object, Object> rec2 = Maps.newHashMap();
+		m.put("fruit", "banana");
+		m.put("color", "yellow");
+		
+		return new Object[][]{{rec1},{rec2}};
+	}
+}
+
+```
