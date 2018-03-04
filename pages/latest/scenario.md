@@ -132,7 +132,7 @@ public class CustomDataProvider {
 		m.put("fruit", "banana");
 		m.put("color", "yellow");
 		
-		return new Object[][]{{rec1},{rec2}};
+		return new Object[][]{ {rec1},{rec2}};
 	}
 }
 
