@@ -32,6 +32,7 @@ import com.qmetry.qaf.automation.core.ConfigurationManager;
 import com.qmetry.qaf.automation.core.QAFListener;
 import com.qmetry.qaf.automation.data.BaseDataBean;
 import com.qmetry.qaf.automation.data.PasswordDecryptor;
+import com.qmetry.qaf.automation.http.UriProxySelector;
 import com.qmetry.qaf.automation.step.QAFTestStepListener;
 import com.qmetry.qaf.automation.ui.selenium.SeleniumCommandListener;
 import com.qmetry.qaf.automation.ui.selenium.WaitService;
@@ -553,11 +554,10 @@ public enum ApplicationProperties {
 	ENCRYPTED_PASSWORD_KEY_PREFIX("encrypted."),
 	/**
 	 * <p>
-	 * To set default meta-data for all element. Meta-data provided with
-	 * locator has higher preference than default values.
+	 * To set default meta-data for all element. Meta-data provided with locator
+	 * has higher preference than default values.
 	 * </p>
-	 * <b>key</b>:
-	 * <code>element.default.metadata</code><br/>
+	 * <b>key</b>: <code>element.default.metadata</code><br/>
 	 * <b>value</b>: JSON map of meta data to be set as default for element.
 	 * 
 	 * @since 2.1.13
@@ -568,8 +568,7 @@ public enum ApplicationProperties {
 	 * <p>
 	 * Specify weather to attach default element listener or not.
 	 * </p>
-	 * <b>key</b>:
-	 * <code>element.default.listener</code><br/>
+	 * <b>key</b>: <code>element.default.listener</code><br/>
 	 * <b>value</b>: boolean true/false.
 	 * 
 	 * @since 2.1.13
@@ -578,30 +577,63 @@ public enum ApplicationProperties {
 	ELEMENT_ATTACH_DEFAULT_LISTENER("element.default.listener"),
 	/**
 	 * <p>
-	 * Set true to trust all certificates and ignore host name verification  for web-services.
+	 * Set true to trust all certificates and ignore host name verification for
+	 * web-services.
 	 * </p>
-	 * <b>key</b>:
-	 * <code>https.accept.all.cert</code><br/>
+	 * <b>key</b>: <code>https.accept.all.cert</code><br/>
 	 * <b>value</b>: boolean true/false.
 	 * 
 	 * @since 2.1.13
 	 * 
 	 */
 	HTTPS_ACCEPT_ALL_CERT("https.accept.all.cert"),
-	
+
 	/**
 	 * <p>
-	 * Set test case identifier meta-key which will be used to as file name of test case result json file.
+	 * Set test case identifier meta-key which will be used to as file name of
+	 * test case result json file.
 	 * </p>
-	 * <b>key</b>:
-	 * <code>tc.identifier.key</code><br/>
+	 * <b>key</b>: <code>tc.identifier.key</code><br/>
 	 * <b>value</b>: String test-case meta-key.
 	 * 
 	 * @since 2.1.13
 	 * 
 	 */
-	TESTCASE_IDENTIFIER_KEY("tc.identifier.key")
-	;
+	TESTCASE_IDENTIFIER_KEY("tc.identifier.key"),
+	/**
+	 * <p>
+	 * Set proxy server that needs to used by {@link UriProxySelector}
+	 * </p>
+	 * <b>key</b>: <code>proxy.server</code><br/>
+	 * <b>value</b>: proxy server.
+	 * 
+	 * @since 2.1.14
+	 * 
+	 */
+	PROXY_SERVER_KEY("proxy.server"),
+	/**
+	 * <p>
+	 * Set proxy server port that needs to used by {@link UriProxySelector}.
+	 * Default value is 80.
+	 * </p>
+	 * <b>key</b>: <code>proxy.port</code><br/>
+	 * <b>value</b>: integer port of running proxy server.
+	 * 
+	 * @since 2.1.14
+	 * 
+	 */
+	PROXY_PORT_KEY("proxy.port"),
+	/**
+	 * <p>
+	 * Set one or more host url that needs to be proxied through given proxy server.
+	 * </p>
+	 * <b>key</b>: <code>host.to.proxy</code><br/>
+	 * <b>value</b>: one or more host URL separated by ';'
+	 * 
+	 * @since 2.1.14
+	 * 
+	 */
+	PROXY_HOSTS_KEY("host.to.proxy");
 
 	public String key;
 

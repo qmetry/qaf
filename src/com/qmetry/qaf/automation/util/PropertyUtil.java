@@ -28,6 +28,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.ProxySelector;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -54,6 +55,7 @@ import org.apache.commons.logging.impl.LogFactoryImpl;
 import com.qmetry.qaf.automation.core.AutomationError;
 import com.qmetry.qaf.automation.data.Base64PasswordDecryptor;
 import com.qmetry.qaf.automation.data.PasswordDecryptor;
+import com.qmetry.qaf.automation.http.UriProxySelector;
 import com.qmetry.qaf.automation.keys.ApplicationProperties;
 
 /**
@@ -137,6 +139,8 @@ public class PropertyUtil extends XMLConfiguration {
 			} catch (NoSuchAlgorithmException e) {
 				logger.error("Unable to find Algorithm while setting ignore certificate and host name verification", e);
 			}
+		}else if(ApplicationProperties.PROXY_SERVER_KEY.key.equalsIgnoreCase(key) && StringUtil.isNotBlank(value.toString())){
+			ProxySelector.setDefault(UriProxySelector.getInstance());
 		}
 	}
 
