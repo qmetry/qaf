@@ -21,8 +21,9 @@
  * For any inquiry or need additional information, please contact support-qaf@infostretch.com
  *******************************************************************************/
 
-
 package com.qmetry.qaf.automation.data;
+
+import static com.qmetry.qaf.automation.core.ConfigurationManager.getBundle;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AccessibleObject;
@@ -30,13 +31,13 @@ import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.apache.commons.lang.text.StrSubstitutor;
 import org.testng.ITestContext;
 import org.testng.ITestNGMethod;
 import org.testng.annotations.Test;
+import org.testng.xml.XmlTest;
 
 import com.google.gson.Gson;
-import com.qmetry.qaf.automation.core.ConfigurationManager;
-import com.qmetry.qaf.automation.util.StringUtil;
 
 /**
  * Internal class for test case and test step meta data scanning.
@@ -89,6 +90,31 @@ public class MetaDataScanner {
 		return getMetadata(methodOrFileld, false);
 	}
 
+	public static String getParameter(XmlTest xmlTest, String parameter) {
+		String paramValue = "";
+		
+		boolean overrideUsingSystemProp = System.getProperties().containsKey(parameter);
+		
+		Map<String, String> context = xmlTest.getAllParameters();
+		context.keySet().removeAll(System.getProperties().keySet());
+		
+		if (overrideUsingSystemProp) {
+			paramValue = System.getProperty(parameter);
+		}else if(context.containsKey(parameter)){
+			paramValue = context.get(parameter);
+		}else if(getBundle().containsKey(parameter)){
+			try {
+				//unresolved value
+				paramValue = (String) getBundle().configurationAt(parameter).getRoot().getValue();
+			} catch (Exception e) {
+				paramValue=getBundle().getString(parameter, "");
+			}
+		}
+		paramValue = StrSubstitutor.replace(paramValue, context);
+		paramValue = getBundle().getSubstitutor().replace(paramValue);
+		return paramValue;
+	}
+
 	/**
 	 * Get parameter value from the system property, context or configuration.
 	 * 
@@ -98,14 +124,7 @@ public class MetaDataScanner {
 	 *         context and last is configuration/properties.
 	 */
 	public static String getParameter(ITestContext context, String parameter) {
-		if (System.getProperties().containsKey(parameter)) {
-			return System.getProperty(parameter);
-		}
-		String paramValue = null != context ? context.getCurrentXmlTest().getParameter(parameter) : "";
-		if (StringUtil.isNotBlank(paramValue)) {
-			return paramValue;
-		}
-		return ConfigurationManager.getBundle().getString(parameter);
+		return getParameter(context.getCurrentXmlTest(), parameter);
 	}
 
 	/**
@@ -117,14 +136,9 @@ public class MetaDataScanner {
 	 *         context and last is configuration/properties.
 	 */
 	public static String getParameter(ITestNGMethod method, String parameter) {
-		if (System.getProperties().containsKey(parameter)) {
-			return System.getProperty(parameter);
-		}
-		String paramValue = null != method && null != method.getXmlTest() ? method.getXmlTest().getParameter(parameter)
-				: "";
-		if (StringUtil.isNotBlank(paramValue)) {
-			return paramValue;
-		}
-		return ConfigurationManager.getBundle().getString(parameter);
+		if (null != method && null != method.getXmlTest()) {
+			return getParameter(method.getXmlTest(), parameter);
+		}		
+		return getBundle().getString(parameter);
 	}
 }
