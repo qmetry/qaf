@@ -41,25 +41,18 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.apache.commons.configuration.ConfigurationMap;
-import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.lang.text.StrSubstitutor;
 import org.json.JSONException;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
+import com.qmetry.qaf.automation.core.AutomationError;
 import com.qmetry.qaf.automation.core.TestBaseProvider;
 import com.qmetry.qaf.automation.data.MetaData;
-import com.qmetry.qaf.automation.gson.GsonDeserializerObjectWrapper;
-import com.qmetry.qaf.automation.gson.ObjectWrapper;
 import com.qmetry.qaf.automation.ui.api.TestPage;
 import com.qmetry.qaf.automation.ui.webdriver.QAFWebElement;
 import com.qmetry.qaf.automation.util.JSONUtil;
@@ -182,7 +175,8 @@ public class JavaStep extends BaseTestStep {
 		}
 	}
 
-	protected Object getStepProvider() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	protected Object getStepProvider()
+			throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		return stepProvider == null ? getClassInstance(method.getDeclaringClass()) : stepProvider;
 	}
 
@@ -198,6 +192,7 @@ public class JavaStep extends BaseTestStep {
 		return signature;
 	}
 
+	@SuppressWarnings("unchecked")
 	protected Object[] processArgs(Method method, Object... objects) {
 		int noOfParams = method.getParameterTypes().length;
 		if (noOfParams == 0) {
@@ -219,68 +214,37 @@ public class JavaStep extends BaseTestStep {
 					+ " parameters but Actual is " + (objects == null ? "0" : objects.length));
 		}
 
-		Gson gson = new GsonBuilder().setDateFormat("dd-MM-yyyy")
-				.registerTypeAdapter(ObjectWrapper.class, new GsonDeserializerObjectWrapper()).create();
 
 		description = StrSubstitutor.replace(description, context);
 		description = getBundle().getSubstitutor().replace(description);
+		Annotation[][] paramsAnnotations = method.getParameterAnnotations();
+		context.put("__method", method);
+		QAFTestStepArgumentFormatter<Object> defaultFormatter = new QAFTestStepArgumentFormatterImpl();
 		for (int i = 0; i < noOfParams; i++) {
 			Class<?> paramType = method.getParameterTypes()[i];
+			context.put("__paramType", paramType);
+			context.put("__paramIndex", i);
 
-			if ((params[i] instanceof String)) {
-				String pstr = (String) params[i];
-
-				if (pstr.startsWith("${") && pstr.endsWith("}")) {
-					String pname = pstr.substring(2, pstr.length() - 1);
-					params[i] = context.containsKey(pstr) ? context.get(pstr)
-							: context.containsKey(pname) ? context.get(pname)
-									: getBundle().containsKey(pstr) ? getObject(pstr, paramType) : getPropValue(pname,paramType);
-				} else if (pstr.indexOf("$") >= 0) {
-					pstr = StrSubstitutor.replace(pstr, context);
-					params[i] = getBundle().getSubstitutor().replace(pstr);
+			Annotation[] paramAnnotations = paramsAnnotations[i];
+			Class<QAFTestStepArgumentFormatter<?>> formatter = null;
+			for (Annotation paramAnnotation : paramAnnotations) {
+				if (paramAnnotation instanceof Formatter) {
+					formatter = (Class<QAFTestStepArgumentFormatter<?>>) ((Formatter) paramAnnotation).value();
 				}
-
 			}
-			if (String.class.isAssignableFrom(paramType)) {
-				continue;
-			}
-			try {
-				String strVal = gson.toJson(params[i]);
-				if (params[i] instanceof String) {
-					strVal = String.valueOf(params[i]);
-				}
-
-				strVal = getBundle().getSubstitutor().replace(strVal);
-				strVal = StrSubstitutor.replace(strVal, context);
-
+			if (null != formatter) {
 				try {
-					// prevent gson from expressing integers as floats
-					ObjectWrapper w = gson.fromJson(strVal, ObjectWrapper.class);
-					Object obj = w.getObject();
-					try {
-						params[i] = paramType.cast(obj);
-					} catch (Exception e) {
-						JsonElement j = gson.toJsonTree(obj);
-						params[i] = gson.fromJson(j, paramType);
-					}
-				} catch (Exception e) {
-					try {
-						params[i] = gson.fromJson(strVal, paramType);
-					} catch (Exception e1) {
-						// https://github.com/qmetry/qaf/issues/181
-						Object oval = gson.fromJson(strVal, Object.class);
-						if (null!=oval && oval instanceof List) {
-							params[i]=null;
-							List<?> lst = ((List<?>)oval);
-							if(!lst.isEmpty()){
-								params[i]=lst.get(0);
-							}
-						}
-					}
+					params[i] = formatter.newInstance().format(params[i], context);
+					continue;
+				} catch (InstantiationException e) {
+					throw new AutomationError("Unable to use formatter " + formatter , e);
+				} catch (IllegalAccessException e) {
+					throw new AutomationError("Unable to use formatter " + formatter , e);
 				}
-			} catch (Exception e) {
-				logger.debug(e);
+			}else{
+				params[i]=defaultFormatter.format(params[i], context);
 			}
+
 		}
 		return params;
 	}
@@ -300,7 +264,8 @@ public class JavaStep extends BaseTestStep {
 		}
 	}
 
-	private Object getClassInstance(Class<?> cls) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	private Object getClassInstance(Class<?> cls)
+			throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		if (getBundle().getBoolean("step.provider.sharedinstance", false) && isSharableInstance(cls)) {
 			// allow class variable sharing among steps
 			Object obj = getBundle().getObject(cls.getName());
@@ -318,9 +283,9 @@ public class JavaStep extends BaseTestStep {
 
 	private void inject(Object obj) {
 		try {
-			//new ElementFactory().initFields(obj);
+			// new ElementFactory().initFields(obj);
 			Field[] flds = obj.getClass().getDeclaredFields();
-			for(Field fld : flds){
+			for (Field fld : flds) {
 				if (fld.isAnnotationPresent(Inject.class)) {
 					fld.setAccessible(true);
 					Object value = getClassInstance(fld.getType());
@@ -329,23 +294,25 @@ public class JavaStep extends BaseTestStep {
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
-			
+
 		}
 	}
 
-	private Object createInstance(Class<?> cls) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	private Object createInstance(Class<?> cls)
+			throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		try {
 			return cls.newInstance();
 		} catch (Exception e) {
-				//only public constructors with or without parameter(s) to be considered!...
-				Constructor<?> con = cls.getConstructors()[0];
-				con.setAccessible(true);
-				ArrayList<Object> args = new ArrayList<Object>();
-				for (Class<?> param : con.getParameterTypes()) {
-					args.add(getClassInstance(param));
-				}
-			return	con.newInstance(args.toArray(new Object[args.size()]));
-				
+			// only public constructors with or without parameter(s) to be
+			// considered!...
+			Constructor<?> con = cls.getConstructors()[0];
+			con.setAccessible(true);
+			ArrayList<Object> args = new ArrayList<Object>();
+			for (Class<?> param : con.getParameterTypes()) {
+				args.add(getClassInstance(param));
+			}
+			return con.newInstance(args.toArray(new Object[args.size()]));
+
 		}
 	}
 
@@ -395,26 +362,4 @@ public class JavaStep extends BaseTestStep {
 		return false;
 	}
 
-	private Object getPropValue(String pname,  Class<?> paramType) {
-		Object o = getBundle().subset(pname);
-		if (o instanceof HierarchicalConfiguration && ((HierarchicalConfiguration) o).getRoot().getValue() == null
-				&& ((HierarchicalConfiguration) o).getRoot().getChildrenCount() > 0) {
-			return new ConfigurationMap(getBundle().subset(pname));
-		}
-		return getObject(pname, paramType);
-	}
-	
-	private Object getObject(String key, Class<?> paramType){
-		Object o = getBundle().getProperty(key);
-		if(o.getClass().isAssignableFrom(paramType)){
-			return o;
-		}
-		if(paramType.isArray()){
-			return getBundle().getList(key).toArray();
-		}
-		if(o instanceof List){
-			return ((List<?>)o).get(0);
-		}
-		return o;
-	}
 }

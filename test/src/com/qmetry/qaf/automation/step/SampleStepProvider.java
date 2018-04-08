@@ -25,9 +25,11 @@ package com.qmetry.qaf.automation.step;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.qmetry.qaf.automation.impl.step.formatter.TestArgFormatter;
 import com.qmetry.qaf.automation.step.QAFTestStep;
 import com.qmetry.qaf.automation.step.StringTestStep;
 import com.qmetry.qaf.automation.step.TestStep;
+import com.qmetry.qaf.automation.util.Validator;
 
 /**
  * In this class some methods are test.step.SampleStepProvider.java
@@ -79,5 +81,9 @@ public class SampleStepProvider {
 	public void printMap(Map<String, String> map) {
 		System.out.printf("%s\n", map);
 	}
-
+	
+	@QAFTestStep(description = "Just for test formatter {str}")
+	public void stepWithFormatter(@Formatter(TestArgFormatter.class)String s) {
+		Validator.assertTrue(s.endsWith("formatted"), "argument didn't formatted", "argument formatted");
+	}
 }

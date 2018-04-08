@@ -28,8 +28,6 @@
  *******************************************************************************/
 package com.qmetry.qaf.automation.impl.step.common;
 
-import com.qmetry.qaf.automation.step.QAFTestStep;
-
 /**
  * @author chirag.jayswal
  */

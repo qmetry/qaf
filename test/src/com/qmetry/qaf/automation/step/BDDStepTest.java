@@ -175,4 +175,8 @@ public class BDDStepTest {
 		System.out.println(loc + " -> " + val);
 	}
 
+	@Test
+	public void stepFormatterTest() {
+		StringTestStep.execute("Just for test formatter 'test'");
+	}
 }
