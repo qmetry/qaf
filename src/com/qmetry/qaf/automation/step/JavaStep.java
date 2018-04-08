@@ -41,6 +41,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -263,9 +264,22 @@ public class JavaStep extends BaseTestStep {
 						params[i] = gson.fromJson(j, paramType);
 					}
 				} catch (Exception e) {
-					params[i] = gson.fromJson(strVal, paramType);
+					try {
+						params[i] = gson.fromJson(strVal, paramType);
+					} catch (Exception e1) {
+						// https://github.com/qmetry/qaf/issues/181
+						Object oval = gson.fromJson(strVal, Object.class);
+						if (null!=oval && oval instanceof List) {
+							params[i]=null;
+							List<?> lst = ((List<?>)oval);
+							if(!lst.isEmpty()){
+								params[i]=lst.get(0);
+							}
+						}
+					}
 				}
 			} catch (Exception e) {
+				logger.debug(e);
 			}
 		}
 		return params;

@@ -64,18 +64,15 @@ public class GherkinFileParser extends AbstractScenarioFileParser {
 	public static final String FEATURE = "Feature";
 	public static final String BACKGROUND = "Background";
 
-	protected void processStatements(Object[][] statements, String referece,
-			List<Scenario> scenarios) {
+	protected void processStatements(Object[][] statements, String referece, List<Scenario> scenarios) {
 
-		for (int statementIndex =
-				0; statementIndex < statements.length; statementIndex++) {
+		for (int statementIndex = 0; statementIndex < statements.length; statementIndex++) {
 
 			String type = ((String) statements[statementIndex][0]).trim();
 
 			// ignore blanks and statements outside scenario or step-def
-			if (StringUtil.isBlank(type)
-					|| !(type.equalsIgnoreCase(FEATURE) || type.equalsIgnoreCase(SCENARIO)
-							|| type.equalsIgnoreCase(EXAMPLES))) {
+			if (StringUtil.isBlank(type) || !(type.equalsIgnoreCase(FEATURE) || type.equalsIgnoreCase(SCENARIO)
+					|| type.equalsIgnoreCase(EXAMPLES))) {
 				String nextSteptype = "";
 				do {
 					statementIndex++;
@@ -84,8 +81,7 @@ public class GherkinFileParser extends AbstractScenarioFileParser {
 					} else {
 						nextSteptype = END; //
 					}
-				} while (!(nextSteptype.equalsIgnoreCase(EXAMPLES)
-						|| nextSteptype.equalsIgnoreCase(SCENARIO)
+				} while (!(nextSteptype.equalsIgnoreCase(EXAMPLES) || nextSteptype.equalsIgnoreCase(SCENARIO)
 						|| nextSteptype.equalsIgnoreCase(END)));
 			}
 
@@ -93,8 +89,7 @@ public class GherkinFileParser extends AbstractScenarioFileParser {
 			if (type.equalsIgnoreCase(STEP_DEF)) {
 				statementIndex = parseStepDef(statements, statementIndex, referece);
 			} else if (type.equalsIgnoreCase(SCENARIO)) {
-				statementIndex =
-						parseScenario(statements, statementIndex, referece, scenarios);
+				statementIndex = parseScenario(statements, statementIndex, referece, scenarios);
 			}
 		}
 
@@ -133,12 +128,11 @@ public class GherkinFileParser extends AbstractScenarioFileParser {
 				/**
 				 * ignore if line is empty or comment line
 				 */
-				if (!("".equalsIgnoreCase(strLine.trim())
-						|| COMMENT_CHARS.contains("" + strLine.trim().charAt(0)))) {
+				if (!("".equalsIgnoreCase(strLine.trim()) || COMMENT_CHARS.contains("" + strLine.trim().charAt(0)))) {
 					currLineBuffer.append((strLine.trim()));
 
 					// process single statement
-					Object[] cols = new Object[]{"", "", "", lineNo};
+					Object[] cols = new Object[] { "", "", "", lineNo };
 					String currLine = currLineBuffer.toString();
 					String type = getType(currLine);
 					if (type == "") {
@@ -166,16 +160,13 @@ public class GherkinFileParser extends AbstractScenarioFileParser {
 							Object[] scenario = rows.get(lastScenarioIndex);
 							scenario[0] = SCENARIO;
 
-							Map<Object, Object> metadata =
-									new Gson().fromJson((String) scenario[2], Map.class);
-							//scenario[2] = new Gson().toJson(metadata);
+							Map<Object, Object> metadata = new Gson().fromJson((String) scenario[2], Map.class);
+							// scenario[2] = new Gson().toJson(metadata);
 
 							String exampleMetadata = (String) cols[1];
 
-							if (StringUtil.isNotBlank(exampleMetadata)
-									&& exampleMetadata.trim().startsWith("{")) {
-								metadata.putAll(
-										new Gson().fromJson(exampleMetadata, Map.class));
+							if (StringUtil.isNotBlank(exampleMetadata) && exampleMetadata.trim().startsWith("{")) {
+								metadata.putAll(new Gson().fromJson(exampleMetadata, Map.class));
 								scenario[2] = new Gson().toJson(metadata);
 								currLineBuffer = new StringBuffer();
 								continue;
@@ -183,8 +174,7 @@ public class GherkinFileParser extends AbstractScenarioFileParser {
 
 						} else {
 							scenarioTags.addAll(globalTags);
-							String metadata = String.format("{\"groups\":%s}",
-									new Gson().toJson(scenarioTags));
+							String metadata = String.format("{\"groups\":%s}", new Gson().toJson(scenarioTags));
 							cols[2] = metadata;
 							scenarioTags.clear();
 							if (type.equalsIgnoreCase(FEATURE)) {
@@ -199,47 +189,45 @@ public class GherkinFileParser extends AbstractScenarioFileParser {
 
 					if (!examplesTable.isEmpty()) {
 						String lastStamtent = (String) rows.get(rows.size() - 1)[0];
-						int lastStatementIndex = lastStamtent.equalsIgnoreCase(EXAMPLES)
-								? lastScenarioIndex : (rows.size() - 1);
+						int lastStatementIndex = lastStamtent.equalsIgnoreCase(EXAMPLES) ? lastScenarioIndex
+								: (rows.size() - 1);
 						setExamples(rows.get(lastStatementIndex), examplesTable);
 						examplesTable.clear();
 						if (lastStamtent.equalsIgnoreCase(EXAMPLES)) {
 							rows.remove(rows.size() - 1);
 						}
 					}
-					
 
 					if (isBackground)
 						background.add(cols);
 					else {
 						rows.add(cols);
 						boolean scenarioStarted = StringUtil.indexOfIgnoreCase(type, SCENARIO) == 0;
-						
+
 						if (scenarioStarted) {
 							lastScenarioIndex = rows.size() - 1;
-								rows.addAll(background);
+							rows.addAll(background);
 						}
 					}
 					currLineBuffer = new StringBuffer();
 
-				} else if (StringUtil.isNotBlank(strLine)
-						&& strLine.trim().charAt(0) == '|') {
+				} else if (StringUtil.isNotBlank(strLine) && strLine.trim().charAt(0) == '|') {
 					addExample(strLine.trim(), examplesTable);
 				}
 			}
 
-			int lastStatementIndex =  rows.size() - 1;
+			int lastStatementIndex = rows.size() - 1;
 			String lastStamtent = (String) rows.get(lastStatementIndex)[0];
 			if (lastStamtent.equalsIgnoreCase(EXAMPLES)) {
 				rows.remove(lastStatementIndex);
-				lastStatementIndex =lastScenarioIndex;
+				lastStatementIndex = lastScenarioIndex;
 			}
-			
+
 			if (!examplesTable.isEmpty()) {
 				setExamples(rows.get(lastStatementIndex), examplesTable);
 				examplesTable.clear();
 			}
-			
+
 		} catch (Exception e) {
 			String strMsg = "Exception while reading BDD file: " + strFile + "#" + lineNo;
 			logger.error(strMsg + e);
@@ -256,7 +244,8 @@ public class GherkinFileParser extends AbstractScenarioFileParser {
 
 		}
 
-		rows.add(new Object[]{"END", "", "", lineNo+1});//indicate end of BDD
+		rows.add(new Object[] { "END", "", "", lineNo + 1 });// indicate end of
+																// BDD
 		return rows;
 	}
 
@@ -279,11 +268,15 @@ public class GherkinFileParser extends AbstractScenarioFileParser {
 				}
 				dataMapList.add(map);
 			}
-			if (!isScenario && dataMapList.size() == 1) {
-				data = dataMapList.get(0); // case of map argument to statement
-			} else {
-				data = dataMapList;
-			}
+			// https://github.com/qmetry/qaf/issues/181
+			// map will be handled while processing parameters
+			// if (!isScenario && dataMapList.size() == 1) {
+			// data = dataMapList.get(0); // case of map argument to statement
+			// } else {
+			// data = dataMapList;
+			// }
+			data = dataMapList;
+
 		} else {
 			List<Object> res = new ArrayList<Object>();
 			for (List<Object> entry : examplesTable) {
@@ -295,8 +288,7 @@ public class GherkinFileParser extends AbstractScenarioFileParser {
 
 		if (isScenario) {
 			@SuppressWarnings("unchecked")
-			Map<Object, Object> metadata =
-					new Gson().fromJson((String) cols[2], Map.class);
+			Map<Object, Object> metadata = new Gson().fromJson((String) cols[2], Map.class);
 			metadata.put(params.JSON_DATA_TABLE.name(), new Gson().toJson(data));
 			cols[2] = new Gson().toJson(metadata);
 
@@ -320,8 +312,7 @@ public class GherkinFileParser extends AbstractScenarioFileParser {
 
 	private String convertParam(String currLine) {
 
-		return StringUtil.replace(StringUtil.replace(currLine, ">", "}", -1), "<", "${",
-				-1);
+		return StringUtil.replace(StringUtil.replace(currLine, ">", "}", -1), "<", "${", -1);
 	}
 
 	private String getType(String line) {

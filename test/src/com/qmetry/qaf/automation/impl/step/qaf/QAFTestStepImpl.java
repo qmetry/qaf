@@ -29,10 +29,9 @@
 package com.qmetry.qaf.automation.impl.step.qaf;
 
 import java.util.List;
+import java.util.Map;
 
 import com.qmetry.qaf.automation.step.QAFTestStep;
-
-import cucumber.api.java.en.Given;
 
 /**
  * @author chiragj.ayswal
@@ -78,5 +77,29 @@ public class QAFTestStepImpl {
 	public void parameter1(String param1) {
 
 	    System.out.println("text:" + param1);
+	}
+	
+	@QAFTestStep(description="I see following colors:{colors}")
+	public void listOfColors(List<String> colors) {
+	    System.out.println("colors:" + colors);
+	}
+	
+	
+	@QAFTestStep(description="system with following users:{users}")
+	public void listOfUser(List<Map<String, Object>> users) {
+	    System.out.println("users:" + users);
+	}
+	
+	@QAFTestStep(description="system may have following user:{users}")
+	public void oneOrMoreUser(Map<String, Object>... users) {
+	    System.out.println("users:" + users);
+	}
+	@QAFTestStep(description="I may see following color:{colors}")
+	public void oneOrMoreColors(String... colors) {
+	    System.out.println("colors:" + colors);
+	}
+	@QAFTestStep(description="user is:{user}")
+	public void aUser(Map<String, Object> user) {
+	    System.out.println("users:" + user);
 	}
 }
