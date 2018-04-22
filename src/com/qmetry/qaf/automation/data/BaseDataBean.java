@@ -132,7 +132,7 @@ public abstract class BaseDataBean implements DataBean {
 			JSONObject jsonObject = new JSONObject(jsonstr);
 			String[] keys = JSONObject.getNames(jsonObject);
 			for (String key : keys) {
-				fillData(key, jsonObject.getString(key));
+				fillData(key, jsonObject.optString(key));
 			}
 		} catch (JSONException e) {
 			logger.error(e);
