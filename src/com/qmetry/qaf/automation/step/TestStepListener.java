@@ -276,10 +276,11 @@ class TestStepListener implements QAFTestStepListener {
 
 	private String getParam(String text) {
 		String result = getBundle().getSubstitutor().replace(text);
-		ParamType ptype = ParamType.getType(result);
+		String value = String.valueOf(getBundle().getObject(result));
+		ParamType ptype = ParamType.getType(value);
 		if (ptype.equals(ParamType.MAP)) {
 			@SuppressWarnings("unchecked")
-			Map<String, Object> kv = new Gson().fromJson(result, Map.class);
+			Map<String, Object> kv = new Gson().fromJson(value, Map.class);
 			if (kv.containsKey("desc")) {
 				result = String.valueOf(kv.get("desc"));
 			} else if (kv.containsKey("description")) {
