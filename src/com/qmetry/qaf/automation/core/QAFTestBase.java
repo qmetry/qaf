@@ -188,7 +188,7 @@ public class QAFTestBase {
 			UiDriver uiDriver = (UiDriver) drivercontext.get(driver);
 			if (null != uiDriver) {
 				new UiDriverFactory().tearDown(uiDriver);
-				if (getBaseUrl().equalsIgnoreCase(driver)) {
+				if (getDriverName().equalsIgnoreCase(driver)) {
 					setDriver("");
 				}
 			}
@@ -204,7 +204,7 @@ public class QAFTestBase {
 			new UiDriverFactory().tearDown(uiDriver);
 		}
 		drivercontext.remove(driverName);
-		if (getBaseUrl().equalsIgnoreCase(driverName)) {
+		if (getDriverName().equalsIgnoreCase(driverName)) {
 			setDriver("");
 		}
 	}
@@ -246,7 +246,7 @@ public class QAFTestBase {
 	 */
 	public boolean hasDriver() {
 		String driverName = getDriverName();
-		return hasDriver(driverName);
+		return StringUtil.isNotBlank(driverName) && hasDriver(driverName);
 	}
 
 	public UiDriver getUiDriver() {
