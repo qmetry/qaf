@@ -22,9 +22,9 @@ You can create Locator repository with property file having extension ‘. prope
   ...
   
   #self-descriptive locator example
-  login.username.txt = {'locator':'name=uname'; 'desc':'User name texbox on Login Page'}
-  login.password.txt = {'locator':'name=upwd'; 'desc':'Password texbox on Login Page'}
-  login.pageheader.lbl = {'locator':'css=.header'; 'desc':'Header of Login Page'}
+  login.username.txt = {'locator':'name=uname','desc':'User name texbox on Login Page'}
+  login.password.txt = {'locator':'name=upwd','desc':'Password texbox on Login Page'}
+  login.pageheader.lbl = {'locator':'css=.header','desc':'Header of Login Page'}
   ...
 ```
 
