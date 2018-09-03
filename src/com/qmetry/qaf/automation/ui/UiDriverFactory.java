@@ -260,7 +260,7 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 
 						return constructor.newInstance(new URL(urlStr), capabilities);
 					} catch (InvocationTargetException e2) {
-						throw new WebDriverException(e2);
+						throw new WebDriverException(e2.getTargetException());
 					} catch (InstantiationException e2) {
 						throw new WebDriverException(e2);
 					} catch (IllegalAccessException e2) {
