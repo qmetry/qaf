@@ -83,7 +83,7 @@ public class DataDrivenScenario extends Scenario {
 
 	}
 
-	@Test(alwaysRun = true, dataProvider = "scenariodp", groups = "scenario")
+	@Test(dataProvider = "scenariodp", groups = "scenario")
 	public void scenario(Map<String, String> testData) {
 		beforeScanario();
 		logger.info("Test Data" + String.format("%s", testData));

@@ -213,7 +213,7 @@ public class Scenario extends WebDriverTestCase
 		}
 	}
 
-	@Test(alwaysRun = true, groups = "scenario")
+	@Test(groups = "scenario")
 	public void scenario() {
 		beforeScanario();
 		if (steps.size() > 0) {
