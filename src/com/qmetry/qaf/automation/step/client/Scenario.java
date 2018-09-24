@@ -178,7 +178,7 @@ public class Scenario extends WebDriverTestCase
 					executionIndx = stepExecutionTracker.getNextStepIndex();
 
 			}
-			status = "SUCESS";
+			status = "SUCCESS";
 
 		} catch (RuntimeException t) {
 			status = "FAILURE";
