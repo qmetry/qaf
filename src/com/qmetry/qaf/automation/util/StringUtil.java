@@ -291,7 +291,7 @@ public class StringUtil extends StringUtils {
 		}
 		for (String param : csvKeyVal) {
 			if (isNotBlank(param)) {
-				String[] kv = param.split("=");
+				String[] kv = param.split("=",2);
 				map.put(ensureKeyUppercase ? kv[0].toUpperCase() : kv[0], kv.length > 1 ? (kv[1]) : "");
 			}
 		}
