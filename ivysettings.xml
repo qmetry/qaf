@@ -10,18 +10,28 @@
 	OF ANY KIND, either express or implied. See the License for the specific 
 	language governing permissions and limitations under the License. -->
 <ivysettings>
-	<settings defaultResolver="qaf" />
+ 	<credentials host="oss.sonatype.org"
+                      realm="Sonatype Nexus Repository Manager"
+                      username="cjayswal" passwd="CJ@os_12_1979"/>
+	<settings defaultResolver="nexus" />
+	<property name="nexus-public"
+                   value="https://oss.sonatype.org/content/groups/public"/>
+  	<property name="nexus-releases" value="https://oss.sonatype.org/content/repositories/releases"/>
+  	<property name="nexus-snapshots" value="https://oss.sonatype.org/content/repositories/snapshots"/>
+	<property name="nexus-stating" value=" https://oss.sonatype.org/service/local/staging/deploy/maven2"/>
+	
 	<resolvers>
-		<chain name="qaf">
-			<ibiblio name="central" m2compatible="true" />
-			<ibiblio name="QAF" m2compatible="true"
-				root="https://qmetry.github.io/qaf/dist" />
-			<ibiblio name="jai" m2compatible="true"
-				root="https://repository.jboss.org/nexus/content/repositories/thirdparty-releases" />
-				
-		</chain>
+    	<ibiblio name="nexus" m2compatible="true" root="${nexus-public}"/>
+    	<ibiblio name="nexus-releases" m2compatible="true" root="${nexus-releases}"/>
+    	<ibiblio name="nexus-snapshots" m2compatible="true" root="${nexus-snapshots}" checkmodified="true" changingPattern="*-SNAPSHOT" useMavenMetadata="true" />
+		<ibiblio name="nexus-stating" m2compatible="true" root="${nexus-stating}" useMavenMetadata="true" />
 		<filesystem name="local-m2-publish" m2compatible="true">
       		<artifact pattern="${basedir}/repository/[organisation]/[module]/[revision]/qaf-[revision](-[classifier]).[ext]"/>
     	</filesystem>
 	</resolvers>
+	<publications>
+    <artifact name="${artifact.name}" ext="jar" conf="binary" type="jar"/>
+    <artifact name="${artifact.name}-javadoc" ext="jar" conf="development" type="javadoc"/>
+    <artifact name="${artifact.name}-sources" ext="jar" conf="development" type="source"/>
+</publications>
 </ivysettings>

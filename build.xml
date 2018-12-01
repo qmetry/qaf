@@ -126,7 +126,7 @@ For any inquiry or need additional information, please contact support-qaf@infos
 		<echo level="info">--- compile (finished) ---</echo>
 	</target>
 	<!-- ================================= target: build ================================= -->
-	<target name="build" depends="make-jar, build-cucumber-report, gendoc,gensource, make-standalone-jar" description="build framework, generate docs">
+	<target name="build" depends="make-jar, gendoc,gensource" description="build framework, generate docs">
 
 
 	</target>
@@ -235,7 +235,7 @@ For any inquiry or need additional information, please contact support-qaf@infos
 
 <!-- Resolve ivy dependencies and create a Maven POM file -->
 <ivy:deliver deliverpattern="${dist.dir}/ivy.xml" pubrevision="${release.num}" status="release" />
-<ivy:makepom ivyfile="${dist.dir}/ivy.xml" pomfile="${dist.dir}/qaf.pom">
+<ivy:makepom ivyfile="${dist.dir}/ivy.xml" pomfile="${dist.dir}/qaf.pom" templatefile="pom.tmpl">
 	<mapping conf="compile" scope="compile" />
 	<mapping conf="runtime" scope="runtime" />
 	<mapping conf="test" scope="test" />
@@ -245,17 +245,33 @@ For any inquiry or need additional information, please contact support-qaf@infos
 <!-- Publish the local repo. Defaults to ~/.ivy2/local -->
 <ivy:publish resolver="local-m2-publish" forcedeliver="true" publishivy="true" pubrevision="${release.num}" overwrite="true">
 	<artifacts pattern="${dist.dir}/[artifact].[ext]" />
-	<artifact name="qaf-standalone" pattern="${dist.dir}/[artifact].[ext]" ext="jar" classifier="standalone" type="standalone" version="${release.num}" />
+	<!--<artifact name="qaf-standalone" pattern="${dist.dir}/[artifact].[ext]" ext="jar" classifier="standalone" type="standalone" version="${release.num}" /> -->
 	<artifact name="qaf" pattern="${dist.dir}/[artifact].[ext]" ext="pom" type="pom" version="${release.num}" />
 	<artifact name="qaf-sources" pattern="${dist.dir}/[artifact].[ext]" ext="jar" classifier="sources" type="sources" version="${release.num}" />
 	<artifact name="qaf-javadoc" pattern="${dist.dir}/[artifact].[ext]" ext="jar" classifier="javadoc" type="javadoc" version="${release.num}" />
 </ivy:publish>
 </target>
 
-<target name="ivy-publish-share" depends="make-jar" description="publish jar/source to maven repo mounted at ~/repo">
-<ivy:publish resolver="share-m2" forcedeliver="true" overwrite="true" publishivy="false">
-	<artifacts pattern="${dist.dir}/[artifact].[ext]" />
-</ivy:publish>
+<target name="ivy-publish-share" description="publish jar/source to maven repo mounted at ~/repo" depends="init">
+	<!-- Determine build number from previously published revisions -->
+	<ivy:buildnumber resolver="${publish.resolver}" organisation="${ivy.organisation}" module="${ivy.module}" revision="${release.num}" />
+
+	<!-- Resolve ivy dependencies and create a Maven POM file -->
+	<ivy:deliver deliverpattern="${dist.dir}/ivy.xml" pubrevision="${release.num}" status="${status}" />
+	<ivy:makepom ivyfile="${dist.dir}/ivy.xml" pomfile="${dist.dir}/${artifact.name}.pom" templatefile="pom.tmpl" >
+		<mapping conf="compile" scope="compile" />
+		<mapping conf="runtime" scope="runtime" />
+		<mapping conf="test" scope="test" />
+		<mapping conf="provided" scope="provided" />
+	</ivy:makepom>
+
+	<!-- Publish the local repo. Defaults to ~/.ivy2/local -->
+	<ivy:publish resolver="${publish.resolver}" forcedeliver="true" publishivy="false" pubrevision="${release.num}" overwrite="true" status="${status}">
+		<artifacts pattern="${dist.dir}/[artifact](-[classifier]).[ext]" />
+		<artifact name="${artifact.name}" pattern="${dist.dir}/[artifact].[ext]" ext="pom" type="pom" version="${release.num}" />
+		<artifact name="${artifact.name}" pattern="${dist.dir}/[artifact].[ext]" ext="jar" classifier="sources" type="sources" version="${release.num}" />
+		<artifact name="${artifact.name}" pattern="${dist.dir}/[artifact].[ext]" ext="jar" classifier="javadoc" type="javadoc" version="${release.num}" />
+	</ivy:publish>
 </target>
 
 <target name="test-compile" depends="init">
