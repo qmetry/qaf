@@ -460,6 +460,28 @@ public class QAFExtendedWebElement extends RemoteWebElement implements QAFWebEle
 	public List<QAFWebElement> findElements(String loc) {
 		return (List<QAFWebElement>) (List<? extends WebElement>) findElements(LocatorUtil.getBy(loc));
 	}
+	
+	@SuppressWarnings("unchecked")
+	public <T extends QAFExtendedWebElement> List<T> findElements(String loc, Class<T> t) {
+		List<QAFWebElement> eles = findElements(loc);
+		List<T> objs = new ArrayList<T>();
+		for (QAFWebElement ele : eles) {
+			T obj = (T) ComponentFactory.getObject(t, loc, this, this);
+			obj.setId(((QAFExtendedWebElement) ele).getId());
+			obj.parentElement = this;
+			obj.cacheable = true;
+			objs.add(obj);
+		}
+		return objs;
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T extends QAFExtendedWebElement> T findElement(String loc, Class<T> t) {
+		T obj = (T) ComponentFactory.getObject(t, loc, this, this);
+		obj.parentElement = this;
+		obj.getId();
+		return obj;
+	}
 
 	@Override
 	public void afterCommand(QAFExtendedWebElement element, CommandTracker commandTracker) {
@@ -641,6 +663,17 @@ public class QAFExtendedWebElement extends RemoteWebElement implements QAFWebEle
 				.until(QAFWebElementExpectedConditions.elementCssPropertyValueNotEq(name, value));
 	}
 
+	public void waitForCssStyleColor(String name, String value, long... timeout) {
+		new QAFWebElementWait(this, timeout).ignoring(NoSuchElementException.class, RuntimeException.class)
+				.withMessage("Wait time out for " + getDescription() + " have css style " + name + "=" + value)
+				.until(QAFWebElementExpectedConditions.elementCssColorPropertyValueEq(name, value));
+	}
+
+	public void waitForNotCssStyleColor(String name, String value, long... timeout) {
+		new QAFWebElementWait(this, timeout).ignoring(NoSuchElementException.class, RuntimeException.class)
+				.withMessage("Wait time out for " + getDescription() + " have css style " + name + "!=" + value)
+				.until(QAFWebElementExpectedConditions.elementCssColorPropertyValueNotEq(name, value));
+	}
 	/**
 	 * will only report if failed
 	 * 
@@ -999,6 +1032,40 @@ public class QAFExtendedWebElement extends RemoteWebElement implements QAFWebEle
 		return outcome;
 	}
 
+	@Override
+	public boolean verifyCssStyleColor(String prop, String value, String... label) {
+		if (!ensurePresent(label))
+			return false;
+
+		boolean outcome = true;
+		String msgFor = getDescription(label);
+		try {
+			waitForCssStyleColor(prop, value);
+		} catch (Exception e) {
+			outcome = false;
+
+		}
+		report("cssstyle", outcome, msgFor, value, getCssValue(prop));
+		return outcome;
+	}
+
+	@Override
+	public boolean verifyNotCssStyleColor(String prop, String value, String... label) {
+		if (!ensurePresent(label))
+			return false;
+
+		boolean outcome = true;
+		String msgFor = getDescription(label);
+		try {
+			waitForNotCssStyleColor(prop, value);
+		} catch (Exception e) {
+			outcome = false;
+
+		}
+		report("notcssstyle", outcome, msgFor, value, getCssValue(prop));
+		return outcome;
+	}
+
 	// preconditions
 	public void givenPresent() {
 		if (!verifyPresent()) {
@@ -1148,6 +1215,20 @@ public class QAFExtendedWebElement extends RemoteWebElement implements QAFWebEle
 		if (!verifyNotCssStyle(name, value, label)) {
 			throw new AssertionError();
 		}
+	}
+
+	@Override
+	public void assertCssStyleColor(String prop, String value, String... label) {
+		if (!verifyCssStyleColor(prop, value, label)) {
+			throw new AssertionError();
+		}		
+	}
+
+	@Override
+	public void assertNotCssStyleColor(String prop, String value, String... label) {
+		if (!verifyNotCssStyleColor(prop, value, label)) {
+			throw new AssertionError();
+		}		
 	}
 
 	@SuppressWarnings("unchecked")

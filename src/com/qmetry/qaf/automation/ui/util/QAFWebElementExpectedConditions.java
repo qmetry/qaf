@@ -25,6 +25,8 @@ package com.qmetry.qaf.automation.ui.util;
 
 import java.util.List;
 
+import org.openqa.selenium.support.Color;
+
 import com.qmetry.qaf.automation.ui.webdriver.QAFExtendedWebElement;
 import com.qmetry.qaf.automation.ui.webdriver.QAFWebElement;
 import com.qmetry.qaf.automation.util.StringMatcher;
@@ -229,6 +231,24 @@ public class QAFWebElementExpectedConditions {
 		};
 	}
 
+	public static ExpectedCondition<QAFExtendedWebElement, Boolean> elementCssColorPropertyValueEq(final String propertyName,
+			final Object val) {
+		return new ExpectedCondition<QAFExtendedWebElement, Boolean>() {
+			@Override
+			public Boolean apply(QAFExtendedWebElement element) {
+				return Color.fromString(element.getCssValue(propertyName)).asRgba().equals(Color.fromString(String.valueOf(val)).asRgba());
+			}
+		};
+	}
+	public static ExpectedCondition<QAFExtendedWebElement, Boolean> elementCssColorPropertyValueNotEq(
+			final String propertyName, final Object val) {
+		return new ExpectedCondition<QAFExtendedWebElement, Boolean>() {
+			@Override
+			public Boolean apply(QAFExtendedWebElement element) {
+				return !Color.fromString(element.getCssValue(propertyName)).asRgba().equals(Color.fromString(String.valueOf(val)).asRgba());
+			}
+		};
+	}
 	public static ExpectedCondition<QAFExtendedWebElement, Boolean> elementTextEq(final Object val) {
 		return new ExpectedCondition<QAFExtendedWebElement, Boolean>() {
 			@Override

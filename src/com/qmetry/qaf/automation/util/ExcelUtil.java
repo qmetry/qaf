@@ -26,6 +26,8 @@ package com.qmetry.qaf.automation.util;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -219,7 +221,7 @@ public class ExcelUtil {
 						colNames[col - firstCol] = cells[col].getContents().trim();
 					}
 				} else {
-					HashMap<String, String> map = new HashMap<String, String>();
+					Map<String, String> map = new LinkedHashMap<String, String>();
 					for (int col = firstCol; col < (firstCol + cells.length); col++) {
 						map.put(colNames[col - firstCol], cells[col].getContents());
 					}
@@ -287,7 +289,7 @@ public class ExcelUtil {
 
 					}
 				} else {
-					HashMap<String, String> map = new HashMap<String, String>();
+					Map<String, String> map = new LinkedHashMap<String, String>();
 					for (int j = startCol + 1; j < endCol; j++, cj++) {
 						map.put(colNames[cj], sheet.getCell(j, i).getContents());
 					}

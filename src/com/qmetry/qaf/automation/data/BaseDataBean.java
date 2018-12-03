@@ -90,7 +90,7 @@ public abstract class BaseDataBean implements DataBean {
 	@SuppressWarnings("unchecked")
 	public void fillData(Object obj) {
 		if (obj instanceof Map) {
-			fillData((Map<String, String>) obj);
+			fillData((Map<String, Object>) obj);
 			return;
 		}
 		if (obj instanceof String) {
@@ -146,7 +146,7 @@ public abstract class BaseDataBean implements DataBean {
 	 * @param datakey
 	 */
 	public void fillFromConfig(String datakey) {
-		List<Object[]> set = DataProviderUtil.getDataSetAsMap(datakey);
+		List<Object[]> set = DataProviderUtil.getDataSetAsMap(datakey,"");
 		if (set.isEmpty()) {
 			return;
 		}
@@ -232,7 +232,7 @@ public abstract class BaseDataBean implements DataBean {
 	 *            example if bean property is "firstName" map should contain
 	 *            entry with key "FIRSTNAME" (case insensitive)
 	 */
-	public void fillData(Map<String, String> map) {
+	public void fillData(Map<String, Object> map) {
 		for (String key : map.keySet()) {
 			fillData(key, String.valueOf(map.get(key)));
 		}
@@ -250,7 +250,7 @@ public abstract class BaseDataBean implements DataBean {
 	 */
 	@SuppressWarnings("unchecked")
 	public void fillDataFromDB(String query) {
-		fillData(((Map<String, String>) DatabaseUtil.getRecordDataAsMap(query)[0][0]));
+		fillData(((Map<String, Object>) DatabaseUtil.getRecordDataAsMap(query)[0][0]));
 	}
 
 	/**

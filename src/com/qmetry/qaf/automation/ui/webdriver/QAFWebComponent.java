@@ -76,24 +76,4 @@ public abstract class QAFWebComponent extends QAFExtendedWebElement {
 		elementFactory.initFields(this);
 	}
 
-	@SuppressWarnings("unchecked")
-	public <T extends QAFWebComponent> List<T> findElements(String loc, Class<T> t) {
-		List<QAFWebElement> eles = findElements(loc);
-		List<T> objs = new ArrayList<T>();
-		for (QAFWebElement ele : eles) {
-			T obj = (T) ComponentFactory.getObject(t.getClass(), loc, this, this);
-			obj.setId(((QAFExtendedWebElement) ele).getId());
-			obj.parentElement = this;
-			obj.cacheable = true;
-			objs.add(obj);
-		}
-		return objs;
-	}
-
-	@SuppressWarnings("unchecked")
-	public <T extends QAFWebComponent> T findElement(String loc, Class<T> t) {
-		T obj = (T) ComponentFactory.getObject(t.getClass(), loc, this, this);
-		obj.getId();
-		return obj;
-	}
 }

@@ -64,7 +64,7 @@ public class QAFWebElementCommandAdapter implements QAFWebElementCommandListener
 	 */
 	protected void executeWithoutLog(QAFExtendedWebElement element, CommandTracker commandTracker) {
 		if (null != commandTracker.getResponce()) {
-			commandTracker.setResponce(element.execute(commandTracker.getCommand(), commandTracker.getParameters()));
+			commandTracker.setResponce(element.executeWitoutLog(commandTracker.getCommand(), commandTracker.getParameters()));
 		}
 	}
 

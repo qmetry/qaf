@@ -10,9 +10,6 @@
 	OF ANY KIND, either express or implied. See the License for the specific 
 	language governing permissions and limitations under the License. -->
 <ivysettings>
- 	<credentials host="oss.sonatype.org"
-                      realm="Sonatype Nexus Repository Manager"
-                      username="cjayswal" passwd="CJ@os_12_1979"/>
 	<settings defaultResolver="nexus" />
 	<property name="nexus-public"
                    value="https://oss.sonatype.org/content/groups/public"/>

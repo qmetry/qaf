@@ -47,6 +47,7 @@ import org.testng.internal.collections.ArrayIterator;
 import com.qmetry.qaf.automation.core.AutomationError;
 import com.qmetry.qaf.automation.step.StringTestStep;
 import com.qmetry.qaf.automation.step.TestStep;
+import com.qmetry.qaf.automation.testng.dataprovider.QAFDataProvider;
 import com.qmetry.qaf.automation.testng.dataprovider.QAFDataProvider.dataproviders;
 import com.qmetry.qaf.automation.testng.dataprovider.QAFDataProvider.params;
 import com.qmetry.qaf.automation.testng.pro.DataProviderUtil;
@@ -83,7 +84,8 @@ public class DataDrivenScenario extends Scenario {
 
 	}
 
-	@Test(dataProvider = "scenariodp", groups = "scenario")
+	@QAFDataProvider
+	@Test(groups = "scenario")
 	public void scenario(Map<String, String> testData) {
 		beforeScanario();
 		logger.info("Test Data" + String.format("%s", testData));
@@ -130,7 +132,7 @@ public class DataDrivenScenario extends Scenario {
 			return new ArrayIterator(DatabaseUtil.getRecordDataAsMap(query));
 		}
 		if (dataproviderName.equalsIgnoreCase(dataproviders.isfw_property.name())) {
-			List<Object[]> mapData = DataProviderUtil.getDataSetAsMap(param.get(params.KEY.name()));
+			List<Object[]> mapData = DataProviderUtil.getDataSetAsMap(param.get(params.KEY.name()),"");
 
 			return mapData.iterator();
 

@@ -30,6 +30,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -161,7 +162,7 @@ public class CSVUtil {
 						colsNames = StringUtil.parseCSV(strLine, separatorChar);
 					} else {
 						String[] cols = StringUtil.parseCSV(strLine, separatorChar);
-						HashMap<String, String> map = new HashMap<String, String>();
+						Map<String, String> map = new LinkedHashMap<String, String>();
 						for (int i = 0; i < cols.length; i++) {
 							try {
 								map.put(colsNames[i].trim(), cols[i]);

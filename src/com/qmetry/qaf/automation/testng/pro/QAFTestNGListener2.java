@@ -21,7 +21,6 @@
  * For any inquiry or need additional information, please contact support-qaf@infostretch.com
  *******************************************************************************/
 
-
 package com.qmetry.qaf.automation.testng.pro;
 
 import static com.qmetry.qaf.automation.core.ConfigurationManager.getBundle;
@@ -56,6 +55,7 @@ import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.step.client.TestNGScenario;
 import com.qmetry.qaf.automation.testng.RetryAnalyzer;
 import com.qmetry.qaf.automation.testng.dataprovider.QAFDataProvider;
+import com.qmetry.qaf.automation.testng.dataprovider.QAFInetrceptableDataProvider;
 import com.qmetry.qaf.automation.testng.report.ReporterUtil;
 import com.qmetry.qaf.automation.util.ClassUtil;
 import com.qmetry.qaf.automation.util.StringUtil;
@@ -105,7 +105,7 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 	public void onFinish(ITestContext testContext) {
 		if (skipReporting())
 			return;
-		
+
 		super.onFinish(testContext);
 		ReporterUtil.updateOverview(testContext, null);
 	}
@@ -113,16 +113,11 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 	@SuppressWarnings("rawtypes")
 	public void transform(ITestAnnotation testAnnotation, Class clazz, Constructor arg2, Method method) {
 		try {
-			if ((method.getAnnotation(QAFDataProvider.class) != null) && (null != method.getParameterTypes())
-					&& (null != method) && (method.getParameterTypes().length > 0)) {
-				String dp = getDataProvider(method);
-				if (StringUtil.isNotBlank(dp)) {
-					testAnnotation.setDataProvider(dp);
-					testAnnotation.setDataProviderClass(DataProviderUtil.class);
-				}
-			}
-
 			if (null != method) {
+				if ((method.getAnnotation(QAFDataProvider.class) != null) && (null != method.getParameterTypes())
+						&& (method.getParameterTypes().length > 0)) {
+					QAFInetrceptableDataProvider.setQAFDataProvider(testAnnotation, method);
+				}
 
 				String tmtURL = getBundle().getString(method.getName() + ".testspec.url");
 				if (StringUtil.isNotBlank(tmtURL)) {
@@ -208,11 +203,11 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 					Class<?> updatorCls = Class.forName(updator);
 
 					TestCaseResultUpdator updatorObj = (TestCaseResultUpdator) updatorCls.newInstance();
-				    
+
 					TestNGScenario scenario = (TestNGScenario) tr.getMethod();
 					Map<String, Object> params = new HashMap<String, Object>(scenario.getMetaData());
 					params.put("duration", tr.getEndMillis() - tr.getStartMillis());
-						    
+
 					ResultUpdator.updateResult(result, stb.getHTMLFormattedLog() + stb.getAssertionsLog(), updatorObj,
 							params);
 				}
@@ -224,7 +219,8 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 
 	}
 
-	private boolean skipReporting(){
-		return getBundle().getBoolean("disable.qaf.testng.reporter",false) || getBundle().getBoolean("cucumber.run.mode",false);
+	private boolean skipReporting() {
+		return getBundle().getBoolean("disable.qaf.testng.reporter", false)
+				|| getBundle().getBoolean("cucumber.run.mode", false);
 	}
 }

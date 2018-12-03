@@ -31,6 +31,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -207,11 +208,11 @@ public class DatabaseUtil {
 			rs = stmt.executeQuery(query);
 
 			while (rs.next()) {
-				HashMap<String, String> map = new HashMap<String, String>();
+				HashMap<String, Object> map = new LinkedHashMap<String, Object>();
 
 				int colsCnt = rs.getMetaData().getColumnCount();
 				for (int indx = 1; indx <= colsCnt; indx++) {
-					map.put(rs.getMetaData().getColumnLabel(indx), String.valueOf(rs.getObject(indx)));
+					map.put(rs.getMetaData().getColumnLabel(indx), (rs.getObject(indx)));
 				}
 				rows.add(new Object[] { map });
 			}

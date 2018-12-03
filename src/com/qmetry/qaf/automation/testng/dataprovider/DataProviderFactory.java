@@ -73,7 +73,7 @@ public class DataProviderFactory {
 
 		}
 		if (dataproviderName.equalsIgnoreCase(dataproviders.isfw_property.name())) {
-			List<Object[]> mapData = DataProviderUtil.getDataSetAsMap(param.get(params.KEY.name()));
+			List<Object[]> mapData = DataProviderUtil.getDataSetAsMap(param.get(params.KEY.name()),"");
 
 			return mapData.toArray(new Object[][] {});
 

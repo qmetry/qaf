@@ -147,7 +147,8 @@ public class ElementMetaDataListener extends QAFWebElementCommandAdapter {
 				//decrypt encrypted text
 				values[0] = ConfigurationManager.getBundle().getPasswordDecryptor()
 						.getDecryptedPassword(encriptedPassword);
-				executeWithoutLog(element, commandTracker);
+				Response response=element.executeWitoutLog(commandTracker.getCommand(), commandTracker.getParameters());
+				commandTracker.setResponce(response);
 				//reset encrypted text
 				values[0] =encriptedPassword;
 			} else if (isSelect(element)) {

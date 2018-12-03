@@ -21,28 +21,54 @@
  * For any inquiry or need additional information, please contact support-qaf@infostretch.com
  *******************************************************************************/
 
+package com.qmetry.qaf.automation.util;
 
-package com.qmetry.qaf.automation.data;
-
-import java.util.Map;
-
-import com.qmetry.qaf.automation.util.Randomizer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 /**
- * interface for databean
- * 
- * @author chirag
+ * @author chirag.jayswal
+ *
  */
-public interface DataBean extends Cloneable {
+public class ListUtils {
 
-	/**
-	 * This will fill random data in bean property.
-	 * 
-	 * @see Randomizer
-	 */
-	void fillRandomData();
+	@SuppressWarnings("unchecked")
+	public static <T> List<T> toList(Object arrayOrIterator) {
+		if (arrayOrIterator instanceof Iterator)
+			return toList((Iterator<T>) arrayOrIterator);
+		if(arrayOrIterator.getClass().isArray()){
+			return toList((T[])arrayOrIterator);
+		}
+		if(List.class.isAssignableFrom(arrayOrIterator.getClass()))
+			return new ArrayList<T>((List<T>)arrayOrIterator);
+		
+		List<T> lstToReturn = new ArrayList<T>();
+		lstToReturn.add((T)arrayOrIterator);
+		
+		return lstToReturn;
+	}
 
-	void fillData(Map<String, Object> map);
+	public static <T> List<T> toList(T[] array) {
+		return Arrays.asList(array);
+	}
 
-	String toCSV();
+	public static <T> List<T> toList(Iterator<T> iter) {
+		ArrayList<T> list = new ArrayList<T>();
+		if (null != iter) {
+			while (iter.hasNext()) {
+				list.add(iter.next());
+			}
+		}
+		return list;
+	}
+	
+	public static void main(String[] args) {
+		Object[][] aa = {{"a",10},{"b",20}};
+		Object a = aa;
+		
+		System.out.printf("%s" ,toList(a).get(0));
+		
+	}
 }

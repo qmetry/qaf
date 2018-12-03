@@ -21,7 +21,6 @@
  * For any inquiry or need additional information, please contact support-qaf@infostretch.com
  *******************************************************************************/
 
-
 package com.qmetry.qaf.automation.testng.pro;
 
 import java.lang.reflect.Method;
@@ -44,6 +43,8 @@ import com.qmetry.qaf.automation.util.CSVUtil;
 import com.qmetry.qaf.automation.util.DatabaseUtil;
 import com.qmetry.qaf.automation.util.ExcelUtil;
 import com.qmetry.qaf.automation.util.JSONUtil;
+import com.qmetry.qaf.automation.util.PropertyUtil;
+import com.qmetry.qaf.automation.util.StringUtil;
 
 /**
  * Utility class for TestNG data providers.
@@ -140,11 +141,8 @@ public class DataProviderUtil extends DataProviderFactory {
 			// will consider first row as header row
 			return ExcelUtil.getExcelDataAsMap(param.get(params.DATAFILE.name()), param.get(params.SHEETNAME.name()));
 		}
-		return ExcelUtil
-				.getExcelData(param.get(params.DATAFILE.name()),
-						(param.get(params.HASHEADERROW.name()) != null)
-								&& Boolean.valueOf(param.get(params.HASHEADERROW.name())),
-						param.get(params.SHEETNAME.name()));
+		return ExcelUtil.getExcelData(param.get(params.DATAFILE.name()), (param.get(params.HASHEADERROW.name()) != null)
+				&& Boolean.valueOf(param.get(params.HASHEADERROW.name())), param.get(params.SHEETNAME.name()));
 	}
 
 	/**
@@ -235,7 +233,7 @@ public class DataProviderUtil extends DataProviderFactory {
 	@DataProvider(name = "isfw_json")
 	public static final Object[][] getJsonData(Method method) {
 		Map<String, String> methodParams = getParameters(method);
-		if(methodParams.containsKey(params.JSON_DATA_TABLE.name())){
+		if (methodParams.containsKey(params.JSON_DATA_TABLE.name())) {
 			return JSONUtil.getJsonArrayOfMaps(methodParams.get(params.JSON_DATA_TABLE.name()));
 		}
 		return JSONUtil.getJsonArrayOfMaps(methodParams.get(params.DATAFILE.name()));
@@ -254,7 +252,7 @@ public class DataProviderUtil extends DataProviderFactory {
 	@SuppressWarnings("unchecked")
 	@DataProvider(name = "isfw_property")
 	public static final Object[][] getDataFromProp(Method method) {
-		List<Object[]> mapData = getDataSetAsMap(getParameters(method).get(params.KEY.name()));
+		List<Object[]> mapData = getDataSetAsMap(getParameters(method).get(params.KEY.name()),"");
 		Class<?> types[] = method.getParameterTypes();
 		if ((types.length == 1) && Map.class.isAssignableFrom(types[0])) {
 			return mapData.toArray(new Object[][] {});
@@ -262,29 +260,34 @@ public class DataProviderUtil extends DataProviderFactory {
 			List<Object[]> data = new ArrayList<Object[]>();
 			Iterator<Object[]> mapDataIter = mapData.iterator();
 			while (mapDataIter.hasNext()) {
-				Map<String, String> map = (Map<String, String>) mapDataIter.next()[0];
+				Map<String, Object> map = (Map<String, Object>) mapDataIter.next()[0];
 				data.add(map.values().toArray());
 			}
 			return data.toArray(new Object[][] {});
 		}
 	}
 
-	public static List<Object[]> getDataSetAsMap(String key) {
-		Configuration config = ConfigurationManager.getBundle().subset(key);
+	public static List<Object[]> getDataSetAsMap(String key, String file) {
+
+		Configuration config;
+		if (StringUtil.isBlank(file)) {
+			config = ConfigurationManager.getBundle().subset(key);
+		} else {
+			config = new PropertyUtil(file).subset(key);
+		}
 		ArrayList<Object[]> dataset = new ArrayList<Object[]>();
-		if(config.isEmpty()){
-			logger.error("Missing data with key [" + key
-					+ "]. ");
+		if (config.isEmpty()) {
+			logger.error("Missing data with key [" + key + "]. ");
 			throw new DataProviderException("Not test data found with key:" + key);
 		}
 		int size = config.getList(config.getKeys().next().toString()).size();
 		for (int i = 0; i < size; i++) {
-			Map<String, String> map = new LinkedHashMap<String, String>();
+			Map<String, Object> map = new LinkedHashMap<String, Object>();
 			Iterator<?> iter = config.getKeys();
 			while (iter.hasNext()) {
 				String dataKey = String.valueOf(iter.next());
 				try {
-					map.put(dataKey, config.getStringArray(dataKey)[i]);
+					map.put(dataKey, config.getList(dataKey).get(i));
 				} catch (ArrayIndexOutOfBoundsException e) {
 					logger.error("Missing entry for property " + dataKey
 							+ ". Provide value for each property (or blank) in each data set in data file.", e);

@@ -76,6 +76,22 @@ public interface QAFWebElement extends WebElement, FindsByCustomStretegy {
 	void waitForCssStyle(String prop, String value, long... timeout);
 
 	void waitForNotCssStyle(String prop, String value, long... timeout);
+	
+	/**
+	 * Special method to wait for css color property. For other css properties use {@link #waitForCssStyle(String, String, String...)}
+	 * @param prop css style property for color to validate. For example: color, background-color
+	 * @param value expected value - valid color name or rgb or rgba or hax
+	 * @param timeout optional timeout and interval
+	 */
+	void waitForCssStyleColor(String prop, String value, long... timeout);
+
+	/**
+	 * Special method to wait for css color property. For other css properties use {@link #waitForNotCssStyle(String, String, String...)}
+	 * @param prop css style property for color to validate. For example: color, background-color
+	 * @param value expected value - valid color name or rgb or rgba or hax
+	 * @param timeout optional timeout and interval
+	 */
+	void waitForNotCssStyleColor(String prop, String value, long... timeout);
 
 	// verifications
 	boolean verifyPresent(String... label);
@@ -121,6 +137,22 @@ public interface QAFWebElement extends WebElement, FindsByCustomStretegy {
 	boolean verifyCssStyle(String prop, String value, String... label);
 
 	boolean verifyNotCssStyle(String prop, String value, String... label);
+	
+	/**
+	 * Special method to validate css color property. For other css properties use {@link #verifyCssStyle(String, String, String...)}
+	 * @param prop css style property for color to validate. For example: color, background-color
+	 * @param value expected value - valid color name or rgb or rgba or hax
+	 * @param label optional label to use in report. If not provided it will use description if available
+	 */
+	boolean verifyCssStyleColor(String prop, String value, String... label);
+
+	/**
+	 * Special method to validate css color property. For other css properties use {@link #verifyNotCssStyle(String, String, String...)}
+	 * @param prop css style property for color to validate. For example: color, background-color
+	 * @param value expected value - valid color name or rgb or rgba or hax
+	 * @param label optional label to use in report. If not provided it will use description if available
+	 */
+	boolean verifyNotCssStyleColor(String prop, String value, String... label);
 
 	// preconditions
 	void givenPresent();
@@ -171,6 +203,22 @@ public interface QAFWebElement extends WebElement, FindsByCustomStretegy {
 	void assertCssStyle(String prop, String value, String... label);
 
 	void assertNotCssStyle(String prop, String value, String... label);
+	
+	/**
+	 * Special method to validate css color property. For other css properties use {@link #assertCssStyle(String, String, String...)}
+	 * @param prop css style property for color to validate. For example: color, background-color
+	 * @param value expected value - valid color name or rgb or rgba or hax
+	 * @param label optional label to use in report. If not provided it will use description if available
+	 */
+	void assertCssStyleColor(String prop, String value, String... label);
+
+	/**
+	 * Special method to validate css color property. For other css properties use {@link #assertNotCssStyle(String, String, String...)}
+	 * @param prop css style property for color to validate. For example: color, background-color
+	 * @param value expected value - valid color name or rgb or rgba or hax
+	 * @param label optional label to use in report. If not provided it will use description if available
+	 */
+	void assertNotCssStyleColor(String prop, String value, String... label);
 
 	// other
 	void setAttribute(String attr, String value);
