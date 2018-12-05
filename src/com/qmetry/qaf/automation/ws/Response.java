@@ -71,15 +71,20 @@ public class Response {
 
 		this.clientResponse = clientResponse;
 		// messageBody = clientResponse.getEntity(type);
+		setRawMessageBody();
 		headers = clientResponse.getHeaders();
 		status = clientResponse.getClientResponseStatus();
-		mediaType = clientResponse.getType();
 		cookies = clientResponse.getCookies();
 		lastModified = clientResponse.getLastModified();
 		responseDate = clientResponse.getResponseDate();
 		language = clientResponse.getLanguage();
 
-		setRawMessageBody();
+		try {
+			mediaType = clientResponse.getType();
+		} catch (Exception e) {
+			System.err.println("Unable to parse media type. If want to access media type, you may try using 'Content-Type' from header.");
+			e.printStackTrace();
+		}
 
 	}
 
