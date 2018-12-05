@@ -62,7 +62,7 @@ public class QAFInetrceptableDataProvider {
 		Map<String, Object> metadata = new TreeMap<String, Object>(String.CASE_INSENSITIVE_ORDER);
 		metadata.putAll(parameters);
 		
-		//update resolved meta-data
+		//update resolved meta-data should reflect in report 
 		scenario.getMetaData().putAll(metadata);
 		
 		List<Object[]> dataList = null;
