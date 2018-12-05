@@ -10,7 +10,8 @@
 	OF ANY KIND, either express or implied. See the License for the specific 
 	language governing permissions and limitations under the License. -->
 <ivysettings>
-	<settings defaultResolver="nexus" />
+
+	<settings defaultResolver="qaf" />
 	<property name="nexus-public"
                    value="https://oss.sonatype.org/content/groups/public"/>
   	<property name="nexus-releases" value="https://oss.sonatype.org/content/repositories/releases"/>
@@ -18,6 +19,11 @@
 	<property name="nexus-stating" value=" https://oss.sonatype.org/service/local/staging/deploy/maven2"/>
 	
 	<resolvers>
+		<chain name="qaf">
+			<ibiblio name="central" m2compatible="true" />
+			<ibiblio name="jai" m2compatible="true"
+				root="https://repository.jboss.org/nexus/content/repositories/thirdparty-releases" />
+		</chain>
     	<ibiblio name="nexus" m2compatible="true" root="${nexus-public}"/>
     	<ibiblio name="nexus-releases" m2compatible="true" root="${nexus-releases}"/>
     	<ibiblio name="nexus-snapshots" m2compatible="true" root="${nexus-snapshots}" checkmodified="true" changingPattern="*-SNAPSHOT" useMavenMetadata="true" />
