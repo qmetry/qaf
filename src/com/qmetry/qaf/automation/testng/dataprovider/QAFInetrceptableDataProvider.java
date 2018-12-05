@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang.text.StrSubstitutor;
 import org.testng.ITestContext;
 import org.testng.ITestNGMethod;
 import org.testng.annotations.DataProvider;
@@ -46,7 +47,12 @@ import com.qmetry.qaf.automation.util.StringUtil;
 public class QAFInetrceptableDataProvider {
 
 	public static final String QAF_DATA_PROVIDER = "qaf-data-provider";
+	private static final String QAF_DATA_PROVIDER_PARALLEL = "qaf-data-provider-parallel";
 
+	@DataProvider(name = QAF_DATA_PROVIDER_PARALLEL, parallel=true)
+	public static Iterator<Object[]> interceptedParallelDataProvider(ITestNGMethod method, ITestContext c) {
+		return interceptedDataProvider(method, c);
+	}
 	@DataProvider(name = QAF_DATA_PROVIDER)
 	public static Iterator<Object[]> interceptedDataProvider(ITestNGMethod method, ITestContext c) {
 		TestNGScenario scenario = (TestNGScenario) method;
@@ -55,8 +61,10 @@ public class QAFInetrceptableDataProvider {
 
 		Map<String, Object> metadata = new TreeMap<String, Object>(String.CASE_INSENSITIVE_ORDER);
 		metadata.putAll(parameters);
-
-		// override from properties if provided
+		
+		//update resolved meta-data
+		scenario.getMetaData().putAll(metadata);
+		
 		List<Object[]> dataList = null;
 		boolean hasCustomDataProvider = metadata.containsKey(params.DATAPROVIDERCLASS.name());
 		if (hasCustomDataProvider) {
@@ -106,8 +114,8 @@ public class QAFInetrceptableDataProvider {
 		String mtd = scenario.getMethodName();
 		testParameters = testParameters.replace("${class}", cls);
 		testParameters = testParameters.replace("${method}", mtd);
+		testParameters = StrSubstitutor.replace(testParameters, methodParameters);
 		testParameters = getBundle().getSubstitutor().replace(testParameters);
-
 		try {
 			return new Gson().fromJson(testParameters, Map.class);
 		} catch (JsonSyntaxException e) {
@@ -312,8 +320,12 @@ public class QAFInetrceptableDataProvider {
 				}
 				testAnnotation.setDescription(new Gson().toJson(desc));
 			}
-
-			testAnnotation.setDataProvider(QAF_DATA_PROVIDER);
+			
+			boolean globalParallelSetting = getBundle().getBoolean("global.datadriven.parallel", false);
+			boolean parallel = getBundle().getBoolean(method.getName() + ".parallel",globalParallelSetting);
+			dataProvider = parallel?QAF_DATA_PROVIDER_PARALLEL:QAF_DATA_PROVIDER;
+			
+			testAnnotation.setDataProvider(dataProvider);
 			testAnnotation.setDataProviderClass(QAFInetrceptableDataProvider.class);
 		}
 	}
