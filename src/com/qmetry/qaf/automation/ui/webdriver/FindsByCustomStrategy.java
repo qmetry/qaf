@@ -30,8 +30,8 @@ import org.openqa.selenium.WebElement;
 /**
  * @author Chirag
  */
-public interface FindsByCustomStretegy {
-	WebElement findElementByCustomStretegy(String stretegy, String loc);
+public interface FindsByCustomStrategy {
+	WebElement findElementByCustomStrategy(String strategy, String loc);
 
-	List<WebElement> findElementsByCustomStretegy(String stretegy, String loc);
+	List<WebElement> findElementsByCustomStrategy(String strategy, String loc);
 }
