@@ -38,15 +38,15 @@ import com.qmetry.qaf.automation.core.ConfigurationManager;
  */
 public class ByCustom extends By {
 
-	private String stretegy;
+	private String strategy;
 	private String loc;
 
 	private By by;
 
-	public ByCustom(String stretegy, String loc) {
+	public ByCustom(String strategy, String loc) {
 		this.loc = loc;
-		this.stretegy = stretegy;
-		by = getBy(stretegy, loc);
+		this.strategy = strategy;
+		by = getBy(strategy, loc);
 	}
 
 	/*
@@ -60,7 +60,7 @@ public class ByCustom extends By {
 		if (null != by){
 			return by.findElements(context);
 		}
-		return ((FindsByCustomStretegy) context).findElementsByCustomStretegy(stretegy, loc);
+		return ((FindsByCustomStrategy) context).findElementsByCustomStrategy(strategy, loc);
 	}
 
 	private By getBy(String s, String loc) {
@@ -76,7 +76,7 @@ public class ByCustom extends By {
 				throw new AutomationError("Unable to create by using class" + s + " for locator " + loc, e);
 			}
 		} catch (ClassNotFoundException e) {
-			System.out.println("No class registerd for stretegy" + s + ". Will use '" + s + "' as custom stretegy");
+			System.out.println("No class registerd for strategy" + s + ". Will use '" + s + "' as custom strategy");
 		}
 		return null;
 	}
