@@ -25,7 +25,6 @@
 package com.qmetry.qaf.automation.util;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -221,9 +220,9 @@ public class ExcelUtil {
 						colNames[col - firstCol] = cells[col].getContents().trim();
 					}
 				} else {
-					Map<String, String> map = new LinkedHashMap<String, String>();
+					Map<String, Object> map = new LinkedHashMap<String, Object>();
 					for (int col = firstCol; col < (firstCol + cells.length); col++) {
-						map.put(colNames[col - firstCol], cells[col].getContents());
+						map.put(colNames[col - firstCol], StringUtil.toObject(cells[col].getContents()));
 					}
 					retobj[row - (firstRow + 1)][0] = map;
 				}
@@ -289,9 +288,9 @@ public class ExcelUtil {
 
 					}
 				} else {
-					Map<String, String> map = new LinkedHashMap<String, String>();
+					Map<String, Object> map = new LinkedHashMap<String, Object>();
 					for (int j = startCol + 1; j < endCol; j++, cj++) {
-						map.put(colNames[cj], sheet.getCell(j, i).getContents());
+						map.put(colNames[cj], StringUtil.toObject(sheet.getCell(j, i).getContents()));
 					}
 					logger.debug("Record " + ci + ":" + map);
 					tabArray[ci++][0] = map;

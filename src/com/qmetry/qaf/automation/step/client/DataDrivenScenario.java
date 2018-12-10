@@ -107,7 +107,7 @@ public class DataDrivenScenario extends Scenario {
 		//System.out.println(dataProviderDesc);
 		dataProviderDesc = getBundle().getSubstitutor().replace(dataProviderDesc);
 		Map<String, String> param = StringUtil
-				.toMap(StringUtil.parseCSV(dataProviderDesc, getBundle().getListDelimiter()), true);
+				.toMap((String[])StringUtil.parseCSV(dataProviderDesc, getBundle().getListDelimiter()), true);
 		//System.out.println(param);
 
 		if(param.containsKey(params.DATAPROVIDER.name())){

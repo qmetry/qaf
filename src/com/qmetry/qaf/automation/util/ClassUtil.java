@@ -82,6 +82,11 @@ public final class ClassUtil {
 	public static Set<Method> getAllMethodsWithAnnotation(Class<?> cls, Class<? extends Annotation> annotation) {
 		Set<Method> methods = new HashSet<Method>();
 		try {
+			for (Method method : cls.getDeclaredMethods()) {
+				if (hasAnnotation(method, annotation)) {
+					methods.add(method);
+				}
+			}
 			for (Method method : cls.getMethods()) {
 				if (hasAnnotation(method, annotation)) {
 					methods.add(method);

@@ -21,7 +21,6 @@
  * For any inquiry or need additional information, please contact support-qaf@infostretch.com
  *******************************************************************************/
 
-
 package com.qmetry.qaf.automation.util;
 
 import java.text.ParseException;
@@ -29,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -37,8 +37,15 @@ import java.util.WeakHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.script.ScriptContext;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class StringUtil extends StringUtils {
 	/**
@@ -48,9 +55,10 @@ public class StringUtil extends StringUtils {
 	public static String getTitleCase(String str) {
 		return str.substring(0, 1).toUpperCase() + str.substring(1);
 	}
-	
+
 	/**
 	 * Utility method to create variable or method name from string.
+	 * 
 	 * @param formStr
 	 * @return
 	 */
@@ -65,7 +73,8 @@ public class StringUtil extends StringUtils {
 				char[] stringArray = str.trim().toCharArray();
 				if (i == 0)
 					stringArray[0] = Character.toLowerCase(stringArray[0]);
-				else stringArray[0] = Character.toUpperCase(stringArray[0]);
+				else
+					stringArray[0] = Character.toUpperCase(stringArray[0]);
 				str = new String(stringArray);
 
 				res.append(str);
@@ -78,7 +87,7 @@ public class StringUtil extends StringUtils {
 	public static String toTitleCaseIdentifier(String formStr) {
 		return getTitleCase(toCamelCaseIdentifier(formStr));
 	}
-	
+
 	public static String getRandomString(String format) {
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < format.length(); i++) {
@@ -272,9 +281,9 @@ public class StringUtil extends StringUtils {
 	 * @return
 	 */
 	public static Map<String, String> toMap(String csvKeyVal, boolean ensureKeyUppercase, char... ch) {
-		String[] params = StringUtil.parseCSV(csvKeyVal, ch);
+		Object[] params = StringUtil.parseCSV(csvKeyVal, ch);
 
-		return toMap(params, ensureKeyUppercase);
+		return toMap((String[]) params, ensureKeyUppercase);
 	}
 
 	/**
@@ -291,7 +300,7 @@ public class StringUtil extends StringUtils {
 		}
 		for (String param : csvKeyVal) {
 			if (isNotBlank(param)) {
-				String[] kv = param.split("=",2);
+				String[] kv = param.split("=", 2);
 				map.put(ensureKeyUppercase ? kv[0].toUpperCase() : kv[0], kv.length > 1 ? (kv[1]) : "");
 			}
 		}
@@ -300,7 +309,18 @@ public class StringUtil extends StringUtils {
 
 	/**
 	 * Method to parse character separated values, generic version of comma
-	 * separated values Supports escape Character
+	 * separated values Supports escape Character. It also supports quoted
+	 * string.Examples:
+	 * <ul>
+	 * <li>"a",1,true,1.5 -> ["a",1,true,1.5]
+	 * <li>"a,b",1,true,1.5 -> ["a,b",1,true,1.5]
+	 * <li>" a ",1,true,1.5 -> [" a ",1,true,1.5]
+	 * <li>" a " , 1 , true , 1.5 ->[" a ",1,true,1.5]
+	 * <li>a | 1 | true | 1.5 Separator |->["a",1,true,1.5]
+	 * <li>" a "| 1 |true| 1.5 ->Separator |[" a ",1,true,1.5]
+	 * <li>"a, b"| 1 |true| 1.5 ->Separator |["a, b",1,true,1.5]
+	 * <li>a b | 1 |true| 1.5 ->Separator |["a b",1,true,1.5]
+	 * <li>"a\" b" | 1 |true| 1.5 ->Separator |["a\" b",1,true,1.5]
 	 * 
 	 * @param data
 	 * @param char[]
@@ -309,15 +329,34 @@ public class StringUtil extends StringUtils {
 	 *            char[1] : escape charter - default value '\'
 	 * @return
 	 */
-	public static String[] parseCSV(String data, char... ch) {
-		List<String> values = new ArrayList<String>();
-		char seperator = ((null == ch) || (ch.length < 1) || (ch[0] == NULL)) ? ',' : ch[0];
+	public static Object[] parseCSV(String data, char... ch) {
+		List<Object> values = new ArrayList<Object>();
+		boolean hasSeperator = null != ch && ch.length > 0 && ch[0] != NULL && ch[0] != ',';
+		char seperator = hasSeperator ? ch[0] : ',';
 		char escapeChar = ((null == ch) || (ch.length < 2) || (ch[1] == NULL)) ? '\\' : ch[1];
+		
+		if (data.indexOf(escapeChar + "" + seperator) < 0) {
+			//without escape char for separator
+			if (hasSeperator && data.contains(",")) {
+				data = ensuerStirngQuated(data, seperator);
+			}
+			
+			String commaSperatoredData = data.replace(seperator, ',');
+			//fix ignored end column if it is null 
+			if(commaSperatoredData.trim().endsWith(",")){
+				commaSperatoredData = commaSperatoredData+"null";
+			}
+			JSONArray jsonArray = JSONUtil.getJsonArrayOrNull("[" + commaSperatoredData + "]");
+			if (null != jsonArray) {
+				return jsonArray.toList().toArray();
+			}
+		}
+		//to continue support old way with use of escape char without quoted string
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < data.length(); ++i) {
 			char c = data.charAt(i);
 			if (c == seperator) {
-				values.add(sb.toString());
+				values.add(JSONObject.stringToValue(sb.toString()));
 				sb = new StringBuilder();
 				continue;
 			} else if (c == escapeChar) {
@@ -326,9 +365,27 @@ public class StringUtil extends StringUtils {
 			}
 			sb.append(c);
 		}
-		values.add(sb.toString());
+		values.add(toObject(sb.toString()));
 
-		return (values.toArray(new String[values.size()]));
+		return (values.toArray(new Object[values.size()]));
+	}
+
+	private static String ensuerStirngQuated(String data, char seperator) {
+		if(isBlank(data) || data.indexOf(seperator)<0){
+			return data;
+		}
+		StringBuilder sb = new StringBuilder();
+		String[] parts = data.split(Pattern.quote(String.valueOf(seperator)),-1);
+		for (String part : parts) {
+			part = part.trim();
+			if (part.indexOf(',') >= 0 && !part.startsWith("\"") && !part.endsWith("\"")) {
+				sb.append(JSONObject.quote(part));
+			} else {
+				sb.append(part);
+			}
+			sb.append(seperator);
+		}
+		return sb.deleteCharAt(sb.length() - 1).toString();
 	}
 
 	/**
@@ -439,5 +496,29 @@ public class StringUtil extends StringUtils {
 		default:
 			return number + "th";
 		}
+	}
+
+	public static <T> T eval(String expression) throws ScriptException {
+		return eval(expression, new HashMap<String, Object>());
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T eval(String expression, Map<? extends String, ? extends Object> context)
+			throws ScriptException {
+		ScriptEngineManager engineManager = new ScriptEngineManager();
+		ScriptEngine jsEngine = engineManager.getEngineByName("JavaScript");
+		jsEngine.getBindings(ScriptContext.ENGINE_SCOPE).putAll(context);
+		return (T) jsEngine.eval(expression);
+	}
+
+	/**
+	 * Try to convert a string into java primitive type or null. If the
+	 * stringcan't be converted, return the string.
+	 * 
+	 * @param string
+	 * @return Object
+	 */
+	public static Object toObject(String string) {
+		return JSONObject.stringToValue(string);
 	}
 }

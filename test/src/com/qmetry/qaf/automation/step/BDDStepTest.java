@@ -104,6 +104,26 @@ public class BDDStepTest {
 		step.execute();
 
 	}
+	
+	@Test
+	public void testArgWithQuotes() {
+		String err_msg=
+				"message Wrong \\\"user name or password\\\"";
+		System.out.println(err_msg);
+
+		String stepCall = "Then It should show error message \""+err_msg +"\" on screen";
+		StringTestStep step = new StringTestStep(stepCall);
+		step.execute();
+		
+		err_msg=
+				"message Wrong \"user name or password\"";
+
+		System.out.println(err_msg);
+		 stepCall = "Then It should show error message '"+err_msg +"' on screen";
+		 step = new StringTestStep(stepCall);
+		step.execute();
+
+	}
 	@Test
 	public void test1Param() {
 		String stepCall =

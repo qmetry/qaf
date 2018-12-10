@@ -24,7 +24,6 @@
 package com.qmetry.qaf.automation.testng.pro;
 
 import static com.qmetry.qaf.automation.core.ConfigurationManager.getBundle;
-import static com.qmetry.qaf.automation.testng.dataprovider.DataProviderFactory.getDataProvider;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -54,7 +53,6 @@ import com.qmetry.qaf.automation.integration.TestCaseRunResult;
 import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.step.client.TestNGScenario;
 import com.qmetry.qaf.automation.testng.RetryAnalyzer;
-import com.qmetry.qaf.automation.testng.dataprovider.QAFDataProvider;
 import com.qmetry.qaf.automation.testng.dataprovider.QAFInetrceptableDataProvider;
 import com.qmetry.qaf.automation.testng.report.ReporterUtil;
 import com.qmetry.qaf.automation.util.ClassUtil;
@@ -114,7 +112,7 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 	public void transform(ITestAnnotation testAnnotation, Class clazz, Constructor arg2, Method method) {
 		try {
 			if (null != method) {
-				if ((method.getAnnotation(QAFDataProvider.class) != null) && (null != method.getParameterTypes())
+				if (null != method.getParameterTypes()
 						&& (method.getParameterTypes().length > 0)) {
 					QAFInetrceptableDataProvider.setQAFDataProvider(testAnnotation, method);
 				}

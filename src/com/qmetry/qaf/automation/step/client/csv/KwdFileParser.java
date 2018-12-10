@@ -63,7 +63,7 @@ public class KwdFileParser extends AbstractScenarioFileParser {
 
 				if (!("".equalsIgnoreCase(strLine.trim()) || "#!".contains("" + strLine.trim().charAt(0)))) {
 					Object[] cols = new Object[] { "", "", "", lineNo };
-					String[] csvcols = StringUtil.parseCSV(strLine, separatorChar);// strLine.split(separatorChar);
+					Object[] csvcols = StringUtil.parseCSV(strLine, separatorChar);// strLine.split(separatorChar);
 					System.arraycopy(csvcols, 0, cols, 0, csvcols.length);
 
 					rows.add(cols);

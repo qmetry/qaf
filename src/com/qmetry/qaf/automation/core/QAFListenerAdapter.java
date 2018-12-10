@@ -28,9 +28,15 @@
  *******************************************************************************/
 package com.qmetry.qaf.automation.core;
 
+import java.util.List;
+
+import org.testng.ITestContext;
+
 import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.step.QAFTestStepListener;
 import com.qmetry.qaf.automation.step.StepExecutionTracker;
+import com.qmetry.qaf.automation.step.client.TestNGScenario;
+import com.qmetry.qaf.automation.testng.dataprovider.QAFDataProviderIntercepter;
 import com.qmetry.qaf.automation.ui.webdriver.CommandTracker;
 import com.qmetry.qaf.automation.ui.webdriver.QAFExtendedWebElement;
 import com.qmetry.qaf.automation.ui.webdriver.QAFWebDriverCommandAdapter;
@@ -47,7 +53,7 @@ public class QAFListenerAdapter extends QAFWebDriverCommandAdapter
 		implements
 			QAFWebElementCommandListener,
 			QAFWebDriverCommandListener,
-			QAFTestStepListener {
+			QAFTestStepListener, QAFDataProviderIntercepter {
 
 	@Override
 	public void onFailure(StepExecutionTracker stepExecutionTracker) {
@@ -79,6 +85,11 @@ public class QAFListenerAdapter extends QAFWebDriverCommandAdapter
 	@Override
 	public void onFailure(QAFExtendedWebElement element, CommandTracker commandTracker) {
 
+	}
+
+	@Override
+	public List<Object[]> intercept(TestNGScenario scenario, ITestContext context, List<Object[]> testdata) {
+		return testdata;
 	}
 
 }

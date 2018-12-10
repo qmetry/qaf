@@ -2,3 +2,6 @@
 searchKey,searchResult,number,TestCaseId
 QMetry QAF, QMetry Automation Framework,15,TC-001
 Selenium ISFW,Infostretch Test Automation Framework,45,111
+Selenium ISFW,"Chirag's Test Automation Framework",45,TC-Quote1
+Selenium ISFW,"My 'Test Automation Framework'",45,TC-Quote12
+#Selenium ISFW,'My \\"Test Automation Framework\\"',45,TC-Quote2

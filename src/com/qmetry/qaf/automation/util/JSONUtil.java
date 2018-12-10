@@ -39,6 +39,7 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.LogFactoryImpl;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -49,6 +50,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.qmetry.qaf.automation.core.AutomationError;
+import com.qmetry.qaf.automation.keys.ApplicationProperties;
 
 /**
  * com.qmetry.qaf.automation.util.JSONUtil.java
@@ -70,6 +72,15 @@ public class JSONUtil {
 			return true;
 		} catch (JSONException e) {
 			return false;
+		}
+
+	}
+	
+	public static JSONArray getJsonArrayOrNull(String str) {
+		try {
+			return new JSONArray(str);
+		} catch (JSONException e) {
+			return null;
 		}
 
 	}
@@ -127,16 +138,15 @@ public class JSONUtil {
 
 		File f = new File(file);
 		try {
-			Gson gson =
-					new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
+			Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
 			String jsonStr = gson.toJson(obj, obj.getClass());
 
 			FileUtil.writeStringToFile(f, jsonStr, "UTF-8");
 		} catch (Throwable e) {
-			System.err.println("Unable to write : " + obj.getClass().getCanonicalName()
-					+ " in file: " + file + " :" + e.getMessage());
-			logger.error("Unable to write : " + obj.getClass().getCanonicalName()
-					+ " in file: " + file + " :" + e.getMessage());
+			System.err.println("Unable to write : " + obj.getClass().getCanonicalName() + " in file: " + file + " :"
+					+ e.getMessage());
+			logger.error("Unable to write : " + obj.getClass().getCanonicalName() + " in file: " + file + " :"
+					+ e.getMessage());
 		}
 	}
 
@@ -151,7 +161,8 @@ public class JSONUtil {
 			if (file.startsWith("["))
 				mapData = gson.fromJson(file, DATASET_TYPE);
 			else {
-				String jsonStr = FileUtil.readFileToString(new File(file));
+				String jsonStr = FileUtil.readFileToString(new File(file),
+						ApplicationProperties.LOCALE_CHAR_ENCODING.getStringVal("UTF-8"));
 				mapData = gson.fromJson(jsonStr, DATASET_TYPE);
 			}
 			Object[][] objecttoreturn = new Object[mapData.size()][1];
@@ -176,8 +187,7 @@ public class JSONUtil {
 		} catch (IOException e) {
 			json = defVal;
 		} catch (Throwable e) {
-			logger.error("unable to load [" + cls.getName() + "] from file[ " + file
-					+ "] - " + e.getMessage());
+			logger.error("unable to load [" + cls.getName() + "] from file[ " + file + "] - " + e.getMessage());
 			json = defVal;
 		}
 		Gson gson = new GsonBuilder().disableHtmlEscaping().create();

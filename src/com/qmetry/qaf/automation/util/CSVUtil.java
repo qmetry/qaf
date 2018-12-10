@@ -29,7 +29,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,7 +64,7 @@ public class CSVUtil {
 			// exclude blank lines and comments
 			while ((strLine = br.readLine()) != null) {
 				if (!("".equalsIgnoreCase(strLine.trim()) || "#!".contains("" + strLine.trim().charAt(0)))) {
-					String[] cols = StringUtil.parseCSV(strLine, separatorChar);// strLine.split(separatorChar);
+					Object[] cols = StringUtil.parseCSV(strLine, separatorChar);// strLine.split(separatorChar);
 					rows.add(cols);
 				} else if (strLine.contains("col.separator")) {
 					separatorChar = strLine.split("=")[1].trim().charAt(0);
@@ -89,8 +88,8 @@ public class CSVUtil {
 	}
 
 	@Deprecated
-	public static List<String[]> getCSVData(String strFile, Map<String, Integer> headers) {
-		ArrayList<String[]> rows = new ArrayList<String[]>();
+	public static List<Object[]> getCSVData(String strFile, Map<String, Integer> headers) {
+		ArrayList<Object[]> rows = new ArrayList<Object[]>();
 		int cnt = 0;
 		BufferedReader br = null;
 		try {
@@ -105,10 +104,10 @@ public class CSVUtil {
 
 			while ((strLine = br.readLine()) != null) {
 				if (!("".equalsIgnoreCase(strLine.trim()) || "#!".contains("" + strLine.trim().charAt(0)))) {
-					String[] cols = StringUtil.parseCSV(strLine, separatorChar);// strLine.split(separatorChar);
+					Object[] cols = StringUtil.parseCSV(strLine, separatorChar);// strLine.split(separatorChar);
 					if (cnt == 0) {
 						for (int i = 0; i < cols.length; i++) {
-							headers.put(cols[i].replaceAll(" ", "").toUpperCase(), i);
+							headers.put(cols[i].toString().replaceAll(" ", "").toUpperCase(), i);
 						}
 					} else {
 						rows.add(cols);
@@ -155,17 +154,17 @@ public class CSVUtil {
 			char separatorChar = ',';
 			// read comma separated file line by line
 			// exclude blank lines and comments
-			String[] colsNames = null;
+			Object[] colsNames = null;
 			while ((strLine = br.readLine()) != null) {
 				if (!("".equalsIgnoreCase(strLine.trim()) || "#!".contains("" + strLine.trim().charAt(0)))) {
 					if (colsNames == null) {
 						colsNames = StringUtil.parseCSV(strLine, separatorChar);
 					} else {
-						String[] cols = StringUtil.parseCSV(strLine, separatorChar);
-						Map<String, String> map = new LinkedHashMap<String, String>();
+						Object[] cols = StringUtil.parseCSV(strLine, separatorChar);
+						Map<String, Object> map = new LinkedHashMap<String, Object>();
 						for (int i = 0; i < cols.length; i++) {
 							try {
-								map.put(colsNames[i].trim(), cols[i]);
+								map.put(colsNames[i].toString().trim(), cols[i]);
 							} catch (ArrayIndexOutOfBoundsException e) {
 								logger.warn(String.format(
 										"Missing column header for column[%d] in data file: %s. It will be included by lineNo",

@@ -33,9 +33,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
+
+import org.json.JSONObject;
 
 import com.qmetry.qaf.automation.core.AutomationError;
 import com.qmetry.qaf.automation.ui.annotations.UiElement;
@@ -256,11 +256,8 @@ public class BaseFormDataBean extends BaseDataBean {
 			logger.info("parameter " + param + ": " + paramVal);
 			strExpr = strExpr.replaceAll("\\$\\{" + param + "\\}", String.valueOf(paramVal));
 		}
-
-		ScriptEngineManager engineManager = new ScriptEngineManager();
-		ScriptEngine jsEngine = engineManager.getEngineByName("JavaScript");
 		try {
-			return (Boolean) jsEngine.eval(strExpr);
+			return (Boolean)StringUtil.eval(strExpr, new JSONObject(this).toMap());
 		} catch (ScriptException e) {
 			logger.error("Unable to evaluate dependency condition: " + strExpr, e);
 			throw new AutomationError("Unable to evaluate dependency condition: " + strExpr, e);
@@ -297,7 +294,6 @@ public class BaseFormDataBean extends BaseDataBean {
 		String val = params.defaultValue();
 		String depends = params.dependsOnField();
 		String depVal = params.dependingValue();
-		boolean includePageWait = params.pagewait();
 		Class<? extends QAFExtendedWebElement> eleClass = params.elementClass();
 
 		try {

@@ -1,9 +1,31 @@
-/**
- * 
- */
+/*******************************************************************************
+ * QMetry Automation Framework provides a powerful and versatile platform to author 
+ * Automated Test Cases in Behavior Driven, Keyword Driven or Code Driven approach
+ *                
+ * Copyright 2016 Infostretch Corporation
+ *
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ *
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT
+ * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE
+ *
+ * You should have received a copy of the GNU General Public License along with this program in the name of LICENSE.txt in the root folder of the distribution. If not, see https://opensource.org/licenses/gpl-3.0.html
+ *
+ * See the NOTICE.TXT file in root folder of this source files distribution 
+ * for additional information regarding copyright ownership and licenses
+ * of other open source software / files used by QMetry Automation Framework.
+ *
+ * For any inquiry or need additional information, please contact support-qaf@infostretch.com
+ *******************************************************************************/
+
 package com.qmetry.qaf.automation.testng.dataprovider;
 
 import static com.qmetry.qaf.automation.core.ConfigurationManager.getBundle;
+import static org.apache.commons.lang.StringUtils.isBlank;
+import static org.apache.commons.lang.StringUtils.isNotBlank;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -12,10 +34,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.text.StrSubstitutor;
+import org.json.JSONObject;
 import org.testng.ITestContext;
 import org.testng.ITestNGMethod;
 import org.testng.annotations.DataProvider;
@@ -28,7 +50,9 @@ import org.testng.internal.annotations.IAnnotationFinder;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.qmetry.qaf.automation.core.AutomationError;
+import com.qmetry.qaf.automation.core.ConfigurationManager;
 import com.qmetry.qaf.automation.data.DataBean;
+import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.step.client.TestNGScenario;
 import com.qmetry.qaf.automation.testng.dataprovider.QAFDataProvider.params;
 import com.qmetry.qaf.automation.testng.pro.DataProviderUtil;
@@ -41,7 +65,7 @@ import com.qmetry.qaf.automation.util.ListUtils;
 import com.qmetry.qaf.automation.util.StringUtil;
 
 /**
- * @author chirag
+ * @author Chirag Jayswal
  *
  */
 public class QAFInetrceptableDataProvider {
@@ -49,27 +73,26 @@ public class QAFInetrceptableDataProvider {
 	public static final String QAF_DATA_PROVIDER = "qaf-data-provider";
 	private static final String QAF_DATA_PROVIDER_PARALLEL = "qaf-data-provider-parallel";
 
-	@DataProvider(name = QAF_DATA_PROVIDER_PARALLEL, parallel=true)
+	@DataProvider(name = QAF_DATA_PROVIDER_PARALLEL, parallel = true)
 	public static Iterator<Object[]> interceptedParallelDataProvider(ITestNGMethod method, ITestContext c) {
 		return interceptedDataProvider(method, c);
 	}
+
 	@DataProvider(name = QAF_DATA_PROVIDER)
 	public static Iterator<Object[]> interceptedDataProvider(ITestNGMethod method, ITestContext c) {
 		TestNGScenario scenario = (TestNGScenario) method;
 		@SuppressWarnings("unchecked")
 		Map<String, Object> parameters = (Map<String, Object>) getParameters(scenario);
-
-		Map<String, Object> metadata = new TreeMap<String, Object>(String.CASE_INSENSITIVE_ORDER);
+		// update resolved meta-data should reflect in report
+		Map<String, Object> metadata = scenario.getMetaData();
 		metadata.putAll(parameters);
-		
-		//update resolved meta-data should reflect in report 
-		scenario.getMetaData().putAll(metadata);
-		
+
+		String dataProvider = (String) metadata.get(params.DATAPROVIDER.name());
+
 		List<Object[]> dataList = null;
-		boolean hasCustomDataProvider = metadata.containsKey(params.DATAPROVIDERCLASS.name());
+		boolean hasCustomDataProvider = null!=dataProvider && !dataProvider.contains(QAF_DATA_PROVIDER);
 		if (hasCustomDataProvider) {
 			// get data provider from description!...
-			String dataProvider = (String) metadata.get(params.DATAPROVIDER.name());
 			String dataProviderClass = (String) metadata.get(params.DATAPROVIDERCLASS.name());
 			Iterator<Object[]> testData = invokeCustomDataProvider(method, c, dataProvider, dataProviderClass);
 			dataList = ListUtils.toList(testData);
@@ -78,24 +101,58 @@ public class QAFInetrceptableDataProvider {
 			dataList = ListUtils.toList(testData);
 		}
 
-		// listner
-		List<Object[]> interceptedData = intercept(method, c, dataList, metadata);
+		List<Object[]> data = process(scenario, dataList);
+
+		// listeners
+		List<Object[]> interceptedData = intercept(scenario, c, data);
 		return interceptedData.iterator();
+	}
+
+	public static List<Object[]> intercept(TestNGScenario scenario, ITestContext context, List<Object[]> testdata) {
+		int from = 0;
+		int to = testdata.size() - 1;
+
+		// Intercepter registered using property 'qaf.listeners'
+		for (QAFDataProviderIntercepter intercepter : getIntercepters()) {
+			testdata = intercepter.intercept(scenario, context, testdata);
+		}
+
+		Map<String, Object> metadata = scenario.getMetaData();
+		if (metadata.containsKey("from") || metadata.containsKey("to")) {
+			if (metadata.containsKey("to") && (int) metadata.get("to") < to) {
+				to = (int) metadata.get("to");
+			}
+			if (metadata.containsKey("from")) {
+				from = (int) metadata.get("from");
+			}
+			return testdata.subList(from, to);
+		}
+
+		if (metadata.containsKey("indices")) {
+			List<?> indices = (List<?>) metadata.get("indices");
+			List<Object[]> filteredList = new ArrayList<Object[]>();
+			for (Object i : indices) {
+				filteredList.add(testdata.get((int) i));
+			}
+			return filteredList;
+		}
+		return testdata;
 	}
 
 	private static Map<?, ?> getParameters(TestNGScenario scenario) {
 		Map<String, Object> methodParameters = scenario.getMetaData();
-		String description = (String) methodParameters.get("description");
-		if (StringUtil.isNotBlank(description) && JSONUtil.isValidJsonString(description)) {
-			@SuppressWarnings("unchecked")
-			Map<String, String> paramsFromDesc = new Gson().fromJson(description, Map.class);
+		String description = scenario.getDescription();
+		if (isNotBlank(description) && JSONUtil.isValidJsonString(description)) {
+			Map<String, Object> paramsFromDesc = new JSONObject(description).toMap();
+			description =(String) paramsFromDesc.remove("description");
 			methodParameters.putAll(paramsFromDesc);
+			scenario.setDescription(description);
 		}
 
 		// highest priority test data overridden through property with test name
 		// prefix
 		String testParameters = getBundle().getString(scenario.getMethodName() + ".testdata");
-		if (StringUtil.isBlank(testParameters)) {
+		if (isBlank(testParameters)) {
 			boolean hasDataProvider = false;
 			for (params param : params.values()) {
 				if (methodParameters.containsKey(param.name())) {
@@ -104,7 +161,7 @@ public class QAFInetrceptableDataProvider {
 				}
 			}
 			if (hasDataProvider) {
-				testParameters = new Gson().toJson(methodParameters);
+				testParameters = new JSONObject(methodParameters).toString();
 			} else {
 				// lowest priority to global test data
 				testParameters = getBundle().getString("global.testdata");
@@ -117,7 +174,7 @@ public class QAFInetrceptableDataProvider {
 		testParameters = StrSubstitutor.replace(testParameters, methodParameters);
 		testParameters = getBundle().getSubstitutor().replace(testParameters);
 		try {
-			return new Gson().fromJson(testParameters, Map.class);
+			return new JSONObject(testParameters).toMap();
 		} catch (JsonSyntaxException e) {
 			// old way of setting global data or testdata using key=value
 			return StringUtil.toMap(testParameters, true);
@@ -125,25 +182,37 @@ public class QAFInetrceptableDataProvider {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static List<Object[]> intercept(ITestNGMethod method, ITestContext c, List<Object[]> testdata,
-			Map<?, ?> metadata) {
-		Class<?>[] paramTypes = method.getConstructorOrMethod().getParameterTypes();
+	private static List<Object[]> process(TestNGScenario scenario, List<Object[]> testdata) {
+		Class<?>[] paramTypes = scenario.getConstructorOrMethod().getParameterTypes();
 
 		// list of only map object
 		if (null != testdata && !testdata.isEmpty() && testdata.get(0).length == 1
 				&& Map.class.isAssignableFrom(testdata.get(0)[0].getClass())) {
-			
-			//filter records using key include/exclude if provided in data
-			Iterator<Object[]> iter = testdata.iterator();
-			while (iter.hasNext()) {
-				Map<String, Object> record = (Map<String, Object>) iter.next()[0];
-				if ((record.containsKey("exclude") && Boolean.valueOf(record.get("exclude").toString()))
-						|| (record.containsKey("include") && !Boolean.valueOf(record.get("include").toString()))) {
-					iter.remove();
+
+			try {
+				// filter records using key include/exclude if provided in data
+				String filter = (String) scenario.getMetaData().get("filter");
+				if (StringUtil.isNotBlank(filter)) {
+					System.out.println("Applying Filter " + filter);
+					// resolve parameters
+					filter = StrSubstitutor.replace(filter, scenario.getMetaData());
+					filter = getBundle().getSubstitutor().replace(filter);
+
+					Iterator<Object[]> iter = testdata.iterator();
+					while (iter.hasNext()) {
+						// consider column values as context variables
+						Map<String, Object> record = (Map<String, Object>) iter.next()[0];
+						boolean include = StringUtil.eval(filter, record);
+						if (!include) {
+							iter.remove();
+						}
+					}
 				}
+			} catch (Exception e) {
+				throw new AutomationError("Unable to apply filter on data-set", e);
 			}
-			
-			//process parameters 
+
+			// process parameters
 			for (int i = 0; i < testdata.size(); i++) {
 				Map<String, Object> record = (Map<String, Object>) testdata.get(i)[0];
 				if (paramTypes.length > 1) {
@@ -190,66 +259,51 @@ public class QAFInetrceptableDataProvider {
 				} else {
 					record.put("__index", i + 1);
 					if (!record.containsKey("testCaseId")) {
-						record.put("testCaseId", method.getMethodName() + "-" + (i + 1));
+						record.put("testCaseId", scenario.getMethodName() + "-" + (i + 1));
 					}
 				}
 			}
 		}
 
-		int from = 0;
-		int to = testdata.size() - 1;
-		if (metadata.containsKey("from") || metadata.containsKey("to")) {
-			if (metadata.containsKey("to") && (int) metadata.get("to") < to) {
-				to = (int) metadata.get("to");
-			}
-			if (metadata.containsKey("from")) {
-				from = (int) metadata.get("from");
-			}
-			return testdata.subList(from, to);
-		}
-
-		if (metadata.containsKey("indices")) {
-			List<?> indices = (List<?>) metadata.get("indices");
-			List<Object[]> filteredList = new ArrayList<Object[]>();
-			for (Object i : indices) {
-				filteredList.add(testdata.get((int) i));
-			}
-			return filteredList;
-		}
 		return testdata;
 	}
 
-	public static Object[][] getData(Map<?, ? extends Object> param) {
+	public static Object[][] getData(Map<String, Object> metadata) {
 
-		if (param.containsKey(params.SQLQUERY.name())) {
-			String query = (String) param.get(params.SQLQUERY.name());
+		String query = (String) metadata.get(params.SQLQUERY.name());
+		if (isNotBlank(query)) {
 			return DatabaseUtil.getRecordDataAsMap(query);
 		}
-		if (param.containsKey(params.JSON_DATA_TABLE.name())) {
-			return JSONUtil.getJsonArrayOfMaps((String) param.get(params.JSON_DATA_TABLE.name()));
+
+		String jsonTable = (String) metadata.get(params.JSON_DATA_TABLE.name());
+		if (isNotBlank(jsonTable)) {
+			return JSONUtil.getJsonArrayOfMaps(jsonTable);
 		}
-		if (param.containsKey(params.DATAFILE.name())) {
-			String file = (String) param.get(params.DATAFILE.name());
+
+		String file = (String) metadata.get(params.DATAFILE.name());
+		String key = (String) metadata.get(params.KEY.name());
+
+		if (isNotBlank(file)) {
 			if (file.endsWith("json")) {
 				return JSONUtil.getJsonArrayOfMaps(file);
 			}
 			if (file.endsWith("xml")) {
-				List<Object[]> mapData = DataProviderUtil.getDataSetAsMap((String) param.get(params.KEY.name()), file);
+				List<Object[]> mapData = DataProviderUtil.getDataSetAsMap(key, file);
 				return mapData.toArray(new Object[][] {});
 			}
 			if (file.endsWith("xls")) {
-				if (param.containsKey(params.KEY.name())) {
-					return ExcelUtil.getTableDataAsMap(file, ((String) param.get(params.KEY.name())),
-							(String) param.get(params.SHEETNAME.name()));
+				if (isNotBlank(key)) {
+					return ExcelUtil.getTableDataAsMap(file, ((String) metadata.get(params.KEY.name())),
+							(String) metadata.get(params.SHEETNAME.name()));
 				}
-				return ExcelUtil.getExcelDataAsMap(file, (String) param.get(params.SHEETNAME.name()));
+				return ExcelUtil.getExcelDataAsMap(file, (String) metadata.get(params.SHEETNAME.name()));
 			}
 			// csv, text
 			List<Object[]> csvData = CSVUtil.getCSVDataAsMap(file);
 			return csvData.toArray(new Object[][] {});
 		}
-		if (param.containsKey(params.KEY.name())) {
-			List<Object[]> mapData = DataProviderUtil.getDataSetAsMap((String) param.get(params.KEY.name()), "");
+		if (isNotBlank(key)) {
+			List<Object[]> mapData = DataProviderUtil.getDataSetAsMap(key, "");
 			return mapData.toArray(new Object[][] {});
 		}
 		throw new RuntimeException("No data provider found");
@@ -257,12 +311,18 @@ public class QAFInetrceptableDataProvider {
 
 	private static Iterator<Object[]> invokeCustomDataProvider(ITestNGMethod tm, ITestContext c, String dp,
 			String dpc) {
-		if (StringUtil.isBlank(dpc)) {
-			dpc = getBundle().getString("global.dataproviderclass", getBundle().getString("dataproviderclass"));
+		String methodClass = tm.getConstructorOrMethod().getDeclaringClass().getName();
+
+		if (isBlank(dpc)) {
+			dpc = getBundle().getString("global.dataproviderclass", getBundle().getString("dataproviderclass",methodClass));
 		}
-		if (StringUtil.isNotBlank(dpc)) {
-			Method m = getDataProviderMethod(dp, dpc);
-			;
+		if (isNotBlank(dpc)) {
+			Method m;
+			try {
+				m = getDataProviderMethod(dp, dpc);
+			} catch (Exception e) {
+				m = getDataProviderMethod(dp, methodClass);
+			}
 			Object instanceToUse = ClassHelper.newInstanceOrNull(m.getDeclaringClass());
 			return InvocatoinHelper.invokeDataProvider(instanceToUse, m, tm, c, null,
 					new Configuration().getAnnotationFinder());
@@ -301,10 +361,9 @@ public class QAFInetrceptableDataProvider {
 	}
 
 	public static void setQAFDataProvider(ITestAnnotation testAnnotation, Method method) {
-		if (method.getAnnotation(QAFDataProvider.class) != null && (null != method)
-				&& null != method.getParameterTypes() && (method.getParameterTypes().length > 0)) {
+		if ((null != method) && null != method.getParameterTypes() && (method.getParameterTypes().length > 0)) {
 			String dataProvider = testAnnotation.getDataProvider();
-			boolean hasDataProvider = StringUtil.isNotBlank(dataProvider);
+			boolean hasDataProvider = isNotBlank(dataProvider);
 
 			// other than qaf data provider
 			if (hasDataProvider && !dataProvider.equalsIgnoreCase(QAF_DATA_PROVIDER)) {
@@ -315,19 +374,32 @@ public class QAFInetrceptableDataProvider {
 				Class<?> dpClass = testAnnotation.getDataProviderClass();
 				if (null != dpClass) {
 					desc.put("dataProviderClass", dpClass.getName());
-				} else {
-					desc.put("dataProviderClass", method.getDeclaringClass().getName());
 				}
-				testAnnotation.setDescription(new Gson().toJson(desc));
+				testAnnotation.setDescription(new JSONObject(desc).toString());
 			}
-			
+
 			boolean globalParallelSetting = getBundle().getBoolean("global.datadriven.parallel", false);
-			boolean parallel = getBundle().getBoolean(method.getName() + ".parallel",globalParallelSetting);
-			dataProvider = parallel?QAF_DATA_PROVIDER_PARALLEL:QAF_DATA_PROVIDER;
-			
+			boolean parallel = getBundle().getBoolean(method.getName() + ".parallel", globalParallelSetting);
+			dataProvider = parallel ? QAF_DATA_PROVIDER_PARALLEL : QAF_DATA_PROVIDER;
+
 			testAnnotation.setDataProvider(dataProvider);
 			testAnnotation.setDataProviderClass(QAFInetrceptableDataProvider.class);
 		}
 	}
 
+	private static List<QAFDataProviderIntercepter> getIntercepters() {
+		List<QAFDataProviderIntercepter> intercepters = new ArrayList<QAFDataProviderIntercepter>();
+		String[] listners = ConfigurationManager.getBundle().getStringArray(ApplicationProperties.QAF_LISTENERS.key);
+		for (String listener : listners) {
+			try {
+				Class<?> listenerClass = Class.forName(listener);
+				if (QAFDataProviderIntercepter.class.isAssignableFrom(listenerClass)) {
+					QAFDataProviderIntercepter intercepter = (QAFDataProviderIntercepter) listenerClass.newInstance();
+					intercepters.add(intercepter);
+				}
+			} catch (Exception e) {
+			}
+		}
+		return intercepters;
+	}
 }

@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -262,7 +263,7 @@ public class GherkinFileParser extends AbstractScenarioFileParser {
 			}
 
 			for (int i = 1; i < examplesTable.size(); i++) {
-				Map<String, Object> map = new HashMap<String, Object>();
+				Map<String, Object> map = new LinkedHashMap<String, Object>();
 				for (int k = 0; k < keys.size(); k++) {
 					map.put(keys.get(k), examplesTable.get(i).get(k).toString().trim());
 				}
@@ -298,14 +299,14 @@ public class GherkinFileParser extends AbstractScenarioFileParser {
 	}
 
 	private void addExample(String line, ArrayList<List<Object>> examplesTable) {
-		String[] rawData = StringUtil.parseCSV(line, '|');
+		Object[] rawData = StringUtil.parseCSV(line, '|');
 		ArrayList<Object> cols = new ArrayList<Object>();
 		for (int i = 1; i < rawData.length - 1; i++) {
 			// if (StringUtil.isBlank(rawData[i]) && (i == 0 || i ==
 			// rawData.length-1)) {
 			// continue;
 			// }
-			cols.add(rawData[i].trim());
+			cols.add(rawData[i]);
 		}
 		examplesTable.add(cols);
 	}
