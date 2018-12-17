@@ -41,6 +41,7 @@ import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
@@ -68,7 +69,7 @@ public class PropertyUtil extends XMLConfiguration {
 	 * 
 	 */
 	private static final long serialVersionUID = -8633909707831110230L;
-	Log logger = LogFactoryImpl.getLog(PropertyUtil.class);
+	private Log logger = LogFactoryImpl.getLog(PropertyUtil.class);
 
 	public PropertyUtil() {
 		super();
@@ -130,14 +131,27 @@ public class PropertyUtil extends XMLConfiguration {
 				logger.info("Updated property [" + decryptedValueKey + "] with decrypted value using "
 						+ passwordDecryptor.getClass().getSimpleName());
 			}
-		}else if(ApplicationProperties.HTTPS_ACCEPT_ALL_CERT.key.equalsIgnoreCase(key) && getBoolean(key)){
-			try {
-				logger.info("Seeting behavior to accept all certitificate and host name");
-				ignoreSSLCetrificatesAndHostVerification();
-			} catch (KeyManagementException e) {
-				logger.error("Unable to set behavior to ignore certificate and host name verification", e);
-			} catch (NoSuchAlgorithmException e) {
-				logger.error("Unable to find Algorithm while setting ignore certificate and host name verification", e);
+		}else if(ApplicationProperties.HTTPS_ACCEPT_ALL_CERT.key.equalsIgnoreCase(key)){
+			if(getBoolean(key)){
+				try {
+					if(!containsKey("default.socket.factory")){
+						super.addPropertyDirect("default.socket.factory", HttpsURLConnection.getDefaultSSLSocketFactory());
+						super.addPropertyDirect("default.hostname.verifier",HttpsURLConnection.getDefaultHostnameVerifier());
+					}
+					logger.info("Seeting behavior to accept all certitificate and host name");
+					ignoreSSLCetrificatesAndHostVerification();
+				} catch (KeyManagementException e) {
+					logger.error("Unable to set behavior to ignore certificate and host name verification", e);
+				} catch (NoSuchAlgorithmException e) {
+					logger.error("Unable to find Algorithm while setting ignore certificate and host name verification", e);
+				}
+			}else{
+				//revert to default
+				if(containsKey("default.socket.factory")){
+					logger.info("Reverting behavior to verify certificate and host name");
+					HttpsURLConnection.setDefaultSSLSocketFactory((SSLSocketFactory) getObject("default.socket.factory"));
+					HttpsURLConnection.setDefaultHostnameVerifier((HostnameVerifier) getObject("default.hostname.verifier"));
+				}
 			}
 		}else if(ApplicationProperties.PROXY_SERVER_KEY.key.equalsIgnoreCase(key) && StringUtil.isNotBlank(value.toString())){
 			ProxySelector.setDefault(UriProxySelector.getInstance());
@@ -344,21 +358,24 @@ public class PropertyUtil extends XMLConfiguration {
 	}
 
 	private static void ignoreSSLCetrificatesAndHostVerification() throws NoSuchAlgorithmException, KeyManagementException {
+		
 		SSLContext sslContext = SSLContext.getInstance("SSL");
 
 		// set up a TrustManager that trusts everything
 		sslContext.init(null, new TrustManager[] { new X509TrustManager() {
+			private final Log logger = LogFactoryImpl.getLog(this.getClass());
+
 			public X509Certificate[] getAcceptedIssuers() {
-				System.out.println("======== AcceptedIssuers =============");
+				logger.info("======== AcceptedIssuers =============");
 				return null;
 			}
 
 			public void checkClientTrusted(X509Certificate[] certs, String authType) {
-				System.out.println("========= ClientTrusted =============");
+				logger.info("========= ClientTrusted =============");
 			}
 
 			public void checkServerTrusted(X509Certificate[] certs, String authType) {
-				System.out.println("======== ServerTrusted =============");
+				logger.info("======== ServerTrusted =============");
 			}
 		} }, new SecureRandom());
 
