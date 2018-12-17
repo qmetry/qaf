@@ -44,8 +44,10 @@ import javax.script.ScriptException;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
+import org.json.CDL;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 
 public class StringUtil extends StringUtils {
 	/**
@@ -251,6 +253,14 @@ public class StringUtil extends StringUtils {
 		return true;
 	}
 
+	/**
+	 * 
+	 * @param prefix
+	 * @param expectedPattern
+	 * @param actual
+	 * @param flags
+	 * @return
+	 */
 	public static Boolean handleRegex(String prefix, String expectedPattern, String actual, int flags) {
 		if (expectedPattern.startsWith(prefix)) {
 			String expectedRegEx = expectedPattern.replaceFirst(prefix, "");// +
@@ -315,12 +325,16 @@ public class StringUtil extends StringUtils {
 	 * <li>"a",1,true,1.5 -> ["a",1,true,1.5]
 	 * <li>"a,b",1,true,1.5 -> ["a,b",1,true,1.5]
 	 * <li>" a ",1,true,1.5 -> [" a ",1,true,1.5]
+	 * <li>,,, -> [null,null,null,null]
 	 * <li>" a " , 1 , true , 1.5 ->[" a ",1,true,1.5]
 	 * <li>a | 1 | true | 1.5 Separator |->["a",1,true,1.5]
 	 * <li>" a "| 1 |true| 1.5 ->Separator |[" a ",1,true,1.5]
 	 * <li>"a, b"| 1 |true| 1.5 ->Separator |["a, b",1,true,1.5]
 	 * <li>a b | 1 |true| 1.5 ->Separator |["a b",1,true,1.5]
 	 * <li>"a\" b" | 1 |true| 1.5 ->Separator |["a\" b",1,true,1.5]
+	 * <li> | | |  ->Separator |[null,null,null,null]
+	 * <li>"a"" b" | 1 |true| 1.5 ->Separator |["a\" b",1,true,1.5]
+
 	 * 
 	 * @param data
 	 * @param char[]
@@ -344,19 +358,17 @@ public class StringUtil extends StringUtils {
 			String commaSperatoredData = data.replace(seperator, ',');
 			//fix ignored end column if it is null 
 			if(commaSperatoredData.trim().endsWith(",")){
-				commaSperatoredData = commaSperatoredData+"null";
+				commaSperatoredData = commaSperatoredData+"\"\"";
 			}
-			JSONArray jsonArray = JSONUtil.getJsonArrayOrNull("[" + commaSperatoredData + "]");
-			if (null != jsonArray) {
-				return jsonArray.toList().toArray();
-			}
+			
+			return getArrayFromCsv(commaSperatoredData);
 		}
 		//to continue support old way with use of escape char without quoted string
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < data.length(); ++i) {
 			char c = data.charAt(i);
 			if (c == seperator) {
-				values.add(JSONObject.stringToValue(sb.toString()));
+				values.add(toObject(sb.toString()));
 				sb = new StringBuilder();
 				continue;
 			} else if (c == escapeChar) {
@@ -368,24 +380,6 @@ public class StringUtil extends StringUtils {
 		values.add(toObject(sb.toString()));
 
 		return (values.toArray(new Object[values.size()]));
-	}
-
-	private static String ensuerStirngQuated(String data, char seperator) {
-		if(isBlank(data) || data.indexOf(seperator)<0){
-			return data;
-		}
-		StringBuilder sb = new StringBuilder();
-		String[] parts = data.split(Pattern.quote(String.valueOf(seperator)),-1);
-		for (String part : parts) {
-			part = part.trim();
-			if (part.indexOf(',') >= 0 && !part.startsWith("\"") && !part.endsWith("\"")) {
-				sb.append(JSONObject.quote(part));
-			} else {
-				sb.append(part);
-			}
-			sb.append(seperator);
-		}
-		return sb.deleteCharAt(sb.length() - 1).toString();
 	}
 
 	/**
@@ -498,10 +492,23 @@ public class StringUtil extends StringUtils {
 		}
 	}
 
+	/**
+	 * 
+	 * @param expression
+	 * @return
+	 * @throws ScriptException
+	 */
 	public static <T> T eval(String expression) throws ScriptException {
 		return eval(expression, new HashMap<String, Object>());
 	}
 
+	/**
+	 * 
+	 * @param expression
+	 * @param context
+	 * @return
+	 * @throws ScriptException
+	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T eval(String expression, Map<? extends String, ? extends Object> context)
 			throws ScriptException {
@@ -513,12 +520,49 @@ public class StringUtil extends StringUtils {
 
 	/**
 	 * Try to convert a string into java primitive type or null. If the
-	 * stringcan't be converted, return the string.
+	 * string can't be converted, return the string. It will return null for empty string.
 	 * 
 	 * @param string
 	 * @return Object
 	 */
 	public static Object toObject(String string) {
-		return JSONObject.stringToValue(string);
+		if(StringUtil.isNotEmpty(string)){
+			return JSONObject.stringToValue(string);
+		}
+		return null;
+	}
+
+	private static String ensuerStirngQuated(String data, char seperator) {
+		if(isBlank(data) || data.indexOf(seperator)<0){
+			return data;
+		}
+		StringBuilder sb = new StringBuilder();
+		String[] parts = data.split(Pattern.quote(String.valueOf(seperator)),-1);
+		for (String part : parts) {
+			part = part.trim();
+			if (part.indexOf(',') >= 0 && !part.startsWith("\"") && !part.endsWith("\"")) {
+				sb.append(JSONObject.quote(part));
+			} else {
+				sb.append(part);
+			}
+			sb.append(seperator);
+		}
+		return sb.deleteCharAt(sb.length() - 1).toString();
+	}
+	
+	/**
+	 * 
+	 * @param csv
+	 * @return
+	 */
+	private static Object[] getArrayFromCsv(String csv){
+		JSONArray obj = CDL.rowToJSONArray(new JSONTokener(csv));
+	
+		List<Object> strings = obj.toList();
+		Object[] array = new Object[strings.size()];
+		for (int i=0; i<strings.size();i++){
+			array[i]=toObject((String) strings.get(i));
+		}
+		return array;
 	}
 }

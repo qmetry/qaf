@@ -21,7 +21,6 @@
  * For any inquiry or need additional information, please contact support-qaf@infostretch.com
  *******************************************************************************/
 
-
 package com.qmetry.qaf.automation.testng.dataprovider;
 
 import static java.lang.annotation.ElementType.METHOD;
@@ -53,13 +52,18 @@ import java.lang.annotation.Target;
 @Retention(java.lang.annotation.RetentionPolicy.RUNTIME)
 @Target({ METHOD, TYPE })
 public @interface QAFDataProvider {
+	/**
+	 * Represents meta-data for data provider
+	 * 
+	 * @author chirag
+	 *
+	 */
 	public enum params {
-		DATAFILE, SHEETNAME, KEY, HASHEADERROW, SQLQUERY, BEANCLASS, JSON_DATA_TABLE, DATAPROVIDER, DATAPROVIDERCLASS;
+		DATAFILE, SHEETNAME, KEY, HASHEADERROW, SQLQUERY, BEANCLASS, JSON_DATA_TABLE, DATAPROVIDER, DATAPROVIDERCLASS, FILTER, FROM, TO, INDICES;
 	}
 
-	public enum dataproviders {
-		isfw_csv, isfw_database, isfw_excel, isfw_excel_table, isfw_json, isfw_property;
-	}
+	public static final String NAME= "qaf-data-provider";
+	public static final String NAME_PARALLEL = "qaf-data-provider-parallel";
 
 	/**
 	 * Used to provide csv or excel file. Can be overridden by property
@@ -103,4 +107,31 @@ public @interface QAFDataProvider {
 	 * @return
 	 */
 	String sqlQuery() default "";
+
+	/**
+	 * Filter to apply on data set returned by the data-provider that returns
+	 * List of Maps. It must represent logical expression that returns true or
+	 * false. You can use map key as context variable and test meta-data as
+	 * parameter. For example you test data has "first-name", "last-name", "age"
+	 * and "country", you can have expression that filters records for age above
+	 * 18 as below:<br/>
+	 * <code>
+	 * <ul>
+	 * <li>filter="age>18"</li>
+	 * <li>filter="country.equalsIgnoreCase('India') && age>18"</li>
+	 * </ul>
+	 * </code> <br/>
+	 * As you can use test case meta-data, method name as "method" and class
+	 * name as "class" as parameters, Another example of using test case
+	 * meta-data in filter assuming test case meta-data has meta-data
+	 * "testCaseID" and test data has "ID". <code>
+	 * <ul>
+	 * <li>filter="ID=='${testCaseID}'"</li>
+	 * <li>filter="ID.equalsIgnoreCase(\"${method}\")"</li>
+	 * </ul>
+	 * </code>
+	 * 
+	 * @return
+	 */
+	String filter() default "";
 }

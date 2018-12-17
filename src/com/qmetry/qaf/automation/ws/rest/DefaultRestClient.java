@@ -29,8 +29,11 @@
 package com.qmetry.qaf.automation.ws.rest;
 
 import static com.qmetry.qaf.automation.core.ConfigurationManager.getBundle;
+
 import java.util.Iterator;
+
 import org.apache.commons.configuration.Configuration;
+
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;

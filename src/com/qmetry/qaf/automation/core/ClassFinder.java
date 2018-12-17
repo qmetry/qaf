@@ -28,7 +28,6 @@
  *******************************************************************************/
 package com.qmetry.qaf.automation.core;
 
-import java.io.IOException;
 import java.util.List;
 
 /**

@@ -30,10 +30,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.hamcrest.Matchers;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import com.qmetry.qaf.automation.step.client.text.BDDDefinitionHelper;
+import com.qmetry.qaf.automation.testng.dataprovider.QAFDataProvider;
+import com.qmetry.qaf.automation.testng.dataprovider.QAFInetrceptableDataProvider;
 import com.qmetry.qaf.automation.util.Reporter;
+import com.qmetry.qaf.automation.util.Validator;
 
 /**
  * 
@@ -124,6 +129,15 @@ public class BDDStepTest {
 		step.execute();
 
 	}
+	
+	@QAFDataProvider(dataFile="resources/testdata.txt")
+	@Test(dataProvider=QAFDataProvider.NAME, dataProviderClass=QAFInetrceptableDataProvider.class)
+	public void testArgWithQuotesFromFile(Map<String, Object> data) {
+		String err_msg= (String) data.get("searchResult");
+		String stepCall = "It should show error message \""+err_msg +"\" on screen";
+		boolean res = BDDDefinitionHelper.matches("It should show error message {0} on screen", stepCall);
+		Validator.assertTrue(res, "Step call didn't match", "Step call matched");
+	}
 	@Test
 	public void test1Param() {
 		String stepCall =
@@ -135,64 +149,66 @@ public class BDDStepTest {
 	
 	@QAFTestStep(description = "Bdd with arg {0} and second arg {1}")
 	public static void bddApostrophe(String arg1, String arg2) {
-		System.out.println("arguments are::" + arg1 + "second" + arg2);
+		Validator.assertThat(arg1, Matchers.notNullValue());
+		Validator.assertThat(arg2, Matchers.notNullValue());
 	}
 
 	@QAFTestStep(description = "Bdd with String arg {0} and Array arg {1}")
 	public static void bdd(String resultLinkText, String[] s) {
-		System.out.println(
-				"bdd resultLinkText: " + resultLinkText + " - " + Arrays.toString(s));
+		Validator.assertThat(resultLinkText, Matchers.notNullValue());
+		Validator.assertThat(s, Matchers.notNullValue());
 		Reporter.log("bdd with array argument: " + resultLinkText + " - "
 				+ Arrays.toString(s));
 	}
 
 	@QAFTestStep(stepName = "Bdd 1 argument {0}")
 	public static void bdd1arg(String resultLinkText) {
-		System.out.println("bdd: " + resultLinkText);
-		Reporter.log("bdd with array argument: " + resultLinkText);
+		Validator.assertThat(resultLinkText, Matchers.notNullValue());
+		Reporter.log("bdd with 1 argument: " + resultLinkText);
 	}
 
 	@QAFTestStep(stepName = "Bdd with array {0}")
 	public static void bdd1arg_array(String[] s) {
-		System.out.println("bdd: " + Arrays.toString(s));
+		Validator.assertThat(s, Matchers.notNullValue());
 		Reporter.log("bdd with array argument: " + Arrays.toString(s));
 	}
 
 	@QAFTestStep(stepName = "Bdd with date {0}")
 	public static void bdd1arg_date(Date birthday) {
-		System.out.println("bdd: " + birthday);
+		Validator.assertThat(birthday, Matchers.notNullValue());
 		Reporter.log("bdd with array argument: " + birthday);
 	}
 
 	@QAFTestStep(stepName = "Bdd with map {0}")
 	public static void bdd1arg_array(Map<String, Object> s) {
-		System.out.println("bdd: " + s);
+		Validator.assertThat(s, Matchers.notNullValue());
 		Reporter.log("bdd with array argument: " + s);
 	}
 	@QAFTestStep(stepName = "Normal step")
 	public static void normal(String resultLinkText, String[] s) {
-
-		System.out.println("Testing normal " + resultLinkText + " - " + s[0]);
+		Validator.assertThat(resultLinkText, Matchers.notNullValue());
+		Validator.assertThat(s, Matchers.notNullValue());	
 	}
 
 	@QAFTestStep(description = "It should show error message {0} on screen")
 	public static void verifyAlert(String error) {
-		System.out.println("Error: " + error);
+		Validator.assertThat(error, Matchers.notNullValue());
 	}
 
 	@QAFTestStep(description = "step for int {0,number,integer}")
 	public static void intArg(int error) {
-		System.out.println("int: " + error);
+		Validator.assertThat(error, Matchers.notNullValue());
 	}
 
 	@QAFTestStep(description = "step for int list {0}")
 	public static void intListArg(List<Integer> error) {
-		System.out.println("Error: " + error);
+		Validator.assertThat(error, Matchers.notNullValue());
 	}
 
 	@QAFTestStep(description = "type {1} into {0}")
 	public static void type(String loc, String val) {
-		System.out.println(loc + " -> " + val);
+		Validator.assertThat(loc, Matchers.notNullValue());
+		Validator.assertThat(val, Matchers.notNullValue());
 	}
 
 	@Test

@@ -18,7 +18,6 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.LogFactoryImpl;
 
-import com.qmetry.qaf.automation.testng.pro.DataProviderUtil;
 import com.qmetry.qaf.automation.util.StringUtil;
 
 /**

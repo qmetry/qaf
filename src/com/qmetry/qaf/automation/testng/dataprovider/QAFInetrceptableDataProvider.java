@@ -29,19 +29,21 @@ import static org.apache.commons.lang.StringUtils.isNotBlank;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.text.StrSubstitutor;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.impl.LogFactoryImpl;
 import org.json.JSONObject;
 import org.testng.ITestContext;
 import org.testng.ITestNGMethod;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.ITestAnnotation;
 import org.testng.internal.ClassHelper;
 import org.testng.internal.Configuration;
 import org.testng.internal.MethodInvocationHelper;
@@ -49,13 +51,12 @@ import org.testng.internal.annotations.IAnnotationFinder;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import com.qmetry.qaf.automation.core.AutomationError;
 import com.qmetry.qaf.automation.core.ConfigurationManager;
 import com.qmetry.qaf.automation.data.DataBean;
 import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.step.client.TestNGScenario;
+import com.qmetry.qaf.automation.testng.DataProviderException;
 import com.qmetry.qaf.automation.testng.dataprovider.QAFDataProvider.params;
-import com.qmetry.qaf.automation.testng.pro.DataProviderUtil;
 import com.qmetry.qaf.automation.util.CSVUtil;
 import com.qmetry.qaf.automation.util.ClassUtil;
 import com.qmetry.qaf.automation.util.DatabaseUtil;
@@ -65,20 +66,30 @@ import com.qmetry.qaf.automation.util.ListUtils;
 import com.qmetry.qaf.automation.util.StringUtil;
 
 /**
- * @author Chirag Jayswal
+ * @author Chirag.Jayswal
  *
  */
 public class QAFInetrceptableDataProvider {
+	private static final Log logger = LogFactoryImpl.getLog(QAFInetrceptableDataProvider.class);
 
-	public static final String QAF_DATA_PROVIDER = "qaf-data-provider";
-	private static final String QAF_DATA_PROVIDER_PARALLEL = "qaf-data-provider-parallel";
-
-	@DataProvider(name = QAF_DATA_PROVIDER_PARALLEL, parallel = true)
+	/**
+	 * 
+	 * @param method
+	 * @param c
+	 * @return
+	 */
+	@DataProvider(name = QAFDataProvider.NAME_PARALLEL, parallel = true)
 	public static Iterator<Object[]> interceptedParallelDataProvider(ITestNGMethod method, ITestContext c) {
 		return interceptedDataProvider(method, c);
 	}
 
-	@DataProvider(name = QAF_DATA_PROVIDER)
+	/**
+	 * 
+	 * @param method
+	 * @param c
+	 * @return
+	 */
+	@DataProvider(name = QAFDataProvider.NAME)
 	public static Iterator<Object[]> interceptedDataProvider(ITestNGMethod method, ITestContext c) {
 		TestNGScenario scenario = (TestNGScenario) method;
 		@SuppressWarnings("unchecked")
@@ -86,11 +97,17 @@ public class QAFInetrceptableDataProvider {
 		// update resolved meta-data should reflect in report
 		Map<String, Object> metadata = scenario.getMetaData();
 		metadata.putAll(parameters);
-
-		String dataProvider = (String) metadata.get(params.DATAPROVIDER.name());
-
+		
+		// Intercepter registered using property 'qaf.listeners'
+		Set<QAFDataProviderIntercepter> intercepters = getIntercepters();
+		for (QAFDataProviderIntercepter intercepter : intercepters) {
+			intercepter.beforeFech(scenario, c);
+		}
+				
 		List<Object[]> dataList = null;
-		boolean hasCustomDataProvider = null!=dataProvider && !dataProvider.contains(QAF_DATA_PROVIDER);
+		String dataProvider = (String) metadata.get(params.DATAPROVIDER.name());
+		boolean hasCustomDataProvider = null!=dataProvider && !dataProvider.startsWith(QAFDataProvider.NAME);
+		
 		if (hasCustomDataProvider) {
 			// get data provider from description!...
 			String dataProviderClass = (String) metadata.get(params.DATAPROVIDERCLASS.name());
@@ -104,32 +121,33 @@ public class QAFInetrceptableDataProvider {
 		List<Object[]> data = process(scenario, dataList);
 
 		// listeners
-		List<Object[]> interceptedData = intercept(scenario, c, data);
+		List<Object[]> interceptedData = intercept(scenario, c, data,intercepters);
 		return interceptedData.iterator();
 	}
 
-	public static List<Object[]> intercept(TestNGScenario scenario, ITestContext context, List<Object[]> testdata) {
-		int from = 0;
-		int to = testdata.size() - 1;
+	private static List<Object[]> intercept(TestNGScenario scenario, ITestContext context, List<Object[]> testdata, Set<QAFDataProviderIntercepter> intercepters) {
+		
 
 		// Intercepter registered using property 'qaf.listeners'
-		for (QAFDataProviderIntercepter intercepter : getIntercepters()) {
+		for (QAFDataProviderIntercepter intercepter : intercepters) {
 			testdata = intercepter.intercept(scenario, context, testdata);
 		}
-
+		int from = 0;
+		int to = testdata.size() - 1;
+		
 		Map<String, Object> metadata = scenario.getMetaData();
-		if (metadata.containsKey("from") || metadata.containsKey("to")) {
-			if (metadata.containsKey("to") && (int) metadata.get("to") < to) {
-				to = (int) metadata.get("to");
+		if (metadata.containsKey(params.FROM.name()) || metadata.containsKey(params.TO.name())) {
+			if (metadata.containsKey(params.TO.name()) && (int) metadata.get(params.TO.name()) < to) {
+				to = (int) metadata.get(params.TO.name());
 			}
-			if (metadata.containsKey("from")) {
-				from = (int) metadata.get("from");
+			if (metadata.containsKey(params.FROM.name())) {
+				from = (int) metadata.get(params.FROM.name());
 			}
 			return testdata.subList(from, to);
 		}
 
-		if (metadata.containsKey("indices")) {
-			List<?> indices = (List<?>) metadata.get("indices");
+		if (metadata.containsKey(params.INDICES.name())) {
+			List<?> indices = (List<?>) metadata.get(params.INDICES.name());
 			List<Object[]> filteredList = new ArrayList<Object[]>();
 			for (Object i : indices) {
 				filteredList.add(testdata.get((int) i));
@@ -193,10 +211,15 @@ public class QAFInetrceptableDataProvider {
 				// filter records using key include/exclude if provided in data
 				String filter = (String) scenario.getMetaData().get("filter");
 				if (StringUtil.isNotBlank(filter)) {
-					System.out.println("Applying Filter " + filter);
 					// resolve parameters
-					filter = StrSubstitutor.replace(filter, scenario.getMetaData());
+					TreeMap<String, Object> parametes = new TreeMap<String, Object>(String.CASE_INSENSITIVE_ORDER);
+					parametes.putAll(scenario.getMetaData());
+					parametes.put("method", scenario.getMethodName());
+					parametes.put("class", scenario.getMethod().getDeclaringClass().getSimpleName());
+					
+					filter = StrSubstitutor.replace(filter, parametes);
 					filter = getBundle().getSubstitutor().replace(filter);
+					logger.info("Applying Filter " + filter);
 
 					Iterator<Object[]> iter = testdata.iterator();
 					while (iter.hasNext()) {
@@ -204,12 +227,13 @@ public class QAFInetrceptableDataProvider {
 						Map<String, Object> record = (Map<String, Object>) iter.next()[0];
 						boolean include = StringUtil.eval(filter, record);
 						if (!include) {
+							logger.debug("removing " + record);
 							iter.remove();
 						}
 					}
 				}
 			} catch (Exception e) {
-				throw new AutomationError("Unable to apply filter on data-set", e);
+				throw new DataProviderException("Unable to apply filter on data-set", e);
 			}
 
 			// process parameters
@@ -235,7 +259,7 @@ public class QAFInetrceptableDataProvider {
 									BeanUtils.populate(bean, record);
 								}
 							} catch (Exception e) {
-								throw new AutomationError("Unable to populate data" + paramTypes, e);
+								throw new DataProviderException("Unable to populate data" + paramTypes, e);
 							}
 						}
 						testdata.set(i, params);
@@ -248,7 +272,7 @@ public class QAFInetrceptableDataProvider {
 							testdata.set(i, new Object[] { bean });
 
 						} catch (Exception e) {
-							throw new AutomationError("Unable to populate databean", e);
+							throw new DataProviderException("Unable to populate databean", e);
 						}
 					} else {
 						Gson gson = new Gson();
@@ -268,7 +292,12 @@ public class QAFInetrceptableDataProvider {
 		return testdata;
 	}
 
-	public static Object[][] getData(Map<String, Object> metadata) {
+	/**
+	 * 
+	 * @param metadata
+	 * @return
+	 */
+	private static Object[][] getData(Map<String, Object> metadata) {
 
 		String query = (String) metadata.get(params.SQLQUERY.name());
 		if (isNotBlank(query)) {
@@ -327,7 +356,7 @@ public class QAFInetrceptableDataProvider {
 			return InvocatoinHelper.invokeDataProvider(instanceToUse, m, tm, c, null,
 					new Configuration().getAnnotationFinder());
 		} else {
-			throw new AutomationError(
+			throw new DataProviderException(
 					"Data-provider class not found. Please provide fully qualified class name as dataProviderClass");
 		}
 	}
@@ -344,10 +373,10 @@ public class QAFInetrceptableDataProvider {
 				}
 			}
 		} catch (ClassNotFoundException e) {
-			throw new AutomationError("Data-provider class " + dpc
+			throw new DataProviderException("Data-provider class " + dpc
 					+ " not found. Please provide fully qualified class name as dataProviderClass");
 		}
-		throw new AutomationError("Data-provider: '" + dp + "' not found in class: '" + dpc
+		throw new DataProviderException("Data-provider: '" + dp + "' not found in class: '" + dpc
 				+ "'. Please provide valid data provider name as dataProvider");
 	}
 
@@ -360,35 +389,8 @@ public class QAFInetrceptableDataProvider {
 		}
 	}
 
-	public static void setQAFDataProvider(ITestAnnotation testAnnotation, Method method) {
-		if ((null != method) && null != method.getParameterTypes() && (method.getParameterTypes().length > 0)) {
-			String dataProvider = testAnnotation.getDataProvider();
-			boolean hasDataProvider = isNotBlank(dataProvider);
-
-			// other than qaf data provider
-			if (hasDataProvider && !dataProvider.equalsIgnoreCase(QAF_DATA_PROVIDER)) {
-				// keep actual data-provider details with description
-				Map<String, String> desc = new HashMap<String, String>();
-				desc.put("description", testAnnotation.getDescription());
-				desc.put("dataProvider", testAnnotation.getDataProvider());
-				Class<?> dpClass = testAnnotation.getDataProviderClass();
-				if (null != dpClass) {
-					desc.put("dataProviderClass", dpClass.getName());
-				}
-				testAnnotation.setDescription(new JSONObject(desc).toString());
-			}
-
-			boolean globalParallelSetting = getBundle().getBoolean("global.datadriven.parallel", false);
-			boolean parallel = getBundle().getBoolean(method.getName() + ".parallel", globalParallelSetting);
-			dataProvider = parallel ? QAF_DATA_PROVIDER_PARALLEL : QAF_DATA_PROVIDER;
-
-			testAnnotation.setDataProvider(dataProvider);
-			testAnnotation.setDataProviderClass(QAFInetrceptableDataProvider.class);
-		}
-	}
-
-	private static List<QAFDataProviderIntercepter> getIntercepters() {
-		List<QAFDataProviderIntercepter> intercepters = new ArrayList<QAFDataProviderIntercepter>();
+	private static Set<QAFDataProviderIntercepter> getIntercepters() {
+		Set<QAFDataProviderIntercepter> intercepters = new LinkedHashSet<QAFDataProviderIntercepter>();
 		String[] listners = ConfigurationManager.getBundle().getStringArray(ApplicationProperties.QAF_LISTENERS.key);
 		for (String listener : listners) {
 			try {

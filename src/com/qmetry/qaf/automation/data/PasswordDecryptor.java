@@ -35,5 +35,10 @@ import com.qmetry.qaf.automation.keys.ApplicationProperties;
  *
  */
 public interface PasswordDecryptor {
+	/**
+	 * 
+	 * @param encriptedPassword
+	 * @return
+	 */
 	public String getDecryptedPassword(String encriptedPassword);
 }

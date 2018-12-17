@@ -24,9 +24,6 @@
 
 package com.qmetry.qaf.automation.ui.webdriver;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.By;

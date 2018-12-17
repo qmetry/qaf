@@ -32,11 +32,29 @@ import com.qmetry.qaf.automation.step.client.TestNGScenario;
 
 /**
  * Implementation of this interface can be registered as {@link QAFListener} to
- * intercept test data provided by Data provider in data driven test case. you can use it to process or apply filter.
+ * intercept test data provided by Data provider in data driven test case. you
+ * can use it to process or apply filter.
  * 
- * @author Chirag Jayswal
+ * @author Chirag.Jayswal
  *
  */
 public interface QAFDataProviderIntercepter extends QAFListener {
+	
+	/**
+	 * This method will be called before fetching the data from data-provider.
+	 * @param scenario
+	 * @param context
+	 */
+	public void beforeFech(TestNGScenario scenario, ITestContext context);
+	
+	/**
+	 * This method will called after test data fetched from the data-provider
+	 * after applied filter and data-conversion if any.
+	 * 
+	 * @param scenario
+	 * @param context
+	 * @param testdata
+	 * @return
+	 */
 	public List<Object[]> intercept(TestNGScenario scenario, ITestContext context, List<Object[]> testdata);
 }

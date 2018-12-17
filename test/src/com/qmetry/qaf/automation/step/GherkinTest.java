@@ -67,6 +67,7 @@ public class GherkinTest {
 		parser.parse("resources/features/gherkinWithSingleScenario.feature", scenarios);
 		Validator.assertThat("Scenarios in feature", scenarios, Matchers.hasSize(1));
 		Validator.assertThat("Steps in scenario", scenarios.get(0).getSteps(), Matchers.hasSize(4));
+		
 	}
 
 	@Test
@@ -83,6 +84,9 @@ public class GherkinTest {
 		Validator.assertThat("steps in scenario 5", scenarios.get(4).getSteps(), Matchers.hasSize(4));
 		Validator.assertThat("steps in scenario 6", scenarios.get(5).getSteps(), Matchers.hasSize(4));
 		Validator.assertThat("steps in scenario 7", scenarios.get(6).getSteps(), Matchers.hasSize(2));
+		
+		scenarios.get(4).scenario();
+
 
 	}
 

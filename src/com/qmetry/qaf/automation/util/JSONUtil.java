@@ -39,9 +39,11 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.LogFactoryImpl;
+import org.json.CDL;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
@@ -60,12 +62,23 @@ import com.qmetry.qaf.automation.keys.ApplicationProperties;
 public class JSONUtil {
 	private static final Log logger = LogFactoryImpl.getLog(JSONUtil.class);
 
+	/**
+	 * 
+	 * @param json
+	 * @return
+	 * @throws JSONException
+	 */
 	public static Map<String, Object> toMap(String json) throws JSONException {
 		@SuppressWarnings("unchecked")
 		Map<String, Object> map = new Gson().fromJson(json, Map.class);
 		return map;
 	}
 
+	/**
+	 * 
+	 * @param str
+	 * @return
+	 */
 	public static boolean isValidJsonString(String str) {
 		try {
 			new JSONObject(str);
@@ -76,15 +89,35 @@ public class JSONUtil {
 
 	}
 	
+	/**
+	 * 
+	 * @param str
+	 * @return
+	 */
 	public static JSONArray getJsonArrayOrNull(String str) {
 		try {
 			return new JSONArray(str);
 		} catch (JSONException e) {
+			e.printStackTrace();
 			return null;
 		}
 
 	}
 
+	/**
+	 * 
+	 * @param csv
+	 * @return
+	 */
+	public static JSONArray getJsonArrayFromCsvOrNull(String csv){
+		try {
+			return CDL.rowToJSONArray(new JSONTokener(csv));
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	/**
 	 * This is specifically to work with GSON. for example even "some string" is
 	 * not valid json but gson can considers as valid json
@@ -134,6 +167,11 @@ public class JSONUtil {
 		}
 	}
 
+	/**
+	 * 
+	 * @param file
+	 * @param obj
+	 */
 	public static <T> void writeJsonObjectToFile(final String file, final T obj) {
 
 		File f = new File(file);
@@ -150,6 +188,11 @@ public class JSONUtil {
 		}
 	}
 
+	/**
+	 * 
+	 * @param file
+	 * @return
+	 */
 	public static Object[][] getJsonArrayOfMaps(String file) {
 		try {
 			Gson gson = new Gson();
@@ -176,6 +219,12 @@ public class JSONUtil {
 		}
 	}
 
+	/**
+	 * 
+	 * @param file
+	 * @param cls
+	 * @return
+	 */
 	public static <T> T getJsonObjectFromFile(final String file, final Class<T> cls) {
 
 		File f = new File(file);

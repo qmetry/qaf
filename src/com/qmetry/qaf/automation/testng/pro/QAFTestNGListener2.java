@@ -53,7 +53,7 @@ import com.qmetry.qaf.automation.integration.TestCaseRunResult;
 import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.step.client.TestNGScenario;
 import com.qmetry.qaf.automation.testng.RetryAnalyzer;
-import com.qmetry.qaf.automation.testng.dataprovider.QAFInetrceptableDataProvider;
+import com.qmetry.qaf.automation.testng.dataprovider.DataProviderUtil;
 import com.qmetry.qaf.automation.testng.report.ReporterUtil;
 import com.qmetry.qaf.automation.util.ClassUtil;
 import com.qmetry.qaf.automation.util.StringUtil;
@@ -114,7 +114,7 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 			if (null != method) {
 				if (null != method.getParameterTypes()
 						&& (method.getParameterTypes().length > 0)) {
-					QAFInetrceptableDataProvider.setQAFDataProvider(testAnnotation, method);
+					DataProviderUtil.setQAFDataProvider(testAnnotation, method);
 				}
 
 				String tmtURL = getBundle().getString(method.getName() + ".testspec.url");

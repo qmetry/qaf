@@ -92,4 +92,8 @@ public class QAFListenerAdapter extends QAFWebDriverCommandAdapter
 		return testdata;
 	}
 
+	@Override
+	public void beforeFech(TestNGScenario scenario, ITestContext context) {
+		
+	}
 }

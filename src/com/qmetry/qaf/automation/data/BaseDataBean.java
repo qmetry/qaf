@@ -53,14 +53,14 @@ import org.testng.SkipException;
 
 import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.testng.RetryAnalyzer;
-import com.qmetry.qaf.automation.testng.pro.DataProviderUtil;
+import com.qmetry.qaf.automation.testng.dataprovider.DataProviderUtil;
 import com.qmetry.qaf.automation.util.ClassUtil;
 import com.qmetry.qaf.automation.util.DatabaseUtil;
 import com.qmetry.qaf.automation.util.DateUtil;
 import com.qmetry.qaf.automation.util.JSONUtil;
+import com.qmetry.qaf.automation.util.RandomStringGenerator.RandomizerTypes;
 import com.qmetry.qaf.automation.util.Randomizer;
 import com.qmetry.qaf.automation.util.StringUtil;
-import com.qmetry.qaf.automation.util.RandomStringGenerator.RandomizerTypes;
 
 /**
  * com.qmetry.qaf.automation.data.BaseDataBean.java

@@ -49,6 +49,10 @@ import com.qmetry.qaf.automation.core.ConfigurationManager;
 public class DatabaseUtil {
 	private static Logger log = Logger.getLogger(DatabaseUtil.class);
 
+	/**
+	 * {@link PreparedStatement#close() close PreparedStatement} if not null ignoring exception if any
+	 * @param ps
+	 */
 	public static void close(PreparedStatement ps) {
 		try {
 			if (ps != null) {
@@ -61,6 +65,11 @@ public class DatabaseUtil {
 		}
 	}
 
+	/**
+	 * {@link Statement#close() close Statement} if not null ignoring exception if any
+ 
+	 * @param s
+	 */
 	public static void close(Statement s) {
 		try {
 			if (s != null) {
@@ -71,16 +80,30 @@ public class DatabaseUtil {
 		}
 	}
 
+	/**
+	 * Utility method to close result-set and statement if not not and ignoring exception if any
+	 * @param ps
+	 * @param rs
+	 */
 	public static void close(PreparedStatement ps, ResultSet rs) {
 		close(rs);
 		close(ps);
 	}
 
+	/**
+	 * Utility method to close result-set and statement if not not and ignoring exception if any
+	 * @param st
+	 * @param rs
+	 */
 	public static void close(Statement st, ResultSet rs) {
 		close(rs);
 		close(st);
 	}
 
+	/**
+	 * {@link ResultSet#close() close result set} if not null ignoring exception if any
+	 * @param rs
+	 */
 	public static void close(ResultSet rs) {
 		try {
 			if (rs != null) {
@@ -91,6 +114,11 @@ public class DatabaseUtil {
 		}
 	}
 
+	/**
+	 * {@link Connection#close() close connection} if not null ignoring exception if any
+
+	 * @param conn
+	 */
 	public static void close(Connection conn) {
 		try {
 			if (conn != null) {
@@ -168,6 +196,11 @@ public class DatabaseUtil {
 		return con;
 	}
 
+	/**
+	 * 
+	 * @param query
+	 * @return
+	 */
 	public static Object[][] getData(String query) {
 		ArrayList<Object[]> rows = new ArrayList<Object[]>();
 		Connection con = null;
@@ -197,6 +230,11 @@ public class DatabaseUtil {
 		return rows.toArray(new Object[][] {});
 	}
 
+	/**
+	 * 
+	 * @param query
+	 * @return
+	 */
 	public static Object[][] getRecordDataAsMap(String query) {
 		ArrayList<Object[]> rows = new ArrayList<Object[]>();
 		Connection con = null;

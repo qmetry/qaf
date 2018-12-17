@@ -60,11 +60,14 @@ public class StringUtilsTest {
 		return new Object[][] {
 				new Object[] { "\"a\",1,true,1.5", ',', new Object[] { "a",1, true, 1.5}},
 				new Object[] { "\"a\",1,true,1.5, a bc  ", ',', new Object[] { "a",1, true, 1.5, "a bc"}},
+				new Object[] { "\"a\",1,true,1.5, a bc  ,null", ',', new Object[] { "a",1, true, 1.5, "a bc",null}},
+
 				new Object[] { "\"a,b\",1,true,1.5", ',', new Object[] { "a,b",1, true, 1.5}},
 				new Object[] { "\" a \",1,true,1.5", ',', new Object[] { " a ",1, true, 1.5}},
 				new Object[] { " \" a \" , 1 , true , 1.5 ", ',', new Object[] { " a ",1, true, 1.5}},
 
 				new Object[] { "a,1,true,1.5,a\\, bc", ',', new Object[] { "a",1, true, 1.5, "a, bc"}},
+				new Object[] { "a,1,true,1.5,a\\, bc,", ',', new Object[] { "a",1, true, 1.5, "a, bc",null}},
 
 				new Object[] { " a | 1 | true | 1.5 ", '|', new Object[] { "a",1, true, 1.5}},
 				new Object[] { "\" a \"|	1 |true|	1.5	", '|', new Object[] { " a ",1, true, 1.5}},
@@ -72,13 +75,13 @@ public class StringUtilsTest {
 				new Object[] { "a b |	1 |true|	1.5	", '|', new Object[] { "a b",1, true, 1.5}},
 				new Object[] { "a b |	abcd efgh. | 1 |true|	1.5	", '|', new Object[] { "a b","abcd efgh.",1, true, 1.5}},
 				new Object[] { "a b |	abcd, efgh. | 1 |true|	1.5	", '|', new Object[] { "a b","abcd, efgh.",1, true, 1.5}},
-				new Object[] { "\"a\\\" b\" |	1 |true|	1.5	", '|', new Object[] { "a\" b",1, true, 1.5}},
+				new Object[] { "\"a\"\" b\" |	1 |true|	1.5	", '|', new Object[] { "a\" b",1, true, 1.5}},
 				new Object[] { "a b |	abc'd, efgh. | 1 |true|	1.5	", '|', new Object[] { "a b","abc'd, efgh.",1, true, 1.5}},
 				
 				//below case of 'single quoted text' without double quote will not work with tabs addition spaces to exclude
-				new Object[] { "a b|'abc' d efgh.|1|true|1.5", '|', new Object[] { "a b","'abc' d efgh.",1, true, 1.5}},
+				new Object[] { "a b|\"'abc' d efgh.\"|1|true|1.5", '|', new Object[] { "a b","'abc' d efgh.",1, true, 1.5}},
 				
-				//ensure first and last value null
+				//ensure first and last value empty
 				new Object[] { "| QMetry Automation Framework |", '|', new Object[] { null,"QMetry Automation Framework",null}},
 				new Object[] { "||", '|', new Object[] { null,null,null}},
 				//ensure all null
@@ -142,5 +145,9 @@ public class StringUtilsTest {
 				new Object[] { "F", true, false, "F stiring with default true" },
 				new Object[] { null, true, true, "null with default true" },
 				new Object[] { null, false, false, "null with default false" }, };
+	}
+	
+	public static void main(String[] args) {
+		
 	}
 }

@@ -42,7 +42,6 @@ import com.qmetry.qaf.automation.core.AutomationError;
 // import com.thoughtworks.selenium.Wait;
 import com.qmetry.qaf.automation.core.MessageTypes;
 import com.qmetry.qaf.automation.ui.WebDriverCommandLogger;
-import com.qmetry.qaf.automation.ui.WebDriverTestBase;
 import com.qmetry.qaf.automation.ui.annotations.UiElement.Type;
 import com.qmetry.qaf.automation.ui.webdriver.QAFExtendedWebElement;
 import com.qmetry.qaf.automation.ui.webdriver.QAFWebComponent;

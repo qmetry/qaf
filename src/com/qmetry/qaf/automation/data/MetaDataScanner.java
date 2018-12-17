@@ -90,6 +90,12 @@ public class MetaDataScanner {
 		return getMetadata(methodOrFileld, false);
 	}
 
+	/**
+	 * 
+	 * @param xmlTest
+	 * @param parameter
+	 * @return
+	 */
 	public static String getParameter(XmlTest xmlTest, String parameter) {
 		String paramValue = "";
 		

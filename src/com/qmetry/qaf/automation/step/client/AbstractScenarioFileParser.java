@@ -239,9 +239,9 @@ public abstract class AbstractScenarioFileParser implements ScenarioFileParser {
 		 * configuration file.
 		 */
 		if (include(includeGroups, excludeGroups, metadata)) {
-			String dataProvider = getDP(metadata);
-			Scenario scenario = StringUtil.isBlank(dataProvider) ? new Scenario(stepName, steps, metadata)
-					: new DataDrivenScenario(stepName, steps, dataProvider, metadata);
+			boolean dataProvider = hasDP(metadata);
+			Scenario scenario = dataProvider ? new DataDrivenScenario(stepName, steps, metadata)
+					: new Scenario(stepName, steps, metadata);
 
 			scenarios.add(scenario);
 		} else {
@@ -300,15 +300,13 @@ public abstract class AbstractScenarioFileParser implements ScenarioFileParser {
 		}
 	}
 
-	protected String getDP(Map<String, Object> metadata) {
-		String dataProvider = "";
+	protected boolean hasDP(Map<String, Object> metadata) {
 		for (params key : params.values()) {
 			if (metadata.containsKey(key.name())) {
-				dataProvider = String.format("%s%s%s=%s", dataProvider, StringUtil.isNotBlank(dataProvider) ? ";" : "",
-						key, metadata.get(key.name()));
+				return true;
 			}
 		}
-		return dataProvider;
+		return false;
 	}
 
 	/**

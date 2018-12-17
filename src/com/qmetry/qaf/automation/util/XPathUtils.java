@@ -45,10 +45,22 @@ import org.apache.commons.configuration.tree.xpath.XPathExpressionEngine;
  */
 public class XPathUtils {
 
+	/**
+	 * 
+	 * @param xmlFile
+	 * @return
+	 * @throws IOException
+	 */
 	public static XMLConfiguration read(File xmlFile) throws IOException{
 		String xmlsrc = FileUtil.readFileToString(xmlFile, "UTF-8");
 		return read(xmlsrc);
 	}
+	
+	/**
+	 * 
+	 * @param src
+	 * @return
+	 */
 	public static XMLConfiguration read(String src) {
 		try {
 			// remove all namespaces from xml
@@ -64,6 +76,11 @@ public class XPathUtils {
 		}
 	}
 
+	/**
+	 * 
+	 * @param xmlStr
+	 * @return
+	 */
 	private static String removeNSAndPreamble(String xmlStr) {
 		String xsltString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"><xsl:output method=\"xml\" indent=\"yes\" encoding=\"UTF-8\"/><xsl:template match=\"/\"><xsl:copy><xsl:apply-templates/></xsl:copy></xsl:template><xsl:template match=\"@*\"><xsl:attribute name=\"{local-name()}\"><xsl:value-of select=\"current()\"/></xsl:attribute></xsl:template><xsl:template match=\"*\"><xsl:element name=\"{local-name()}\"><xsl:apply-templates select=\"@* | * | text()\"/></xsl:element></xsl:template><xsl:template match=\"text()\"><xsl:copy><xsl:value-of select=\"current()\"/></xsl:copy></xsl:template></xsl:stylesheet>";
 		try (ByteArrayOutputStream bo = new ByteArrayOutputStream()) {

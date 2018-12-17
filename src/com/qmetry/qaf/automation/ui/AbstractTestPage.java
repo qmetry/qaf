@@ -33,9 +33,7 @@ import com.qmetry.qaf.automation.core.ConfigurationManager;
 import com.qmetry.qaf.automation.ui.api.PageLocator;
 import com.qmetry.qaf.automation.ui.api.TestPage;
 import com.qmetry.qaf.automation.ui.api.UiTestBase;
-import com.qmetry.qaf.automation.ui.selenium.WaitService.JsToolkit;
 import com.qmetry.qaf.automation.ui.webdriver.ElementFactory;
-import com.qmetry.qaf.automation.ui.webdriver.QAFExtendedWebDriver;
 import com.qmetry.qaf.automation.util.PropertyUtil;
 
 /**
