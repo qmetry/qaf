@@ -53,6 +53,8 @@ import com.qmetry.qaf.automation.step.TestStep;
 import com.qmetry.qaf.automation.step.TestStepCompositer;
 import com.qmetry.qaf.automation.testng.QAFTestNGTest;
 import com.qmetry.qaf.automation.ui.WebDriverTestCase;
+import com.qmetry.qaf.automation.util.Reporter;
+import com.qmetry.qaf.automation.util.StringUtil;
 
 /**
  * com.qmetry.qaf.automation.step.client.Scenario.java
@@ -140,6 +142,11 @@ public class Scenario extends WebDriverTestCase
 		try {
 			for (executionIndx = 0; executionIndx < stepsToExecute.length;) {
 				TestStep currTestStep = stepsToExecute[executionIndx];
+				if(StringUtil.isBlank(currTestStep.getName()) && null!=currTestStep.getActualArgs() && currTestStep.getActualArgs().length>0){
+					++executionIndx;
+					Reporter.log(currTestStep.getActualArgs()[0].toString());
+					continue;
+				}
 				((StringTestStep) currTestStep).initStep();
 				
 				StepExecutionTracker stepExecutionTracker =

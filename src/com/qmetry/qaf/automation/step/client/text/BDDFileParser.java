@@ -39,6 +39,7 @@ import java.util.Collection;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.google.gson.Gson;
 import com.qmetry.qaf.automation.core.AutomationError;
 import com.qmetry.qaf.automation.step.client.AbstractScenarioFileParser;
 import com.qmetry.qaf.automation.util.StringUtil;
@@ -52,6 +53,7 @@ public class BDDFileParser extends AbstractScenarioFileParser {
 	private static final String LINE_BREAK = "_&";
 	private static final String COMMENT_CHARS = "#!";
 	private static final String BACKGROUND = "Background";
+	private static final String MULTI_LINE_COMMENT = "\"\"\"";
 
 	@Override
 	protected Collection<Object[]> parseFile(String strFile) {
@@ -83,7 +85,7 @@ public class BDDFileParser extends AbstractScenarioFileParser {
 						|| COMMENT_CHARS.contains("" + strLine.trim().charAt(0)))) {
 					currLineBuffer.append((strLine.trim()));
 
-					if (strLine.endsWith(LINE_BREAK)) {
+				if (strLine.endsWith(LINE_BREAK)) {
 						/*
 						 * Statement not completed. Remove line break character
 						 * and continue statement reading from next line
@@ -129,8 +131,18 @@ public class BDDFileParser extends AbstractScenarioFileParser {
 								bIsBackground = false;
 							}
 						} else {
+							
+							if (currLineBuffer.toString().startsWith(MULTI_LINE_COMMENT)) {
+								if (StringUtil.indexOfIgnoreCase(currLine, MULTI_LINE_COMMENT, 3) > 0) {
+									cols[1] = new Gson().toJson(new String[] { currLine.replace("\"\"\"", "") });
+								}else{
+									currLineBuffer.append("\n");
+									continue;
+								}
+							}else{
 							// this is a statement
 							cols[0] = currLine;
+							}
 						}
 						if (bIsBackground) {
 							background.add(cols);

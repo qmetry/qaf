@@ -3,7 +3,11 @@ Feature: google search
 
 Scenario: Search Keyword
 META-DATA: {"dataFile":"resources/testdata.txt"}
- 
+  """
+ this is to test
+ multi line comment
+
+ """
  When I search for "${searchKey}"
  Then I get at least ${number} results
  Then it should have "${searchResult}" in search results

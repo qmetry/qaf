@@ -68,7 +68,9 @@ public class BehaviorTests {
 		List<Scenario> scenarios = new ArrayList<Scenario>();
 		parser.parse("resources/scenarios/singlescenario.bdd", scenarios);
 		Validator.assertThat("Scenarios in bdd", scenarios, Matchers.hasSize(1));
-		Validator.assertThat("steps in scenario", scenarios.get(0).getSteps(), Matchers.hasSize(3));
+		//multi-line comment is considered as one log step
+		Validator.assertThat("steps in scenario", scenarios.get(0).getSteps(), Matchers.hasSize(4));
+		
 	}
 	
 
