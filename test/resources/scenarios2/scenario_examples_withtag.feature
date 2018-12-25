@@ -101,7 +101,7 @@ Examples:
   Then I get at least <number> results
   Then it should have "<searchResult>" in search results
 
-#no tags should be considered as default when no include groups specified but should be considered when none of include group matched
+#no tags should be considered as default when no include groups specified
 Examples:
  | searchKey | searchResult | number |
  | @default |tag1| 10 |
@@ -120,7 +120,7 @@ Examples:
   Then I get at least <number> results
   Then it should have "<searchResult>" in search results
 
-#no tags should be considered as default when no include groups specified but should not be considered when include group provided
+#no tags should be considered as default when no include groups specified
 Examples:
  | searchKey | searchResult | number |
  | @default |tag1| 10 |
