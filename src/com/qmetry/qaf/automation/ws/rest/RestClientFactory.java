@@ -57,7 +57,8 @@ public abstract class RestClientFactory {
 				(RequestLogger) getTestBase().getContext().getObject(REST_REQ_LOGGER_KEY);
 
 		if (requestLogger == null) {
-			requestLogger = new RequestLogger(System.out);
+			//no need to provide print stream as logger will be used if print stream not provided
+			requestLogger = new RequestLogger();
 			getTestBase().getContext().setProperty(REST_REQ_LOGGER_KEY, requestLogger);
 		}
 
