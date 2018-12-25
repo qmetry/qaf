@@ -24,6 +24,7 @@
 package com.qmetry.qaf.automation.step.client;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -238,7 +239,7 @@ public abstract class AbstractScenarioFileParser implements ScenarioFileParser {
 		 * in method filter where it will not include groups from xml
 		 * configuration file.
 		 */
-		if (include(includeGroups, excludeGroups, metadata)) {
+		if (include(metadata)) {
 			boolean dataProvider = hasDP(metadata);
 			Scenario scenario = dataProvider ? new DataDrivenScenario(stepName, steps, metadata)
 					: new Scenario(stepName, steps, metadata);
@@ -311,14 +312,21 @@ public abstract class AbstractScenarioFileParser implements ScenarioFileParser {
 
 	/**
 	 * To apply groups and enabled filter
-	 * 
-	 * @param includeGroups
-	 * @param excludeGroups
 	 * @param metadata
 	 * @return
 	 */
+	protected boolean include(Map<String, Object> metadata) {
+		return include(metadata, includeGroups);
+	}
+	
+	/**
+	 * To apply groups and enabled filter with default group is group to include not specified
+	 * @param metadata
+	 * @param defInclude
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
-	protected boolean include(List<String> includeGroups, List<String> excludeGroups, Map<String, Object> metadata) {
+	protected boolean include(Map<String, Object> metadata, List<String> defInclude) {
 		// check for enabled
 		if (metadata.containsKey("enabled") && !((Boolean) metadata.get("enabled")))
 			return false;
@@ -327,8 +335,10 @@ public abstract class AbstractScenarioFileParser implements ScenarioFileParser {
 				? (List<String>) metadata.get(ScenarioFactory.GROUPS) : new ArrayList<String>());
 		if (!includeGroups.isEmpty()) {
 			groups.retainAll(includeGroups);
+		}else{
+			groups.retainAll(defInclude);
 		}
 		groups.removeAll(excludeGroups);
-		return (!groups.isEmpty() || (includeGroups.isEmpty() && excludeGroups.isEmpty()));
+		return (!groups.isEmpty() || (includeGroups.isEmpty() && defInclude.isEmpty() && excludeGroups.isEmpty()));
 	}
 }

@@ -37,9 +37,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -48,6 +50,7 @@ import com.google.gson.Gson;
 import com.qmetry.qaf.automation.core.AutomationError;
 import com.qmetry.qaf.automation.step.client.AbstractScenarioFileParser;
 import com.qmetry.qaf.automation.step.client.Scenario;
+import com.qmetry.qaf.automation.step.client.ScenarioFactory;
 import com.qmetry.qaf.automation.step.client.text.BehaviorScanner;
 import com.qmetry.qaf.automation.testng.dataprovider.QAFDataProvider.params;
 import com.qmetry.qaf.automation.util.StringUtil;
@@ -74,6 +77,8 @@ public class BDDFileParser2 extends AbstractScenarioFileParser {
 	public static final String EXAMPLES = "EXAMPLES";
 	public static final String FEATURE = "Feature";
 	public static final String BACKGROUND = "Background";
+	
+	private static final List<String> DEF_INCLUDE_FOR_EXMAPLES = Arrays.asList("default");
 
 	protected void processStatements(Object[][] statements, String referece, List<Scenario> scenarios) {
 
@@ -120,7 +125,7 @@ public class BDDFileParser2 extends AbstractScenarioFileParser {
 		ArrayList<String> globalTags = new ArrayList<String>();
 		ArrayList<String> scenarioTags = new ArrayList<String>();
 		ArrayList<List<Object>> examplesTable = new ArrayList<List<Object>>();
-
+		boolean excludeExamples=false;
 		BufferedReader br = null;
 		try {
 
@@ -177,19 +182,34 @@ public class BDDFileParser2 extends AbstractScenarioFileParser {
 						if (type.equalsIgnoreCase(EXAMPLES)) {
 							Object[] scenario = rows.get(lastScenarioIndex);
 							scenario[0] = SCENARIO;
+							Map<String, Object> tags = getMetaData(scenarioTags);
+							scenarioTags.clear();
 
-							Map<Object, Object> metadata = new Gson().fromJson((String) scenario[2], Map.class);
-							// scenario[2] = new Gson().toJson(metadata);
-
-							String exampleMetadata = (String) cols[1];
-
-							if (StringUtil.isNotBlank(exampleMetadata) && exampleMetadata.trim().startsWith("{")) {
-								metadata.putAll(new Gson().fromJson(exampleMetadata, Map.class));
+							List<String> groups = (List<String>) tags.get("groups");
+							Map<String, Object> metadata = new Gson().fromJson((String) scenario[2], Map.class);
+							if(groups.isEmpty() || include(tags,DEF_INCLUDE_FOR_EXMAPLES) ){
+								excludeExamples = false;
+								// scenario[2] = new Gson().toJson(metadata);
+								List<String> scenariogroups = (List<String>) metadata.get("groups");
+								scenariogroups.addAll(groups);
 								scenario[2] = new Gson().toJson(metadata);
+								
+								String exampleMetadata = (String) cols[1];
+								if (StringUtil.isNotBlank(exampleMetadata) && exampleMetadata.trim().startsWith("{")) {
+									metadata.putAll(new Gson().fromJson(exampleMetadata, Map.class));
+									scenario[2] = new Gson().toJson(metadata);
+									currLineBuffer = new StringBuffer();
+									continue;
+								}
+							}else{
+								excludeExamples = true;
+								if(!metadata.containsKey(params.JSON_DATA_TABLE)){
+									metadata.put(params.JSON_DATA_TABLE.name(), "[]");
+									scenario[2] = new Gson().toJson(metadata);
+								}
 								currLineBuffer = new StringBuffer();
 								continue;
 							}
-
 						} else {
 							scenarioTags.addAll(globalTags);
 							Map<String, Object> metadata = getMetaData(scenarioTags);
@@ -228,11 +248,12 @@ public class BDDFileParser2 extends AbstractScenarioFileParser {
 						if (scenarioStarted) {
 							lastScenarioIndex = rows.size() - 1;
 							rows.addAll(background);
+							excludeExamples = false;
 						}
 					}
 					currLineBuffer = new StringBuffer();
 
-				} else if (StringUtil.isNotBlank(strLine) && strLine.trim().charAt(0) == '|') {
+				} else if (StringUtil.isNotBlank(strLine) && strLine.trim().charAt(0) == '|' && !excludeExamples) {
 					addExample(strLine.trim(), examplesTable);
 				}
 			}
@@ -271,7 +292,6 @@ public class BDDFileParser2 extends AbstractScenarioFileParser {
 	}
 
 	private void setExamples(Object[] cols, ArrayList<List<Object>> examplesTable) {
-		// TODO Auto-generated method stub
 		boolean isMap = examplesTable.get(0).size() > 1;
 		boolean isScenario = ((String) cols[0]).trim().equalsIgnoreCase(SCENARIO);
 		Object data = null;
@@ -322,10 +342,6 @@ public class BDDFileParser2 extends AbstractScenarioFileParser {
 		Object[] rawData = StringUtil.parseCSV(line, '|');
 		ArrayList<Object> cols = new ArrayList<Object>();
 		for (int i = 1; i < rawData.length - 1; i++) {
-			// if (StringUtil.isBlank(rawData[i]) && (i == 0 || i ==
-			// rawData.length-1)) {
-			// continue;
-			// }
 			cols.add(rawData[i]);
 		}
 		examplesTable.add(cols);
@@ -378,5 +394,4 @@ public class BDDFileParser2 extends AbstractScenarioFileParser {
 		return metaData;
 	}
 	
-
 }

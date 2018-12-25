@@ -74,7 +74,31 @@
 				name="com.qmetry.qaf.automation.step.client.gherkin.GherkinScenarioFactory" />
 		</classes>
 	</test>
+	<test name="QAF-BDD2">
+		<parameter name="step.provider.sharedinstance" value="true" />
+	
+		<parameter name="step.provider.pkg" value="com.qmetry.qaf.automation.impl.step" />
+		<parameter name="scenario.file.loc" value="resources/features;resources/scenarios2" />
 
+		<classes>
+			<class
+				name="com.qmetry.qaf.automation.step.client.text.BDDTestFactory2" />
+		</classes>
+	</test>
+	<test name="QAF-BDD2-tagged-example">
+		
+		<parameter name="step.provider.pkg" value="com.qmetry.qaf.automation.impl.step" />
+		<parameter name="scenario.file.loc" value="resources/features;resources/scenarios2" />
+		<groups>
+			<run>
+				<include name="tag-to-include"/>
+			</run>
+		</groups>
+		<classes>
+			<class
+				name="com.qmetry.qaf.automation.step.client.text.BDDTestFactory2" />
+		</classes>
+	</test>
 
 	<test name="Scenario">
 		<packages>
