@@ -226,7 +226,7 @@ public class BDDDefinitionHelper {
 	public static List<String[]> getArgsFromCall(String def, String call,List<String> defArgPos) {
 		List<String[]> argsToreturn = new ArrayList<String[]>();
 		List<String[]> args = getArgs(call, def, defArgPos);
-
+		
 		Pattern num = Pattern.compile(ParamType.LONG.getRegx());
 
 		argsToreturn.addAll(args);
@@ -236,7 +236,7 @@ public class BDDDefinitionHelper {
 			def = def.replace(posInDef, Pattern.quote(args.get(i)[0]));
 
 			Matcher numMathcher = num.matcher(posInDef);
-			int argPos = numMathcher.find() ? Integer.parseInt(numMathcher.group()) : i;
+			int argPos = Character.isDigit(posInDef.charAt(1))&&numMathcher.find() ? Integer.parseInt(numMathcher.group()) : i;
 			args.get(i)[0] = processArg(args.get(i)[0]);
 			argsToreturn.set(argPos, args.get(i));
 		}

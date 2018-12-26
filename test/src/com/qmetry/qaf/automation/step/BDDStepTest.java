@@ -82,6 +82,18 @@ public class BDDStepTest {
 
 		StringTestStep step = new StringTestStep(stepCall);
 		step.execute();
+		Validator.assertThat(step.getActualArgs()[1].toString(), Matchers.equalToIgnoringCase("aa a"));
+
+
+	}
+
+	@Test
+	public void testArgOrderAsParam() {
+	
+		String stepCall = "scheduled payment of type 'savings' from 'account-2' to 'account-1'";
+		StringTestStep step = new StringTestStep(stepCall);
+		step.execute();
+		Validator.assertThat(step.getActualArgs()[1].toString(), Matchers.equalToIgnoringCase("account-2"));
 
 	}
 
@@ -210,6 +222,13 @@ public class BDDStepTest {
 		Validator.assertThat(loc, Matchers.notNullValue());
 		Validator.assertThat(val, Matchers.notNullValue());
 	}
+	
+    @QAFTestStep(description = "scheduled payment of type {ScheduleType} from {acct2} to {acct1}")
+    public void scheduledPaymentType(String scheduleType, String acct2, String acct1) {
+		Validator.assertThat(scheduleType, Matchers.notNullValue());
+		Validator.assertThat(acct2, Matchers.notNullValue());
+		Validator.assertThat(acct1, Matchers.notNullValue());
+    }
 
 	@Test
 	public void stepFormatterTest() {
