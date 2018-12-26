@@ -1,0 +1,7 @@
+<qaf>
+<testdata>
+	<ref>${testdata.value}</ref>
+	<subref>${testdata.value} 1</subref>
+	<value>actual value</value>
+</testdata>
+</qaf>

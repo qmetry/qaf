@@ -34,6 +34,7 @@ import org.hamcrest.Matchers;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import com.qmetry.qaf.automation.core.ConfigurationManager;
 import com.qmetry.qaf.automation.step.client.text.BDDDefinitionHelper;
 import com.qmetry.qaf.automation.testng.dataprovider.QAFDataProvider;
 import com.qmetry.qaf.automation.testng.dataprovider.QAFInetrceptableDataProvider;
@@ -65,8 +66,22 @@ public class BDDStepTest {
 
 		StringTestStep step = new StringTestStep(stepCall);
 		step.execute();
+		Validator.assertThat(step.getActualArgs()[0].toString(), Matchers.equalToIgnoringCase("aaa'bbbb"));
+
 	}
 
+	@Test
+	public void testArgRef() {
+		StringTestStep step = new StringTestStep("step with '${testdata.ref}' arg" );
+		Object res = step.execute();
+		System.out.println(res);
+		Validator.assertThat(res.toString(), Matchers.equalToIgnoringCase("actual value"));
+		
+		step = new StringTestStep("step with '${testdata.subref}' arg" );
+		res = step.execute();
+		Validator.assertThat(res.toString(), Matchers.equalToIgnoringCase("actual value 1"));
+
+	}
 	@Test
 	public void testBDDWithDate() {
 		String stepCall = "Bdd with date '12-05-2012'";
@@ -177,6 +192,11 @@ public class BDDStepTest {
 	public static void bdd1arg(String resultLinkText) {
 		Validator.assertThat(resultLinkText, Matchers.notNullValue());
 		Reporter.log("bdd with 1 argument: " + resultLinkText);
+	}
+	
+	@QAFTestStep(stepName = "step with {0} arg")
+	public static Object stepRetVal(Object arg) {
+		return arg;
 	}
 
 	@QAFTestStep(stepName = "Bdd with array {0}")

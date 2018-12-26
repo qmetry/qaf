@@ -115,7 +115,15 @@ public class QAFTestStepArgumentFormatterImpl implements QAFTestStepArgumentForm
 	
 	private Object getObject(String key, Class<?> paramType){
 		Object o = getBundle().getProperty(key);
-		if(o.getClass().isAssignableFrom(paramType)){
+		if (null!=o && o.toString().indexOf("${")>=0 ){
+			String ref = o.toString();
+			if(ref.startsWith("${") && ref.toString().endsWith("}")){
+				String pname = ref.substring(2, ref.length() - 1);
+				return getPropValue(pname, paramType);
+			}
+			return getBundle().getSubstitutor().replace(ref);
+		} 
+		if(null==o || o.getClass().isAssignableFrom(paramType)){
 			return o;
 		}
 		if(paramType.isArray()){
