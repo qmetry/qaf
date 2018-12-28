@@ -37,6 +37,8 @@
            url: ../qaf-2.1.7b/docs.html
          - title: Older Version Docs
            url: ../latest/older_versions_docs.html
+         - title: QAF users group
+           external_url: "https://groups.google.com/forum/#!forum/qaf-users"
          - title: QAF on Stack Overflow
            external_url: http://stackoverflow.com/questions/tagged/qaf
          - title: Support
