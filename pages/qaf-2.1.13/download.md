@@ -1,7 +1,7 @@
 ---
 title: Download
 sidebar: download_sidebar
-permalink: latest/download.html
+permalink: qaf-2.1.13/download.html
 folder: latest
 ---
 

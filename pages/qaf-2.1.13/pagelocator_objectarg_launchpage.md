@@ -1,7 +1,7 @@
 ---
 title: Page Locator and Object arguments in Launch page
-sidebar: qaf_latest-sidebar
-permalink: latest/pagelocator_objectarg_launchpage.html
+sidebar: qaf_2_1_13-sidebar
+permalink: qaf-2.1.13/pagelocator_objectarg_launchpage.html
 folder: latest
 tags: [page,java,selenium,locator]
 ---

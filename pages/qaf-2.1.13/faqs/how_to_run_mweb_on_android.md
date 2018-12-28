@@ -1,7 +1,7 @@
 ---
 title: How to run mobile web automation on Android
 sidebar: faq_sidebar
-permalink: latest/how_to_run_mweb_on_android.html
+permalink: qaf-2.1.13/how_to_run_mweb_on_android.html
 folder: latest
 ---
 

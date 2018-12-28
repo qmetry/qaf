@@ -1,7 +1,7 @@
 ---
 title: How to run test on cloud or selenium grid?
 sidebar: faq_sidebar
-permalink: latest/how_to_run_test_on_cloud_or_selenium_grid.html
+permalink: qaf-2.1.13/how_to_run_test_on_cloud_or_selenium_grid.html
 folder: latest
 ---
 

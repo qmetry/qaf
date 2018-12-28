@@ -1,7 +1,7 @@
 ---
 title: What is the use of listeners?
 sidebar: faq_sidebar
-permalink: latest/what_is_the_use_of_listeners.html
+permalink: qaf-2.1.13/what_is_the_use_of_listeners.html
 folder: latest
 ---
 

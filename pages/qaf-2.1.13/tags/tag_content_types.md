@@ -2,8 +2,8 @@
 title: "Content types pages"
 tagName: content_types
 search: exclude
-permalink: latest/tag_content_types.html
-sidebar: qaf_latest-sidebar
+permalink: qaf-2.1.13/tag_content_types.html
+sidebar: qaf_2_1_13-sidebar
 folder: latest
 ---
 {% include taglogic.html %}

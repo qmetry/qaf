@@ -1,7 +1,7 @@
 ---
 title: How to run mobile web app on desktop browser?
 sidebar: faq_sidebar
-permalink: latest/how_to_run_mobile_web_app_on_desktop_browser.html
+permalink: qaf-2.1.13/how_to_run_mobile_web_app_on_desktop_browser.html
 folder: latest
 ---
 
