@@ -2,7 +2,7 @@
 title: Managing resources for Different Environments
 sidebar: qaf_2_1_13-sidebar
 permalink: qaf-2.1.13/managing_resources_for_different_env.html
-folder: latest
+folder: qaf-2.1.13
 ---
 
 ## Managing Multiple Environments

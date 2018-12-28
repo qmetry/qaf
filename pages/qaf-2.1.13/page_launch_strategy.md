@@ -2,7 +2,7 @@
 title: Page launch strategy
 sidebar: qaf_2_1_13-sidebar
 permalink: qaf-2.1.13/page_launch_strategy.html
-folder: latest
+folder: qaf-2.1.13
 tags: [page,testng,java]
 ---
 

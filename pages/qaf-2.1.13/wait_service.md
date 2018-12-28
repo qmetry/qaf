@@ -2,7 +2,7 @@
 title: Wait Service
 sidebar: qaf_2_1_13-sidebar
 permalink: qaf-2.1.13/wait_service.html
-folder: latest
+folder: qaf-2.1.13
 tags: [java,webelement,webdriver]
 ---
 

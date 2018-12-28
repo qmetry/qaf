@@ -2,7 +2,7 @@
 title: Web Services Testing
 sidebar: qaf_2_1_13-sidebar
 permalink: qaf-2.1.13/web_services.html
-folder: latest
+folder: qaf-2.1.13
 tags: [java]
 ---
 For advance usage please refer [qaf-suport-ws](https://github.com/qmetry/qaf-support-ws/wiki).

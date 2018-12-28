@@ -3,7 +3,7 @@ title: QAF-2.1.7b Release Notes
 sidebar: qaf_2_1_13-sidebar
 
 permalink: qaf-2.1.13/release_notes2_1_7.html
-folder: latest
+folder: qaf-2.1.13
 ---
 
 ## New Features

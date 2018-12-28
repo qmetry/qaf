@@ -2,7 +2,7 @@
 title: What are the features provided by Qmetry Automation Framework?
 sidebar: faq_sidebar
 permalink: qaf-2.1.13/what_are_the_features_provided_by_qas.html
-folder: latest
+folder: qaf-2.1.13
 ---
 
 * Extended WebDriver

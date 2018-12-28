@@ -2,7 +2,7 @@
 title: How to use driver?
 sidebar: faq_sidebar
 permalink: qaf-2.1.13/how_to_use_driver.html
-folder: latest
+folder: qaf-2.1.13
 ---
 
 Default available driver names in QAF:

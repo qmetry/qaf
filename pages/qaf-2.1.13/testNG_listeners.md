@@ -2,7 +2,7 @@
 title: TestNG listeners
 sidebar: qaf_2_1_13-sidebar
 permalink: qaf-2.1.13/testNG_listeners.html
-folder: latest
+folder: qaf-2.1.13
 tags: [testng]
 ---
 

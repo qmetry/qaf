@@ -2,7 +2,7 @@
 title: Download
 sidebar: download_sidebar
 permalink: qaf-2.1.13/download.html
-folder: latest
+folder: qaf-2.1.13
 ---
 
 ## Blank Project

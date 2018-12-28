@@ -2,7 +2,7 @@
 title: Understating Directory Structure
 sidebar: qaf_2_1_13-sidebar
 permalink: qaf-2.1.13/understand_dirstructure.html
-folder: latest
+folder: qaf-2.1.13
 tags: [getting_started]
 ---
 * **config**

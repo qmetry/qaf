@@ -3,7 +3,7 @@ title: License
 sidebar: qaf_2_1_13-sidebar
 
 permalink: qaf-2.1.13/license.html
-folder: latest
+folder: qaf-2.1.13
 ---
                     GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
