@@ -92,7 +92,7 @@
 		<dependency org="commons-lang" name="commons-lang" rev="2.6" conf="compile->default"/>
 
 		<dependency org="commons-io" name="commons-io" rev="2.5" conf="compile->default"/>
-		<dependency org="com.google.code.gson" name="gson" rev="2.1" conf="compile->default">
+		<dependency org="com.google.code.gson" name="gson" rev="2.8.5" conf="compile->default">
 			<artifact name="gson" type="jar"></artifact>
 		</dependency>
 

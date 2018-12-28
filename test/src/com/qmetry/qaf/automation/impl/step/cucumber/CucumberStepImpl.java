@@ -53,7 +53,7 @@ public class CucumberStepImpl {
 
 	}
 
-	@Then("^it should have \"([^\"]*)\" in search results$")
+	@Then("^it should have \"(.*)\" in search results$")
 	public void itShouldHave_inSearchResults(String s) {
 		System.out.printf("it should have %s in search results\n", s);
 

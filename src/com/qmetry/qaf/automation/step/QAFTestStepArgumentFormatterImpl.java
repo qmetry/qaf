@@ -66,9 +66,11 @@ public class QAFTestStepArgumentFormatterImpl implements QAFTestStepArgumentForm
 			return objVal;
 		}
 		try {
-			String strVal = gson.toJson(objVal);
+			String strVal;
 			if (objVal instanceof String) {
 				strVal = String.valueOf(objVal);
+			}else{
+				strVal = gson.toJson(objVal);
 			}
 
 			strVal = getBundle().getSubstitutor().replace(strVal);

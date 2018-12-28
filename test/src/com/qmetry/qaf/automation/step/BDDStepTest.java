@@ -74,7 +74,6 @@ public class BDDStepTest {
 	public void testArgRef() {
 		StringTestStep step = new StringTestStep("step with '${testdata.ref}' arg" );
 		Object res = step.execute();
-		System.out.println(res);
 		Validator.assertThat(res.toString(), Matchers.equalToIgnoringCase("actual value"));
 		
 		step = new StringTestStep("step with '${testdata.subref}' arg" );
@@ -161,9 +160,18 @@ public class BDDStepTest {
 	@Test(dataProvider=QAFDataProvider.NAME, dataProviderClass=QAFInetrceptableDataProvider.class)
 	public void testArgWithQuotesFromFile(Map<String, Object> data) {
 		String err_msg= (String) data.get("searchResult");
-		String stepCall = "It should show error message \""+err_msg +"\" on screen";
-		boolean res = BDDDefinitionHelper.matches("It should show error message {0} on screen", stepCall);
+		getBundle().setProperty("err_msg_from_file", err_msg);
+		String stepCall = "step with \"${err_msg_from_file}\" arg";
+		boolean res = BDDDefinitionHelper.matches("step with {0} arg", stepCall);
 		Validator.assertTrue(res, "Step call didn't match", "Step call matched");
+		
+		StringTestStep step = new StringTestStep("step with \"${err_msg_from_file}\" arg" );
+		Object sres = step.execute();
+		System.out.println(sres);
+		Validator.assertThat(sres.toString(), Matchers.equalToIgnoringCase(err_msg));
+		
+		getBundle().clearProperty("err_msg_from_file");
+
 	}
 	@Test
 	public void test1Param() {

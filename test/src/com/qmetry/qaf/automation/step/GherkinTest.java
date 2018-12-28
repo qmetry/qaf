@@ -121,17 +121,24 @@ public class GherkinTest {
 	@DataProvider(name = "testMathcerDP")
 	public Iterator<Object[]> gettestMathcerData() {
 		List<Object[]> data = new ArrayList<Object[]>();
+		 data.add(new Object[]{"^it should have \"(.*)\" in search results$",
+				 "it should have \"QMetry \\\"Automation\\\" Framework\" in search results",
+				 true,
+				 new String[]{"QMetry \\\"Automation\\\" Framework"}});
+		
 		 data.add(new Object[]{"^I am using QMetry Automation Framework$",
 		 "I am using QMetry Automation Framework", true, new String[]{}});
 		 data.add(new Object[]{"^I search for \"([^\"]*)\"$",
 		 "I search for \"git qmetry\"", true, new String[]{"git qmetry"}});
 		 data.add(new Object[]{"^I search for \"(.*?)\"$","I search for \"git qmetry\"",true, new String[]{"git qmetry"}});
+		 
 		 data.add(new Object[]{"^I search for a \"([^\"]*)\"$",
 		 "I search for \"git qmetry\"", false, new String[]{}});
 		 data.add(new Object[]{"^it should have \"([^\"]*)\" in search results$",
 		 "it should have \"QMetry Automation Framework\" in search results",
 		 true,
 		 new String[]{"QMetry Automation Framework"}});
+		
 		 data.add(new Object[]{"^it should have following search results:$",
 		 "it should have following search results:[\"a\"]", true,
 		 new String[]{"[\"a\"]"}});
