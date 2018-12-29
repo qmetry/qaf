@@ -211,6 +211,9 @@ entries:
     - title: Gherkin
       url: gherkin_client.html
       output: web, pdf
+    - title: BDD2
+      url: bdd2.html
+      output: web, pdf
               
   - title: Listeners
     output: web, pdf
