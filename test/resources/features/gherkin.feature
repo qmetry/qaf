@@ -60,12 +60,9 @@ Examples:
  | Selenium ISFW | "Infostretch, Test Automation Framework" | 10 |
  | "Selenium ISFW" | Chirag's Test Automation Framework | 10 |
  | "Selenium ISFW" | "Chirag's Test Automation Framework" | 10 |
-#| "Selenium ISFW" | My "Test Automation Framework" | 10 |
+ | "Selenium ISFW" | My "Test Automation Framework" | 10 |
  | "Selenium ISFW" | My 'Test Automation Framework' | 10 |
-#| "Selenium ISFW" | "My \""Test Automation Framework\""" | 10 |
-#| "Selenium ISFW" | My \"Test Automation Framework\" | 10 |
- 
- 
+ | "Selenium ISFW" | "My ""Test Automation Framework""" | 10 |
  
  
 Scenario: Optional parameter
