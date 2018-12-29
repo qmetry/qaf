@@ -5,6 +5,44 @@ sidebar: qaf_latest-sidebar
 permalink: latest/release_notes.html
 folder: latest
 ---
+
+## VER-2.1.14 Release Notes:
+
+**New Features**
+
+ 1. New bdd parser and factory - supports meta-data with tags, data drivnet test with meta-data or example, tag support with examples
+ 2. BDD multi-line comment support
+ 3. [#185](https://github.com/qmetry/qaf/issues/185) support to provider xml file for xml data provider
+ 4. [#180](https://github.com/qmetry/qaf/issues/180) added intercepter support in data-provider
+ 5. [#177](https://github.com/qmetry/qaf/issues/177) Set proxy for specific URL(s) configuration
+ 
+**Enahancements**
+
+ 1. [#231](https://github.com/qmetry/qaf/issues/231) When https.accept.all.cert property set to false, then QAF
+ 2. [#212](https://github.com/qmetry/qaf/issues/212) meta-data with parameters should get reflected with value in qaf report
+ 3. [#184](https://github.com/qmetry/qaf/issues/184) Support to format step arguments
+ 4. [#182](https://github.com/qmetry/qaf/issues/182) enhanced utility methods to get parameters from TestNG context
+ 5. [#176](https://github.com/qmetry/qaf/issues/176) New annotation @PageIdentifier test-page
+ 6. [#175](https://github.com/qmetry/qaf/issues/175) Support for selenium-support library 3+
+ 7. [#38](https://github.com/qmetry/qaf/issues/38) for data driven test `global.datadriven.parallel` and `<test-case>.parallel` property 
+ 8. [#226](https://github.com/qmetry/qaf/issues/226) 
+ 
+
+
+**Bug Fixes**
+
+ [#196](https://github.com/qmetry/qaf/issues/196) xml reference resolution in step argument
+ [#195](https://github.com/qmetry/qaf/issues/195) parameter name with numbers in step description changes the order of argument to be considered
+ 
+ [#203](https://github.com/qmetry/qaf/issues/203) sendkeys command uses encrypted password instead of decrypted
+    version
+ Fixed issue with findElement and findElements with type argument methods
+ in component, moved it form `QAFWebCompont` to `QAFExtendedWebElement`
+ [#181](https://github.com/qmetry/qaf/issues/181) Fixed Step call in Gherkin data-table with single entry
+ [#131](https://github.com/qmetry/qaf/issues/131) Ability to teardown driver by name
+ [#229](https://github.com/qmetry/qaf/issues/229) Database data provider not working if query contains "="
+
+
 ## VER-2.1.13 Release Notes:
 
 **New Features**
@@ -13,7 +51,7 @@ folder: latest
  2. [#168](https://github.com/qmetry/qaf/issues/168)  Support to specify default webelement implementation
  3. [#160](https://github.com/qmetry/qaf/issues/160) Timeout support in BDD Scenario 
  4. Default element listener for password field and element scroll behavior
- 5. Support of @Inject annotation in step library class
+ 5. Support of `@Inject` annotation in step library class
  6. Added support for custom by
  
 **Enahancements**

@@ -1396,8 +1396,9 @@ body .ui-tooltip {
 .ui-layout-content ul a{
 	text-decoration:none !important;
 }
-.ui-layout-content ul a li {
-	padding: 8px 0px 8px 5px;
+.ui-layout-content ul li a {
+	/*padding: 8px 0px 8px 5px;*/
+	padding: 15px 0;
 	margin: 0px;
 	list-style: none;
 	border-bottom: 1px solid #CCC;
@@ -1407,42 +1408,43 @@ body .ui-tooltip {
 	text-decoration:none;
 	font-size:18px;
 }
-.ui-layout-content ul a li{
-	padding: 8px 0px 8px 5px;
+.ui-layout-content ul li a {
+	/*padding: 8px 0px 8px 5px;*/
+	padding: 0 0 2px 3px;
 	margin: 0px;
 	list-style: none;
 	border-bottom: 1px solid #CCC;
-	border-left: 5px solid #cbcbcb !important;
+	border-left: 7px solid #cbcbcb !important;
 	display:block;
-	margin-bottom:5px;
+	margin-bottom:1px;
 	color:#484848;
 	text-decoration:none;
 
 }
-.ui-layout-content  ul a li.active:hover{
+.ui-layout-content  ul li.active:hover a {
 	color:#000000;
-
-	border-left: 5px solid #000000 !important;
+	border-left: 7px solid #032545 !important;
 	display:block;
-	
 }
-.ui-layout-content ul a li span{
-	font-size:12px;
+.ui-layout-content  ul li.active:hover a .jobid, .ui-layout-content  ul li.selected a .jobid {
+	color:#000;
+}
+.ui-layout-content ul li a span{
+	font-size:14px;
 	width:100%;
 	display: block;
 }
 
-.ui-layout-content  ul a li.selected{
-	color:#f89a22;
-
-	border-left: 5px solid #f89a22 !important;
+.ui-layout-content  ul li.selected a {
+	color:#032545;
+	border-left: 7px solid #032545 !important;
 	cursor:default;
 	display:block;
 	
 }
-.ui-layout-content ul a li p{	
+.ui-layout-content ul li a p{	
  display: block;
-    height: 22px;
+   /*height: 22px;*/
     margin: 0;
     overflow: hidden;
 	white-space:nowrap;

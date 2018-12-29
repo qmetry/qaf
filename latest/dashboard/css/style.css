@@ -2,7 +2,6 @@ body { font:12px Helvetica, arial, sans-serif }
 h1, h2, p { margin:10px 0 }
 .hidden { visibility:hidden }
 
-
 .message { padding:10px; margin:15px 0; display:block; text-align:left }
 .message-title { font-weight:bold; font-size:1.25em }
 .message-body { margin-top:4px }
@@ -13,5 +12,5 @@ h1, h2, p { margin:10px 0 }
 .error a { color:#8a1f11 }
 .notice a { color:#514721 }
 .success a { color:#264409 }
-.ui-icon.ui-icon-chart { background-image: url(../images/trands_icon.png); width:15px;}
+.ui-icon.ui-icon-chart { background-image: url(../images/trands_icon_dark.png); width:15px;}
 

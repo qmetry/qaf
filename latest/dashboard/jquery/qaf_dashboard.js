@@ -1,25 +1,35 @@
 /*******************************************************************************
- * QMetry Automation Framework provides a powerful and versatile platform to author 
- * Automated Test Cases in Behavior Driven, Keyword Driven or Code Driven approach
- *                
+ * QMetry Automation Framework provides a powerful and versatile platform to
+ * author Automated Test Cases in Behavior Driven, Keyword Driven or Code Driven
+ * approach
+ * 
  * Copyright 2016 Infostretch Corporation
- *
- * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- *
- * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
- * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT
- * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE
- *
- * You should have received a copy of the GNU General Public License along with this program in the name of LICENSE.txt in the root folder of the distribution. If not, see https://opensource.org/licenses/gpl-3.0.html
- *
- * See the NOTICE.TXT file in root folder of this source files distribution 
- * for additional information regarding copyright ownership and licenses
- * of other open source software / files used by QMetry Automation Framework.
- *
- * For any inquiry or need additional information, please contact support-qaf@infostretch.com
- *******************************************************************************/
+ * 
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+ * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
+ * OR OTHER DEALINGS IN THE SOFTWARE
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * this program in the name of LICENSE.txt in the root folder of the
+ * distribution. If not, see https://opensource.org/licenses/gpl-3.0.html
+ * 
+ * See the NOTICE.TXT file in root folder of this source files distribution for
+ * additional information regarding copyright ownership and licenses of other
+ * open source software / files used by QMetry Automation Framework.
+ * 
+ * For any inquiry or need additional information, please contact
+ * support-qaf@infostretch.com
+ ******************************************************************************/
 // Error Buckets with patterns
 var errorBuckets = {
 	"ServerSideFailure" : /JSONObject\[\".*\"\] not found|Unexpected end of file from server|A JSONArray text must start with/i,
@@ -32,7 +42,240 @@ var errorBuckets = {
 
 };
 
-var resultRootDir = "test-results";
+var listTemplate = '<li class="active" dir="${dir}" title="${name}" id="${li_id}">'
+		+ '<a href="#${anchor_id}" title="${name}" id="job_${anchor_id}">'
+		+ '<span class="jobid ${jobid}">${jobid}</span>'
+		+ '<div class="details">'
+		+ '<p>${name}</p>'
+		+ '<span>${msToFormatedDateStr(startTime, "dd-MM-yy HH:MM")}</span>'
+		+ '</div>' + '</a>' + '</li>';
+
+var overviewTemplate = '<div class="title_bg">${name}</div>'
+		+ '<div class="cont_data">'
+		+ '<div id="overview-sec">'
+		+ '<div class="top_area">'
+		+ '<div class="left_area" id="pichart" style="width: 430px; height: 217px;"></div>'
+		+ '<div class="right_area">'
+		+ '<div class="colum colum_one_mrgin">'
+		+ '<ul>'
+		+ '<li class="title text-center">&nbsp;</li>'
+		+ '<li class="title text-center"><a dir="all" class="link" href="javascript:void(0)" onclick="loadListAll();">View all results</a></li>'
+		+ '<li class="result text-center">Passed</li>'
+		+ '<li class=""><div class="green_bg" style="margin:0 auto;">${pass}</div></li>'
+		+ '</ul>'
+		+ '</div>'
+		+ '<div class="colum colum_two_mrgin">'
+		+ '<ul>'
+		+ '<li class="title text-center">Duration</li>'
+		+ '<li class="number text-center" title="[${msToFormatedDateStr(startTime, \"dd-MM-yy HH:MM\")} - ${msToFormatedDateStr(endTime, \"dd-MM-yy HH:MM\")}]">${getDuration(endTime-startTime)}</li>'
+		+ '<li class="result text-center">Skipped</li>'
+		+ '<li class=""><div class="yellow_bg" style="margin:0 auto;">${skip}</div></li>'
+		+ '</ul>'
+		+ '</div>'
+		+ '<div class="colum colum_three_mrgin">'
+		+ '<ul>'
+		+ '<li class="title text-center">Total</li>'
+		+ '<li class="number text-center">${total}</li>'
+		+ '<li class="result text-center">Failed</li>'
+		+ '<li class=""><div class="red_bg" style="margin:0 auto;">${fail}</div></li>'
+		+ '</ul>' + '</div>' + '</div>' + '</div>'
+		+ '<div class="clear"></div>' + '<div class="bottom_area">'
+		+ '<table border="0" cellspacing="0" cellpadding="0" id="test_report">'
+		+ '<thead>' + '<tr>' + '<th scope="col" width=20%>Test</th>'
+		+ '<th scope="col" width=10%>Duration</th>'
+		+ '<th scope="col" width=10%>Passed</th>'
+		+ '<th scope="col" width=10%>Skipped</th>'
+		+ '<th scope="col" width=10%>Failed</th>'
+		+ '<th scope="col" width=10%>Total</th>'
+		+ '<th scope="col" width=10%>Pass Rate</th>' + '</tr>' + '</thead>'
+		+ '<tbody id="tests">' + '</tbody>' + '</table>' + '</div>'
+		+ '<!-- end overview-->' + '</div>' + '</div>';
+
+var testOverviewTemplate = '<tr>'
+		+ '<td class="test_col"><a href="${window.location.href}#${name}" id="result_${name}" onclick="loaResult(\'${name}\');" class="reportlink">${name}</a></td>'
+		+ '<td title="[${msToFormatedDateStr(startTime, \'dd-MM-yy HH:MM\')} - ${msToFormatedDateStr(endTime, \'dd-MM-yy HH:MM\')}]">${getDuration(endTime-startTime)}</td>'
+		+ '<td>${pass}</td>'
+		+ '<td>${skip}</td>'
+		+ '<td>${fail}</td>'
+		+ '<td>${total}</td>'
+		+ '<td>'
+		+ '<div class="passrate_col"><span style="width:${calcPassRate(pass,fail,skip)}%;">${calcPassRate(pass,fail,skip)}%</span></div>'
+		+ '</td>' + '</tr>';
+
+var methodHeaderTemplate = '<div class="mehod ${result} ${type}" id="${result}_cont">'
+		+ '<div class="mehodheader" onclick="mehodheaderClick(this);">'
+		+ '<span class="statusicon ${result}"> &nbsp;<span class="status" style="display:none">${result}</span></span>'
+		+ '<b class="ui-icon-text">{{if (typeof metaData != \'undefined\') }} {{each(i,v) metaData}} {{if (i == \'name\')}}${v} {{/if}}{{/each}} {{else}} ${name} {{/if}}</b> {{if ((typeof args != \'undefined\') && args.length>0)}}'
+		+ ' <span class="mehod-args"> ${args[0][\'tcId\']} ${args[0][\'recId\']}</span> {{/if}}'
+		+ '<div style="float: right; ">'
+		+ '{{if typeof retryCount != \'undefined\' && retryCount>0}}'
+		+ '<span class=\'rerunCount\' title="Retried Failed Execution">${retryCount}</span>{{/if}}'
+		+ '<span class="duration">${getDuration(duration)}</span>'
+		+ '<span class="ui-icon time_icon oexecution" style="float: right;" title="Duration">${startTime}</span>'
+		+ '</div>'
+		+ '</div>'
+		+ '<div class="details data_cont" data-file="${datafile}" style="display:none; position: relative;"></div>'
+		+ '<div class="meta-info tab-content" style="display:none;padding:0px;width:100%;">'
+		+ '<table cellspacing="1" cellpadding="0" border="0" style="display:block;">'
+		+ '<tbody>'
+		+ '{{if ((typeof args != \'undefined\') && args.length>0)}}'
+		+ '<tr>'
+		+ '<th>Test Data:</th>'
+		+ '<td colspan="3">${parseArray(args)}</td>'
+		+ '</tr>'
+		+ '{{/if}} {{if (typeof metaData != \'undefined\') }} {{each(i,v) getMetaDataToDisplay(metaData)}} {{if (v!= \'undefined\' && v.length>0)}}'
+		+ '<tr>'
+		+ '<th>${i.capitalizeFirstLetter()}:</th>'
+		+ '<td>'
+		+ '{{html displayMetaData(v)}}'
+		+ '</td>'
+		+ '</tr>'
+		+ '{{/if}} {{/each}} {{/if}} {{if dependsOn.length>0}}'
+		+ '<tr>'
+		+ '<th>Depends On:</th>'
+		+ '<td colspan="3">{{each dependsOn}}'
+		+ '<span class="group">${$value}</span> {{/each}}'
+		+ '</td>'
+		+ '</tr>'
+		+ '{{/if}}'
+		+ '<tr>'
+		+ '<th>Start Time:</th>'
+		+ '<td>${msToDateStr( startTime)}</td>'
+		+ '</tr>'
+		+ '<tr>'
+		+ '<th>End&nbsp;Time:</th>'
+		+ '<td>${msToDateStr(startTime+duration)}</td>'
+		+ '</tr>'
+		+ '<tr id="totalTime" style="display:none;">'
+		+ '<th>Actual&nbsp;Time:</th>'
+		+ '<td></td>'
+		+ '</tr>'
+		+ '<tr>'
+		+ '<th valign="top">Check Points:</th>'
+		+ '<td class="check-points-details" style="word-wrap: break-word;">'
+		+ '</td>' + '</tr>' + '</tbody>' + '</table>' + '</div>' + '</div>';
+
+var methodDetailsTemplate = '<span class="toolbar">'
+		+ '{{if errorTrace}}'
+		+ '<span class="ui-icon ui-icon-alert error-trace action" style="float: right; margin-right: .3em;" title="Error trace"></span> {{/if}} {{if seleniumLog.length>0}}'
+		+ '<span class="ui-icon ui-icon-document selenium-log action" style="float: right; margin-right: .3em;" title="Command log"></span> {{/if}} {{if (checkPoints.length>0 && checkPoints[0].duration)}}'
+		+ '<span class="ui-icon ui-icon-chart step-analysis action" style="float: right; margin-right: .3em;" title="Step Time Analysis"></span> {{/if}}'
+		+ '<span class="ui-icon ui-icon-clipboard meta-info-check-points  action" style="float: right; margin-right: .3em;" title="Check Points"></span>'
+		+ '</span>'
+		+ '<div class="detailsContainer">'
+		+ '<div class="check-points tab-content" style="display:none;word-wrap: break-word;">'
+		+ '{{tmpl(checkPoints) "checkpointTemplate"}}'
+		+ '</div>'
+		+ '<div class="selenium-log tab-content " style="display:none;padding-top:5px;">'
+		+ '<table width="100%">'
+		+ '<tbody>'
+		+ '{{tmpl(seleniumLog) "seleniumLogTemplate"}}</tbody>'
+		+ '</table>'
+		+ '</div>'
+		+ '{{if errorTrace}}'
+		+ '<div class="error-trace tab-content" style="display:none;margin-top:15px;">'
+		+ '<pre class="prettyprint linenums">{{html errorTrace}}</pre>'
+		+ '</div>'
+		+ '{{/if}} {{if (checkPoints.length>0 && checkPoints[0].duration)}}'
+		+ '<div class="step-analysis tab-content" style="position:relative;margin-left:20px;margin-top:20px;margin-bottom:40px;margin-right:20px;height:300px;display:none;" data="${getStepTimes(checkPoints)}" </div>'
+		+ '{{/if}}' + '</div>';
+
+var checkpointTemplate = '<pre class="prettyprint" style="border: none !important;">'
+		+ '<div class="checkpoint ${getContainerClass(type)}" style="border:none;">'
+		+ '<div {{if subCheckPoints}}onclick="$(this).closest(\'.checkpoint\').children(\'.subcheckpoints\').toggle();$(this).children(\'span\').toggleClass(\'ui-icon-triangle-1-e ui-icon-triangle-1-s\');" {{/if}}>'
+		+ '<span class="ui-icon {{if subCheckPoints.length > 0}} ui-icon-triangle-1-e {{else}} ${getIcon(type)} {{/if}}" style="float:left;margin-top:0.0em;margin-left:5px;" title="${type}"></span>'
+		+ '<span style="vertical-align:top;margin-left:25px;display:block;word-wrap: break-word;">{{html message}}'
+		+ '{{if screenshot}}<a class="screenshot" href="${screenshot}" style="width:auto;margin-top:0.0em;vertical-align:middle;" title="Screenshot"></a>'
+		+ '{{/if}}'
+		+ '{{if duration}}'
+		+ '[{{if threshold}}'
+		+ '{{if (threshold>0) && (threshold*1000<duration)}}<span class="step-threshold" style="color:#FF9900" title="threshold: ${threshold}s&#13;exceeded: ${duration/1000.0 - threshold}s">${duration/1000.0}s</span>{{else}}'
+		+ '<span class="step-threshold" title="threshold: ${threshold}s&#13;outstanding: ${threshold - duration/1000.0}s">${duration/1000.0}s</span> {{/if}} {{else}}${duration/1000.0}s {{/if}}] {{/if}}'
+		+ '</span>'
+		+ '</div>'
+		+ '{{if subCheckPoints}}'
+		+ '<div style="display:none;" class="subcheckpoints">'
+		+ '{{tmpl(subCheckPoints) "checkpointTemplate"}}'
+		+ '</div>'
+		+ '{{/if}}' + '</div>' + '</pre>';
+
+var errorAnalysisTemplate = '<div id="error_analysis_chart" style="width:25%; max-width:350px; height: 300px;" class="fleft"></div>'
+		+ '<div style="min-width: 450px;width: 71%; height: 300px;" class="fleft">'
+		+ '{{each(i, item) $data}}'
+		+ '<div class="collapse collapsible" style="background-color: #D2D2C2;margin-top:5px; width:100%; float:left;">'
+		+ '<div class="accordien_arrow" style="background-color: transparent;float: left;border:5px solid transparent;"></div>'
+		+ '<div class="key" style="padding:6px;">${i}'
+		+ '<div class="value_count">${item.length}</div>'
+		+ '</div>'
+		+ '</div>'
+		+ '<div>'
+		+ '<ul style="list-style-type: square; padding-left:15px;" class="ui-state-active ui-widget-content">'
+		+ '{{each item}} {{html dspTCLink($value)}} {{/each}}'
+		+ '</ul>'
+		+ '</div>' + '{{/each}}' + '</div>' + '<div style="clear:left;"></div>';
+
+var seleniumLogTemplate =
+
+'{{if subLogs.length>0}}'
+		+ '<tr valign="top">'
+		+ '<td colspan="4">'
+		+ '<div class="selenium-log" style="padding-top:5px;font-size:13px">'
+		+ '<table width="100%">'
+		+ '<thead onclick="$(this).closest(\'table\').children(\'tbody\').toggle();" style="border:1px solid #000;">'
+		+ '<tr valign="top">'
+		+ '<th align="left" width="20%"><pre class="prettyprint">{{html trunck(commandName)}}</pre></th>'
+		+ '<th align="left" width="37%"><pre class="prettyprint">{{html trunck(args)}}</pre></th>'
+		+ '<th align="left" width="37%"><pre class="prettyprint">{{html trunck(result)}}</pre></th>'
+		+ '<td width="4%"><pre class="prettyprint">${getTotalDuration(subLogs)}</pre></td>'
+		+ '</tr>'
+		+ '</thead>'
+		+ '<tbody style="display:none;">'
+		+ '{{tmpl(subLogs) "seleniumLogTemplate"}}</tbody>'
+		+ '</table>'
+		+ '</div>'
+		+ '</td>'
+		+ '{{else}}'
+		+ '{{if commandName}}'
+		+ '<tr valign="top">'
+		+ '<td width="19%"><pre class="prettyprint">${commandName}</pre></td>'
+		+ '<td width="37%"><pre class="prettyprint">${args}</pre></td>'
+		+ '<td width="37%"><pre class="prettyprint">${formatedRes(result)}</pre></td>'
+		+ '{{else}}'
+		+ '<tr onclick="showDialog(this)" valign="top">'
+		+ '<td width="19%">${commandName}</td>'
+		+ '<td width="37%"><pre class="prettyprint lang-html">${args}</pre></td>'
+		+ '<td width="37%"><pre class="prettyprint lang-html">${formatedRes(result)}</pre></td>'
+		+ '{{/if}}'
+
+		+ '{{if duration}}'
+		+ '<td width="4%"><pre class="prettyprint">${duration>0?(duration/1000):duration}</pre></td>'
+		+ '{{/if}} {{/if}}' + '</tr>';
+
+var envInfoTemplate = '<ol>'
+		+ '{{each(i, item) $data}} {{if typeof item== \'object\'}}'
+		+ '<li><span class="key">${i}</span>:${JSON.stringify(item)}</li>'
+		+ '{{else}} {{if item.toString().length > 0}}'
+		+ '<li><span class="key">${i}</span>:{{html item}}</li>'
+		+ '{{/if}} {{/if}} {{/each}}' + '</ol>';
+
+$.template("listTemplate", listTemplate);
+$.template("overviewTemplate", overviewTemplate);
+$.template("testOverviewTemplate", testOverviewTemplate);
+$.template("methodHeaderTemplate", methodHeaderTemplate);
+$.template("methodDetailsTemplate", methodDetailsTemplate);
+$.template("checkpointTemplate", checkpointTemplate);
+$.template("errorAnalysisTemplate", errorAnalysisTemplate);
+$.template("seleniumLogTemplate", seleniumLogTemplate);
+$.template("envInfoTemplate", envInfoTemplate);
+
+function getUrlVar(key) {
+
+	var result = new RegExp(key + "=([^&]*)", "i").exec(window.location.search);
+
+	return (result && unescape(result[1] + "/test-results")) || "test-results";
+
+}
+var resultRootDir = getUrlVar("job");// "test-results";
 var curResultDir = "";
 var layout;
 var treports;
@@ -147,15 +390,22 @@ function loadList(loadmethods) {
 		treports = data;
 		var size = treports.reports.length;
 		$.each(treports.reports, function(i, item) {
+			item['li_id'] = getIdFromDir(item.dir);
 			item['jobid'] = size--;
-			item['anchor_id'] = item.startTime;
-			$("#listTemplate").tmpl(item).appendTo("#reportlist");
+			if ($.isNumeric(item['li_id'])) {
+				item['jobid'] = item['jobid'] + " #" + item['li_id'];
+				item['anchor_id'] = item['li_id'];
+			} else {
+				item['anchor_id'] = item.startTime;
+			}
+			$.tmpl(listTemplate, item).appendTo("#reportlist");
 		});
 		$('#reportlist li').click(function() {
 			$('#details').html('');
 			if (($(this).hasClass('selected'))) {
 				return 0;
 			}
+			window.location.href = $(this).find("a").attr('href');
 			var curSelceteReport = $('#reportlist li.selected');
 			if (curSelceteReport) {
 				$(curSelceteReport).removeClass("selected");
@@ -170,9 +420,11 @@ function loadList(loadmethods) {
 
 		if (loadmethods) {
 			$('#details').html('');
+
 			var curSelceteReport = $('#reportlist li.selected');
 			if (curSelceteReport) {
 				$(curSelceteReport).removeClass("selected");
+
 				$(curSelceteReport).addClass("active");
 			}
 			$("#reportlist li:first").addClass("selected");
@@ -192,8 +444,10 @@ function selectReport() {
 	split = url.split("#");
 	length = split.length;
 	if (length > 1) {
-		if ($('#job_' + split[1]).children('li').length) {
-			$('#job_' + split[1]).children('li').trigger('click');
+		if ($('#' + split[1]).length) {
+			$('#' + split[1]).trigger('click');
+		} else if ($('#job_' + split[1]).parent('li').length) {
+			$('#job_' + split[1]).parent('li').trigger('click');
 		} else {
 			$("#reportlist li:first").trigger('click');
 		}
@@ -203,9 +457,18 @@ function selectReport() {
 
 }
 
+function getIdFromDir(dir) {
+	var index = dir.indexOf("test-results") + "test-results/".lenght;
+	var endindex = dir.indexOf("json") - 1;
+
+	return dir.substring(index, endindex);
+}
+
 function removePrefixOfResultRootDir(dir) {
-	var index = dir.indexOf(resultRootDir);
-	return dir.substr(index, dir.length);
+	// var index = dir.indexOf(resultRootDir);
+	// return dir.substr(index, dir.length);
+	var index = dir.indexOf("test-results");
+	return dir.substr(index, dir.length).replace("test-results", resultRootDir);
 }
 
 function loadListAll() {
@@ -221,17 +484,22 @@ function loadListAll() {
 		$(curSelceteReport).addClass("selected");
 		$(curSelceteReport).removeClass("active");
 		loadAllMethods($(curSelceteReport).attr("dir"));
+		window.location.href = window.location.href + "#*";
+
 	});
 
 }
 function loaResult(dir) {
 	tmp = curResultDir + "/" + dir;
 	loadMethods(curResultDir, dir);
+	currSuite = dir;
 	resetFilterAndOrder();
 	$("#report_details").show();
 	$("#overview-tab-content").hide();
 	$("ul.tabs li").removeClass("active");
 	$(".data_cont").hide();
+
+	pageLayout.close('west');
 }
 
 function loadOverview(dir) {
@@ -240,18 +508,22 @@ function loadOverview(dir) {
 		$("#overview-tab-content").show();
 
 		$("#overview-tab-content").html('');
-		$("#overview-template").tmpl(data).appendTo("#overview-tab-content");
+		$.tmpl(overviewTemplate, data).appendTo("#overview-tab-content");
 
 		$.each(data.tests, function(i, item) {
 			$.getJSON(dir + "/" + item + "/overview.json", function(data1) {
 				data1["name"] = item;
-				$("#test-overview-template").tmpl(data1).appendTo("#tests");
+				$.tmpl(testOverviewTemplate, data1).appendTo("#tests");
 			});
 		});
 
 		if (length > 2) {
 			setTimeout(function() {
-				$('#result_' + split[2]).click()
+				if (split[2] == "*") {
+					loadListAll();
+				} else {
+					$('#result_' + split[2]).click();
+				}
 			}, 10);
 			length = 0;
 		}
@@ -264,6 +536,7 @@ function loadOverview(dir) {
 function loadAllMethods(dir) {
 	$("#overview-tab-content").hide();
 	$("#method-results").html('');
+	dir = removePrefixOfResultRootDir(dir);
 	chained1 = $.getJSON(dir + "/meta-info.json", function(data) {
 
 		$.each(data.tests, function(i, item) {
@@ -290,7 +563,8 @@ function drawPIChart(report) {
 			// Make this a pie chart.
 			renderer : jQuery.jqplot.PieRenderer,
 			rendererOptions : {
-				seriesColors : [ '#D10707', '#8FC400', '#FFD800' ],
+				seriesColors : [ '#e63c20', '#23a347', '#f3b600' ],
+				// RED GREEN YELLOW
 				// Put data labels on the pie slices.
 				// By default, labels show the percentage of the
 				// slice.
@@ -360,12 +634,41 @@ function loadMethods(cresultRoot, testDir) {
 																								+ mdata.name
 																								+ ".json";
 																					}
-																					$(
-																							"#method-header-Template")
+																					$
 																							.tmpl(
+																									methodHeaderTemplate,
 																									mdata)
 																							.appendTo(
 																									"#method-results");
+																					if (split.length > 3
+																							&& mdata.datafile
+																									.indexOf(split[3]
+																											+ ".json") > 0) {
+																						setTimeout(
+																								function() {
+																									var ele = $("div[data-file*='"
+																											+ split[3]
+																											+ ".json'] ~ div");
+
+																									var detailsContainer = $(
+																											ele)
+																											.parent();
+																									mehodheaderClick(ele);
+																									$(
+																											'.ui-layout-center.content.ui-layout-pane')
+																											.animate(
+																													{
+																														scrollTop : $(
+																																detailsContainer)
+																																.offset().top
+																																- ($(
+																																		".ui-layout-north")
+																																		.height() + 30)
+																													},
+																													500);
+																								},
+																								100);
+																					}
 																				});
 															});
 										});
@@ -375,22 +678,22 @@ function loadMethods(cresultRoot, testDir) {
 						$("#actual-capabilities").html('');
 						$("#run-parameters").html('');
 
-						$("#env-info-template").tmpl(
+						$.tmpl(envInfoTemplate,
 								data.envInfo['execution-env-info']).appendTo(
 								"#execution_env_info");
-						$("#env-info-template").tmpl(
-								data.envInfo['isfw-build-info']).appendTo(
-								"#isfw_build_info");
+						$
+								.tmpl(envInfoTemplate,
+										data.envInfo['isfw-build-info'])
+								.appendTo("#isfw_build_info");
 						;
-						$("#env-info-template").tmpl(
+						$.tmpl(envInfoTemplate,
 								data.envInfo['browser-desired-capabilities'])
 								.appendTo("#desired_capabilities");
-						$("#env-info-template").tmpl(
+						$.tmpl(envInfoTemplate,
 								data.envInfo['browser-actual-capabilities'])
 								.appendTo("#actual-capabilities");
-						$("#env-info-template").tmpl(
-								data.envInfo['run-parameters']).appendTo(
-								"#run-parameters");
+						$.tmpl(envInfoTemplate, data.envInfo['run-parameters'])
+								.appendTo("#run-parameters");
 
 					});
 	resetFilterAndOrder();
@@ -509,10 +812,22 @@ function displayMetaData(value) {
 
 }
 function loadDetailsTemplate(data, container) {
-	$("#method-details-Template").tmpl(data).appendTo(container);
+	$.tmpl(methodDetailsTemplate, data).appendTo(container);
+
+	$(container).find('pre.prettyprint').each(
+			function() {
+				var lang = '';
+				if($(this).is('[class*=lang-]')){
+					var lang = this.className.split('lang-')[1].split(' ')[0];
+					console.log("class name" + lang);
+				}
+				$(this).html(
+						PR.prettyPrintOne($(this).html(), lang, $(this).hasClass(
+								'linenums')));
+				$(this).addClass('prettyprinted');
+			});
 	applyUi(container);
 	displayTotalTime(container, data);
-
 }
 
 function loadDetails(file, container) {
@@ -609,7 +924,88 @@ function getContainerClass(type) {
 	return ' ui-state-highlight';
 
 }
+function trunck(str) {
+	if (str.toString().length > 100) {
+		return '<span title="' + str + '">' + str.toString().substring(0, 30)
+				+ '...</span>';
+	}
+	return str;
+}
 
+function formatedRes(res) {
+	res = vkbeautify.xmlmin(res, true);
+
+	try {
+		var results = [];
+		extractJSON(res, results);
+		$(results).each(function(index, value) {
+			res = res.replace(value, vkbeautify.json(value));
+		});
+	} catch (e) {
+		console.log(e);
+	}
+	res = vkbeautify.xml(res);
+
+	return res;
+}
+
+function extractJSON(str, results) {
+	var firstOpen, firstClose, candidate;
+	firstOpen = str.indexOf('{', firstOpen + 1);
+	do {
+		firstClose = str.lastIndexOf('}');
+		// console.log('firstOpen: ' + firstOpen, 'firstClose: ' + firstClose);
+		if (firstClose <= firstOpen) {
+			return results;
+		}
+		do {
+			candidate = str.substring(firstOpen, firstClose + 1);
+			// console.log('candidate: ' + candidate);
+			try {
+				var res = JSON.parse(candidate);
+				// console.log('...found');
+				results.push(candidate);
+				// return [res, firstOpen, firstClose + 1];
+				return extractJSON(str.slice(firstClose + 1), results)
+			} catch (e) {
+				// console.log('...failed');
+			}
+			firstClose = str.substr(0, firstClose).lastIndexOf('}');
+		} while (firstClose > firstOpen);
+		firstOpen = str.indexOf('{', firstOpen + 1);
+	} while (firstOpen != -1);
+}
+
+function showDialog(ele) {
+	cmdDialog = $("#cmd-dialog");
+	$('#request-details').html($(ele).find("td:nth(1)").html());
+	$('#response-details').html($(ele).find("td:nth(2)").html());
+
+	$(cmdDialog).dialog(
+			{
+				modal : true,
+				resizable : true,
+				draggable : true,
+				width : '80%',
+				height : '630',
+				title : "Details",
+				buttons : {
+					'Close' : function() {
+						$(this).dialog('close');
+					},
+					'Request' : function() {
+						$('#request-details').show();
+						$(cmdDialog).scrollTop("0");
+					},
+					'Response' : function() {
+						$('#response-details').show();
+						var top = $('#request-details').is(":visible") ? $(
+								'#request-details').height() : "0";
+						$(cmdDialog).scrollTop(top);
+					}
+				}
+			});
+}
 function previewImage(uri) {
 
 	// Get the HTML Elements
@@ -621,7 +1017,7 @@ function previewImage(uri) {
 	uriParts = uri.split("/");
 
 	// append dir if not absolute path
-	if (uri.indexOf('http') != 0)
+	if (uri.indexOf('http') != 0 && uri.indexOf('\.') == 0)
 		uri = curResultDir + "/" + uri;
 
 	// Set the image src
@@ -785,6 +1181,17 @@ function mehodheaderClick(ele) {
 	toggleTestDetails(details);
 	setChecked('#ocollapse', false);
 	setChecked('#oexpand', false);
+
+	// testcase deep link
+	var dataFile = $(details).attr('data-file');
+	var tcLink = dataFile.slice(dataFile.lastIndexOf('/') + 1, dataFile
+			.lastIndexOf('.'));
+	var stIndex = dataFile.indexOf(curResultDir) + curResultDir.length + 1;
+	if (stIndex > 0) {
+		currSuite = dataFile.slice(stIndex).split("/")[0];
+	}
+	window.location.href = $("#reportlist li.selected a").attr('href') + "#"
+			+ currSuite + "#" + tcLink;
 }
 
 function setActiveTab(tab) {
@@ -828,46 +1235,48 @@ function populateErrorBucket() {
 	var categoryCnt = 0;
 	var chained;
 	var per100 = $("#method-results>.fail:not([style*='display: none']), #method-results>.skip:not([style*='display: none'])").length;
-	var progressCnt = 0; 
-	if(per100 == 0){
+	var progressCnt = 0;
+	if (per100 == 0) {
 		showErrorBucketProgress(progressCnt / per100);
 		$("#error_analysis_details").html('');
 	}
-	$("#method-results>.fail:not([style*='display: none']), #method-results>.skip:not([style*='display: none'])").each(function() {
-		var detailsContainer = $(this).find('.details');
-		var dataFileUrl = $(detailsContainer).attr('data-file');
-		var testObject = $(this);
-		$.ajaxQueue.addRequest({
-			url : dataFileUrl,
-			dataType : 'json',
-			success : function(data) {
-				var errorTrace = data.errorTrace;
-				if (!errorTrace || errorTrace.trim().length == 0) {
-					errorTrace = "CheckPointFailure";
-				}
+	$(
+			"#method-results>.fail:not([style*='display: none']), #method-results>.skip:not([style*='display: none'])")
+			.each(function() {
+				var detailsContainer = $(this).find('.details');
+				var dataFileUrl = $(detailsContainer).attr('data-file');
+				var testObject = $(this);
+				$.ajaxQueue.addRequest({
+					url : dataFileUrl,
+					dataType : 'json',
+					success : function(data) {
+						var errorTrace = data.errorTrace;
+						if (!errorTrace || errorTrace.trim().length == 0) {
+							errorTrace = "CheckPointFailure";
+						}
 
-				var error = errorTrace.split(':')[0];
+						var error = errorTrace.split(':')[0];
 
-				error = getBucketFromErrorTrace(errorTrace);
+						error = getBucketFromErrorTrace(errorTrace);
 
-				if (!errorMap[error]) {
-					errorMap[error] = [];
-					categoryCnt++;
-				}
-				var testResult = [];
-				testResult.push(data);
-				testResult.push(testObject);
-				errorMap[error].push(testResult);
-				progressCnt++;
-				showErrorBucketProgress(progressCnt / per100);
-				// loadDetailsTemplate(data, detailsContainer);
-			}
-		});
-	});
+						if (!errorMap[error]) {
+							errorMap[error] = [];
+							categoryCnt++;
+						}
+						var testResult = [];
+						testResult.push(data);
+						testResult.push(testObject);
+						errorMap[error].push(testResult);
+						progressCnt++;
+						showErrorBucketProgress(progressCnt / per100);
+						// loadDetailsTemplate(data, detailsContainer);
+					}
+				});
+			});
 	$.ajaxQueue.run();
 	$.ajaxQueue.done = function() {
 		$('#error_analysis_details').html('');
-		$("#error-analysis-template").tmpl(errorMap).appendTo(
+		$.tmpl(errorAnalysisTemplate, errorMap).appendTo(
 				$('#error_analysis_details'));
 
 		$("#error_analysis_details .collapsible").click(function(event) {
@@ -946,8 +1355,8 @@ function dspTCLink(obj) {
 	var ele = $(obj[1]).find('.mehodheader .ui-icon-text');
 	var nId = 'f' + (i++);
 	$(ele).attr("id", nId);
-	return "<li><a onclick='viewTest(\"" + nId + "\")' href='#'>"
-			+ $(ele).text() + "</a></li>";
+	return "<li><a onclick='viewTest(\"" + nId
+			+ "\")' href='javascript:void(0);'>" + $(ele).text() + "</a></li>";
 }
 
 function getTestName(obj, nid) {
@@ -978,6 +1387,9 @@ function showOverview(tab) {
 
 	$("#method-results").html("");
 	$(".data_cont").show();
+
+	window.location.href = $("#reportlist li.selected a").attr('href');
+	pageLayout.open('west');
 }
 
 function drawTrendChart(reports) {
@@ -1010,7 +1422,7 @@ function drawTrendChart(reports) {
 	chained.done(function() {
 		var plot1b = $.jqplot('trends-chart', [ pass, fail, skip ], {
 			stackSeries : true,
-			seriesColors : [ "#8FC400", "#D10707", "#FFD800" ],
+			seriesColors : [ '#23a347', '#e63c20', '#f3b600' ],
 			seriesDefaults : {
 				rendererOptions : {
 					smooth : true
@@ -1172,31 +1584,54 @@ function wait(forTask, timeout) {
 
 function doFilter(cssClass) {
 	interuptLoading = true;
-	var expr = '.mehod.' + cssClass;
+	var expr = '';
 
-	if (cssClass === 'pass' || cssClass === 'fail' || cssClass === 'skip') {
-		expr = expr + (!isChecked('#fconfig') ? ':not(.config)' : '')
-				+ (!isChecked('#ftest') ? ':not(.test)' : '');
-	} else {
-		expr = expr + (!isChecked('#fpass') ? ':not(.pass)' : '')
-				+ (!isChecked('#ffail') ? ':not(.fail)' : '')
-				+ (!isChecked('#fskip') ? ':not(.skip)' : '');
+	expr = expr + (!isChecked('#fconfig') ? ':not(.config)' : '')
+			+ (!isChecked('#ftest') ? ':not(.test)' : '');
 
-	}
-	$(expr).toggle();
+	expr = expr + (!isChecked('#fpass') ? ':not(.pass)' : '')
+			+ (!isChecked('#ffail') ? ':not(.fail)' : '')
+			+ (!isChecked('#fskip') ? ':not(.skip)' : '');
+
+	$('.mehod:has(' + expr + ')').show();
+	$('.mehod:not(' + expr + ')').hide();
+
 	setChecked('#ocollapse', false);
 	setChecked('#oexpand', false);
-	
+
 	if (cssClass === 'fail' || cssClass === 'skip') {
 		showErrorBucket();
+	}
+	var searchTerm = $('#inputSerach').val().trim();
+	if (searchTerm.length > 0) {
+		var expr = ".mehod:not(:has(.group:Contains('" + searchTerm + "')))";
+		$(expr).hide();
+	}
+	setFilterResultCount();
+}
+
+function setFilterResultCount() {
+	var tot = $(".mehod").length;
+	if (tot > 0) {
+		$('#filterResultCnt').text($(".mehod:not(:hidden)").length);
+		$('#allResultCnt').text("/" + tot);
+	} else {
+		$('#filterResultCnt').text("");
+		$('#allResultCnt').text("");
 	}
 
 }
 
-function showErrorBucket(){
-	if(!$("#ffail").is(":checked") &&  !$("#fskip").is(":checked")){
+jQuery.expr[':'].Contains = function(a, i, m) {
+
+	var pattern = new RegExp(m[3], "ig");
+	return pattern.test(jQuery(a).text());
+};
+
+function showErrorBucket() {
+	if (!$("#ffail").is(":checked") && !$("#fskip").is(":checked")) {
 		$('#error_analysis_header').hide();
-	}else{
+	} else {
 		$('#error_analysis_header').show();
 	}
 	$("#error_analysis_details").html('');

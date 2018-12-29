@@ -29,7 +29,7 @@ body {
  */
 .ui-layout-pane { /* all 'panes' */
 	background:	#FFF; 
-	border:		1px solid #f89a22;
+	border:		1px solid #032545;
 	padding:	10px; 
 	overflow:	auto;
 	/* DO NOT add scrolling (or padding) to 'panes' that have a content-div,
@@ -70,7 +70,7 @@ body {
  */
 .ui-layout-resizer	{ /* all 'resizer-bars' */
 	background:		#DDD;
-	border:			1px solid #f89a22;
+	border:			1px solid #032545;
 	border-width:	0;
 	
 	}
@@ -85,7 +85,7 @@ body {
 		background: #C4E1A4;
 	}
 	.ui-layout-resizer-dragging {	/* CLONED resizer being dragged */
-		border: 	 1px solid #f89a22;
+		border: 	 1px solid #032545;
 	}
 	.ui-layout-resizer-north-dragging,
 	.ui-layout-resizer-south-dragging {
@@ -122,8 +122,8 @@ body {
  *	TOGGLER-BUTTONS
  */
 .ui-layout-toggler {
-	border: 1px solid #f89a22; /* match pane-border */
-	background-color: #f89a22;
+	border: 1px solid #032545; /* match pane-border */
+	background-color: #032545;
 	}
 	.ui-layout-resizer-hover .ui-layout-toggler {
 		opacity: .60;
@@ -131,10 +131,13 @@ body {
 	}
 	.ui-layout-toggler-hover , /* need when NOT resizable */
 	.ui-layout-resizer-hover .ui-layout-toggler-hover { /* need specificity when IS resizable */
-		background-color: #FC6;
+		background-color: #6dc849;
 		opacity: 1.00;
 		filter:  alpha(opacity=100);
+		border-color:#6dc849 !important;
+		
 	}
+	.ui-layout-toggler .content { color:#ffffff !important; }
 	.ui-layout-toggler-north ,
 	.ui-layout-toggler-south {
 		border-width: 0 1px; /* left/right borders */
