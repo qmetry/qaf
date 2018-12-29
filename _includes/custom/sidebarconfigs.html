@@ -1,6 +1,36 @@
 {% if page.sidebar == "home_sidebar" %}
 {% assign sidebar = site.data.sidebars.home_sidebar.entries %}
 
+
+{% elsif page.sidebar == "qaf_latest-sidebar" %}
+{% assign sidebar = site.data.sidebars.qaf_latest-sidebar.entries %}
+<script type="text/javascript">$("nav a[href='docs.html']").parent('li').addClass("active");</script>
+
+{% elsif page.sidebar == "qaf_2_1_13-sidebar" %}
+{% assign sidebar = site.data.sidebars.qaf_2_1_13-sidebar.entries %}
+<script type="text/javascript">$("nav a[href='docs.html']").parent('li').addClass("active");</script>
+
+{% elsif page.sidebar == "qaf_2_1_12-sidebar" %}
+{% assign sidebar = site.data.sidebars.qaf_2_1_12-sidebar.entries %}
+<script type="text/javascript">$("nav a[href='docs.html']").parent('li').addClass("active");</script>
+
+{% elsif page.sidebar == "qaf_2_1_11-sidebar" %}
+{% assign sidebar = site.data.sidebars.qaf_2_1_11-sidebar.entries %}
+<script type="text/javascript">$("nav a[href='docs.html']").parent('li').addClass("active");</script>
+
+{% elsif page.sidebar == "qaf_2_1_10-sidebar" %}
+{% assign sidebar = site.data.sidebars.qaf_2_1_10-sidebar.entries %}
+<script type="text/javascript">$("nav a[href='docs.html']").parent('li').addClass("active");</script>
+
+{% elsif page.sidebar == "qaf_2_1_9-sidebar" %}
+{% assign sidebar = site.data.sidebars.qaf_2_1_9-sidebar.entries %}
+<script type="text/javascript">$("nav a[href='docs.html']").parent('li').addClass("active");</script>
+
+
+{% elsif page.sidebar == "qaf_2_1_8-sidebar" %}
+{% assign sidebar = site.data.sidebars.qaf_2_1_8-sidebar.entries %}
+<script type="text/javascript">$("nav a[href='docs.html']").parent('li').addClass("active");</script>
+
 {% elsif page.sidebar == "qaf_2_1_7b-sidebar" %}
 {% assign sidebar = site.data.sidebars.qaf_2_1_7b-sidebar.entries %}
 <script type="text/javascript">$("nav a[href='docs.html']").parent('li').addClass("active");</script>
@@ -14,23 +44,6 @@
 <script type="text/javascript">$("nav a[href='download.html']").parent('li').addClass("active");</script>
 
 
-
-{% elsif page.sidebar == "qaf_latest-sidebar" %}
-{% assign sidebar = site.data.sidebars.qaf_latest-sidebar.entries %}
-<script type="text/javascript">$("nav a[href='docs.html']").parent('li').addClass("active");</script>
-
-
-
-{% elsif page.sidebar == "qaf_2_1_8-sidebar" %}
-{% assign sidebar = site.data.sidebars.qaf_2_1_8-sidebar.entries %}
-<script type="text/javascript">$("nav a[href='docs.html']").parent('li').addClass("active");</script>
-
-{% elsif page.sidebar == "qaf_2_1_9-sidebar" %}
-{% assign sidebar = site.data.sidebars.qaf_2_1_9-sidebar.entries %}
-<script type="text/javascript">$("nav a[href='docs.html']").parent('li').addClass("active");</script>
-{% elsif page.sidebar == "qaf_2_1_10-sidebar" %}
-{% assign sidebar = site.data.sidebars.qaf_2_1_10-sidebar.entries %}
-<script type="text/javascript">$("nav a[href='docs.html']").parent('li').addClass("active");</script>
 {% elsif page.sidebar == "sponsor_sidebar" %}
 {% assign sidebar = site.data.sidebars.qaf_latest-sidebar.entries %}
 <script type="text/javascript">$("nav a[href='sponsor.html']").parent('li').addClass("active");</script>
