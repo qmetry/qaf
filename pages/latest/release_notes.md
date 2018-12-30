@@ -18,7 +18,7 @@ folder: latest
  
 **Enahancements**
 
- 1. [#231](https://github.com/qmetry/qaf/issues/231) When https.accept.all.cert property set to false, then QAF
+ 1. [#231](https://github.com/qmetry/qaf/issues/231) When https.accept.all.cert property set to false, then QAF should revert the previous value in JVM
  2. [#212](https://github.com/qmetry/qaf/issues/212) meta-data with parameters should get reflected with value in qaf report
  3. [#184](https://github.com/qmetry/qaf/issues/184) Support to format step arguments
  4. [#182](https://github.com/qmetry/qaf/issues/182) enhanced utility methods to get parameters from TestNG context
@@ -26,6 +26,8 @@ folder: latest
  6. [#175](https://github.com/qmetry/qaf/issues/175) Support for selenium-support library 3+
  7. [#38](https://github.com/qmetry/qaf/issues/38) for data driven test `global.datadriven.parallel` and `<test-case>.parallel` property 
  8. [#226](https://github.com/qmetry/qaf/issues/226) 
+ 9. Additional wait/assert/verify method with `QAFWebElement` for css style
+color properties to match expected and actual values as color object
  
 
 
