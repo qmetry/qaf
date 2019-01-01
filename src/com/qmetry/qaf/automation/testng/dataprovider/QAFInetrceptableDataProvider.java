@@ -36,7 +36,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.configuration.ConfigurationConverter;
 import org.apache.commons.lang.text.StrSubstitutor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.LogFactoryImpl;
@@ -133,12 +133,12 @@ public class QAFInetrceptableDataProvider {
 			testdata = intercepter.intercept(scenario, context, testdata);
 		}
 		int from = 0;
-		int to = testdata.size() - 1;
+		int to = testdata.size();
 		
 		Map<String, Object> metadata = scenario.getMetaData();
 		if (metadata.containsKey(params.FROM.name()) || metadata.containsKey(params.TO.name())) {
 			if (metadata.containsKey(params.TO.name()) && (int) metadata.get(params.TO.name()) < to) {
-				to = (int) metadata.get(params.TO.name());
+				to = (int) metadata.get(params.TO.name())+1;
 			}
 			if (metadata.containsKey(params.FROM.name())) {
 				from = (int) metadata.get(params.FROM.name());
@@ -167,24 +167,17 @@ public class QAFInetrceptableDataProvider {
 			scenario.setDescription(description);
 		}
 
-		// highest priority test data overridden through property with test name
-		// prefix
-		String testParameters = getBundle().getString(scenario.getMethodName() + ".testdata");
-		if (isBlank(testParameters)) {
-			boolean hasDataProvider = false;
-			for (params param : params.values()) {
-				if (methodParameters.containsKey(param.name())) {
-					hasDataProvider = true;
-					break;
-				}
-			}
-			if (hasDataProvider) {
+		// highest priority test data overridden through property with test name prefix
+		String testParameters = getConfigParameters(scenario.getMethodName() + ".testdata");
+		if(isBlank(testParameters)){
+			//second priority overridden through property "global.testdata"
+			testParameters = getConfigParameters("global.testdata");
+			if(isBlank(testParameters)){
+				//default provided with test case
 				testParameters = new JSONObject(methodParameters).toString();
-			} else {
-				// lowest priority to global test data
-				testParameters = getBundle().getString("global.testdata");
 			}
 		}
+		
 		String cls = scenario.getMethod().getDeclaringClass().getSimpleName();
 		String mtd = scenario.getMethodName();
 		testParameters = testParameters.replace("${class}", cls);
@@ -200,9 +193,9 @@ public class QAFInetrceptableDataProvider {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static List<Object[]> process(TestNGScenario scenario, List<Object[]> testdata) {
+	private static List<Object[]> process(TestNGScenario scenario, List<Object[]> data) {
 		Class<?>[] paramTypes = scenario.getConstructorOrMethod().getParameterTypes();
-
+		List<Object[]> testdata = new ArrayList<Object[]>(data);
 		// list of only map object
 		if (null != testdata && !testdata.isEmpty() && testdata.get(0).length == 1
 				&& Map.class.isAssignableFrom(testdata.get(0)[0].getClass())) {
@@ -241,7 +234,7 @@ public class QAFInetrceptableDataProvider {
 				Map<String, Object> record = (Map<String, Object>) testdata.get(i)[0];
 				if (paramTypes.length > 1) {
 					Object[] values = record.values().toArray();
-					if (paramTypes.length == values.length) {
+					if (paramTypes.length == values.length && paramTypes[0].isAssignableFrom(values[0].getClass())) {
 						testdata.set(i, values);
 					} else {
 						Object[] params = new Object[paramTypes.length];
@@ -255,8 +248,9 @@ public class QAFInetrceptableDataProvider {
 									params[pi] = bean;
 
 								} else {
-									Object bean = paramTypes[pi].newInstance();
-									BeanUtils.populate(bean, record);
+									Gson gson = new Gson();
+									String seralizedObj = gson.toJson(record);
+									params[pi] = gson.fromJson(seralizedObj, paramTypes[pi]);
 								}
 							} catch (Exception e) {
 								throw new DataProviderException("Unable to populate data" + paramTypes, e);
@@ -403,5 +397,16 @@ public class QAFInetrceptableDataProvider {
 			}
 		}
 		return intercepters;
+	}
+	
+	private static String getConfigParameters(String key){
+		if(getBundle().containsKey(key) || !getBundle().subset(key).isEmpty()){
+			org.apache.commons.configuration.Configuration config = getBundle().subset(key);
+			if(config.isEmpty()){
+				return getBundle().getString(key);
+			}
+			return new JSONObject(ConfigurationConverter.getMap(config)).toString();
+		}
+		return "";
 	}
 }

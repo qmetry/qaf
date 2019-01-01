@@ -20,81 +20,54 @@
  *
  * For any inquiry or need additional information, please contact support-qaf@infostretch.com
  *******************************************************************************/
+
 package com.qmetry.qaf.automation.impl;
 
-import java.lang.reflect.Method;
 import java.util.Map;
 
-import org.testng.ITestContext;
-import org.testng.ITestNGMethod;
-import org.testng.annotations.DataProvider;
+import org.json.JSONObject;
 import org.testng.collections.Maps;
+
+import gherkin.deps.com.google.gson.Gson;
 
 /**
  * @author chirag.jayswal
  *
  */
-public class CustomDataProvider {
-	@DataProvider(name="dp-without-injection")
-	public static Object[][] dataProviderForBDD(){
-		Map<Object, Object> m = Maps.newHashMap();
-		m.put("value", "OK");
-		return new Object[][]{{m}};
+public class Item {
+
+	private String name;
+	private double price;
+	private String description;
+	private long id;
+	
+	protected String getName() {
+		return name;
+	}
+	protected void setName(String name) {
+		this.name = name;
+	}
+	protected double getPrice() {
+		return price;
+	}
+	protected void setPrice(double price) {
+		this.price = price;
+	}
+	protected String getDescription() {
+		return description;
+	}
+	protected void setDescription(String description) {
+		this.description = description;
 	}
 	
-	@DataProvider(name="dp-with-testngmethod")
-	public Object[][] dataProviderForBDD(ITestNGMethod method){
-		Map<Object, Object> m = Maps.newHashMap();
-		m.put("method", method.getMethodName());
-		return new Object[][]{{m}};
-	}
-	
-	@DataProvider(name="dp-with-method")
-	public Object[][] dataProviderForBDD(Method method){
-		Map<Object, Object> m = Maps.newHashMap();
-		m.put("method", method.getName());
-		return new Object[][]{{m}};
-	}
-	
-	@DataProvider(name="dp-with-testngmethod-contex")
-	public Object[][] dataProviderForBDD(ITestNGMethod method, ITestContext contex){
-		Map<Object, Object> m = Maps.newHashMap();
-		m.put("method", method.getMethodName());
-		m.put("contex", contex.getName());
-		return new Object[][]{{m}};
-	}
-	
-	@DataProvider(name="dp-for-filter")
-	public static Object[][] dataProviderToTestFilter(){
+	public static void main(String[] args) {
 		Map<Object, Object> m = Maps.newHashMap();
 		m.put("name", "a");
 		m.put("uname", "a");
 
 		m.put("id", 1);
 		
-		Map<Object, Object> m2 = Maps.newHashMap();
-		m2.put("name", "b");
-		m2.put("uname", "b");
-
-		m2.put("id", 2);
-
-		Map<Object, Object> m3 = Maps.newHashMap();
-		m3.put("name", "c");
-		m3.put("uname", "c");
-
-		m3.put("id", 3);
-		
-		Map<Object, Object> m4 = Maps.newHashMap();
-		m4.put("name", "d");
-		m4.put("uname", "d");
-
-		m4.put("id", 4);
-
-		Map<Object, Object> m5 = Maps.newHashMap();
-		m5.put("name", "e");
-		m5.put("uname", "e");
-
-		m5.put("id", 5);
-		return new Object[][]{{m},{m2},{m3},{m4},{m5}};
+	  Item item = new Gson().fromJson(new Gson().toJson(m), Item.class);
+	  System.out.println(new Gson().toJson(item));
 	}
 }
