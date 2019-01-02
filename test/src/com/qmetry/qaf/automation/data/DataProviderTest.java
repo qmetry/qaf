@@ -66,19 +66,19 @@ public class DataProviderTest{
 	@MetaData("{'from':3}")
 	@Test(description="filter start index 3", dataProvider="dp-for-filter", dataProviderClass=CustomDataProvider.class)
 	public void testFilterFrom(Map<String, Object> data){
-		Validator.assertThat(data.get("id"), Matchers.isIn(new Object[]{4,5}));
+		Validator.assertThat(data.get("id"), Matchers.isIn(new Object[]{3,4,5}));
 	}
 	
 	@MetaData("{'to':3}")
 	@Test(description="filter end index 3", dataProvider="dp-for-filter", dataProviderClass=CustomDataProvider.class)
 	public void testFilterTo(Map<String, Object> data){
-		Validator.assertThat(data.get("id"), Matchers.isIn(new Object[]{1,2,3,4}));
+		Validator.assertThat(data.get("id"), Matchers.isIn(new Object[]{1,2,3}));
 	}
 	
 	@MetaData("{'from':1,'to':3}")
 	@Test(description="filter from 1 to 3",dataProvider="dp-for-filter", dataProviderClass=CustomDataProvider.class)
 	public void testFilterFromTo(Map<String, Object> data){
-		Validator.assertThat(data.get("id"), Matchers.isIn(new Object[]{2,3,4}));
+		Validator.assertThat(data.get("id"), Matchers.isIn(new Object[]{1,2,3}));
 	}
 	
 	@Test(dataProvider="dp-for-filter", dataProviderClass=CustomDataProvider.class)

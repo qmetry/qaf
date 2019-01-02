@@ -132,18 +132,21 @@ public class QAFInetrceptableDataProvider {
 		for (QAFDataProviderIntercepter intercepter : intercepters) {
 			testdata = intercepter.intercept(scenario, context, testdata);
 		}
-		int from = 0;
+		int from = 1;
 		int to = testdata.size();
 		
 		Map<String, Object> metadata = scenario.getMetaData();
 		if (metadata.containsKey(params.FROM.name()) || metadata.containsKey(params.TO.name())) {
 			if (metadata.containsKey(params.TO.name()) && (int) metadata.get(params.TO.name()) < to) {
-				to = (int) metadata.get(params.TO.name())+1;
+				to = (int) metadata.get(params.TO.name());
 			}
 			if (metadata.containsKey(params.FROM.name())) {
 				from = (int) metadata.get(params.FROM.name());
 			}
-			return testdata.subList(from, to);
+			if(from<1){
+				from=1;
+			}
+			return testdata.subList(from-1, to);
 		}
 
 		if (metadata.containsKey(params.INDICES.name())) {
@@ -213,15 +216,18 @@ public class QAFInetrceptableDataProvider {
 					filter = StrSubstitutor.replace(filter, parametes);
 					filter = getBundle().getSubstitutor().replace(filter);
 					logger.info("Applying Filter " + filter);
-
+					int i =0;
 					Iterator<Object[]> iter = testdata.iterator();
 					while (iter.hasNext()) {
 						// consider column values as context variables
 						Map<String, Object> record = (Map<String, Object>) iter.next()[0];
 						boolean include = StringUtil.eval(filter, record);
+						i=i+1;
 						if (!include) {
 							logger.debug("removing " + record);
 							iter.remove();
+						}else{
+							record.put("__baseindex", i);
 						}
 					}
 				}
@@ -276,9 +282,6 @@ public class QAFInetrceptableDataProvider {
 					}
 				} else {
 					record.put("__index", i + 1);
-					if (!record.containsKey("testCaseId")) {
-						record.put("testCaseId", scenario.getMethodName() + "-" + (i + 1));
-					}
 				}
 			}
 		}
