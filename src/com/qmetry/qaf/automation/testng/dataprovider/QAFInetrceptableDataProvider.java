@@ -140,11 +140,8 @@ public class QAFInetrceptableDataProvider {
 			if (metadata.containsKey(params.TO.name()) && (int) metadata.get(params.TO.name()) < to) {
 				to = (int) metadata.get(params.TO.name());
 			}
-			if (metadata.containsKey(params.FROM.name())) {
+			if (metadata.containsKey(params.FROM.name()) && (int) metadata.get(params.FROM.name())>from) {
 				from = (int) metadata.get(params.FROM.name());
-			}
-			if(from<1){
-				from=1;
 			}
 			return testdata.subList(from-1, to);
 		}
