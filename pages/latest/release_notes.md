@@ -33,16 +33,15 @@ color properties to match expected and actual values as color object
 
 **Bug Fixes**
 
- [#196](https://github.com/qmetry/qaf/issues/196) xml reference resolution in step argument
- [#195](https://github.com/qmetry/qaf/issues/195) parameter name with numbers in step description changes the order of argument to be considered
- 
- [#203](https://github.com/qmetry/qaf/issues/203) sendkeys command uses encrypted password instead of decrypted
+ 1. [#196](https://github.com/qmetry/qaf/issues/196) xml reference resolution in step argument
+ 2. [#195](https://github.com/qmetry/qaf/issues/195) parameter name with numbers in step description changes the order of argument to be considered
+ 3. [#203](https://github.com/qmetry/qaf/issues/203) sendkeys command uses encrypted password instead of decrypted
     version
- Fixed issue with findElement and findElements with type argument methods
+ 4. Fixed issue with findElement and findElements with type argument methods
  in component, moved it form `QAFWebCompont` to `QAFExtendedWebElement`
- [#181](https://github.com/qmetry/qaf/issues/181) Fixed Step call in Gherkin data-table with single entry
- [#131](https://github.com/qmetry/qaf/issues/131) Ability to teardown driver by name
- [#229](https://github.com/qmetry/qaf/issues/229) Database data provider not working if query contains "="
+ 5. [#181](https://github.com/qmetry/qaf/issues/181) Fixed Step call in Gherkin data-table with single entry
+ 6. [#131](https://github.com/qmetry/qaf/issues/131) Ability to teardown driver by name
+ 7. [#229](https://github.com/qmetry/qaf/issues/229) Database data provider not working if query contains "="
 
 
 ## VER-2.1.13 Release Notes:

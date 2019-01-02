@@ -1,5 +1,5 @@
 ---
-title: Scenario
+title: BDD syntax
 sidebar: qaf_latest-sidebar
 permalink: latest/bdd-syntax.html
 summary: "QAF supports multiple BDD syntaxes."

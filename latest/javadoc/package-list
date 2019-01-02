@@ -1,6 +1,7 @@
 com.qmetry.qaf.automation.core
 com.qmetry.qaf.automation.data
 com.qmetry.qaf.automation.gson
+com.qmetry.qaf.automation.http
 com.qmetry.qaf.automation.integration
 com.qmetry.qaf.automation.keys
 com.qmetry.qaf.automation.step
