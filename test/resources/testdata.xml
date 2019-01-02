@@ -1,7 +1,49 @@
 <qaf>
-<testdata>
-	<ref>${testdata.value}</ref>
-	<subref>${testdata.value} 1</subref>
-	<value>actual value</value>
-</testdata>
+	<testdata>
+		<ref>${testdata.value}</ref>
+		<subref>${testdata.value} 1</subref>
+		<value>actual value</value>
+		<tc01>
+			<data>
+				<testCaseId>12345</testCaseId>
+				<uname>user1</uname>
+				<password>@Test123#</password>
+				<id>1</id>
+				<name>item-1</name>
+				<price>15.0</price>
+			</data>
+			<data>
+				<testCaseId>12346</testCaseId>
+				<uname>user1</uname>
+				<password>@Test123#</password>
+				<id>2</id>
+				<name>item-2</name>
+				<price>25.0</price>
+			</data>
+			<data>
+				<testCaseId>12347</testCaseId>
+				<uname>user1</uname>
+				<password>@Test123#</password>
+				<id>3</id>
+				<name>item-3</name>
+				<price>15.50</price>
+			</data>
+			<data>
+				<testCaseId>12348</testCaseId>
+				<uname>user2</uname>
+				<password>@Test123#</password>
+				<id>3</id>
+				<name>item-3</name>
+				<price>15.50</price>
+			</data>
+			<data>
+				<testCaseId>12349</testCaseId>
+				<uname>user2</uname>
+				<password>@Test123#</password>
+				<id>5</id>
+				<name>item-5</name>
+				<price>115.50</price>
+			</data>
+		</tc01>
+	</testdata>
 </qaf>

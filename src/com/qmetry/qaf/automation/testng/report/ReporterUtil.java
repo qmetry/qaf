@@ -385,7 +385,7 @@ public class ReporterUtil {
 			}
 		}
 		if(metadata.containsKey(identifierKey)){
-			id=(String) metadata.get(identifierKey);
+			id= metadata.get(identifierKey).toString();
 		}
 		id=StringUtil.toTitleCaseIdentifier(id);
 		

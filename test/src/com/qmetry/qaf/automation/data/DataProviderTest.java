@@ -30,6 +30,7 @@ import org.testng.annotations.Test;
 import com.qmetry.qaf.automation.impl.CustomDataProvider;
 import com.qmetry.qaf.automation.impl.Item;
 import com.qmetry.qaf.automation.impl.LoginBean;
+import com.qmetry.qaf.automation.testng.dataprovider.QAFDataProvider;
 import com.qmetry.qaf.automation.util.Validator;
 
 /**
@@ -88,4 +89,19 @@ public class DataProviderTest{
 	}
 	
 	
+	@QAFDataProvider(key="testdata.${method}.data", filter="uname.equalsIgnoreCase('user1')")
+	@Test
+	public void tc01(LoginBean bean, Item item){
+		Validator.assertThat(bean, Matchers.notNullValue());
+		Validator.assertThat(item, Matchers.notNullValue());
+		Validator.assertThat(bean.getUname(), Matchers.equalToIgnoringCase("user1"));
+	}
+	
+	@MetaData("{'user':'user2','tname':'tc01'}")
+	@QAFDataProvider(key="testdata.${tname}.data", filter="uname.equalsIgnoreCase('${user}')")
+	@Test
+	public void testMetadataResolution(Map<String, Object> data){
+		Validator.assertThat(data, Matchers.notNullValue());
+		Validator.assertThat((String)data.get("uname"), Matchers.equalToIgnoringCase("user2"));
+	}
 }
