@@ -10,7 +10,7 @@ folder: latest
 
 **New Features**
 
- 1. New bdd parser and factory - supports meta-data with tags, data drivnet test with meta-data or example, tag support with examples
+ 1. New bdd parser and factory - supports meta-data with tags, data driven test using meta-data or example, tag support with examples
  2. BDD multi-line comment support
  3. [#185](https://github.com/qmetry/qaf/issues/185) support to provider xml file for xml data provider
  4. [#180](https://github.com/qmetry/qaf/issues/180) added intercepter support in data-provider
