@@ -1,8 +1,8 @@
 ---
 title: Comment and line break in BDD
 sidebar: qaf_latest-sidebar
-permalink: latest/bdd2-comment.html
-summary: "QAF BDD2 is derived from QAF BDD and gherkin. It supports meta-data from qaf bdd as tags and examples from gherkin."
+permalink: latest/bdd-comment.html
+summary: "QAF BDD supports single line and multiline comment"
 folder: latest
 tags: [bdd,scenario]
 ---
