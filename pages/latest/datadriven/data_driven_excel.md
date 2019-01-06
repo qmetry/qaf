@@ -15,19 +15,19 @@ Following is the example of xls data file used to provide test data where first 
 | Wrong User name and Wrong Password | test | wrongtest | FALSE | Invalid Username Or Password. Please Try Again.|
 | wrong Username | chirag	| abc123 | FALSE | Invalid Username Or Password. Please Try Again. |
 
-##Usage
+## Usage
 `sheetName` only required if sheet is not first sheet
-####Java
+#### Java
 ```java
 @QAFDataProvider(dataFile = "resources/data/logintestdata.xls", sheetName="LoginSheet")
 
 ```
-####BDD
+#### BDD
 ```
 Meta-data:{"dataFile":"resources/data/logintestdata.xls", "sheetName":"LoginSheet"}
 ```
 
-####BDD2
+#### BDD2
 ```
 @dataFile:resources/data/logintestdata.xls
 @sheetName:LoginSheet
@@ -40,7 +40,7 @@ Examples: {"dataFile":"resources/data/logintestdata.xls", "sheetName":"LoginShee
 
 ```
 
-####Gherkin
+#### Gherkin
 ```
 Examples: {"dataFile":"resources/data/logintestdata.xls", "sheetName":"LoginSheet"}
 
@@ -65,19 +65,19 @@ Below is xls data file represents two data tables with key `login` and `key2`.
 |       | identifier-3 | col1-val2 | col2-val2 | coln-val1 | | |
 |       | identifier-2 | col1-val3 | col2-val3 | coln-val1 | Key2 | |
 
-###Usage
+### Usage
 
-####Java
+#### Java
 ```java
 @QAFDataProvider(dataFile = "resources/data/logintestdata.xls", sheetName="LoginSheet", key="login")
 
 ```
-####BDD
+#### BDD
 ```
 Meta-data:{"dataFile":"resources/data/logintestdata.xls", "sheetName":"LoginSheet", "key":"login"}
 ```
 
-####BDD2
+#### BDD2
 ```
 @dataFile:resources/data/logintestdata.xls
 @sheetName:LoginSheet
@@ -90,7 +90,7 @@ Examples: {"dataFile":"resources/data/logintestdata.xls", "sheetName":"LoginShee
 
 ```
 
-####Gherkin
+#### Gherkin
 ```
 Examples: {"dataFile":"resources/data/logintestdata.xls", "sheetName":"LoginSheet", "key":"login"}
 

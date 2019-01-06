@@ -28,7 +28,7 @@ wronguser@domain.com|wrongpwd|false
 ```
 
 
-##Comma separated values:
+## Comma separated values:
  
 Both `abc` and `"abc"` are supported to represent string `abc`. Quoted string will eliminate use of escape
 char for separator char, for example with `,` as separator char you can provide column value `abc, def` as `"abc, def"`
@@ -48,18 +48,18 @@ wronguser@domain.com,pwdtest,false
 wronguser@domain.com,wrongpwd,false 
 ```
 
-##Usage
-###Java
+## Usage
+### Java
 ```java
 @QAFDataProvider(dataFile = "resources/data/logintestdata.csv")
 
 ```
-###BDD
+### BDD
 ```
 Meta-data:{"dataFile":"resources/data/logintestdata.csv"}
 ```
 
-###BDD2
+### BDD2
 ```
 @dataFile:resources/data/logintestdata.csv
 
@@ -71,7 +71,7 @@ Examples: {"dataFile":"resources/data/logintestdata.csv"}
 
 ```
 
-###Gherkin
+### Gherkin
 ```
 Examples: {"dataFile":"resources/data/logintestdata.csv"}
 

@@ -17,18 +17,18 @@ Following is the example of JSON data file used to provide test data. The test g
 ]
 ```
 
-##Usage
-###Java
+## Usage
+### Java
 ```java
 @QAFDataProvider(dataFile = "resources/data/logintestdata.json")
 
 ```
-###BDD
+### BDD
 ```
 Meta-data:{"dataFile":"resources/data/logintestdata.json"}
 ```
 
-###BDD2
+### BDD2
 ```
 @dataFile:resources/data/logintestdata.json
 
@@ -40,7 +40,7 @@ Examples: {"dataFile":"resources/data/logintestdata.json"}
 
 ```
 
-###Gherkin
+### Gherkin
 ```
 Examples: {"dataFile":"resources/data/logintestdata.json"}
 

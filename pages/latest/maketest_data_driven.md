@@ -76,8 +76,9 @@ Priority for meta-data to take effect is:
    * Meta-data set using global test data property, i.e. "gloabal.testdata"
    * Meta-data provided with test case using annotation or as scenario meta-data
 
-##Compete Example
+## Compete Example
 Consider following test data specified in CSV file.
+
 | recId | username | password | isvalid | expected_msg |
 |-------|---------|-------|--------|---------|
 | Wrong password | chirag12 |  test123 | false | Invalid Username Or Password. Please Try Again.|
@@ -93,7 +94,7 @@ Wrong Username,admin,admin123,false,Invalid Username Or Password. Please Try Aga
 ```
 
 
-####java
+#### java
 ```java
 @QAFDataProvider(dataFile = "resources/data/logintestdata.csv")
 @Test(description = "login functionality test")
@@ -105,7 +106,7 @@ public void login(Map<String, Object> data) {
     loginPage.getErrorMessage().verifyText(data.get("expected_msg"));
 }
 ```
-####BDD
+#### BDD
 ```java
 Scenario: example
 Meta-data: {"dataFile":"resources/data/logintestdata.csv"}

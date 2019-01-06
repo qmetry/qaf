@@ -40,19 +40,19 @@ If we want to provide data using xml file below is the sample xml file. The test
 ```
 The test case code will remain same only the change will be in meta-data as below. You need to specify xml file using `dataFile` **only if it is not in** [configured resources](managing_resources_for_different_env.html). 
 
-##Usage
-###Java
+## Usage
+### Java
 ```java
 
 @QAFDataProvider(dataFile = "data/logintestdata.xml", key = "login.data")
 
 ```
-###BDD
+### BDD
 ```
 Meta-data:{"dataFile":"data/logintestdata.xml", "key":"login.data"}
 ```
 
-###BDD2
+### BDD2
 ```
 @dataFile:data/logintestdata.xml
 @key:login.data
@@ -64,7 +64,7 @@ Examples: {"dataFile":"data/logintestdata.xml", "key":"login.data"}
 
 ```
 
-###Gherkin
+### Gherkin
 ```
 Examples: {"dataFile":"data/logintestdata.xml", "key":"login.data"}
 

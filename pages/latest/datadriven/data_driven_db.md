@@ -16,18 +16,18 @@ db.pwd=password
 
 ```
 
-##Usage
-###Java
+## Usage
+### Java
 ```java
 @QAFDataProvider(sqlQuery="select username,password,isvalid from login_table")
 
 ```
-###BDD
+### BDD
 ```
 Meta-data:{"sqlQuery":"select username,password,isvalid from login_table"}
 ```
 
-###BDD2
+### BDD2
 ```
 @sqlQuery:select username,password,isvalid from login_table
 
@@ -39,7 +39,7 @@ Examples: {"sqlQuery":"select username,password,isvalid from login_table"}
 
 ```
 
-###Gherkin
+### Gherkin
 ```
 Examples: {"sqlQuery":"select username,password,isvalid from login_table"}
 
