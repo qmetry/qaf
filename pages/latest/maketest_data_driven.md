@@ -94,7 +94,7 @@ Wrong Username,admin,admin123,false,Invalid Username Or Password. Please Try Aga
 ```
 
 
-#### java
+### java
 ```java
 @QAFDataProvider(dataFile = "resources/data/logintestdata.csv")
 @Test(description = "login functionality test")
@@ -106,8 +106,8 @@ public void login(Map<String, Object> data) {
     loginPage.getErrorMessage().verifyText(data.get("expected_msg"));
 }
 ```
-#### BDD
-```java
+### BDD
+```
 Scenario: example
 Meta-data: {"dataFile":"resources/data/logintestdata.csv"}
 	Given use is on login page
