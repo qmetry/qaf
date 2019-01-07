@@ -9,10 +9,11 @@ tags: [bdd,execution]
 
 QAF considers each BDD Scenario as TestNG test and Scenario Outline as data-driven test. You can run sequential or parallel methods (scenarios) or groups or xml test on one or more browser same as test case in Java.  
 
-In order to run your test cases written using [BDD syntax](bdd-syntax.html), you need to create TestNG [XML](http://testng.org/doc/documentation-main.html#testng-xml) or [YAML](http://testng.org/doc/documentation-main.html#yaml) configuration file with appropriate [factory class](#Factory-class). You can set scenario file to run and step implementation package using properties. To set properties refer [Different ways of providing properties](different_ways_of_providing_prop.html) 
+In order to run your test cases written using [BDD syntax](bdd-syntax.html), you need to create TestNG [XML](http://testng.org/doc/documentation-main.html#testng-xml) or [YAML](http://testng.org/doc/documentation-main.html#yaml) configuration file with appropriate [factory class](#factory-class). You can set scenario file to run and step implementation package using properties. To set properties refer [Different ways of providing properties](different_ways_of_providing_prop.html) 
 
 ## Properties
 Following are properties used for bdd execution configuration
+
 | Property | Value | Description | 
 |-------|---------|-------|
 | step.provider.pkg | one or more package |  Specify where to look up for step implementation. |
