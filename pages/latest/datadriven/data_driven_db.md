@@ -4,6 +4,7 @@ sidebar: qaf_latest-sidebar
 permalink: latest/database.html
 tags: [datadriven]
 folder: latest
+prev: maketest_data_driven.html
 ---
 
 Below are the properties which required to configure in property file to configure database.

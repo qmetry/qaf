@@ -7,10 +7,11 @@ folder: latest
 tags: [bdd]
 ---
 
-QAF supports multiple BDD syntaxes.
+QAF supports multiple BDD syntaxes with [meta-data](scenario-meta-data.html), [comment](bdd-comment.html) and [data-provider](maketest_data_driven.html) support. While using QAF, you can take advantage of each TestNG features, including data-providers, parallel execution [configuration](bdd-configuration.html) in different ways (groups/tests/methods), TestNG listeners.
+
 
 ## QAF BDD2 Syntax
-BDD2 syntax is supported by the `BDDTestFactory2`. It is derived from QAF BDD, Jbehave and Gherkin. 
+BDD2 syntax is supported by the `BDDTestFactory2` which uses [BDDFileParser2](javadoc/com/qmetry/qaf/automation/step/client/text/BDDFileParser2.html). It is derived from QAF BDD, Jbehave and Gherkin. 
 ```
 @group1
 @author:Chirag Jayswal
@@ -58,7 +59,7 @@ Examples:
 ```
 
 ## QAF BDD Syntax
-QAF BDD syntax is supported by the `BDDTestFactory`.
+QAF BDD syntax is supported by the `BDDTestFactory`  which uses [BDDFileParser](javadoc/com/qmetry/qaf/automation/step/client/text/BDDFileParser.html).
 
 ```
 Feature: A feature is a collection of scenarios
@@ -90,7 +91,7 @@ Meta-data: {'groups':['regression'],'datafie':'resources/${env}/testdata.txt'}
 ```
 
 ## Gherkin Syntax
-Gherkin syntax is supported by the `GherkinScenarioFactory`.
+Gherkin syntax is supported by the `GherkinScenarioFactory`  which uses [GherkinFileParser](javadoc/com/qmetry/qaf/automation/step/client/gherkin/GherkinFileParser.html).
 QAF also supports parameters as argument and data-providers for examples, which are not currently available in Gherkin.
 
 ```

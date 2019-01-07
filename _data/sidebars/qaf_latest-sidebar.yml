@@ -108,10 +108,18 @@ entries:
         output: web, pdf
         subfolderitems:
 
-        - title: Overview
+        - title: Test Authoring-Java
           output: web, pdf
           url: Creating_test_cases.html
-
+          
+        - title: Test Authoring-BDD
+          output: web, pdf
+          url: bdd-syntax.html
+          
+        - title: Test Case Metadata
+          output: web, pdf
+          url: scenario-meta-data.html
+          
         - title: Test Data
           output: web, pdf
           url: testdata.html
@@ -173,6 +181,7 @@ entries:
 
       subfolders:
       - title: BDD
+        url: bdd-syntax.html
         output: web, pdf
         subfolderitems:
             - title: Scenario
@@ -251,6 +260,10 @@ entries:
 
     - title: Configuration
       url: creating_configuration_file.html
+      output: web, pdf
+
+    - title: BDD Configuration
+      url: bdd-configuration.html
       output: web, pdf
 
     - title: Meta-data Filter

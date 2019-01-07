@@ -4,6 +4,7 @@ sidebar: qaf_latest-sidebar
 permalink: latest/json.html
 tags: [datadriven]
 folder: latest
+prev: maketest_data_driven.html
 ---
 Following is the example of JSON data file used to provide test data. The test gets executed 3 times as there are 3 data set in data file.
 

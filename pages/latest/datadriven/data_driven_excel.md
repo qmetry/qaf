@@ -4,6 +4,7 @@ sidebar: qaf_latest-sidebar
 permalink: latest/excel.html
 tags: [datadriven]
 folder: latest
+prev: maketest_data_driven.html
 ---
 Following is the example of xls data file used to provide test data where first row is header. The test gets executed 3 times as there are 3 data set in data file. It assumes by default first sheet. If sheet is not first sheet you need to provide sheet name using meta-key `sheetName`.
 

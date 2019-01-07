@@ -1,5 +1,5 @@
 ---
-title: Scenario meta-data
+title: Test case meta-data
 sidebar: qaf_latest-sidebar
 permalink: latest/scenario-meta-data.html
 summary: "Testcase meta-data provides information to help manage a test case.The meta-data are collected as part of the BDD parsing."

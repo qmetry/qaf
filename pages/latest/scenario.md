@@ -11,6 +11,7 @@ Scenario consist of meta-data and sequence of steps to represents a single test 
 Each step can be started with standard BDD keywords.
 
 ## List of available keywords.
+Below are available keywords taht can be used as prefix while calling step in bdd. You can define your own by providing [keyword synonym](BDD_Keywords_Synonyms.html)
 
 |keywords|
 |-------|
@@ -70,7 +71,7 @@ banana,yellow
 ```
 
 
-If you want to uses custom data set you need to provide data provider class and data provider name in meta-data.
+If you want to use custom TestNG data provider, you need to provide data provider name and class in meta-data.
 
 ```
 SCENARIO: Custom Data provider Example 

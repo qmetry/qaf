@@ -1,5 +1,5 @@
 ---
-title: Creating test cases
+title: Creating test cases - Java
 sidebar: qaf_latest-sidebar
 permalink: latest/Creating_test_cases.html
 folder: latest
