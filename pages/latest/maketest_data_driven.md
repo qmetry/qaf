@@ -22,15 +22,15 @@ Following are meta-data for test case used by QAF to specify data provider:
 |Meta-data key|Type|Comments|
 |-------|--------|---------|
 |dataFile|Data-file path|csv, xml, json, xls  file for data driven scenario|
-|sheetName|Text|Used for Excel file to provide sheet name for the data driven senario|
+|sheetName|Text|Used for Excel file to provide sheet name for the data driven scenario|
 |key|Text|Used with xml data, to specify node of xml tree or data table key for excel data table|
 |SQL query|Text|To use database, sql query is required to get data from database.|
 |dataProviderClass|Fully qualified class name|required if you want to use custom data provider (since 2.1.12)|
 |dataProvider|name of the data provider|required when you want to use custom data provider (since 2.1.12)|
-|filter|logical expression|Filter to apply on data set returned by the data-provider that returns List of Maps.|
-|indices|List|list of indices to filter|
-|from|number|start index for range filter|
-|to|number|end index for range filter|
+|filter|logical expression|Filter to apply on data set returned by the data-provider that returns List of Maps. (since 2.1.14)|
+|indices|List|list of indices (base 0) to filter (since 2.1.14)|
+|from|number|start index (base 1) for range filter (since 2.1.14)|
+|to|number|end index (base 1) for range filter (since 2.1.14)|
 
 ### parameters in meta-value
 You can use any property in value of meta-data for data provider. It will get resolved using configuration manager. In addition to  that following special  parameters will be available.
@@ -39,7 +39,11 @@ You can use any property in value of meta-data for data provider. It will get re
  * meta-key - any meta-key from test case meta-data
 
 ## Test data Filter
-You can filter specific test data by providing logical expression or list of indices or range.
+You can [filter specific test data](data_driven_filter.html) by providing logical expression or list of indices or range.
+
+## Data provider Intercepter
+
+Implementation of [QAFDataProviderIntercepter](javadoc/com/qmetry/qaf/automation/testng/dataprovider/QAFDataProviderIntercepter.html) interface can be registered as `QAFListener` to intercept test data provided by Data provider in data driven test case. you can use it to process or apply filter.
 
 ## Configure/Override DataProvider
 

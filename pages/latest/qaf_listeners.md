@@ -17,6 +17,8 @@ You can create listener by implementing appropriate listener interface of by ext
 
 | List Interface | Adapter Class | Property | Listener Methods |
 |-------|--------|---------|---------|
+| QAFDataProviderIntercepter | QAFListenerAdapter  | qaf.listeners  |  	beforeFech(TestNGScenario, ITestContext)
+| | | | List intercept(TestNGScenario, ITestContext, List<java.lang.Object[]>)
 | QAFTestStepListener | QAFTestStepAdapter  | teststep.listeners or qaf.listeners  | onFailure(StepExecutionTracker)
 | | | | beforExecute(StepExecutionTracker)
 | | | | afterExecute(StepExecutionTracker)
