@@ -357,7 +357,7 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 			capabilities.putAll(new ConfigurationMap(config));
 			// capabilities specific to this driver
 			String driverCapsKey = String.format(ApplicationProperties.DRIVER_ADDITIONAL_CAPABILITIES_FORMAT.key,
-					name());
+					browserName);
 			extraCapabilities = gson.fromJson(ConfigurationManager.getBundle().getString(driverCapsKey, "{}"),
 					Map.class);
 			capabilities.putAll(extraCapabilities);
