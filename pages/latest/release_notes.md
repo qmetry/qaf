@@ -10,10 +10,10 @@ folder: latest
 
 **New Features**
 
- 1. New bdd parser and factory - supports meta-data with tags, data driven test using meta-data or example, tag support with examples
+ 1. New [bdd](bdd-syntax.html) parser and factory - derived from QAF BDD, Jbehave and Gherkin. It supports meta-data with tags, data driven test using meta-data or example, tag support with examples
  2. BDD multi-line comment support
  3. [#185](https://github.com/qmetry/qaf/issues/185) support to provider xml file for xml data provider
- 4. [#180](https://github.com/qmetry/qaf/issues/180) added intercepter support in data-provider
+ 4. [#180](https://github.com/qmetry/qaf/issues/180) added [intercepter and filter support](https://qmetry.github.io/qaf/latest/maketest_data_driven.html) in data-provider
  5. [#177](https://github.com/qmetry/qaf/issues/177) Set proxy for specific URL(s) configuration
  
 **Enahancements**
@@ -22,7 +22,7 @@ folder: latest
  2. [#212](https://github.com/qmetry/qaf/issues/212) meta-data with parameters should get reflected with value in qaf report
  3. [#184](https://github.com/qmetry/qaf/issues/184) Support to format step arguments
  4. [#182](https://github.com/qmetry/qaf/issues/182) enhanced utility methods to get parameters from TestNG context
- 5. [#176](https://github.com/qmetry/qaf/issues/176) New annotation @PageIdentifier test-page
+ 5. [#176](https://github.com/qmetry/qaf/issues/176) New annotation [@PageIdentifier](javadoc/com/qmetry/qaf/automation/ui/annotations/PageIdentifier.html) test-page
  6. [#175](https://github.com/qmetry/qaf/issues/175) Support for selenium-support library 3+
  7. [#38](https://github.com/qmetry/qaf/issues/38) for data driven test `global.datadriven.parallel` and `<test-case>.parallel` property 
  8. [#226](https://github.com/qmetry/qaf/issues/226) 
