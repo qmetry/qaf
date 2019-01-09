@@ -6,7 +6,7 @@ folder: latest
 ---
 
 
-There are 2 properties to filter scenario/test cases which is written in bdd or kwd or java.
+There are 2 properties to filter scenario/test cases using [meta-data](scenario-meta-data.html), which is written in bdd or kwd or java.
 
 1. include
 2. exclude
@@ -116,4 +116,12 @@ include={'channel':['Mobile','MobileWeb'],'module':['PDP','search']} exclude={'c
 
  It will include scenario which has meta-data 'channel' with value Mobile OR MobileWeb AND 'module' with value PDP OR search and exclude scenario which has meta-data channel with value web OR module with value cart OR profile.
 
+**NOTE:** Meta-data filter uses method selector `com.qmetry.qaf.automation.testng.pro.QAFMethodSelector`. Please make sure that your ant script or maven pom provided this method selector. Alternately you can add method selector in your xml configuration file. 
 
+```xml
+<method-selectors>
+	<method-selector>
+		<selector-class name="com.qmetry.qaf.automation.testng.pro.QAFMethodSelector" />
+	</method-selector>
+</method-selectors>
+```
