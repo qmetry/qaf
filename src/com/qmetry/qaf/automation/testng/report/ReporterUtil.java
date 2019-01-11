@@ -201,7 +201,7 @@ public class ReporterUtil {
 			if ((overview.getStartTime() > 0)) {
 				overview.setEndTime(System.currentTimeMillis());
 			} else {
-				overview.setStartTime(System.currentTimeMillis());
+				overview.setStartTime(context.getStartDate().getTime());
 			}
 			writeJsonObjectToFile(file, overview);
 			updateMetaInfo(context.getSuite());
