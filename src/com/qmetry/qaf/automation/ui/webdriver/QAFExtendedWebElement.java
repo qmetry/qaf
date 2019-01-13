@@ -85,10 +85,7 @@ public class QAFExtendedWebElement extends RemoteWebElement implements QAFWebEle
 	protected QAFExtendedWebElement parentElement;
 	protected String locator;
 	private Map<String, Object> metaData;
-
-	// init default value true to avoid issue for direct initialization by
-	// driver.
-	protected boolean cacheable = true;
+	protected boolean cacheable = false;
 	private Set<QAFWebElementCommandListener> listners = new LinkedHashSet<QAFWebElementCommandListener>();
 	private String description;
 
@@ -97,6 +94,9 @@ public class QAFExtendedWebElement extends RemoteWebElement implements QAFWebEle
 		id = "-1";
 		metaData = new TreeMap<String, Object>(String.CASE_INSENSITIVE_ORDER);// new HashMap<String, Object>();
 		metaData.putAll(GLOBAL_METADATA);
+		
+		//default value true to avoid issue for direct initialization by driver.
+		cacheable = metaData.containsKey("cacheable") ? (Boolean) metaData.get("cacheable") : true;
 		listners.add(driver.getReporter());
 		if(ApplicationProperties.ELEMENT_ATTACH_DEFAULT_LISTENER.getBoolenVal(true)){
 			listners.add(new ElementMetaDataListener());
@@ -228,7 +228,7 @@ public class QAFExtendedWebElement extends RemoteWebElement implements QAFWebEle
 		this.locator = ConfigurationManager.getBundle().getSubstitutor().replace(this.locator);
 		if (JSONUtil.isValidJsonString(this.locator)) {
 			try {
-				metaData = JSONUtil.toMap(this.locator);
+				metaData.putAll(JSONUtil.toMap(this.locator));
 
 				description = metaData.containsKey("desc") ? (String) metaData.get("desc")
 						: metaData.containsKey("description") ? (String) metaData.get("description") : "";
@@ -252,9 +252,6 @@ public class QAFExtendedWebElement extends RemoteWebElement implements QAFWebEle
 			Map m = new HashMap<String, String>();
 			m.putAll(parameters);
 			m.put("id", id);
-			if ((null != getBy()) && !cacheable) {
-				id = "-1";
-			}
 			commandTracker.setParameters(m);
 			beforeCommand(this, commandTracker);
 			// already handled in before command?
@@ -266,6 +263,10 @@ public class QAFExtendedWebElement extends RemoteWebElement implements QAFWebEle
 
 			}
 			afterCommand(this, commandTracker);
+			
+			if ((null != getBy()) && !cacheable) {
+				id = "-1";
+			}
 		} catch (RuntimeException e) {
 			commandTracker.setException(e);
 			onFailure(this, commandTracker);

@@ -98,7 +98,13 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 		logger.debug("onFinish: done");
 
 	}
-
+	@Override
+	public void onStart(ITestContext testContext) {
+		super.onStart(testContext);
+		if (!skipReporting()){
+			ReporterUtil.updateOverview(testContext, null);
+		}
+	}
 	@Override
 	public void onFinish(ITestContext testContext) {
 		if (skipReporting())
