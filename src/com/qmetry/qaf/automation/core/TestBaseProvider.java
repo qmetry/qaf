@@ -27,6 +27,7 @@ package com.qmetry.qaf.automation.core;
 import java.util.Iterator;
 import java.util.Vector;
 
+import com.qmetry.qaf.automation.integration.ResultUpdator;
 import com.qmetry.qaf.automation.ui.webdriver.ChromeDriverHelper;
 
 /**
@@ -96,6 +97,7 @@ public class TestBaseProvider extends ThreadLocal<QAFTestBase> {
 				TestBaseProvider.instance().prepareForShutDown();
 				TestBaseProvider.instance().stopAll();
 				ChromeDriverHelper.teardownService();
+				ResultUpdator.awaitTermination();
 			}
 		});
 	}

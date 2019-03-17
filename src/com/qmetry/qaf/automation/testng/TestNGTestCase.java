@@ -95,7 +95,7 @@ public abstract class TestNGTestCase extends Validator {
 		this.context = context;
 	}
 
-	@AfterSuite
+	@AfterSuite(alwaysRun = true)
 	final public void afterSuit(ITestContext testContext) {
 		TestBaseProvider.instance().stopAll();
 		ResultUpdator.awaitTermination();
