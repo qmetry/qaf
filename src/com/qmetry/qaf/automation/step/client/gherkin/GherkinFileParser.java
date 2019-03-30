@@ -216,16 +216,17 @@ public class GherkinFileParser extends AbstractScenarioFileParser {
 				}
 			}
 
-			int lastStatementIndex = rows.size() - 1;
-			String lastStamtent = (String) rows.get(lastStatementIndex)[0];
-			if (lastStamtent.equalsIgnoreCase(EXAMPLES)) {
-				rows.remove(lastStatementIndex);
-				lastStatementIndex = lastScenarioIndex;
-			}
-
-			if (!examplesTable.isEmpty()) {
-				setExamples(rows.get(lastStatementIndex), examplesTable);
-				examplesTable.clear();
+			if (!rows.isEmpty()) {
+				int lastStatementIndex = rows.size() - 1;
+				String lastStamtent = (String) rows.get(lastStatementIndex)[0];
+				if (lastStamtent.equalsIgnoreCase(EXAMPLES)) {
+					rows.remove(lastStatementIndex);
+					lastStatementIndex = lastScenarioIndex;
+				}
+				if (!examplesTable.isEmpty()) {
+					setExamples(rows.get(lastStatementIndex), examplesTable);
+					examplesTable.clear();
+				} 
 			}
 
 		} catch (Exception e) {

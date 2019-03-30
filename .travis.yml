@@ -15,6 +15,6 @@ jdk:
  #- oraclejdk7 #  Jdk7 broken on container based trusty travis-ci#7019 
   - openjdk7
   - openjdk8
-  - oraclejdk9
-  - oraclejdk11
+ # - oraclejdk9
+ # - oraclejdk11
 
