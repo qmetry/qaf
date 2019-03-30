@@ -205,7 +205,7 @@ public class QAFTestNGListener {
 			final ITestContext context) {
 		logger.debug("afterInvocation: " + method.getTestMethod().getMethodName()
 				+ " - " + method.getTestMethod().getConstructorOrMethod()
-						.getDeclaringClass().getPackage().getName()
+						.getDeclaringClass().getName()
 				+ " is test:" + method.isTestMethod());
 		// if (method.isTestMethod()) {
 		processResult(tr, context);
