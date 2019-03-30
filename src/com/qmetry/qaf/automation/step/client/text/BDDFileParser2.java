@@ -97,6 +97,7 @@ public class BDDFileParser2 extends AbstractScenarioFileParser {
 					} else {
 						nextSteptype = END; //
 					}
+					type = nextSteptype;
 				} while (!(nextSteptype.equalsIgnoreCase(EXAMPLES) || nextSteptype.equalsIgnoreCase(SCENARIO)
 						|| nextSteptype.equalsIgnoreCase(END)));
 			}

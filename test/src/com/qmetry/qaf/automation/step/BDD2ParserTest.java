@@ -40,42 +40,57 @@ import org.testng.annotations.Test;
 
 import com.qmetry.qaf.automation.step.BDDStepMatcherFactory.GherkinStepMatcher;
 import com.qmetry.qaf.automation.step.client.Scenario;
-import com.qmetry.qaf.automation.step.client.gherkin.GherkinFileParser;
+import com.qmetry.qaf.automation.step.client.text.BDDFileParser2;
 import com.qmetry.qaf.automation.util.Validator;
 
 /**
  * @author chirag.jayswal
  */
-public class GherkinTest {
+public class BDD2ParserTest {
 
 	@Test
 	public void testGherkinParser() {
-		GherkinFileParser parser = new GherkinFileParser();
+		BDDFileParser2 parser = new BDDFileParser2();
 		List<Scenario> scenarios = new ArrayList<Scenario>();
 		parser.parse("resources/features/gherkin.feature", scenarios);
 		Validator.assertThat(scenarios, Matchers.hasSize(7));
 		for (Scenario scenario : scenarios) {
-			Validator.assertThat(scenario.getM_groups(), Matchers.hasItemInArray("@Web"));
+			Validator.assertThat(scenario.getM_groups(), Matchers.hasItemInArray("Web"));
 		}
-
 	}
 	
 	@Test
 	public void testFeatureWithDetails() {
-		GherkinFileParser parser = new GherkinFileParser();
+		BDDFileParser2 parser = new BDDFileParser2();
 		List<Scenario> scenarios = new ArrayList<Scenario>();
 		parser.parse("resources/features/featureWithDetails.feature", scenarios);
 		Validator.assertThat(scenarios, Matchers.hasSize(1));
 		for (Scenario scenario : scenarios) {
-			Validator.assertThat(scenario.getM_groups(), Matchers.hasItemInArray("@Web"));
-			Validator.assertThat(scenario.getM_groups(), Matchers.hasItemInArray("@Smoke"));
+			Validator.assertThat(scenario.getM_groups(), Matchers.hasItemInArray("Web"));
+			Validator.assertThat(scenario.getM_groups(), Matchers.hasItemInArray("Smoke"));
+			Validator.assertThat("Steps in scenario", scenario.getSteps(), Matchers.hasSize(4));
 		}
+	}
+	
+	@Test
+	public void testFeatureWithDetails2() {
+		BDDFileParser2 parser = new BDDFileParser2();
+		List<Scenario> scenarios = new ArrayList<Scenario>();
+		parser.parse("resources/scenarios2/featureWithDetails2.feature", scenarios);
+		Validator.assertThat(scenarios, Matchers.hasSize(2));
+		for (Scenario scenario : scenarios) {
+			Validator.assertThat(scenario.getM_groups(), Matchers.hasItemInArray("Web"));
+			Validator.assertThat(scenario.getM_groups(), Matchers.hasItemInArray("Smoke"));
+		}
+		Validator.assertThat("Steps in scenario", scenarios.get(0).getSteps(), Matchers.hasSize(4));
+		//doc string should be added as comment
+		Validator.assertThat("Steps in scenario", scenarios.get(1).getSteps(), Matchers.hasSize(5));
 
 	}
 
 	@Test(description = "make sure it parse scenario with all steps")
 	public void testGherkinParserForScenarioSteps() {
-		GherkinFileParser parser = new GherkinFileParser();
+		BDDFileParser2 parser = new BDDFileParser2();
 		List<Scenario> scenarios = new ArrayList<Scenario>();
 		parser.parse("resources/features/gherkinWithSingleScenario.feature", scenarios);
 		Validator.assertThat("Scenarios in feature", scenarios, Matchers.hasSize(1));
@@ -85,7 +100,7 @@ public class GherkinTest {
 
 	@Test
 	public void parseBDDWithMultipleScenario() {
-		GherkinFileParser parser = new GherkinFileParser();
+		BDDFileParser2 parser = new BDDFileParser2();
 		List<Scenario> scenarios = new ArrayList<Scenario>();
 		parser.parse("resources/features/gherkin.feature", scenarios);
 		Validator.assertThat("Scenarios in feature", scenarios, Matchers.hasSize(7));
@@ -105,7 +120,7 @@ public class GherkinTest {
 
 	@Test
 	public void parseGherkinWithBackground() {
-		GherkinFileParser parser = new GherkinFileParser();
+		BDDFileParser2 parser = new BDDFileParser2();
 		List<Scenario> scenarios = new ArrayList<Scenario>();
 		parser.parse("resources/features/gherkinWithBackground.feature", scenarios);
 		Validator.assertThat(scenarios, Matchers.hasSize(4));
