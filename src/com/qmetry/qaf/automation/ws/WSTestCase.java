@@ -22,23 +22,23 @@
  *******************************************************************************/
 
 
-package com.qmetry.qaf.automation.ws.rest;
+package com.qmetry.qaf.automation.ws;
 
 import com.qmetry.qaf.automation.testng.TestNGTestCase;
-import com.qmetry.qaf.automation.ws.Response;
-import com.qmetry.qaf.automation.ws.WSTestCase;
+import com.qmetry.qaf.automation.util.Validator;
+import com.qmetry.qaf.automation.ws.rest.RestTestBase;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
 
 /**
- * @deprecated use {@link WSTestCase} instead
+ * com.qmetry.qaf.automation.ws.WSTestCase.java
  * 
  * @author chirag
  */
-public class RestWSTestCase extends TestNGTestCase {
+public class WSTestCase extends TestNGTestCase {
 	private RestTestBase testBase;
 
-	public RestWSTestCase() {
+	public WSTestCase() {
 		testBase = new RestTestBase();
 	}
 

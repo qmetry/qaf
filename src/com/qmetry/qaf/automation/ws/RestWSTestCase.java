@@ -24,17 +24,17 @@
 
 package com.qmetry.qaf.automation.ws;
 
-import com.qmetry.qaf.automation.util.Validator;
+import com.qmetry.qaf.automation.testng.TestNGTestCase;
 import com.qmetry.qaf.automation.ws.rest.RestTestBase;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
 
 /**
- * com.qmetry.qaf.automation.ws.RestWSTestCase.java
+ * @deprecated use {@link WSTestCase} instead
  * 
  * @author chirag
  */
-public class RestWSTestCase extends Validator {
+public class RestWSTestCase extends TestNGTestCase {
 	private RestTestBase testBase;
 
 	public RestWSTestCase() {
