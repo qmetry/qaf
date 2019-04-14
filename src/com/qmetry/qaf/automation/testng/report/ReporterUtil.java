@@ -58,6 +58,7 @@ import org.testng.ITestContext;
 import org.testng.ITestNGMethod;
 import org.testng.ITestResult;
 import org.testng.annotations.Test;
+import org.testng.xml.XmlSuite;
 import org.testng.xml.XmlTest;
 
 import com.qmetry.qaf.automation.core.CheckpointResultBean;
@@ -88,19 +89,21 @@ public class ReporterUtil {
 
 	}
 
+	private static Map<XmlSuite, Collection<ISuiteResult>> resultMap= new HashMap<XmlSuite, Collection<ISuiteResult>>();
 	private static void createMetaInfo(ISuite suite, boolean listEntry) {
 		List<XmlTest> tests = suite.getXmlSuite().getTests();
 		List<String> testNames = new ArrayList<String>();
 		for (XmlTest test : tests) {
-			testNames.add(getTestName(test.getName()));
+			testNames.add(getTestName(test));
 		}
+
 		String dir = ApplicationProperties.JSON_REPORT_DIR.getStringVal();
 		Report report = new Report();
 
 		if (!getBundle().containsKey("suit.start.ts")) {
 			dir = ApplicationProperties.JSON_REPORT_DIR
 					.getStringVal(ApplicationProperties.JSON_REPORT_ROOT_DIR.getStringVal(
-							"test-results") + "/" + DateUtil.getDate(0, "EdMMMyy_hhmma"));
+							"test-results") + "/" + DateUtil.getDate(0, "EdMMMyy_hhmmssa"));
 			getBundle().setProperty(ApplicationProperties.JSON_REPORT_DIR.key, dir);
 			FileUtil.checkCreateDir(ApplicationProperties.JSON_REPORT_ROOT_DIR
 					.getStringVal("test-results"));
@@ -115,12 +118,30 @@ public class ReporterUtil {
 
 		int pass = 0, fail = 0, skip = 0, total = 0;
 		Iterator<ISuiteResult> iter = suite.getResults().values().iterator();
+		resultMap.put(suite.getXmlSuite(), suite.getResults().values());
 		while (iter.hasNext()) {
 			ITestContext context = iter.next().getTestContext();
 			pass += getPassCnt(context);
 			skip += getSkipCnt(context);
 			fail += getFailCnt(context) + getFailWithPassPerCnt(context);
 			total += getTotal(context);
+		}
+		List<XmlSuite> childs = suite.getXmlSuite().getChildSuites();
+		for(XmlSuite csuite: childs){
+			tests = csuite.getTests();
+			for (XmlTest test : tests) {
+				testNames.add(getTestName(test));
+			}	
+			if(resultMap.containsKey(csuite)){
+				iter = resultMap.get(csuite).iterator();
+				while (iter.hasNext()) {
+					ITestContext context = iter.next().getTestContext();
+					pass += getPassCnt(context);
+					skip += getSkipCnt(context);
+					fail += getFailCnt(context) + getFailWithPassPerCnt(context);
+					total += getTotal(context);
+				}
+			}
 		}
 		report.setPass(pass);
 		report.setFail(fail);
@@ -434,12 +455,16 @@ public class ReporterUtil {
 		}
 	}
 
+	private static String getTestName(XmlTest context) {
+		return getTestName(context.getSuite().getName()+"_"+context.getName());
+
+	}
 	private static String getTestName(ITestContext context) {
 		if (context == null) {
 			context = (ITestContext) ConfigurationManager.getBundle()
 					.getObject(ApplicationProperties.CURRENT_TEST_CONTEXT.key);
 		}
-		return getTestName(context.getName());
+		return getTestName(context.getCurrentXmlTest());
 
 	}
 
