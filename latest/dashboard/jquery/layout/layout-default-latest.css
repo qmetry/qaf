@@ -131,10 +131,10 @@ body {
 	}
 	.ui-layout-toggler-hover , /* need when NOT resizable */
 	.ui-layout-resizer-hover .ui-layout-toggler-hover { /* need specificity when IS resizable */
-		background-color: #6dc849;
+		background-color: #0EDE00;
 		opacity: 1.00;
 		filter:  alpha(opacity=100);
-		border-color:#6dc849 !important;
+		border-color:#0EDE00 !important;
 		
 	}
 	.ui-layout-toggler .content { color:#ffffff !important; }
