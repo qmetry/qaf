@@ -1,4 +1,4 @@
-<!-- Green #6dc849
+<!-- Green #0EDE00
 Blue : #032545-->
 .clear { clear:both; }
 
@@ -18,16 +18,16 @@ h4 {color: #808080; }
 }
 
 .nav > li.active > a {
-    background-color: #6dc849 !important;
+    background-color: #0EDE00 !important;
 }
 
 .nav > li > a:hover {
-    background-color: #6dc849 !important;
+    background-color: #0EDE00 !important;
     border-radius: 5px;
 }
 
 div.navbar-collapse .dropdown-menu > li > a:hover {
-    background-color: #6dc849 !important;
+    background-color: #0EDE00 !important;
 }
 
 .nav li.thirdlevel > a {
@@ -44,15 +44,15 @@ a[data-toggle="tooltip"] {
 
 .navbar-inverse {
     background-color: #032545;
-    /*border-color: #6dc849;*/
+    /*border-color: #0EDE00;*/
 }
 
 .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
-    color: #6dc849;
+    color: #0EDE00;
 }
 
 .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
-    background-color: #6dc849;
+    background-color: #0EDE00;
     color: #ffffff;
 }
 
@@ -63,8 +63,8 @@ a[data-toggle="tooltip"] {
 
 .btn-primary {
     color: #ffffff;
-    background-color: #6dc849;
-    border-color: #6dc849;
+    background-color: #0EDE00;
+    border-color: #0EDE00;
 }
 
 .btn-primary:hover,
