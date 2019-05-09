@@ -14,7 +14,7 @@ tags: [getting_started]
 | scenario.file.loc | scenarios | list of file/folder from where bdd/kwd scenarios need to be executed
 | remote.server | localhost |	If you are using remote driver, specify server.
 | remote.port |	4444 | If you are using remote driver, specify port on which selenium server is running.
-| driver.name	| | Name of driver to create instance of that driver. Available Possible Values.<br> firefoxDriver, iExplorerDriver, chromeDriver, operaDriver, androidDriver, iPhoneDriver, appiumDriver, <br/><b>otherDriver</b> : To use custom driver, provide driver class as capability. <br/> **Example**:<br/>To use PhantomJSDriver<br/><br/> driver.name=otherDriver <br/> other.additional.capabilities={'driverClass':'org.openqa.selenium.phantomjs.PhantomJSDriver'}
+| driver.name	| | Name of driver to create instance of that driver. Available Possible Values.<br> edgeDriver, firefoxDriver, iexplorerDriver, chromeDriver, operaDriver, safariDriver, androidDriver, iPhoneDriver, appiumDriver, <br/><b>otherDriver</b> : To use custom driver, provide driver class as capability. <br/> **Example**:<br/>To use PhantomJSDriver<br/><br/> driver.name=otherDriver <br/> other.additional.capabilities={'driverClass':'org.openqa.selenium.phantomjs.PhantomJSDriver'}
 | webdriver.remote.session | | selenium remote session id for debugging purpose.
 | selenium.wait.timeout	| 30000	| Default timeout in ms for all the element related commands and for waitservices methods.
 | webdriver.ie.driver	| |	Sepcify IEDriverServer file path here. Required when using iExplorerDriver
