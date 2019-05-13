@@ -18,7 +18,7 @@ Gherkin is well known behavior driven language that Cucumber understands. Howeve
 
 -  Lake of run configuration: you need to be dependent on other java unit testing framework JUnit or TestNG just for run configuration. Even if you use TestNG with Cucumber, you can't take full advantage of all features provided by TestNG!
 -  Using test data form outside the feature file (this is quite important when you need to run feature file for 2 different environment, let say staging and test, where test data defers)
--  running scenario in parallel
+-  Running scenario in parallel
 -  Limited hooks (for example you can not have step hook)
 -  Integrations (ex: test-management tools)
 -  Cannot reuse common steps and hooks across multiple project by having steps and hooks in packaged jar and so on...  
@@ -27,7 +27,7 @@ There are different non-standard ways people use to overcome with one or other s
 
 Another open challenge for web and mobile test automation is, cucumber is unit test testing framework and you have to create your own implementation to support web, mobile web or mobile native support.
 
-In order to overcome with such challenges, We provided Scenario Factory for Gherkin so Gherkin can be used as QAF test step client in addition to BDD, CSV, Excel, and XML client.  
+In order to overcome such challenges, We provided Scenario Factory for Gherkin so Gherkin can be used as QAF test step client in addition to BDD, CSV, Excel, and XML client.  
 
 
 ### Benefits of using QAF-Gherkin Scenario Factory

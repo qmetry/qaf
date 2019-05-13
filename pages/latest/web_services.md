@@ -31,7 +31,7 @@ On extending `RestWSTestCase` following object will be available to use in your 
 
 **Example**
 
-Below is an sample example to invoke http request and verify response code using QAF.
+Below is a sample example to invoke http request and verify response code using QAF.
 
 ```java
 public class Wstest extends RestWSTestCase {
