@@ -9,7 +9,7 @@ tags: [Selenium,locator,java, webdriver, webelement]
 QMetry Automation Framework provides concept called **“Locator Repository”** which can be used to abstract your element locator outside the code. Moreover, you can have separate locator repositories per environment/platform and you can configure at runtime to load environment specific locator repository. 
 
 ## Creating Locator repository
-You can create Locator repository with property file having extension ‘. property’ or ‘.loc’. In repository provide key-value pair of **locator-key** and **locator-value**. While developing test assets insted of providing locator you can use the **locator-key**. To provide locator-value refer [how to locating element](locating_elements.html). 
+You can create Locator repository with property file having extension ‘. property’ or ‘.loc’. In repository provide key-value pair of **locator-key** and **locator-value**. While developing test assets instead of providing locator you can use the **locator-key**. To provide locator-value refer [how to locating element](locating_elements.html). 
 
 ## Example ##
 

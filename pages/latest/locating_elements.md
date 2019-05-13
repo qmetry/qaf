@@ -9,8 +9,8 @@ tags: [Selenium, locator, java, webdriver, webelement]
 ## Locating Elements
 
 In order to locate element QAF provides selenium-1 style syntax. This approach has two benefits: 
- * First of all, you don't need to hardcode or fix strategy for locator in code (for example By.xpath(myxpath)) with qaf locator strategy you can easily switch form one locator to anoter locator either strategy or locator value. 
- * Secondly, you can seperate out locator outside your code by using locator repository, where you can maintain locator without code change.
+ * First of all, you don't need to hardcode or fix strategy for locator in code (for example By.xpath(myxpath)) with qaf locator strategy you can easily switch from one locator to another locator either strategy or locator value. 
+ * Secondly, you can separate out locator outside your code by using locator repository, where you can maintain locator without code change.
 
 ### Element locator syntax
 

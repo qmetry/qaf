@@ -13,8 +13,8 @@ The ideal example is item details page which can be open from item list page.
 
 On item list page there can be list of items with available action for each item and each item's "view details" action takes you to item details page.
 
-Here the page locator provides a way to locate specific item's details page. For example open Item Details page for Item xxx. In other cases you can ignore it.
-Above example of item details page be accomplished by use of page locator. In Item details page you might have openPage implementation like:
+Here the page locator provides a way to locate specific item's details page. For example, open Item Details page for Item xxx. In other cases, you can ignore it.
+Above example of item details page be accomplished by the use of page locator. In Item details page you might have an openPage implementation like:
 
 ```java
 @Override
@@ -53,7 +53,7 @@ itemDetailsPage.launchPage(new DefaultPageLocator("XYZ"));
 
 ## Complex example of page hierarchy and page locator
 
-Consider that in online shopping cart ecommerce application, through admin UI, admin can upload items, supplier etc from excel or another file. After upload there is a status page which shows upload details and provides a link to see details of upload. From status page admin can select and edit individual supplier or item information.
+Consider that in online shopping cart e-commerce application, through admin UI, admin can upload items, supplier, etc from excel or another file. After upload, there is a status page which shows upload details and provides a link to see details of upload. From status page, admin can select and edit individual supplier or item information.
 
 ```java	
 public class EditSupplierDetailPage extends WebDriverBaseTestPage<WebDriverTestPage> {
@@ -116,7 +116,7 @@ public class UploadHistoryPage extends WebDriverBaseTestPage<WebDriverTestPage> 
 
 ## Object arguments
 
-Page locator has some time limited scope for providing launch hierarchy parameters.
+Page locator has sometimes limited scope for providing launch hierarchy parameters.
 
  
 
