@@ -79,7 +79,7 @@ String RATE_CAL_LINK_LOC = "{'locator':'css=.multiRateCalendarLink';'desc':'Brow
 
 {% include inline_image.html file="CustomComponent3.png" alt="Custom Component " %}
 
-You can notice that in page list of property is defined as list of Property component. The property component also defines RateOptions component and a calendar component.
+You can notice that in page list of property is defined as a list of Property component. The property component also defines RateOptions component and a calendar component.
 
 The next step is overriding equals method to search specific component from list of component. For example below sample code demonstrate that we can match property component with string (name or id of property) or a data bean.
 
@@ -130,7 +130,7 @@ private Property getProperty(Object o) {
 ```
 {% include inline_image.html file="CustomComponent4.png" alt="Custom Component " %}
 
-Above is example of reusable component in different page/component. You need to create component sane as above and declare in different page/component where it is used.
+Above is example of reusable component in different page/component. You need to create component same as above and declare in different page/component where it is used.
 
 ```java
 @FindBy(locator = CALENDAR_COMPONENT_LOC)
