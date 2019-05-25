@@ -21,7 +21,6 @@
  * For any inquiry or need additional information, please contact support-qaf@infostretch.com
  *******************************************************************************/
 
-
 package com.qmetry.qaf.automation.ui.webdriver;
 
 import java.util.List;
@@ -30,41 +29,51 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.RemoteWebElement;
 
 /**
  * com.ispl.automation.sample.test.ByAny.java
  * 
- * @author chirag
+ * JQuery strategy locator strategy for application where JQuery used in client
+ * side implementation. If JQuery is not used, then either a direct connection or
+ * a proxy setting is needed to access
+ * https://ajax.googleapis.com/ajax/libs/jquery in order for the JQuery JS to be
+ * retrieved.
+ * 
+ * @author chirag.jayswal
  */
 public class ByJQuery extends By {
 	private String jQuerySelector;
+	private static final String JQUERY_SELECTOR = "var lst = [];  $(arguments[0]).each( function(i,item) { lst.push(item); } ); return lst;";
+	private static final String JQUERY_CHILD_SELECTOR = "var lst = [];  $(arguments[0]).find(arguments[1]).each( function(i,item) { lst.push(item); } ); return lst;";
 
 	public ByJQuery(String jQuerySelector) {
 		this.jQuerySelector = jQuerySelector;
 	}
 
-	@Override
-	public WebElement findElement(SearchContext context) {
-		((JavascriptExecutor) context).executeScript(getJQueryInjectSnippet());
-		return (WebElement) ((JavascriptExecutor) context).executeScript(" return $('" + jQuerySelector + "')[0];");
-
-	}
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<WebElement> findElements(SearchContext context) {
-		((JavascriptExecutor) context).executeScript(getJQueryInjectSnippet());
-		List<WebElement> objects = (List<WebElement>) ((JavascriptExecutor) context).executeScript(
-				"var lst = [];  $('" + jQuerySelector + "').each( function(i,item) { lst.push(item); } ); return lst;");
+		JavascriptExecutor jse;
+		String js;
+		Object[] args;
+		if (context instanceof RemoteWebElement) {
+			jse = (JavascriptExecutor) ((RemoteWebElement) context).getWrappedDriver();
+			js = JQUERY_CHILD_SELECTOR;
+			args = new Object[] { context, jQuerySelector };
+		} else {
+			jse = (JavascriptExecutor) context;
+			js = JQUERY_SELECTOR;
+			args = new Object[] { jQuerySelector };
+		}
+		jse.executeScript(getJQueryInjectSnippet());
+		List<WebElement> objects = (List<WebElement>) jse.executeScript(js, args);
 		return objects;
 	}
 
 	@Override
 	public String toString() {
-		StringBuilder stringBuilder = new StringBuilder("Using JQuery Selector: ");
-		stringBuilder.append(jQuerySelector);
-
-		return stringBuilder.toString();
+		return "Using JQuery Selector: " + jQuerySelector;
 	}
 
 	private static String getJQueryInjectSnippet() {
