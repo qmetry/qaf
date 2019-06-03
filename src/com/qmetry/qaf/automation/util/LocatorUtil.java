@@ -36,6 +36,8 @@ import com.google.gson.JsonElement;
 import com.qmetry.qaf.automation.core.ConfigurationManager;
 import com.qmetry.qaf.automation.ui.webdriver.ByAny;
 import com.qmetry.qaf.automation.ui.webdriver.ByCustom;
+import com.qmetry.qaf.automation.ui.webdriver.ByExtCompQuery;
+import com.qmetry.qaf.automation.ui.webdriver.ByExtDomQuery;
 import com.qmetry.qaf.automation.ui.webdriver.ByJQuery;
 
 public class LocatorUtil {
@@ -92,6 +94,12 @@ public class LocatorUtil {
 			}
 			if (parts[0].equalsIgnoreCase("jquery")) {
 				return new ByJQuery(parts[1]);
+			}
+			if (parts[0].equalsIgnoreCase("extDom")) {
+				return new ByExtDomQuery(parts[1]);
+			}
+			if (parts[0].equalsIgnoreCase("extComp")) {
+				return new ByExtCompQuery(parts[1]);
 			}
 			if (parts[0].equalsIgnoreCase("name")) {
 				return By.name(parts[1]);

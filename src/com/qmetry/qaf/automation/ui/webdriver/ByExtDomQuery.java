@@ -32,60 +32,64 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebElement;
 
 /**
- * com.qmetry.qaf.automation.ui.webdriver.ByJQuery
+ * This class allows to find element using ExtJS DOM query where ExtJS library used in UI.
+ * Refer sencha extjs DOM Query <a href=
+ * "https://docs.sencha.com/extjs/6.2.0/classic/Ext.dom.Query.html">documentation</a>
  * 
- * JQuery strategy locator strategy for application where JQuery used in client
- * side implementation. If JQuery is not used, then either a direct connection or
- * a proxy setting is needed to access
- * https://ajax.googleapis.com/ajax/libs/jquery in order for the JQuery JS to be
- * retrieved.
+ * <h5>Few Examples:</h5>
+ * <ul>
+ * <li>field[fieldLabel=name] : will locate field(s) with label "name"
+ * <li>field[fieldLabel$=name] : will locate all fields with label ends with
+ * "name"
+ * <li>datefield : will locate all elements with xtype "datefield"
+ * </ul>
+ * <h5>Usage</h5>
+ * <code>
+ * <li>
+ * extDom=&lt;dom-query&gt;
+ * <li>extDom=#classtree
+ * <li>extDom=:not(.foo)
+ * </code>
  * 
  * @author chirag.jayswal
  */
-public class ByJQuery extends By {
-	private String jQuerySelector;
-	private static final String JQUERY_SELECTOR = "var lst = [];  $(arguments[0]).each( function(i,item) { lst.push(item); } ); return lst;";
-	private static final String JQUERY_CHILD_SELECTOR = "var lst = [];  $(arguments[0]).find(arguments[1]).each( function(i,item) { lst.push(item); } ); return lst;";
+public class ByExtDomQuery extends By {
+	private String querySelector;
 
-	public ByJQuery(String jQuerySelector) {
-		this.jQuerySelector = jQuerySelector;
+	private static final String COMP_QUERY = "var elements = new Array();"
+			+ "var res = Ext.query(arguments[0]); " 
+			+ "return elements;";
+	private static final String CHILD_COMP_QUERY = "var elements = new Array();"
+			+ "var res = Ext.dom.query('#'+arguments[0].id+' '+ arguments[1]);" 
+			+ "return elements;";
+
+	public ByExtDomQuery(String querySelector) {
+		this.querySelector = querySelector;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.openqa.selenium.By#findElements(org.openqa.selenium.SearchContext)
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<WebElement> findElements(SearchContext context) {
-		JavascriptExecutor jse;
-		String js;
-		Object[] args;
+		Object res;
 		if (context instanceof RemoteWebElement) {
-			jse = (JavascriptExecutor) ((RemoteWebElement) context).getWrappedDriver();
-			js = JQUERY_CHILD_SELECTOR;
-			args = new Object[] { context, jQuerySelector };
+			res = ((JavascriptExecutor) ((RemoteWebElement) context).getWrappedDriver()).executeScript(CHILD_COMP_QUERY,
+					context, querySelector);
 		} else {
-			jse = (JavascriptExecutor) context;
-			js = JQUERY_SELECTOR;
-			args = new Object[] { jQuerySelector };
+			res = ((JavascriptExecutor) context).executeScript(COMP_QUERY, querySelector);
 		}
-		jse.executeScript(getJQueryInjectSnippet());
-		List<WebElement> objects = (List<WebElement>) jse.executeScript(js, args);
-		return objects;
+		
+		return (List<WebElement>) res;
 	}
 
 	@Override
 	public String toString() {
-		return "Using JQuery Selector: " + jQuerySelector;
+		return "Using ExtJs DOM Query: " + querySelector;
 	}
 
-	private static String getJQueryInjectSnippet() {
-		return "(function(callback) {" + " if (typeof jQuery == 'undefined') {"
-				+ " var jqueryUrl = 'https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js';"
-				+ "	var script = document.createElement('script');"
-				+ "	var head = document.getElementsByTagName('head')[0];" + "	var done = false;"
-				+ "   script.onload = script.onreadystatechange = (function() {"
-				+ "            if (!done && (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete')) {"
-				+ "	            done = true;" + "               script.onload = script.onreadystatechange = null;"
-				+ "               head.removeChild(script);" + "               callback();" + "           }"
-				+ "        });" + "  script.src = jqueryUrl;" + "  head.appendChild(script);"
-				+ "  }})(arguments[arguments.length - 1]);";
-	}
 }
