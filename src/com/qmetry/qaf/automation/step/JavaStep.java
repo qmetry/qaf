@@ -35,16 +35,13 @@ import static org.apache.commons.lang.StringUtils.isBlank;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.text.StrSubstitutor;
@@ -53,7 +50,6 @@ import org.json.JSONException;
 import com.qmetry.qaf.automation.core.AutomationError;
 import com.qmetry.qaf.automation.core.TestBaseProvider;
 import com.qmetry.qaf.automation.data.MetaData;
-import com.qmetry.qaf.automation.ui.api.TestPage;
 import com.qmetry.qaf.automation.ui.webdriver.QAFWebElement;
 import com.qmetry.qaf.automation.util.JSONUtil;
 
@@ -144,7 +140,16 @@ public class JavaStep extends BaseTestStep {
 	@Override
 	protected Object doExecute() {
 		try {
-			Object stepProvider = getStepProvider();
+			Object stepProvider = null;
+			try {
+				stepProvider = getStepProvider();
+			} catch (Exception e) {
+				if(!Modifier.isStatic(method.getModifiers())){
+					throw new StepInvocationException(this,
+							"Unable to Instantiate JavaStep: " + getName() + Arrays.toString(actualArgs) + getSignature(),
+							true);
+				}
+			}
 			// block joint-point listener
 			TestBaseProvider.instance().get().getContext().setProperty(ATTACH_LISTENER, false);
 			TestBaseProvider.instance().get().getContext().setProperty("current.teststep", this);
@@ -168,16 +173,12 @@ public class JavaStep extends BaseTestStep {
 				throw (RuntimeException) e.getCause();
 			}
 			throw new StepInvocationException(this, e.getCause());
-		} catch (InstantiationException e) {
-			throw new StepInvocationException(this,
-					"Unable to Instantiate JavaStep: " + getName() + Arrays.toString(actualArgs) + getSignature(),
-					true);
 		}
 	}
 
 	protected Object getStepProvider()
-			throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		return stepProvider == null ? getClassInstance(method.getDeclaringClass()) : stepProvider;
+			throws Exception {
+		return stepProvider == null ? ObjectFactory.INSTANCE.getObject(method.getDeclaringClass()) : stepProvider;
 	}
 
 	/**
@@ -263,67 +264,7 @@ public class JavaStep extends BaseTestStep {
 
 		}
 	}
-
-	private Object getClassInstance(Class<?> cls)
-			throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		if (getBundle().getBoolean("step.provider.sharedinstance", false) && isSharableInstance(cls)) {
-			// allow class variable sharing among steps
-			Object obj = getBundle().getObject(cls.getName());
-			if (null == obj) {
-				obj = createInstance(cls);
-				inject(obj);
-				getBundle().setProperty(cls.getName(), obj);
-			}
-			return obj;
-		}
-		Object obj = createInstance(cls);
-		inject(obj);
-		return obj;
-	}
-
-	private void inject(Object obj) {
-		try {
-			// new ElementFactory().initFields(obj);
-			Field[] flds = obj.getClass().getDeclaredFields();
-			for (Field fld : flds) {
-				if (fld.isAnnotationPresent(Inject.class)) {
-					fld.setAccessible(true);
-					Object value = getClassInstance(fld.getType());
-					fld.set(obj, value);
-				}
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
-
-		}
-	}
-
-	private Object createInstance(Class<?> cls)
-			throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		try {
-			return cls.newInstance();
-		} catch (Exception e) {
-			// only public constructors with or without parameter(s) to be
-			// considered!...
-			Constructor<?> con = cls.getConstructors()[0];
-			con.setAccessible(true);
-			ArrayList<Object> args = new ArrayList<Object>();
-			for (Class<?> param : con.getParameterTypes()) {
-				args.add(getClassInstance(param));
-			}
-			return con.newInstance(args.toArray(new Object[args.size()]));
-
-		}
-	}
-
-	private boolean isSharableInstance(Class<?> cls) {
-
-		if (TestPage.class.isAssignableFrom(cls) || QAFWebElement.class.isAssignableFrom(cls)) {
-			return false;
-		}
-		return true;
-	}
-
+	
 	private void setMetaData() {
 
 		Annotation[] allAnnotations = method.getAnnotations();
