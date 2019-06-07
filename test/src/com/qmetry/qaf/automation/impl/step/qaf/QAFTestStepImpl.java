@@ -62,7 +62,7 @@ public class QAFTestStepImpl {
 	}
 
 	@QAFTestStep(description="I get at least {num} results")
-	public void iGet_inSearchResults(int n) {
+	public void iGet_inSearchResults(Integer n) {
 		System.out.printf("I get at least %d results\n", n);
 
 	}

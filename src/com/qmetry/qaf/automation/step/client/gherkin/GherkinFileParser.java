@@ -266,7 +266,8 @@ public class GherkinFileParser extends AbstractScenarioFileParser {
 			for (int i = 1; i < examplesTable.size(); i++) {
 				Map<String, Object> map = new LinkedHashMap<String, Object>();
 				for (int k = 0; k < keys.size(); k++) {
-					map.put(keys.get(k), examplesTable.get(i).get(k).toString().trim());
+					Object val = examplesTable.get(i).get(k);
+					map.put(keys.get(k), null!=val?val.toString().trim():null);
 				}
 				dataMapList.add(map);
 			}

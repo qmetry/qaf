@@ -63,6 +63,10 @@ Examples:
  | "Selenium ISFW" | My "Test Automation Framework" | 10 |
  | "Selenium ISFW" | My 'Test Automation Framework' | 10 |
  | "Selenium ISFW" | "My ""Test Automation Framework""" | 10 |
+ | "Empty String value" |  | 0 |
+ # empty/null for numeric data worked fine with QAF step implementation with Integer type 
+# | "Empty numeric value" |  |  |
+ 
  
  
 Scenario: Optional parameter
