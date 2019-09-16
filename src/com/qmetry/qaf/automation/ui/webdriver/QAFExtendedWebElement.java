@@ -1288,12 +1288,12 @@ public class QAFExtendedWebElement extends RemoteWebElement implements QAFWebEle
 		return metaData;
 	}
 
-	public QAFWebElement findElementByCustomStretegy(String strategy, String loc) {
-		return (QAFWebElement) findElement(strategy, loc);
+	public QAFWebElement findElementByCustomStretegy(String stetegy, String loc) {
+		return (QAFWebElement) findElement(stetegy, loc);
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<WebElement> findElementsByCustomStretegy(String strategy, String loc) {
-		return (List<WebElement>) (List<? extends WebElement>) findElements(strategy, loc);
+	public List<WebElement> findElementsByCustomStretegy(String stetegy, String loc) {
+		return (List<WebElement>) (List<? extends WebElement>) findElements(stetegy, loc);
 	}
 }
