@@ -45,6 +45,7 @@ import org.openqa.selenium.Point;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.DriverCommand;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.remote.Response;
@@ -295,12 +296,20 @@ public class QAFExtendedWebElement extends RemoteWebElement implements QAFWebEle
 	}
 
 	private void load() {
-		if ((id == "-1")) {
+		if (null==id || (id == "-1")) {
+			Map<String, ?> parameters = new HashMap<String, String>();
+			CommandTracker commandTracker = new CommandTracker(DriverCommand.FIND_ELEMENT, parameters);
 			if (parentElement == null) {
+				beforeCommand(this, commandTracker);
 				((QAFExtendedWebDriver) parent).load(this);
+				afterCommand(this, commandTracker);
 			} else {
+				parentElement.load();
+				beforeCommand(this, commandTracker);
 				setId(parentElement.findElement(getBy()).id);
+				afterCommand(this, commandTracker);
 			}
+			
 		}
 	}
 
