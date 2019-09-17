@@ -423,18 +423,7 @@ This file describes the list of other open source software used as part of QMetr
 	limitations under the License.
 
 ========================================================================================
-33. cucumber-java		->  https://opensource.org/licenses/mit-license
-
-	Additional Licensing Terms:
-	============================
-	Copyright 2016 Infostretch Corporation
-	
-	Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
- 
-	The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-========================================================================================
-34. json 		        ->  http://json.org/license.html
+33. json 		        ->  http://json.org/license.html
 
 	Additional Licensing Terms:
 	============================
