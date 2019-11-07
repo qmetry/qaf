@@ -13,7 +13,6 @@
   
   <a href="https://qmetry.github.io/qaf/" target="_blank">Online documentation</a> | <a href="https://github.com/qmetry/qaf-step-by-step-tutorial/wiki" target="_blank">Step-By-Step-Tutorial</a>
 
-QMetry Automation Framework source code is made available under the <a href="https://opensource.org/licenses/gpl-3.0.html" target="_blank"> GNU General Public License, version 3 (GPL-3.0)</a>.
 
 <h3>Powerful Automation Platform for Test Authoring, Test Execution and Execution Analysis</h3>
 
