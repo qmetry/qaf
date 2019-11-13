@@ -239,6 +239,7 @@ public class BDDFileParser2 extends AbstractScenarioFileParser {
 						boolean scenarioStarted = StringUtil.indexOfIgnoreCase(currLine, SCENARIO) == 0;
 
 						if (scenarioStarted) {
+							cols[0] = SCENARIO;
 							lastScenarioIndex = rows.size() - 1;
 							rows.addAll(background);
 							excludeExamples = false;

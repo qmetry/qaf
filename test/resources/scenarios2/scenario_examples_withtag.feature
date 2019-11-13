@@ -131,3 +131,11 @@ Examples:
  | searchKey | searchResult | number |
  | tag1 |tag1| 10 |
  | tag1-2 | tag1-2 | 20 |
+ 
+  @dataFile:resources/testdata.txt
+  Scenario Outline: Search Keyword with tag to include and no tagged examples
+  Given I am on Google Search Page
+  When I search for "<searchKey>"
+  Then I get at least <number> results
+  Then it should have "<searchResult>" in search results
+ 
