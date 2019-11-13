@@ -24,6 +24,7 @@ package com.qmetry.qaf.automation.data;
 import java.util.Map;
 
 import org.hamcrest.Matchers;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import com.qmetry.qaf.automation.impl.CustomDataProvider;
@@ -102,5 +103,12 @@ public class DataProviderTest{
 	public void testMetadataResolution(Map<String, Object> data){
 		Validator.assertThat(data, Matchers.notNullValue());
 		Validator.assertThat((String)data.get("uname"), Matchers.equalToIgnoringCase("user2"));
+	}
+	
+
+	@Parameters({ "step.provider.sharedinstance"})
+	@Test
+	public void prameterTestThree(boolean param) {
+		System.out.println("Test using param : " + param);
 	}
 }

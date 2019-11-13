@@ -38,6 +38,7 @@ import org.testng.ISuite;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.annotations.ITestAnnotation;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 import org.testng.internal.ConstructorOrMethod;
 
@@ -117,7 +118,7 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 		try {
 			if (null != method) {
 				if (null != method.getParameterTypes()
-						&& (method.getParameterTypes().length > 0)) {
+						&& (method.getParameterTypes().length > 0) && !method.isAnnotationPresent(Parameters.class)) {
 					DataProviderUtil.setQAFDataProvider(testAnnotation, method);
 				}
 
