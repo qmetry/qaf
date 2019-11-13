@@ -594,19 +594,7 @@ public final class ClassUtil {
 
 	public static void setField(String fieldName, Object classObj, Object value) {
 		try {
-
-			Field field = null;
-			try {
-				field = classObj.getClass().getField(fieldName);
-			} catch (NoSuchFieldException e) {
-				Field[] fields = ClassUtil.getAllFields(classObj.getClass(), Object.class);
-				for (Field f : fields) {
-					if (f.getName().equalsIgnoreCase(fieldName)) {
-						field = f;
-						break;
-					}
-				}
-			}
+			Field field = getField(fieldName,classObj.getClass());
 
 			field.setAccessible(true);
 			Field modifiersField = Field.class.getDeclaredField("modifiers");
@@ -616,7 +604,31 @@ public final class ClassUtil {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+	}
+	
+	public static Field getField(String fieldName, Class<?> clazz) throws NoSuchFieldException{
+		try {
+			return clazz.getField(fieldName);
+		} catch (NoSuchFieldException e) {
+			Field[] fields = ClassUtil.getAllFields(clazz, Object.class);
+			for (Field f : fields) {
+				if (f.getName().equalsIgnoreCase(fieldName)) {
+					return f;
+				}
+			}
+			throw e;
+		}
+	}
+	
+	public static Object getField(String fieldName, Object classObj) {
+		try {
+			Field field = getField(fieldName,classObj.getClass());
+			field.setAccessible(true);
+			return field.get(classObj);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	private static Type getTypeVariableViaGenericInterface(Class<?> clazz, Class<?> classDeclaringTypevariable,
