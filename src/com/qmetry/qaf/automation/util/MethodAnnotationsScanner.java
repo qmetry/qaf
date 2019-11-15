@@ -45,7 +45,7 @@ public class MethodAnnotationsScanner extends AbstractScanner {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void scan(Object cls) {
-		System.out.println("scanning using " + getMetadataAdapter().getClass());
+		//System.out.println("scanning using " + getMetadataAdapter().getClass());
 		for (Object method : getMetadataAdapter().getMethods(cls)) {
 
 			for (String methodAnnotation : getMethodAnnotationNames((Member) method)) {
@@ -73,7 +73,7 @@ public class MethodAnnotationsScanner extends AbstractScanner {
 	}
 
 	private Annotation[] getMethodAnnotations(Method method) {
-		System.err.println("get Method Annotations....");
+		//System.err.println("get Method Annotations....");
 
 		List<Annotation> annotations = Arrays.asList(method.getAnnotations());
 

@@ -26,16 +26,31 @@ import static com.qmetry.qaf.automation.core.ConfigurationManager.getBundle;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
+import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.TreeMap;
 
+import org.apache.commons.configuration.Configuration;
 import org.apache.commons.lang.text.StrSubstitutor;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.impl.LogFactoryImpl;
 import org.testng.ITestContext;
 import org.testng.ITestNGMethod;
 import org.testng.annotations.Test;
 import org.testng.xml.XmlTest;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.qmetry.qaf.automation.step.client.Scenario;
+import com.qmetry.qaf.automation.step.client.TestNGScenario;
+import com.qmetry.qaf.automation.testng.dataprovider.QAFDataProvider.params;
+import com.qmetry.qaf.automation.util.StringUtil;
 
 /**
  * Internal class for test case and test step meta data scanning.
@@ -43,6 +58,7 @@ import com.google.gson.Gson;
  * @author Chirag.jayswal
  */
 public class MetaDataScanner {
+	private static final Log logger=LogFactoryImpl.getLog(MetaDataScanner.class);
 
 	/**
 	 * Scans all annotation except @Test, and generates map.
@@ -144,5 +160,147 @@ public class MetaDataScanner {
 			return getParameter(method.getXmlTest(), parameter);
 		}		
 		return getBundle().getString(parameter);
+	}
+	
+	public static boolean hasDP(Map<String, Object> metadata) {
+		for (params key : params.values()) {
+			if (metadata.containsKey(key.name())) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static void formatMetaData(Map<String, Object> metadata){
+		Configuration formats = getBundle().subset("metadata.format");
+		for(Entry<String, Object> entry:metadata.entrySet()){
+			String format = formats.getString(entry.getKey(),"");
+			if(StringUtil.isNotBlank(format)){
+				try {
+					String formattedVal = MessageFormat.format(format, entry.getValue());
+					entry.setValue(formattedVal);
+				} catch (Exception e) {
+					logger.error("Unable to format metadata [" + entry.getKey() +"] using format [" +format+"]", e);
+				}
+			}
+		}
+	}
+	
+	public static String applyMetaRule(Map<String, Object> metadata){
+		StringBuffer result = new StringBuffer();
+		
+		return result.toString();
+	}
+	/**
+	 * Method for none testNG implementation.
+	 * @param metadata
+	 * @return 	true if test should included false otherwise
+	 * @see MetaDataScanner#applyMetafilter(ITestNGMethod) for TestNG
+	 */
+	public static boolean applyMetafilter(Map<String, Object> metadata) {
+		Object enabled = metadata.get("enabled");
+		if (null!=enabled && !("true".equalsIgnoreCase(enabled.toString())))
+			return false;
+		return applyMetafilter(null, metadata);
+	}
+
+	/**
+	 * Method for TestNG implementation.
+	 * @param imethod
+	 * @return true if it should included false otherwise
+	 * @see MetaDataScanner#applyMetafilter(Map) for none TestNG implementation
+	 */
+	public static boolean applyMetafilter(ITestNGMethod imethod) {
+		Map<String, Object> scenarioMetadata = new HashMap<String, Object>();
+
+		// ideally ITestNGMethod should converted to TestNGScenario but if
+		// framework class not loaded then need to process separately
+		if (imethod instanceof TestNGScenario) {
+			TestNGScenario method = (TestNGScenario) imethod;
+			scenarioMetadata = method.getMetaData();
+
+		} else if (Scenario.class.isAssignableFrom(imethod.getRealClass())) {
+			Scenario method = (Scenario) imethod.getInstance();
+			scenarioMetadata = method.getMetadata();
+		} else {
+			scenarioMetadata = getMetadata(imethod.getConstructorOrMethod().getMethod(), false);
+		}
+		return applyMetafilter(imethod, scenarioMetadata);
+	}
+	@SuppressWarnings("unchecked")
+	private static boolean applyMetafilter(ITestNGMethod imethod, Map<String, Object> scenarioMetadata) {
+		String includeStr = getParameter(imethod, "include");
+		String excludeStr = getParameter(imethod, "exclude");
+		if (StringUtil.isBlank(includeStr) && StringUtil.isBlank(excludeStr)) {
+			// no need to process as no include/exclude filter provided
+			return true;
+		}
+
+		Gson gson = new GsonBuilder().create();
+
+		Map<String, Object> includeMeta = gson.fromJson(includeStr, Map.class);
+		Map<String, Object> excludeMeta = gson.fromJson(excludeStr, Map.class);
+
+		return MetaDataScanner.includeMethod(scenarioMetadata, includeMeta, excludeMeta);
+	}
+	
+	private static boolean includeMethod(Map<String, Object> scenarioMetadata, Map<String, Object> includeMeta,
+			Map<String, Object> excludeMeta) {
+
+		boolean binclude = includeMeta == null || includeMeta.isEmpty()
+				|| hasMetaValue(includeMeta, scenarioMetadata, true);
+		boolean bexclude = excludeMeta != null && !excludeMeta.isEmpty()
+				&& hasMetaValue(excludeMeta, scenarioMetadata, false);
+
+		return binclude && !bexclude;
+	}
+	
+	private static boolean hasMetaValue(Map<String, Object> metaFilter, Map<String, Object> metadata,
+			boolean isInclude) {
+
+		// get all the meta data keys used in filter
+		Set<String> filterKeys = metaFilter.keySet(); // author, module, brand
+		// iterate for each key and match with scenario meta data
+		for (String metaKey : filterKeys) {
+			// scenario's meta-value for given key
+			Object metaVal = metadata.get(metaKey); // M1,M2,M3
+			Set<Object> scMetaValues = getMetaValues(metaVal);
+
+			// get meta-data value in filter for given key
+			Object metaValuesObjForKey = metaFilter.get(metaKey);
+			Set<Object> metaValuesForKey = getMetaValues(metaValuesObjForKey); // M1
+
+			if (!metaValuesForKey.isEmpty()) {
+
+				scMetaValues.retainAll(metaValuesForKey);
+				// M1
+				// found so just return as AND operation between deferment
+				// meta-keys and OR with given meta-key values
+
+				if (isInclude) {
+					if (scMetaValues.isEmpty()) {
+						return !isInclude;
+					}
+				} else {
+					if (!scMetaValues.isEmpty()) {
+						return !isInclude;
+					}
+				}
+			}
+		}
+		return isInclude;
+	}
+
+	@SuppressWarnings("unchecked")
+	private static Set<Object> getMetaValues(Object metaVal) {
+		if (null == metaVal)
+			return new HashSet<Object>();
+		if (List.class.isAssignableFrom(metaVal.getClass()))
+			return new HashSet<Object>((List<Object>) (metaVal));
+		if (metaVal.getClass().isArray()) {
+			Object[] vals = (Object[]) metaVal;
+			return new HashSet<Object>(Arrays.asList(vals));
+		}
+		return new HashSet<Object>(Arrays.asList(metaVal));
 	}
 }

@@ -21,25 +21,13 @@
  ******************************************************************************/
 package com.qmetry.qaf.automation.testng.pro;
 
-import static com.qmetry.qaf.automation.data.MetaDataScanner.getMetadata;
-import static com.qmetry.qaf.automation.data.MetaDataScanner.getParameter;
+import static com.qmetry.qaf.automation.data.MetaDataScanner.applyMetafilter;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import org.testng.IMethodSelector;
 import org.testng.IMethodSelectorContext;
 import org.testng.ITestNGMethod;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.qmetry.qaf.automation.step.client.Scenario;
-import com.qmetry.qaf.automation.step.client.TestNGScenario;
-import com.qmetry.qaf.automation.util.StringUtil;
 
 /**
  * This is a method selector class that will selects the method with custom
@@ -76,49 +64,6 @@ public class QAFMethodSelector implements IMethodSelector {
 		return include;
 	}
 
-	@SuppressWarnings("unchecked")
-	private boolean applyMetafilter(ITestNGMethod imethod) {
-		String includeStr = getParameter(imethod, "include");
-		String excludeStr = getParameter(imethod, "exclude");
-		if (StringUtil.isBlank(includeStr) && StringUtil.isBlank(excludeStr)) {
-			// no need to process as no include/exclude filter provided
-			return true;
-		}
-
-		Gson gson = new GsonBuilder().create();
-
-		Map<String, Object> includeMeta = gson.fromJson(includeStr, Map.class);
-		Map<String, Object> excludeMeta = gson.fromJson(excludeStr, Map.class);
-
-		Map<String, Object> scenarioMetadata = new HashMap<String, Object>();
-
-		// ideally ITestNGMethod should converted to TestNGScenario but if
-		// framework class not loaded then need to process separately
-		if (imethod instanceof TestNGScenario) {
-			TestNGScenario method = (TestNGScenario) imethod;
-			scenarioMetadata = method.getMetaData();
-
-		} else if (Scenario.class.isAssignableFrom(imethod.getRealClass())) {
-			Scenario method = (Scenario) imethod.getInstance();
-			scenarioMetadata = method.getMetadata();
-		} else {
-			scenarioMetadata = getMetadata(imethod.getConstructorOrMethod().getMethod(), false);
-		}
-
-		return includeMethod(scenarioMetadata, includeMeta, excludeMeta);
-
-	}
-
-	public static boolean includeMethod(Map<String, Object> scenarioMetadata, Map<String, Object> includeMeta,
-			Map<String, Object> excludeMeta) {
-
-		boolean binclude = includeMeta == null || includeMeta.isEmpty()
-				|| hasMetaValue(includeMeta, scenarioMetadata, true);
-		boolean bexclude = excludeMeta != null && !excludeMeta.isEmpty()
-				&& hasMetaValue(excludeMeta, scenarioMetadata, false);
-
-		return binclude && !bexclude;
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -131,53 +76,6 @@ public class QAFMethodSelector implements IMethodSelector {
 
 	}
 
-	private static boolean hasMetaValue(Map<String, Object> metaFilter, Map<String, Object> metadata,
-			boolean isInclude) {
 
-		// get all the meta data keys used in filter
-		Set<String> filterKeys = metaFilter.keySet(); // author, module, brand
-		// iterate for each key and match with scenario meta data
-		for (String metaKey : filterKeys) {
-			// scenario's meta-value for given key
-			Object metaVal = metadata.get(metaKey); // M1,M2,M3
-			Set<Object> scMetaValues = getMetaValues(metaVal);
-
-			// get meta-data value in filter for given key
-			Object metaValuesObjForKey = metaFilter.get(metaKey);
-			Set<Object> metaValuesForKey = getMetaValues(metaValuesObjForKey); // M1
-
-			if (!metaValuesForKey.isEmpty()) {
-
-				scMetaValues.retainAll(metaValuesForKey);
-				// M1
-				// found so just return as AND operation between deferment
-				// meta-keys and OR with given meta-key values
-
-				if (isInclude) {
-					if (scMetaValues.isEmpty()) {
-						return !isInclude;
-					}
-				} else {
-					if (!scMetaValues.isEmpty()) {
-						return !isInclude;
-					}
-				}
-			}
-		}
-		return isInclude;
-	}
-
-	@SuppressWarnings("unchecked")
-	private static Set<Object> getMetaValues(Object metaVal) {
-		if (null == metaVal)
-			return new HashSet<Object>();
-		if (List.class.isAssignableFrom(metaVal.getClass()))
-			return new HashSet<Object>((List<Object>) (metaVal));
-		if (metaVal.getClass().isArray()) {
-			Object[] vals = (Object[]) metaVal;
-			return new HashSet<Object>(Arrays.asList(vals));
-		}
-		return new HashSet<Object>(Arrays.asList(metaVal));
-	}
 
 }

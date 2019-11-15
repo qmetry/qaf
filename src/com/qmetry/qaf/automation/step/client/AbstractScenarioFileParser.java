@@ -22,7 +22,6 @@
 package com.qmetry.qaf.automation.step.client;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -41,11 +40,10 @@ import com.google.gson.JsonSyntaxException;
 import com.qmetry.qaf.automation.gson.GsonObjectDeserializer;
 import com.qmetry.qaf.automation.step.StringTestStep;
 import com.qmetry.qaf.automation.step.TestStep;
-import com.qmetry.qaf.automation.testng.dataprovider.QAFDataProvider.params;
 import com.qmetry.qaf.automation.util.FileUtil;
 import com.qmetry.qaf.automation.util.JSONUtil;
 import com.qmetry.qaf.automation.util.StringUtil;
-
+import static com.qmetry.qaf.automation.data.MetaDataScanner.hasDP;
 /**
  * @author chirag.jayswal
  */
@@ -297,15 +295,6 @@ public abstract class AbstractScenarioFileParser implements ScenarioFileParser {
 		} catch (Exception e) {// not a number???...
 			return statementIndex;
 		}
-	}
-
-	protected boolean hasDP(Map<String, Object> metadata) {
-		for (params key : params.values()) {
-			if (metadata.containsKey(key.name())) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	/**
