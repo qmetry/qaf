@@ -40,6 +40,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.logging.Log;
@@ -71,7 +72,7 @@ import com.qmetry.qaf.automation.util.StringUtil;
 public class ReporterUtil {
 	private static final Log logger = LogFactoryImpl.getLog(ReporterUtil.class);
 	private static final String QAF_TEST_IDENTIFIER = "qaf_test_identifier";
-
+	private static final AtomicInteger indexer = new AtomicInteger(0);
 	public static void updateMetaInfo(ISuite suite) {
 		createMetaInfo(suite, false);
 	}
@@ -266,7 +267,8 @@ public class ReporterUtil {
 			if (f.exists()) {
 				// if file already exists then it will append some random
 				// character as suffix
-				fileName += StringUtil.getRandomString("aaaaaaaaaa");
+				String suffix = "_"+indexer.incrementAndGet();
+				fileName += suffix;
 				// add updated file name as 'resultFileName' key in metaData
 				methodResultFile = dir + "/" + fileName;
 				result.setAttribute(QAF_TEST_IDENTIFIER,fileName);
@@ -402,8 +404,8 @@ public class ReporterUtil {
 		}
 		id=StringUtil.toTitleCaseIdentifier(id);
 		
-		if(id.length()>50){
-			id=id.substring(0, 50);
+		if(id.length()>45){
+			id=id.substring(0, 45);
 		}
 		result.setAttribute(QAF_TEST_IDENTIFIER,id);
 		return (String) result.getAttribute(QAF_TEST_IDENTIFIER);
