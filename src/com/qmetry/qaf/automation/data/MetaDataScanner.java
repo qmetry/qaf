@@ -244,7 +244,7 @@ public class MetaDataScanner {
 		return MetaDataScanner.includeMethod(scenarioMetadata, includeMeta, excludeMeta);
 	}
 	
-	private static boolean includeMethod(Map<String, Object> scenarioMetadata, Map<String, Object> includeMeta,
+	public static boolean includeMethod(Map<String, Object> scenarioMetadata, Map<String, Object> includeMeta,
 			Map<String, Object> excludeMeta) {
 
 		boolean binclude = includeMeta == null || includeMeta.isEmpty()

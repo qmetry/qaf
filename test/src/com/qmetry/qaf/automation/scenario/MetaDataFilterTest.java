@@ -31,7 +31,7 @@ import org.testng.annotations.Test;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.qmetry.qaf.automation.testng.pro.QAFMethodSelector;
+import com.qmetry.qaf.automation.data.MetaDataScanner;
 
 public class MetaDataFilterTest {
 
@@ -47,7 +47,7 @@ public class MetaDataFilterTest {
 		Map<String, Object> scenarioMetadata =
 				gson.fromJson(scenarioMetadatastr, Map.class);
 
-		boolean binclude = QAFMethodSelector.includeMethod(scenarioMetadata, includeMeta,
+		boolean binclude = MetaDataScanner.includeMethod(scenarioMetadata, includeMeta,
 				excludeMeta);
 
 		Assert.assertEquals(binclude, expectedOutcome);

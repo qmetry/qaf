@@ -21,6 +21,8 @@
  ******************************************************************************/
 package com.qmetry.qaf.automation.step.client.text;
 
+import static com.qmetry.qaf.automation.data.MetaDataScanner.hasDP;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -29,11 +31,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -42,11 +42,8 @@ import com.google.gson.Gson;
 import com.qmetry.qaf.automation.core.AutomationError;
 import com.qmetry.qaf.automation.step.client.AbstractScenarioFileParser;
 import com.qmetry.qaf.automation.step.client.Scenario;
-import com.qmetry.qaf.automation.step.client.ScenarioFactory;
-import com.qmetry.qaf.automation.step.client.text.BehaviorScanner;
 import com.qmetry.qaf.automation.testng.dataprovider.QAFDataProvider.params;
 import com.qmetry.qaf.automation.util.StringUtil;
-
 /**
  * This parser is combination of gherkin and qaf bdd. Supports meta-data as
  * tags, data-provider (external data file). For Data-driven tests it supports
