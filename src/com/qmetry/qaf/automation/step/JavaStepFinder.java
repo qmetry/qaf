@@ -32,9 +32,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.ServiceLoader;
 import java.util.Set;
 
 import org.apache.commons.logging.Log;
@@ -80,9 +82,16 @@ public final class JavaStepFinder {
 				add(stepMapping, new JavaStep(step));
 			}
 		}
-
+		
+		ServiceLoader<StepFinder> stepFinderServicesLoader =  ServiceLoader.load(StepFinder.class);
+		Iterator<StepFinder> stepFinderServices = stepFinderServicesLoader.iterator();
+		while(stepFinderServices.hasNext()){
+			Set<TestStep> osteps = stepFinderServices.next().getAllJavaSteps(pkgs);
+			for(TestStep step:osteps){
+				add(stepMapping, step);
+			}
+		}
 		return stepMapping;
-
 	}
 
 	private static void add(Map<String, TestStep> stepMapping, TestStep step) {
