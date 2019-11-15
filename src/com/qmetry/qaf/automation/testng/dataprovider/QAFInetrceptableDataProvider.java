@@ -289,7 +289,7 @@ public class QAFInetrceptableDataProvider {
 	 * @param metadata
 	 * @return
 	 */
-	private static Object[][] getData(Map<String, Object> metadata) {
+	public static Object[][] getData(Map<String, Object> metadata) {
 
 		String query = (String) metadata.get(params.SQLQUERY.name());
 		if (isNotBlank(query)) {

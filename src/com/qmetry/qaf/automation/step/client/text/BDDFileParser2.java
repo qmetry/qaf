@@ -215,7 +215,7 @@ public class BDDFileParser2 extends AbstractScenarioFileParser {
 								bglobalTags = false;
 								outline = false;
 							} else {
-								outline = type.equalsIgnoreCase(SCENARIO_OUTELINE);
+								outline = type.equalsIgnoreCase(SCENARIO_OUTELINE) || hasDP(metadata);
 							}
 
 						}
