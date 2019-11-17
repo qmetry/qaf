@@ -21,7 +21,10 @@
  ******************************************************************************/
 package com.qmetry.qaf.automation.scenario;
 
+import static com.qmetry.qaf.automation.core.ConfigurationManager.getBundle;
+
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.hamcrest.Matchers;
@@ -36,38 +39,42 @@ import com.qmetry.qaf.automation.util.Validator;
 
 public class MetaDataScannerTest {
 
-	@MetaData(value="{'TC_ID':'12110'}")
-	//@QmetryTestCase(TC_ID = "12110")
+	@MetaData(value = "{'TC_ID':'12110'}")
+	// @QmetryTestCase(TC_ID = "12110")
 	@QAFTestStep(description = "sample test step")
 	void testStep() {
 
 	}
 
-	@MetaData(value="{'TC_ID':'121'}")
-	//@QmetryTestCase(TC_ID = "121")
+	@MetaData(value = "{'TC_ID':'121'}")
+	// @QmetryTestCase(TC_ID = "121")
 	@QAFDataProvider(dataFile = "datafile.xls", sheetName = "sheet1")
 	@Test(description = "sample test")
 	public void tc1() throws Exception {
 		Method testMethod = MetaDataScannerTest.class.getDeclaredMethod("tc1");
 		Map<String, Object> testMetaData = MetaDataScanner.getMetadata(testMethod);
 
-		Validator.verifyThat(testMetaData,
-				Matchers.hasEntry("dataFile", (Object) "datafile.xls"));
-		Validator.verifyThat(testMetaData,
-				Matchers.hasEntry("sheetName", (Object) "sheet1"));
+		Validator.verifyThat(testMetaData, Matchers.hasEntry("dataFile", (Object) "datafile.xls"));
+		Validator.verifyThat(testMetaData, Matchers.hasEntry("sheetName", (Object) "sheet1"));
 		Validator.verifyThat(testMetaData, Matchers.hasEntry("TC_ID", (Object) "121"));
-		Validator.verifyThat("Parameter from @Test", testMetaData,
-				Matchers.hasKey("description"));
+		Validator.verifyThat("Parameter from @Test", testMetaData, Matchers.hasKey("description"));
 
 		Method testStepMethod = MetaDataScannerTest.class.getDeclaredMethod("testStep");
-		Map<String, Object> testStepMetaData =
-				MetaDataScanner.getMetadata(testStepMethod);
-		Validator.verifyThat(testStepMetaData,
-				Matchers.hasEntry("description", (Object) "sample test step"));
-		Validator.verifyThat(testStepMetaData,
-				Matchers.hasEntry("TC_ID", (Object) "12110"));
+		Map<String, Object> testStepMetaData = MetaDataScanner.getMetadata(testStepMethod);
+		Validator.verifyThat(testStepMetaData, Matchers.hasEntry("description", (Object) "sample test step"));
+		Validator.verifyThat(testStepMetaData, Matchers.hasEntry("TC_ID", (Object) "12110"));
 	}
-	
-	
 
+	@Test(description = "test metadata Formattor")
+	public void testFormattor() {
+		getBundle().setProperty("metadata.format.custom-id", "<a herf=\"{0}\">{0}</a>");
+		Map<String, Object> metadata = new HashMap<String, Object>();
+		metadata.put("custom-id", "ABC-123");
+
+		MetaDataScanner.formatMetaData(metadata);
+		Validator.assertThat(metadata.get("custom-id"), Matchers.equalTo((Object)"<a herf=\"ABC-123\">ABC-123</a>"));
+		// try to format again should not mesh up value
+		MetaDataScanner.formatMetaData(metadata);
+		Validator.assertThat(metadata.get("custom-id"), Matchers.equalTo((Object)"<a herf=\"ABC-123\">ABC-123</a>"));
+	}
 }

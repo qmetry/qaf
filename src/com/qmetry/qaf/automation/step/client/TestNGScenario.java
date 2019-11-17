@@ -21,6 +21,7 @@
  ******************************************************************************/
 package com.qmetry.qaf.automation.step.client;
 
+import static com.qmetry.qaf.automation.data.MetaDataScanner.formatMetaData;
 import static com.qmetry.qaf.automation.data.MetaDataScanner.getMetadata;
 
 import java.lang.reflect.Method;
@@ -78,6 +79,7 @@ public class TestNGScenario extends TestNGMethod {
 		metadata.put("name", getMethodName());
 		metadata.put("sign", getSignature());
 
+		formatMetaData(metadata);
 	}
 
 	@Override

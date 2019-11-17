@@ -27,6 +27,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
 import java.text.MessageFormat;
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -58,7 +59,7 @@ import com.qmetry.qaf.automation.util.StringUtil;
  * @author Chirag.jayswal
  */
 public class MetaDataScanner {
-	private static final Log logger=LogFactoryImpl.getLog(MetaDataScanner.class);
+	private static final Log logger = LogFactoryImpl.getLog(MetaDataScanner.class);
 
 	/**
 	 * Scans all annotation except @Test, and generates map.
@@ -112,22 +113,22 @@ public class MetaDataScanner {
 	 */
 	public static String getParameter(XmlTest xmlTest, String parameter) {
 		String paramValue = "";
-		
+
 		boolean overrideUsingSystemProp = System.getProperties().containsKey(parameter);
-		
+
 		Map<String, String> context = xmlTest.getAllParameters();
 		context.keySet().removeAll(System.getProperties().keySet());
-		
+
 		if (overrideUsingSystemProp) {
 			paramValue = System.getProperty(parameter);
-		}else if(context.containsKey(parameter)){
+		} else if (context.containsKey(parameter)) {
 			paramValue = context.get(parameter);
-		}else if(getBundle().containsKey(parameter)){
+		} else if (getBundle().containsKey(parameter)) {
 			try {
-				//unresolved value
+				// unresolved value
 				paramValue = (String) getBundle().configurationAt(parameter).getRoot().getValue();
 			} catch (Exception e) {
-				paramValue=getBundle().getString(parameter, "");
+				paramValue = getBundle().getString(parameter, "");
 			}
 		}
 		paramValue = StrSubstitutor.replace(paramValue, context);
@@ -158,10 +159,10 @@ public class MetaDataScanner {
 	public static String getParameter(ITestNGMethod method, String parameter) {
 		if (null != method && null != method.getXmlTest()) {
 			return getParameter(method.getXmlTest(), parameter);
-		}		
+		}
 		return getBundle().getString(parameter);
 	}
-	
+
 	public static boolean hasDP(Map<String, Object> metadata) {
 		for (params key : params.values()) {
 			if (metadata.containsKey(key.name())) {
@@ -170,42 +171,47 @@ public class MetaDataScanner {
 		}
 		return false;
 	}
-	
-	public static void formatMetaData(Map<String, Object> metadata){
+
+	public static void formatMetaData(Map<String, Object> metadata) {
 		Configuration formats = getBundle().subset("metadata.format");
-		for(Entry<String, Object> entry:metadata.entrySet()){
-			String format = formats.getString(entry.getKey(),"");
-			if(StringUtil.isNotBlank(format)){
+		for (Entry<String, Object> entry : metadata.entrySet()) {
+			String format = formats.getString(entry.getKey(), "");
+			Object value = entry.getValue();
+			//if format exist apply only once
+			if (StringUtil.isNotBlank(format) && !matches(format, value.toString())) {
 				try {
-					String formattedVal = MessageFormat.format(format, entry.getValue());
+					String formattedVal = MessageFormat.format(format, value);
 					entry.setValue(formattedVal);
 				} catch (Exception e) {
-					logger.error("Unable to format metadata [" + entry.getKey() +"] using format [" +format+"]", e);
+					logger.error("Unable to format metadata [" + entry.getKey() + "] using format [" + format + "]", e);
 				}
 			}
 		}
 	}
-	
-	public static String applyMetaRule(Map<String, Object> metadata){
+
+	public static String applyMetaRule(Map<String, Object> metadata) {
 		StringBuffer result = new StringBuffer();
-		
+
 		return result.toString();
 	}
+
 	/**
 	 * Method for none testNG implementation.
+	 * 
 	 * @param metadata
-	 * @return 	true if test should included false otherwise
+	 * @return true if test should included false otherwise
 	 * @see MetaDataScanner#applyMetafilter(ITestNGMethod) for TestNG
 	 */
 	public static boolean applyMetafilter(Map<String, Object> metadata) {
 		Object enabled = metadata.get("enabled");
-		if (null!=enabled && !("true".equalsIgnoreCase(enabled.toString())))
+		if (null != enabled && !("true".equalsIgnoreCase(enabled.toString())))
 			return false;
 		return applyMetafilter(null, metadata);
 	}
 
 	/**
 	 * Method for TestNG implementation.
+	 * 
 	 * @param imethod
 	 * @return true if it should included false otherwise
 	 * @see MetaDataScanner#applyMetafilter(Map) for none TestNG implementation
@@ -227,6 +233,7 @@ public class MetaDataScanner {
 		}
 		return applyMetafilter(imethod, scenarioMetadata);
 	}
+
 	@SuppressWarnings("unchecked")
 	private static boolean applyMetafilter(ITestNGMethod imethod, Map<String, Object> scenarioMetadata) {
 		String includeStr = getParameter(imethod, "include");
@@ -243,7 +250,7 @@ public class MetaDataScanner {
 
 		return MetaDataScanner.includeMethod(scenarioMetadata, includeMeta, excludeMeta);
 	}
-	
+
 	public static boolean includeMethod(Map<String, Object> scenarioMetadata, Map<String, Object> includeMeta,
 			Map<String, Object> excludeMeta) {
 
@@ -254,7 +261,7 @@ public class MetaDataScanner {
 
 		return binclude && !bexclude;
 	}
-	
+
 	private static boolean hasMetaValue(Map<String, Object> metaFilter, Map<String, Object> metadata,
 			boolean isInclude) {
 
@@ -302,5 +309,14 @@ public class MetaDataScanner {
 			return new HashSet<Object>(Arrays.asList(vals));
 		}
 		return new HashSet<Object>(Arrays.asList(metaVal));
+	}
+	
+	private static boolean matches(String formatStr, String s){
+		MessageFormat messageFormat = new MessageFormat(formatStr);
+        try {
+			return messageFormat.parse(s).length>0;
+		} catch (ParseException e) {
+		}
+		return false;
 	}
 }
