@@ -32,11 +32,13 @@ import java.util.TreeMap;
 
 import org.testng.annotations.Test;
 
+import com.qmetry.qaf.automation.core.AutomationError;
 import com.qmetry.qaf.automation.core.CheckpointResultBean;
 import com.qmetry.qaf.automation.core.LoggingBean;
 import com.qmetry.qaf.automation.core.MessageTypes;
 import com.qmetry.qaf.automation.core.QAFTestBase;
 import com.qmetry.qaf.automation.core.TestBaseProvider;
+import com.qmetry.qaf.automation.data.MetaDataScanner;
 import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.step.StepExecutionTracker;
 import com.qmetry.qaf.automation.step.StepNotFoundException;
@@ -176,6 +178,17 @@ public class Scenario extends WebDriverTestCase
 				if ((null != stepExecutionTracker))
 					executionIndx = stepExecutionTracker.getNextStepIndex();
 
+			}
+			if (ApplicationProperties.DRY_RUN_MODE.getBoolenVal(false)){
+				Map<String, Object> metadataToValidate =
+						new TreeMap<String, Object>(String.CASE_INSENSITIVE_ORDER);
+				metadataToValidate.putAll(metadata);
+				metadataToValidate.putAll(context);
+				String messages = MetaDataScanner.applyMetaRule(metadataToValidate);
+				if(StringUtil.isNotBlank(messages)){
+					Reporter.log("Metadata rule failure:" + messages, MessageTypes.TestStepFail);
+					throw new AutomationError("Metadata rule failure:" + messages);
+				}
 			}
 			status = "SUCCESS";
 

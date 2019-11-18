@@ -21,6 +21,8 @@
  ******************************************************************************/
 package com.qmetry.qaf.automation.keys;
 
+import java.text.MessageFormat;
+
 import org.apache.commons.lang.StringUtils;
 import org.testng.IRetryAnalyzer;
 import org.testng.ITestContext;
@@ -33,7 +35,6 @@ import com.qmetry.qaf.automation.data.PasswordDecryptor;
 import com.qmetry.qaf.automation.http.UriProxySelector;
 import com.qmetry.qaf.automation.step.QAFTestStepListener;
 import com.qmetry.qaf.automation.ui.selenium.SeleniumCommandListener;
-import com.qmetry.qaf.automation.ui.selenium.WaitService;
 import com.qmetry.qaf.automation.ui.webdriver.QAFWebDriverCommandListener;
 import com.qmetry.qaf.automation.ui.webdriver.QAFWebElementCommandListener;
 import com.qmetry.qaf.automation.ws.rest.RestClientFactory;
@@ -74,7 +75,7 @@ public enum ApplicationProperties {
 	FAILURE_SCREENSHOT("selenium.failure.screenshots"),
 	/**
 	 * <b>key</b>: <code>selenium.wait.timeout </code><br/>
-	 * <b>value</b>: wait time to be used by {@link WaitService}
+	 * <b>value</b>: default wait time to be used by framework by wait/assert/verify methods
 	 */
 	SELENIUM_WAIT_TIMEOUT("selenium.wait.timeout"),
 	/**
@@ -631,7 +632,29 @@ public enum ApplicationProperties {
 	 * @since 2.1.14
 	 * 
 	 */
-	PROXY_HOSTS_KEY("host.to.proxy");
+	PROXY_HOSTS_KEY("host.to.proxy"),
+	/**
+	 * <p>
+	 * Set list of meta-data rule to be applied on meta-data during dryrun.
+	 * </p>
+	 * <b>key</b>: <code>metadata.rules</code><br/>
+	 * <b>value</b>: Json format List of {@link MetaDataRule}
+	 * 
+	 * @since 2.1.15
+	 * 
+	 */
+	METADATA_RULES("metadata.rules"),
+	/**
+	 * <p>
+	 * Set format as supported by {@link MessageFormat} that accepts one argument.
+	 * </p>
+	 * <b>key</b>: <code>metadata.formatter</code><br/>
+	 * <b>value</b>: format to apply on meta-value
+	 * 
+	 * @since 2.1.15
+	 * 
+	 */
+	METADATA_FORMTTOR_PREFIX("metadata.formatter");
 
 	public String key;
 

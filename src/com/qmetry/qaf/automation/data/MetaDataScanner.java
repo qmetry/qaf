@@ -28,6 +28,7 @@ import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
 import java.text.MessageFormat;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -46,8 +47,10 @@ import org.testng.ITestNGMethod;
 import org.testng.annotations.Test;
 import org.testng.xml.XmlTest;
 
+import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.step.client.Scenario;
 import com.qmetry.qaf.automation.step.client.TestNGScenario;
 import com.qmetry.qaf.automation.testng.dataprovider.QAFDataProvider.params;
@@ -172,12 +175,29 @@ public class MetaDataScanner {
 		return false;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static void formatMetaData(Map<String, Object> metadata) {
-		Configuration formats = getBundle().subset("metadata.format");
+		Configuration formats = getBundle().subset(ApplicationProperties.METADATA_FORMTTOR_PREFIX.key);
 		for (Entry<String, Object> entry : metadata.entrySet()) {
 			String format = formats.getString(entry.getKey(), "");
 			Object value = entry.getValue();
-			//if format exist apply only once
+			if (value instanceof List) {
+				List<Object> lVal = (List<Object>) value;
+				for (int i = 0; i < lVal.size(); i++) {
+					// if format exist apply only once
+					if (StringUtil.isNotBlank(format) && !matches(format, value.toString())) {
+						try {
+							String formattedVal = MessageFormat.format(format, lVal.get(i));
+							lVal.set(i, formattedVal);
+						} catch (Exception e) {
+							logger.error(
+									"Unable to format metadata [" + entry.getKey() + "] using format [" + format + "]",
+									e);
+						}
+					}
+				}
+			} else
+			// if format exist apply only once
 			if (StringUtil.isNotBlank(format) && !matches(format, value.toString())) {
 				try {
 					String formattedVal = MessageFormat.format(format, value);
@@ -189,9 +209,15 @@ public class MetaDataScanner {
 		}
 	}
 
+	@SuppressWarnings("serial")
 	public static String applyMetaRule(Map<String, Object> metadata) {
 		StringBuffer result = new StringBuffer();
-
+		List<MetaDataRule> rules = new Gson().fromJson(ApplicationProperties.METADATA_RULES.getStringVal("[]"),
+				new TypeToken<ArrayList<MetaDataRule>>() {
+				}.getType());
+		for (MetaDataRule rule : rules) {
+			result.append(rule.apply(metadata));
+		}
 		return result.toString();
 	}
 
@@ -310,13 +336,70 @@ public class MetaDataScanner {
 		}
 		return new HashSet<Object>(Arrays.asList(metaVal));
 	}
-	
-	private static boolean matches(String formatStr, String s){
+
+	private static boolean matches(String formatStr, String s) {
 		MessageFormat messageFormat = new MessageFormat(formatStr);
-        try {
-			return messageFormat.parse(s).length>0;
+		try {
+			return messageFormat.parse(s).length > 0;
 		} catch (ParseException e) {
 		}
 		return false;
+	}
+
+	private static class MetaDataRule {
+		private String key;
+		private MetaDataRule depends;
+		private List<Object> values;
+		private Boolean required;
+
+		/**
+		 * 
+		 * @param metadata
+		 * @return details of failure if any or empty string
+		 */
+		public String apply(Map<String, Object> metadata) {
+			boolean isApplicable = isApplicable(metadata);
+
+			if (metadata.containsKey(key)) {
+				if (!isApplicable) {
+					return "\nFound not aplicable Meta data [" + this + "]";
+				}
+				List<Object> declariedValues = getValues(key, metadata);
+				for (Object value : declariedValues) {
+					boolean matched = false;
+					for (Object allowedValue : values) {
+						matched = matched || value.toString().matches(allowedValue.toString());
+					}
+					if (!matched) {
+						return "\nValue mismatch for Meta data [" + this + "]";
+					}
+				}
+			} else if (null!=required && required && isApplicable) {
+				return "\nMissing required meta data [" + this + "]";
+			}
+			return "";
+		}
+
+		private boolean isApplicable(Map<String, Object> metadata) {
+			if (null==depends){
+				return true;
+			}
+			depends.required=true;
+			return StringUtil.isBlank(depends.apply(metadata));
+		}
+
+		@SuppressWarnings("unchecked")
+		private List<Object> getValues(String key, Map<String, Object> metadata) {
+			Object val = metadata.get(key);
+			if (val instanceof List) {
+				return (List<Object>) val;
+			}
+			return Arrays.asList(val);
+		}
+
+		@Override
+		public String toString() {
+			return new Gson().toJson(this);
+		}
 	}
 }
