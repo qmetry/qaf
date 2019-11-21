@@ -310,7 +310,7 @@ public class ConfigurationManager {
 	@SuppressWarnings("unchecked")
 	public static Map<String, TestStep> getStepMapping() {
 		if (!ConfigurationManager.getBundle().containsKey("teststep.mapping")) {
-			ConfigurationManager.getBundle().addProperty("teststep.mapping",
+			ConfigurationManager.getBundle().setProperty("teststep.mapping",
 					JavaStepFinder.getAllJavaSteps());
 			if (ConfigurationManager.getBundle()
 					.containsKey(ApplicationProperties.STEP_PROVIDER_PKG.key)) {
