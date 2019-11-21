@@ -6,6 +6,10 @@
 {% assign sidebar = site.data.sidebars.qaf_latest-sidebar.entries %}
 <script type="text/javascript">$("nav a[href='docs.html']").parent('li').addClass("active");</script>
 
+{% elsif page.sidebar == "qaf_2_1_14-sidebar" %}
+{% assign sidebar = site.data.sidebars.qaf_2_1_14-sidebar.entries %}
+<script type="text/javascript">$("nav a[href='docs.html']").parent('li').addClass("active");</script>
+
 {% elsif page.sidebar == "qaf_2_1_13-sidebar" %}
 {% assign sidebar = site.data.sidebars.qaf_2_1_13-sidebar.entries %}
 <script type="text/javascript">$("nav a[href='docs.html']").parent('li').addClass("active");</script>

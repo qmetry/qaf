@@ -3,7 +3,7 @@
 entries:
 - title: sidebar
   product: QMetry Automation Framework
-  version: 2.1.14
+  version: 2.1.15
   folders:
   - title:
     output: pdf
@@ -21,13 +21,19 @@ entries:
   - title: License
     output: web, pdf
     folderitems:
-    - title: GNU General Public License, version 3 (GPL-3.0)
+    - title: MIT License
       url: license.html
       output: web, pdf
   - title: Releases
     output: web, pdf
     folderitems:
 
+    - title: Release Notes
+      url: release_notes.html
+      output: web, pdf
+    - title: QAF 2.1.14 Docs
+      url: ../qaf-2.1.14/docs.html
+      output: web, pdf
     - title: Release Notes
       url: release_notes.html
       output: web, pdf
