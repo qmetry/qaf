@@ -24,7 +24,9 @@ MetadataRule =
 	Boolean required;
 	}
  ```
+ 
  ### Basic Example:
+ 
  ```
  metadata.rules=[\
  		{
@@ -38,6 +40,7 @@ MetadataRule =
   If any other group specified meta-data rule will fail.
   
  ### Complex Example:
+ 
  ```
  metadata.rules=[\
  		{"key":"groups","values":["P1","P2","P3"],"required":false},\
