@@ -23,7 +23,7 @@ folder: latest
 
 **Enhancements**
 
- 1. Ensuring clear step mapping when adding new steps
+ 1. Ensuring clear step mapping when populating steps mapping
  2. decreased report file name prefix max length from 50 to 45 char
  3. Moved meta data related method to MetaDataScanner
  4. Code improvement to process outline for data driven scenario without
