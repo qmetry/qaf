@@ -27,8 +27,9 @@ MetadataRule =
 	}
  ```
  
- ### Basic Example:
+ ### Basic Example
  
+ Below is basic example with one rule.
  ```
  metadata.rules=[{"key":"groups","values":["P1","P2","P3","sanity","regression","module1"],"required":true}]
  ```
@@ -36,7 +37,8 @@ MetadataRule =
   In above example, there is only one rule that enforece user to specify `groups` in testcase/scenario with possible vaules `["P1","P2","P3","sanity","regression","module1"]`. `"required":true` means you must provide `groups`.
   If any other group specified meta-data rule will fail.
   
- ### Complex Example:
+ ### Complex Example
+ 
  Here is another example, which difines mulitple rules.
  
  ```
