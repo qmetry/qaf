@@ -12,7 +12,9 @@ tags: [bdd,scenario, meta-data]
 Meta-data rule provides a way to enforce [meta-data](scenario-meta-data.html) and it's possible value for the project. 
 You can define required and optional meta-data for scenario along with its possible values. 
 You can specify meta data rules by using `metadata.rules` property. 
-During **dryrun** metadata are validated by applying metadata rules.
+
+During **dryrun** metadata get validated by applying metadata rules.
+
 ### Metadata rule
  `metadata.rules` accepts json list of Metadata rule in following structre:
 ```
@@ -35,10 +37,11 @@ MetadataRule =
   If any other group specified meta-data rule will fail.
   
  ### Complex Example:
+ Here is another example, which difines mulitple rules.
  
  ```
  metadata.rules=[\
- 		{"key":"groups","values":["P1","P2","P3"],"required":false},\
+    {"key":"groups","values":["P1","P2","P3"],"required":false},\
     {"key":"testCaseID","values":["TC-(\\\\d)+"],"required":true},\
     {"key":"type","values":["sanity","regression"],"required":true},\
     {"key":"storyId","values":["PRJ-(\\\\d)+"],"required":true},\
