@@ -1,5 +1,5 @@
 ---
-title: meta-data rules
+title: Metadata rules
 sidebar: qaf_latest-sidebar
 permalink: latest/meta-data-rules.html
 summary: "Meta data rules can be defiened to enforce meta-data and it's possible value for the project"
@@ -7,7 +7,6 @@ folder: latest
 tags: [bdd,scenario, meta-data]
 ---
 
-# Metadata rules
 @since 2.1.15
 
 Meta-data rule provides a way to enforce [meta-data](scenario-meta-data.html) and it's possible value for the project. 
