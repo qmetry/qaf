@@ -20,6 +20,8 @@ folder: latest
      - extComp : to locate element by ExtJS component query
  3. [#301](https://github.com/qmetry/qaf/issues/301) Format meta-data value in report
  4. [#302](https://github.com/qmetry/qaf/issues/302) Enforce [meta-data rules](meta-data-rules.html) in dryrun
+ 5. [qaf-aem-support](https://github.com/qmetry/qaf-aem-support) AEM CoralUI functional test automation support.
+ 6. BDD2 with cucumber runner support through [qaf-cucumber](https://github.com/qmetry/qaf-cucumber)
 
 **Enhancements**
 
