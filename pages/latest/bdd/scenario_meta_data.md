@@ -16,8 +16,16 @@ Meta data can be provided with following statements:
  * Feature
  * Scenario or Scenario Outline
 
+### Meta-data rules
+[Meta data rules](meta-data-rules.html) can be defiened to enforce meta-data and it's possible value for the project
 Meta data provided to feature will be inherited by each scenario.
 
+### Meta-data formatter
+Since 2.1.15, Meta data values can be formatted by providing formmater. To provide formattor for any meta-value, you need to provide property with `metadata.formatter` prefix and meta-key suffix. You can set format as supported by MessageFormat that accepts one argument for format to apply on meta-value.
+```
+metadata.formatter.storyKey=<a href="${jira.url}/{0}">{0}</a>
+```
+When you provide metadata with meta-key `storyKey` on test case, for example in BDD, `@storyKey:PRJ-123` in report story id will be formatted with link. This is applicable for BDD, Java, Keyword driven test case.
 ### Example BDD2:
 In BDD2 meta-data declaration starts with `@` followed by meta-key and meta-value separated with `:`.
 
@@ -37,13 +45,28 @@ Scenario: example
 
 Meta-data without value will be considered as groups in BDD2. in example above, `@grp1` and `@grp2` will be considered as groups `grp1` and `grp2`
 
+### Example BDD2:
+In BDD2 meta-data provided on top of scenario with `@meta-key:meta-value`.
+
+```
+@enabled:true @channel:['web','mobile']
+@storyKey:PRJ-123
+Feature: example feature
+
+
+@TestID:12345
+@grp1 @grp2
+@author:Chirag Jayswal
+Scenario: example
+...
+
 
 ### Example BDD:
 In BDD meta-data provided as JSON map of meta-key and meta-value with `Meta-data` statement.
 
 ```
 Feature: example feature
-Meta-data:{'enabled':true, 'channel':['web','mobile']}
+Meta-data:{'enabled':true, 'channel':['web','mobile'], 'storyKey':'PRJ-123'}
 
 Scenario: example
 Meta-data:{'TestID':'12345', 'description':'This is example scenario in BDD', 'groups':['grp1','grp2'],'author':'Chirag Jayswal'}
@@ -55,7 +78,7 @@ In Java meta-data provided as JSON map of meta-key and meta-value with `@MetaDat
 
 ```
 @Test(description="This is example scenario in BDD",groups={"grp1","grp2"})
-@MetaData("{'TestID':'12345', 'channel':['web','mobile'] ,'author':'Chirag Jayswal'}}"
+@MetaData("{'TestID':'12345', 'storyKey':'PRJ-123', 'channel':['web','mobile'] ,'author':'Chirag Jayswal'}}"
 public void example(){
 
 }
@@ -63,7 +86,7 @@ public void example(){
 ```
 
 ### Example Gherkin:
-In Gherkin meta-data declaration starts with `@` followed by value. Gherkin syntax supports only groups.
+In Gherkin meta-data declaration starts with `@` followed by value. Gherkin syntax supports only groups which is called as tags in gherkin.
 
 
 ```
