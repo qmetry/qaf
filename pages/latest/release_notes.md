@@ -6,10 +6,51 @@ permalink: latest/release_notes.html
 folder: latest
 ---
 
-## VER-2.1.14 Release Notes:
+## VER-2.1.15 Release Notes:
+
+ - [#287](https://github.com/qmetry/qaf/issues/287) Updated license to MIT
+ - Deprecated `RestWSTestCase` use `WSTestCase` instead
 
 **New Features**
 
+ 1. Support to add third party step finder service
+ 2. [#276](https://github.com/qmetry/qaf/issues/276) Support to locate element using extJs. 
+     Provided additional locator strategies:
+     - extDom : to locate element by ExtJS dom query
+     - extComp : to locate element by ExtJS component query
+ 3. [#301](https://github.com/qmetry/qaf/issues/301) Format meta-data value in report
+ 4. [#302](https://github.com/qmetry/qaf/issues/302) Enforce [meta-data rules](meta-data-rules.html) in dryrun
+
+**Enhancements**
+
+ 1. Ensuring clear step mapping when adding new steps
+ 2. decreased report file name prefix max length from 50 to 45 char
+ 3. Moved meta data related method to MetaDataScanner
+ 4. Code improvement to process outline for data driven scenario without
+ 5. support to trigger element listener on find element command
+ 6. [#23](https://github.com/qmetry/qaf/issues/23) Support JSON report for multiple XML suite in single run
+ 7. [#123](https://github.com/qmetry/qaf/issues/123) Added comment for CDN.
+ 8. [#275](https://github.com/qmetry/qaf/issues/275) - support of JQuery locator strategy to find child element
+ 9. [#277](https://github.com/qmetry/qaf/issues/277) Support to have custom step provider class object factory
+
+**Bug fixes**
+
+ 1. [#241](https://github.com/qmetry/qaf/issues/241) Capabilities with driverName prefix should take effect with custom driver
+ 2. [#242](https://github.com/qmetry/qaf/issues/242) cacheble set through default element data doesn't take effect
+ 3. [#243](https://github.com/qmetry/qaf/issues/243) Issue with Time Duration at Test Level
+ 4. [#249](https://github.com/qmetry/qaf/issues/249) ResultUpdator not awaiting for completion When groups include/exclude used in xml configuration file
+ 5. [#250](https://github.com/qmetry/qaf/issues/250) null pointer exception when test method from class in default package
+ 6. [#256](https://github.com/qmetry/qaf/issues/256) Exception when feature file is empty or all statement commented
+ 7. [#257](https://github.com/qmetry/qaf/issues/257) Scenario not parsed by Gherkin and BDD2 Factory when additional details provided after Feature Keyword
+ 8. [#269](https://github.com/qmetry/qaf/issues/269) BDD2 - Examples - Blank/Empty data is not being executed
+ 9. [#278](https://github.com/qmetry/qaf/issues/278) Runtime exception when test method has @Parameters annotation
+ 10. [#300](https://github.com/qmetry/qaf/issues/300) Scenario outline in bdd2 should work without Examples keyword
+
+
+## VER-2.1.14 Release Notes:
+
+**New Features**
+ 
  1. New [bdd](bdd-syntax.html) parser and factory - derived from QAF BDD, Jbehave and Gherkin. It supports meta-data with tags, data driven test using meta-data or example, tag support with examples
  2. BDD multi-line comment support
  3. [#185](https://github.com/qmetry/qaf/issues/185) support to provider xml file for xml data provider
