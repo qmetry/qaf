@@ -25,15 +25,14 @@ import java.net.URL;
 import java.util.Map;
 
 import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.remote.CommandExecutor;
+import org.openqa.selenium.remote.Dialect;
 import org.openqa.selenium.remote.DriverCommand;
 import org.openqa.selenium.remote.Response;
-import org.openqa.selenium.remote.internal.WebElementToJsonConverter;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.ui.WebDriverCommandLogger;
+import com.qmetry.qaf.automation.util.ClassUtil;
 
 /**
  * com.qmetry.qaf.automation.ui.webdriver.QAFWebDriver.java
@@ -49,7 +48,7 @@ public class LiveIsExtendedWebDriver extends QAFExtendedWebDriver {
 		this.capabilities = capabilities;
 	}
 
-	@Override
+	//@Override
 	protected void startClient() {
 	}
 
@@ -65,7 +64,9 @@ public class LiveIsExtendedWebDriver extends QAFExtendedWebDriver {
 						(String) desiredCapabilities.asMap().get(ApplicationProperties.WEBDRIVER_REMOTE_SESSION.key))
 				.trim();
 		setSessionId(sessionId);
+		setCodec();
 	}
+
 
 	protected void startSession(Capabilities desiredCapabilities, Capabilities reqCapabilities) {
 		startSession(desiredCapabilities);
@@ -79,29 +80,38 @@ public class LiveIsExtendedWebDriver extends QAFExtendedWebDriver {
 		return super.execute(driverCommand, parameters);
 	}
 
-	@Override
-	public Object executeScript(String script, Object... args) {
-		return execute("executeScript", validateScriptCommand(script, args)).getValue();
-	}
-
-	@Override
-	public Object executeAsyncScript(String script, Object... args) {
-		return execute("executeAsyncScript", validateScriptCommand(script, args)).getValue();
-	}
-
-	private boolean isJavaScriptEnabled() {
-		return capabilities.isJavascriptEnabled();
-	}
-
-	private Map<String, ?> validateScriptCommand(String script, Object... args) {
-		if (!(isJavaScriptEnabled())) {
-			throw new UnsupportedOperationException(
-					"You must be using an underlying instance of WebDriver that supports executing javascript");
+	private void setCodec() {
+		try {
+			CommandExecutor executor = getCommandExecutor();
+			ClassUtil.setField("commandCodec", executor, Dialect.W3C.getCommandCodec());
+			ClassUtil.setField("responseCodec", executor, Dialect.W3C.getResponseCodec());
+		} catch (Exception e) {
+			// do nothing
 		}
-
-		script = script.replaceAll("\"", "\\\"");
-		Iterable<?> convertedArgs = Iterables.transform(Lists.newArrayList(args), new WebElementToJsonConverter());
-		Map<String, ?> params = ImmutableMap.of("script", script, "args", Lists.newArrayList(convertedArgs));
-		return params;
 	}
+//	@Override
+//	public Object executeScript(String script, Object... args) {
+//		return execute("executeScript", validateScriptCommand(script, args)).getValue();
+//	}
+//
+//	@Override
+//	public Object executeAsyncScript(String script, Object... args) {
+//		return execute("executeAsyncScript", validateScriptCommand(script, args)).getValue();
+//	}
+
+//	private boolean isJavaScriptEnabled() {
+//		return capabilities.isJavascriptEnabled();
+//	}
+
+//	private Map<String, ?> validateScriptCommand(String script, Object... args) {
+//		if (!(isJavaScriptEnabled())) {
+//			throw new UnsupportedOperationException(
+//					"You must be using an underlying instance of WebDriver that supports executing javascript");
+//		}
+//
+//		script = script.replaceAll("\"", "\\\"");
+//		Iterable<?> convertedArgs = Iterables.transform(Lists.newArrayList(args), new WebElementToJsonConverter());
+//		Map<String, ?> params = ImmutableMap.of("script", script, "args", Lists.newArrayList(convertedArgs));
+//		return params;
+//	}
 }
