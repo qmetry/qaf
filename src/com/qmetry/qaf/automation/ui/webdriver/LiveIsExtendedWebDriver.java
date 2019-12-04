@@ -32,7 +32,7 @@ import org.openqa.selenium.remote.Response;
 
 import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.ui.WebDriverCommandLogger;
-import com.qmetry.qaf.automation.util.ClassUtil;
+import static com.qmetry.qaf.automation.util.ClassUtil.setField;
 
 /**
  * com.qmetry.qaf.automation.ui.webdriver.QAFWebDriver.java
@@ -83,35 +83,10 @@ public class LiveIsExtendedWebDriver extends QAFExtendedWebDriver {
 	private void setCodec() {
 		try {
 			CommandExecutor executor = getCommandExecutor();
-			ClassUtil.setField("commandCodec", executor, Dialect.W3C.getCommandCodec());
-			ClassUtil.setField("responseCodec", executor, Dialect.W3C.getResponseCodec());
+			setField("commandCodec", executor, Dialect.W3C.getCommandCodec());
+			setField("responseCodec", executor, Dialect.W3C.getResponseCodec());
 		} catch (Exception e) {
-			// do nothing
+			logger.error("Unable to set W3C codec", e);
 		}
 	}
-//	@Override
-//	public Object executeScript(String script, Object... args) {
-//		return execute("executeScript", validateScriptCommand(script, args)).getValue();
-//	}
-//
-//	@Override
-//	public Object executeAsyncScript(String script, Object... args) {
-//		return execute("executeAsyncScript", validateScriptCommand(script, args)).getValue();
-//	}
-
-//	private boolean isJavaScriptEnabled() {
-//		return capabilities.isJavascriptEnabled();
-//	}
-
-//	private Map<String, ?> validateScriptCommand(String script, Object... args) {
-//		if (!(isJavaScriptEnabled())) {
-//			throw new UnsupportedOperationException(
-//					"You must be using an underlying instance of WebDriver that supports executing javascript");
-//		}
-//
-//		script = script.replaceAll("\"", "\\\"");
-//		Iterable<?> convertedArgs = Iterables.transform(Lists.newArrayList(args), new WebElementToJsonConverter());
-//		Map<String, ?> params = ImmutableMap.of("script", script, "args", Lists.newArrayList(convertedArgs));
-//		return params;
-//	}
 }
