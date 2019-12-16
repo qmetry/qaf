@@ -522,8 +522,9 @@ public class QAFExtendedWebElement extends RemoteWebElement implements QAFWebEle
 			parameters.put("id", element.getId());
 			commandTracker.setException(null);
 			commandTracker.setStage(Stage.executingMethod);
-			element.execute(commandTracker.command, parameters);
+			Response response = element.execute(commandTracker.command, parameters);
 			commandTracker.setEndTime(System.currentTimeMillis());
+			commandTracker.setResponce(response);
 		}
 		for (QAFWebElementCommandListener listener : listners) {
 			// whether handled previous listener
