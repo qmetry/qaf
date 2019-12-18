@@ -1,5 +1,5 @@
 ---
-title: Understating Directory Structure
+title: Understanding Directory Structure
 sidebar: qaf_latest-sidebar
 permalink: latest/understand_dirstructure.html
 folder: latest
