@@ -344,7 +344,8 @@ public class QAFInetrceptableDataProvider {
 			} catch (Exception e) {
 				m = getDataProviderMethod(dp, methodClass);
 			}
-			Object instanceToUse = ClassHelper.newInstanceOrNull(m.getDeclaringClass());
+			Object instanceToUse = m.getDeclaringClass().equals(tm.getConstructorOrMethod().getDeclaringClass()) ? tm.getInstance()
+					: ClassHelper.newInstanceOrNull(m.getDeclaringClass());
 			return InvocatoinHelper.invokeDataProvider(instanceToUse, m, tm, c, null,
 					new Configuration().getAnnotationFinder());
 		} else {
