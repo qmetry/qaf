@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.support.ui.Wait;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
@@ -45,7 +44,7 @@ import com.qmetry.qaf.automation.keys.ApplicationProperties;
  * @author chirag.jayswal
  *
  */
-public class DynamicWait<T> implements Wait<T> {
+public class DynamicWait<T>{ //implements Wait<T> {
 	private T input;
 	private long timeout = getDefaultTimeout();
 	private long interval = getDefaultTimeout();

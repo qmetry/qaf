@@ -164,7 +164,7 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 		}
 	}
 
-	private static void onInitializationFailure(DesiredCapabilities desiredCapabilities, Throwable e,
+	private static void onInitializationFailure(Capabilities desiredCapabilities, Throwable e,
 			Collection<QAFWebDriverCommandListener> listners) {
 		if ((listners != null) && !listners.isEmpty()) {
 			for (QAFWebDriverCommandListener listener : listners) {
@@ -276,14 +276,14 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 
 		firefox(DesiredCapabilities.firefox(), FirefoxDriver.class), iexplorer(DesiredCapabilities.internetExplorer(),
 				InternetExplorerDriver.class), chrome(DesiredCapabilities.chrome(), ChromeDriver.class), opera(
-						new DesiredCapabilities("opera", "", Platform.ANY),
-						"com.opera.core.systems.OperaDriver"), android(DesiredCapabilities.android(),
+						DesiredCapabilities.operaBlink(),
+						"com.opera.core.systems.OperaDriver"), android(new DesiredCapabilities("android", "", Platform.ANDROID),
 								"org.openqa.selenium.android.AndroidDriver"), iphone(
 										new DesiredCapabilities("iPhone", "", Platform.MAC),
 										"org.openqa.selenium.iphone.IPhoneDriver"), ipad(
 												new DesiredCapabilities("iPad", "", Platform.MAC),
 												"org.openqa.selenium.iphone.IPhoneDriver"), safari(
-														new DesiredCapabilities("safari", "", Platform.ANY),
+														DesiredCapabilities.safari(),
 														"org.openqa.selenium.safari.SafariDriver"), appium(
 																new DesiredCapabilities(),
 																"io.appium.java_client.AppiumDriver"), perfecto(
@@ -303,16 +303,16 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 		private Class<? extends WebDriver> driverCls = null;
 		private String browserName = name();
 
-		private Browsers(DesiredCapabilities desiredCapabilities) {
-			this.desiredCapabilities = desiredCapabilities;
-			this.desiredCapabilities.setJavascriptEnabled(true);
+		private Browsers(Capabilities desiredCapabilities) {
+			this.desiredCapabilities = new DesiredCapabilities(desiredCapabilities.asMap());
+			this.desiredCapabilities.setCapability(CapabilityType.SUPPORTS_JAVASCRIPT,true);
 			this.desiredCapabilities.setCapability(CapabilityType.TAKES_SCREENSHOT, true);
 			this.desiredCapabilities.setCapability(CapabilityType.SUPPORTS_FINDING_BY_CSS, true);
 
 		}
 
 		@SuppressWarnings("unchecked")
-		private Browsers(DesiredCapabilities desiredCapabilities, String drivercls) {
+		private Browsers(Capabilities desiredCapabilities, String drivercls) {
 			this(desiredCapabilities);
 			if (null == driverCls) {
 				// not overridden by extra capability
@@ -325,7 +325,7 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 
 		}
 
-		private Browsers(DesiredCapabilities desiredCapabilities, Class<? extends WebDriver> driver) {
+		private Browsers(Capabilities desiredCapabilities, Class<? extends WebDriver> driver) {
 			this(desiredCapabilities);
 			if (null == driverCls) {
 				// not overridden by extra capability
@@ -396,7 +396,7 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 		}
 
 		private QAFExtendedWebDriver getDriver(WebDriverCommandLogger reporter, String urlstr) {
-			DesiredCapabilities desiredCapabilities = getDesiredCapabilities();
+			Capabilities desiredCapabilities = getDesiredCapabilities();
 
 			Collection<QAFWebDriverCommandListener> listners = getDriverListeners();
 			beforeInitialize(desiredCapabilities, listners);
@@ -416,7 +416,7 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 		}
 
 		private QAFExtendedWebDriver getDriver(String url, WebDriverCommandLogger reporter) {
-			DesiredCapabilities desiredCapabilities = getDesiredCapabilities();
+			Capabilities desiredCapabilities = getDesiredCapabilities();
 			Collection<QAFWebDriverCommandListener> listners = getDriverListeners();
 
 			beforeInitialize(desiredCapabilities, listners);

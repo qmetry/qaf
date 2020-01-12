@@ -203,7 +203,6 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 		return proxy;
 	}
 
-	@SuppressWarnings("unchecked")
 	public void load(QAFExtendedWebElement... elements) {
 		if (elements != null) {
 			for (QAFExtendedWebElement element : elements) {
@@ -541,7 +540,7 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 		quit();
 	}
 
-	@Override
+/*	@Override
 	public Object executeScript(String script, Object... args) {
 		if (!getCapabilities().isJavascriptEnabled()) {
 			throw new UnsupportedOperationException(
@@ -573,6 +572,6 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 		Map<String, ?> params = ImmutableMap.of("script", script, "args", Lists.newArrayList(convertedArgs));
 
 		return execute(DriverCommand.EXECUTE_ASYNC_SCRIPT, params).getValue();
-	}
+	}*/
 
 }
