@@ -30,7 +30,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,11 +40,13 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.qmetry.qaf.automation.core.AutomationError;
 import com.qmetry.qaf.automation.step.client.AbstractScenarioFileParser;
 import com.qmetry.qaf.automation.step.client.Scenario;
 import com.qmetry.qaf.automation.testng.dataprovider.QAFDataProvider.params;
+import com.qmetry.qaf.automation.util.JSONUtil;
 import com.qmetry.qaf.automation.util.StringUtil;
 /**
  * This parser is combination of gherkin and qaf bdd. Supports meta-data as
@@ -193,7 +197,7 @@ public class BDDFileParser2 extends AbstractScenarioFileParser {
 								}
 							}else{
 								excludeExamples = true;
-								if(!metadata.containsKey(params.JSON_DATA_TABLE)){
+								if(!metadata.containsKey(params.JSON_DATA_TABLE.name())){
 									metadata.put(params.JSON_DATA_TABLE.name(), "[]");
 									scenario[2] = new Gson().toJson(metadata);
 								}
@@ -201,7 +205,8 @@ public class BDDFileParser2 extends AbstractScenarioFileParser {
 								continue;
 							}
 						} else {
-							scenarioTags.addAll(globalTags);
+							//allow to override meta-data value
+							scenarioTags.addAll(0,globalTags);
 							Map<String, Object> metadata = getMetaData(scenarioTags);
 							// String metadata =
 							// String.format("{\"groups\":%s}", new
@@ -370,6 +375,7 @@ public class BDDFileParser2 extends AbstractScenarioFileParser {
 		return "";
 	}
 
+	@SuppressWarnings("unchecked")
 	private Map<String, Object> getMetaData(List<String> tags) {
 		Map<String, Object> metaData = new HashMap<String, Object>();
 		List<String> groups = new ArrayList<String>();
@@ -377,7 +383,14 @@ public class BDDFileParser2 extends AbstractScenarioFileParser {
 			if (StringUtil.isNotBlank(tag)) {
 				if (tag.indexOf(":") > 0) {
 					String[] keyVal = tag.trim().split(":", 2);
-					metaData.put(keyVal[0], StringUtil.toObject(keyVal[1]));
+					// it will not merge if meta-value not supposed to be list, it will have
+					// conflict when created list for none list values, for example priority or enabled
+					Object val = JSONUtil.toObject(keyVal[1]);
+					Object oVal = metaData.put(keyVal[0], val);
+					if(oVal instanceof List && val instanceof List) {
+						((List<String>)oVal).removeAll((List<String>)val);
+						((List<String>)val).addAll((List<String>)oVal);
+					}
 				} else {
 					groups.add(tag.trim());
 				}

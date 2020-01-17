@@ -25,8 +25,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -497,7 +497,7 @@ public class StringUtil extends StringUtils {
 	 * @throws ScriptException
 	 */
 	public static <T> T eval(String expression) throws ScriptException {
-		return eval(expression, new HashMap<String, Object>());
+		return eval(expression, Collections.emptyMap());
 	}
 
 	/**
@@ -517,7 +517,7 @@ public class StringUtil extends StringUtils {
 	}
 
 	/**
-	 * Try to convert a string into java primitive type or null. If the
+	 * Try to convert a string into java primitive type, java object or null. If the
 	 * string can't be converted, return the string. It will return null for empty string.
 	 * 
 	 * @param string

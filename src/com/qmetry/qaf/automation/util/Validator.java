@@ -63,7 +63,7 @@ public class Validator {
 
 	public static <T> void assertThat(String reason, T actual, Matcher<? super T> matcher) {
 		if (!verifyThat(reason, actual, matcher)) {
-			throw new AssertionError();
+			throw new AssertionError(reason);
 		}
 	}
 

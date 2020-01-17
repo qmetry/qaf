@@ -22,6 +22,7 @@
 package com.qmetry.qaf.automation.step;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -77,6 +78,14 @@ public class BDD2ParserTest {
 		Validator.assertThat("Steps in scenario", scenarios.get(0).getSteps(), Matchers.hasSize(4));
 		//doc string should be added as comment
 		Validator.assertThat("Steps in scenario", scenarios.get(1).getSteps(), Matchers.hasSize(5));
+		
+		Object modules = scenarios.get(0).getMetadata().get("Module");
+		System.out.println("Modules :: " +modules);
+		
+		Validator.assertThat("Modules in scenario metadata", modules, Matchers.instanceOf(Collection.class));
+		Validator.assertThat("total Modules in scenario metadata " + modules, (Collection<?>)modules, Matchers.hasSize(3));
+		Validator.assertThat("total Type in scenario metadata " + scenarios.get(0).getMetadata().get("type"), scenarios.get(0).getMetadata().get("type"), Matchers.is("b"));
+
 
 	}
 

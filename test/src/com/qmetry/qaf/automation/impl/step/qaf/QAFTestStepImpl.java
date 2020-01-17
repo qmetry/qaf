@@ -23,8 +23,14 @@ package com.qmetry.qaf.automation.impl.step.qaf;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.hamcrest.Matchers;
+
+import com.qmetry.qaf.automation.impl.Item;
 import com.qmetry.qaf.automation.step.QAFTestStep;
+import com.qmetry.qaf.automation.util.ClassUtil;
+import com.qmetry.qaf.automation.util.Validator;
 
 /**
  * @author chiragj.ayswal
@@ -81,11 +87,13 @@ public class QAFTestStepImpl {
 	@QAFTestStep(description="system with following users:{users}")
 	public void listOfUser(List<Map<String, Object>> users) {
 	    System.out.println("users:" + users);
+	    Validator.verifyThat(users.get(0), Matchers.instanceOf(Map.class));
 	}
 	
 	@QAFTestStep(description="system may have following user:{users}")
 	public void oneOrMoreUser(Map<String, Object>... users) {
 	    System.out.println("users:" + users);
+	    Validator.verifyThat(true, Matchers.is(users.getClass().isArray()));
 	}
 	@QAFTestStep(description="I may see following color:{colors}")
 	public void oneOrMoreColors(String... colors) {
@@ -94,5 +102,22 @@ public class QAFTestStepImpl {
 	@QAFTestStep(description="user is:{user}")
 	public void aUser(Map<String, Object> user) {
 	    System.out.println("users:" + user);
+	}
+	
+	@QAFTestStep(description = "I have one:{item}")
+	public void iHaveAnItem(Item item) {
+		System.out.println(ClassUtil.getField("name", item));
+	}
+	
+	@QAFTestStep(description = "I have set of:{items}")
+	public void iHaveItems(Set<Item> items) {
+	    Validator.verifyThat(items.toArray()[0], Matchers.instanceOf(Item.class));
+		System.out.println(ClassUtil.getField("name", items.iterator().next()));
+
+	}
+	
+	@QAFTestStep(description = "I can have one or more:{items}")
+	public void iCanHaveOneOrMoreItems(Item... item) {
+		System.out.println(ClassUtil.getField("name", item[0]));
 	}
 }

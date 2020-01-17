@@ -102,7 +102,7 @@ public class PropertyUtil extends XMLConfiguration {
 		} else {
 			String sysVal = System.getProperty(key);
 			if (!sysVal.equalsIgnoreCase(value.toString())) {
-				logger.debug("property [" + key + "] value [" + value
+				logger.trace("property [" + key + "] value [" + value
 						+ "] ignored! It is overriden with System provided value: [" + sysVal + "]");
 			}
 		}

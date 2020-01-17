@@ -46,6 +46,8 @@ import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import org.apache.commons.lang.ClassUtils;
+
 /**
  * com.qmetry.qaf.automation.util.ClassUtil.java
  * 
@@ -193,8 +195,7 @@ public final class ClassUtil {
 	}
 
 	/**
-	 * Recursive method used to find all classes in a given directory and
-	 * subdirs.
+	 * Recursive method used to find all classes in a given directory and subdirs.
 	 * 
 	 * @param directory
 	 *            The base directory
@@ -246,13 +247,12 @@ public final class ClassUtil {
 	}
 
 	/**
-	 * Get all fields of the class including parent up to given level in
-	 * hierarchy.
+	 * Get all fields of the class including parent up to given level in hierarchy.
 	 * 
 	 * @param clazz
 	 * @param uptoParent
-	 *            - restrict hierarchy - to exclude fields from provided class
-	 *            and it's parent(s) in hierarchy
+	 *            - restrict hierarchy - to exclude fields from provided class and
+	 *            it's parent(s) in hierarchy
 	 * @return
 	 */
 	public static Field[] getAllFields(Class<?> clazz, Class<?> uptoParent) {
@@ -274,8 +274,8 @@ public final class ClassUtil {
 	}
 
 	/**
-	 * Get instance of Parameterized class by calling default constructor. Will
-	 * work only if Parameterized class has default constructor
+	 * Get instance of Parameterized class by calling default constructor. Will work
+	 * only if Parameterized class has default constructor
 	 * 
 	 * @param <C>
 	 * @return instance of the parameter
@@ -384,9 +384,9 @@ public final class ClassUtil {
 	}
 
 	/**
-	 * Given an interface Method, look in the implementing class for the method
-	 * that implements the interface's method to obtain generic type
-	 * information. This is useful for templatized interfaces like:
+	 * Given an interface Method, look in the implementing class for the method that
+	 * implements the interface's method to obtain generic type information. This is
+	 * useful for templatized interfaces like:
 	 * <p/>
 	 * 
 	 * <pre>
@@ -416,9 +416,9 @@ public final class ClassUtil {
 	}
 
 	/**
-	 * Given an interface Method, look in the implementing class for the method
-	 * that implements the interface's method to obtain generic type
-	 * information. This is useful for templatized interfaces like:
+	 * Given an interface Method, look in the implementing class for the method that
+	 * implements the interface's method to obtain generic type information. This is
+	 * useful for templatized interfaces like:
 	 * <p/>
 	 * 
 	 * <pre>
@@ -554,8 +554,7 @@ public final class ClassUtil {
 
 	/**
 	 * Finds an actual value of a type variable. The method looks in a class
-	 * hierarchy for a class defining the variable and returns the value if
-	 * present.
+	 * hierarchy for a class defining the variable and returns the value if present.
 	 * 
 	 * @param clazz
 	 * @param typevariable
@@ -594,7 +593,7 @@ public final class ClassUtil {
 
 	public static void setField(String fieldName, Object classObj, Object value) {
 		try {
-			Field field = getField(fieldName,classObj.getClass());
+			Field field = getField(fieldName, classObj.getClass());
 
 			field.setAccessible(true);
 			Field modifiersField = Field.class.getDeclaredField("modifiers");
@@ -605,8 +604,8 @@ public final class ClassUtil {
 			e.printStackTrace();
 		}
 	}
-	
-	public static Field getField(String fieldName, Class<?> clazz) throws NoSuchFieldException{
+
+	public static Field getField(String fieldName, Class<?> clazz) throws NoSuchFieldException {
 		try {
 			return clazz.getField(fieldName);
 		} catch (NoSuchFieldException e) {
@@ -619,10 +618,10 @@ public final class ClassUtil {
 			throw e;
 		}
 	}
-	
+
 	public static Object getField(String fieldName, Object classObj) {
 		try {
-			Field field = getField(fieldName,classObj.getClass());
+			Field field = getField(fieldName, classObj.getClass());
 			field.setAccessible(true);
 			return field.get(classObj);
 		} catch (Exception e) {
@@ -658,8 +657,8 @@ public final class ClassUtil {
 
 	/**
 	 * @param clazz
-	 * @return return true if it is any of the wrapper class (i.e. Double, Long)
-	 *         or String or Void
+	 * @return return true if it is any of the wrapper class (i.e. Double, Long) or
+	 *         String or Void
 	 */
 	public static boolean isWrapperType(Class<?> clazz) {
 		return WRAPPER_TYPES.contains(clazz);
@@ -667,6 +666,26 @@ public final class ClassUtil {
 
 	public static boolean isPrimitiveOrWrapperType(Class<?> clazz) {
 		return clazz.isPrimitive() || isWrapperType(clazz);
+
+	}
+
+	public static boolean isAssignableFrom(Type typeOfT, Class<?> clazz) {
+		Class<?> cls = getClass(typeOfT);
+		return clazz.isAssignableFrom(cls);
+	}
+
+	public static Class<?> getClass(Type typeOfT) {
+		if (typeOfT instanceof ParameterizedType) {
+			return getClass(((ParameterizedType) typeOfT).getRawType());
+		}
+		if (typeOfT instanceof Class) {
+			return (Class<?>) typeOfT;
+		}
+		try {
+			return ClassUtils.getClass(typeOfT.getTypeName());
+		} catch (ClassNotFoundException e) {
+			return typeOfT.getClass();
+		}
 
 	}
 

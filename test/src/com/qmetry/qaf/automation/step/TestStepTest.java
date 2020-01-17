@@ -21,9 +21,15 @@
  ******************************************************************************/
 package com.qmetry.qaf.automation.step;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.testng.annotations.Test;
 
+import com.google.gson.GsonBuilder;
 import com.qmetry.qaf.automation.core.ConfigurationManager;
+
+import gherkin.deps.com.google.gson.Gson;
 
 public class TestStepTest {
 
@@ -70,6 +76,19 @@ public class TestStepTest {
 
 	}
 	
+	@Test(description = "Auto parse List of complex objects in step argument")
+	public void feature303() {
+		ConfigurationManager.getBundle().setProperty("step.provider.pkg", "com.qmetry.qaf.automation.impl.step");
+
+		StringTestStep.execute("And I have set of:[{\"name\":\"item-1\"},{\"name\":\"item-2\"}]", new Object[]{});
+
+		StringTestStep.execute("And I have set of:[\"name\",\"item,-1\",\"item-2\"]", new Object[]{});
+		
+		StringTestStep.execute("And I have set of:{\"name\":\"<item,-1>\"}", new Object[]{});
+		StringTestStep.execute("I see following colors:\"RED\"", new Object[]{});
+		StringTestStep.execute("I see following colors:[\"GREEN\"]", new Object[]{});
+		StringTestStep.execute("I see following colors:[\"R,ED\",\"GREEN\"]", new Object[]{});
+	}
 
 	@Test(description = "")
 	public void testStepFromClassExtendingAnotherClass() {

@@ -1,8 +1,12 @@
+@Module:['M1','M']
+@type:a
 @Web
 Feature: Google Search
 Search should return result only related to serach term,
 not other
 
+@Module:['M1','M2']
+@type:b
 @Smoke
 Scenario: Search InfoStrech
 

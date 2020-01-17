@@ -50,7 +50,7 @@ public class StringUtilsTest {
 		System.out.println(csvStr);
 		System.out.println(new JSONArray(csv).toString());
 
-		Validator.assertThat(csv, Matchers.arrayContaining(expectedResult));
+		Validator.assertThat("Unable to parse: " + csvStr, csv, Matchers.arrayContaining(expectedResult));
 		
 	}
 	

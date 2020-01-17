@@ -29,6 +29,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.LogFactoryImpl;
 import org.json.CDL;
@@ -41,9 +42,14 @@ import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonIOException;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.stream.MalformedJsonException;
 import com.qmetry.qaf.automation.core.AutomationError;
+import com.qmetry.qaf.automation.gson.GsonDeserializerObjectWrapper;
+import com.qmetry.qaf.automation.gson.ObjectWrapper;
 import com.qmetry.qaf.automation.keys.ApplicationProperties;
 
 /**
@@ -62,7 +68,7 @@ public class JSONUtil {
 	 */
 	public static Map<String, Object> toMap(String json) throws JSONException {
 		@SuppressWarnings("unchecked")
-		Map<String, Object> map = new Gson().fromJson(json, Map.class);
+		Map<String, Object> map = (Map<String, Object>) toObject(json, Map.class);
 		return map;
 	}
 
@@ -185,20 +191,21 @@ public class JSONUtil {
 	 * @param file
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public static Object[][] getJsonArrayOfMaps(String file) {
 		try {
-			Gson gson = new Gson();
+			/*Gson gson = new Gson();*/
 			final Type DATASET_TYPE = new TypeToken<List<Map<String, Object>>>() {
 				private static final long serialVersionUID = 4426388930719377223L;
 			}.getType();
 
 			List<Map<String, Object>[]> mapData;
 			if (file.startsWith("["))
-				mapData = gson.fromJson(file, DATASET_TYPE);
+				mapData =  (List<Map<String, Object>[]>) toObject(file, DATASET_TYPE, new GsonBuilder());//gson.fromJson(file, DATASET_TYPE);
 			else {
 				String jsonStr = FileUtil.readFileToString(new File(file),
 						ApplicationProperties.LOCALE_CHAR_ENCODING.getStringVal("UTF-8"));
-				mapData = gson.fromJson(jsonStr, DATASET_TYPE);
+				mapData = (List<Map<String, Object>[]>) toObject(jsonStr, DATASET_TYPE, new GsonBuilder());//gson.fromJson(jsonStr, DATASET_TYPE);
 			}
 			Object[][] objecttoreturn = new Object[mapData.size()][1];
 			for (int i = 0; i < mapData.size(); i++) {
@@ -235,5 +242,45 @@ public class JSONUtil {
 		return gson.fromJson(json, cls);
 
 	}
+	
+	/**
+	 * Get Object from JSON representation. It also works for number, boolean, string values and will return appropriate object for that.
+	 * For example: input "1" will return long object with value 1, "1.0" will return double, "true" will return boolean.
+	 * @param s
+	 * @return
+	 */
+	public static Object toObject(String s) {
+		return toObject(s, Object.class);
+	}
+	
+	public static Object toObject(String s, Type t) {
 
+		GsonBuilder builder = new GsonBuilder().setLenient().serializeNulls();
+		return toObject(s, t, builder);
+	}
+
+	public static <T> T toObject(String s, Class<T> t) {
+		GsonBuilder builder = new GsonBuilder().setLenient().serializeNulls();
+		return t.cast(toObject(s, t, builder));
+	}
+	 
+	public static Object toObject(String s, Type t, GsonBuilder builder) {
+		Gson gson = builder.registerTypeAdapter(ObjectWrapper.class, new GsonDeserializerObjectWrapper(t)).create();
+		try {
+			ObjectWrapper val = gson.fromJson(s, ObjectWrapper.class);
+			return val.getObject();// gson.fromJson(s,t);
+		} catch (JsonSyntaxException e) {
+			if (e.getCause() instanceof MalformedJsonException) {
+				ObjectWrapper val = gson.fromJson("\"" + StringEscapeUtils.escapeJava(s) + "\"", ObjectWrapper.class);
+				return val.getObject();
+			}
+			throw e;
+		}catch (JsonIOException e) {
+			return s;
+		}
+		catch (NullPointerException e) {
+			return s;
+		}
+	}
+	
 }
