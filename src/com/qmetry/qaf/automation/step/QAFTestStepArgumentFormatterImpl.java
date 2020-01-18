@@ -46,7 +46,7 @@ import com.qmetry.qaf.automation.util.ClassUtil;
  *
  */
 public class QAFTestStepArgumentFormatterImpl implements QAFTestStepArgumentFormatter<Object> {
-	private static final GsonBuilder gsonBuilder = new GsonBuilder().setDateFormat("dd-MM-yyyy");
+	private static final GsonBuilder gsonBuilder = new GsonBuilder().setDateFormat("dd-MM-yyyy").serializeNulls();
 	private static final Gson gson = gsonBuilder.create();
 			// .registerTypeAdapter(ObjectWrapper.class, new
 			// GsonDeserializerObjectWrapper())

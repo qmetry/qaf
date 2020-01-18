@@ -120,4 +120,9 @@ public class QAFTestStepImpl {
 	public void iCanHaveOneOrMoreItems(Item... item) {
 		System.out.println(ClassUtil.getField("name", item[0]));
 	}
+	
+	@QAFTestStep(description = "test arguments:{map}")
+	public Map<String, Object> testArguments(Map<String, Object> map) {
+		return map;
+	}
 }

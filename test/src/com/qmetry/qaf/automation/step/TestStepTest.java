@@ -21,15 +21,14 @@
  ******************************************************************************/
 package com.qmetry.qaf.automation.step;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.Map;
 
+import org.hamcrest.Matchers;
 import org.testng.annotations.Test;
 
-import com.google.gson.GsonBuilder;
 import com.qmetry.qaf.automation.core.ConfigurationManager;
-
-import gherkin.deps.com.google.gson.Gson;
+import com.qmetry.qaf.automation.util.JSONUtil;
+import com.qmetry.qaf.automation.util.Validator;
 
 public class TestStepTest {
 
@@ -88,6 +87,21 @@ public class TestStepTest {
 		StringTestStep.execute("I see following colors:\"RED\"", new Object[]{});
 		StringTestStep.execute("I see following colors:[\"GREEN\"]", new Object[]{});
 		StringTestStep.execute("I see following colors:[\"R,ED\",\"GREEN\"]", new Object[]{});
+	}
+	
+	@SuppressWarnings({"unchecked"})
+	@Test(description = "Bdd Step call with Map argument removes entry with null value from map argument")
+	public void bug315() {
+		ConfigurationManager.getBundle().setProperty("step.provider.pkg", "com.qmetry.qaf.automation.impl.step");
+
+		String json = "{'l':1,'a':null}";
+
+		Map<String, Object> o = JSONUtil.toObject(json, Map.class);
+		Validator.assertThat("map should have key 'a'" + o, o, Matchers.hasEntry("a",null));
+		System.out.println(o);
+
+		o = (Map<String, Object>) StringTestStep.execute("testArguments", new Object[] {o});
+		Validator.assertThat("map should have key 'a'" + o, o, Matchers.hasKey("a"));
 	}
 
 	@Test(description = "")
