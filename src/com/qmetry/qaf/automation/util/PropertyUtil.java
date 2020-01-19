@@ -91,6 +91,12 @@ public class PropertyUtil extends XMLConfiguration {
 	}
 
 	@Override
+	protected Object resolveContainerStore(String key) {
+	    key=key.replace("<%", "${").replace("%>", "}");
+		key = getSubstitutor().replace(key);
+		return super.resolveContainerStore(key);
+	}
+	@Override
 	protected void addPropertyDirect(String key, Object value) {
 		if (!System.getProperties().containsKey(key)) {
 			if (key.toLowerCase().startsWith("system.")) {

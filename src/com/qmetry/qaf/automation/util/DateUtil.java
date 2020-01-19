@@ -108,6 +108,27 @@ public class DateUtil {
 	}
 
 	/**
+	 * Get any one random date provided from range.
+	 * 
+	 * @param min
+	 *            : minimum date - 0 is today.
+	 * @param min
+	 *            : maximum date - 0 is today.
+	 * @param format
+	 *            : (option) format in which require date string, default is
+	 *            "MM/dd/yyyy"
+	 * @return date string for expected day. Example:
+	 *         <ol>
+	 *         <li>getDate(0,7) will return any date from today to next 7 days
+	 *         <li>getDate(-7,-1) will return any date from last week
+	 *         </ol>
+	 */
+	public static String getDate(int min, int max, String... format) {
+		Double days =  (Math.random() * ((max - min) + 1)) + min;
+		return getDate(days.intValue(), format);
+	}
+
+	/**
 	 * Get date for today, before/after today. Example:
 	 * <ol>
 	 * <li>getDate(0) will return today's date

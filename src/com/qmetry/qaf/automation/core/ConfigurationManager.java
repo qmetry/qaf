@@ -36,10 +36,14 @@ import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
+import javax.script.ScriptException;
+
 import org.apache.commons.configuration.AbstractConfiguration;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.event.ConfigurationEvent;
 import org.apache.commons.configuration.event.ConfigurationListener;
+import org.apache.commons.configuration.interpol.ConfigurationInterpolator;
+import org.apache.commons.lang.text.StrLookup;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.LogFactoryImpl;
 import org.hamcrest.Matchers;
@@ -83,8 +87,30 @@ public class ConfigurationManager {
 	 */
 	private ConfigurationManager() {
 		AbstractConfiguration.setDefaultListDelimiter(';');
+		registerLookups();
 	}
 
+	private void registerLookups(){
+		ConfigurationInterpolator.registerGlobalLookup("rnd", new StrLookup() {
+			public String lookup(String var) {
+				var = var.replace("<%", "${").replace("%>", "}");
+				var = getBundle().getSubstitutor().replace(var);
+				return StringUtil.getRandomString(var);
+			}
+		});
+		ConfigurationInterpolator.registerGlobalLookup("expr", new StrLookup() {
+			public String lookup(String var) {
+				try {
+					var = var.replace("<%", "${").replace("%>", "}");
+					var = getBundle().getSubstitutor().replace(var);
+					Object res = StringUtil.eval(var);
+					return String.valueOf(res);
+				} catch (ScriptException e) {
+					throw new RuntimeException("Unable to evaluate expression: " + var, e);
+				}
+			}
+		});
+	}
 	public static ConfigurationManager getInstance() {
 		return INSTANCE;
 	}

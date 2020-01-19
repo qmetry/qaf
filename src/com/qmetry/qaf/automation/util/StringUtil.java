@@ -64,7 +64,9 @@ public class StringUtil extends StringUtils {
 	 */
 	public static String toCamelCaseIdentifier(String formStr) {
 		StringBuffer res = new StringBuffer();
-
+		if(isEmpty(formStr)){
+			return "";
+		}
 		formStr = formStr.replaceAll("\\{(\\d)*(\\s)*\\}", "");
 		String[] strArr = formStr.split("\\W");
 		int i = 0;
@@ -350,7 +352,7 @@ public class StringUtil extends StringUtils {
 		if (data.indexOf(escapeChar + "" + seperator) < 0) {
 			//without escape char for separator
 			if (hasSeperator && data.contains(",")) {
-				data = ensuerStirngQuated(data, seperator);
+				data = ensuerStringQuated(data, seperator);
 			}
 			
 			String commaSperatoredData = data.replace(seperator, ',');
@@ -530,7 +532,7 @@ public class StringUtil extends StringUtils {
 		return null;
 	}
 
-	private static String ensuerStirngQuated(String data, char seperator) {
+	private static String ensuerStringQuated(String data, char seperator) {
 		if(isBlank(data) || data.indexOf(seperator)<0){
 			return data;
 		}
