@@ -42,6 +42,7 @@ import com.qmetry.qaf.automation.ui.UiDriverFactory;
 import com.qmetry.qaf.automation.ui.WebDriverTestBase;
 import com.qmetry.qaf.automation.ui.util.DynamicWait;
 import com.qmetry.qaf.automation.ui.util.ExpectedCondition;
+import com.qmetry.qaf.automation.ui.webdriver.QAFExtendedWebDriver;
 import com.qmetry.qaf.automation.util.FileUtil;
 import com.qmetry.qaf.automation.util.PropertyUtil;
 import com.qmetry.qaf.automation.util.StringMatcher;
@@ -207,6 +208,11 @@ public class QAFTestBase {
 		// driver
 		if (StringUtil.isNotBlank(driverName) && hasDriver()) {
 			UiDriverFactory.loadDriverResouces(driverName);
+			 UiDriver driver = getDriverContext().get(driverName);
+			if (null != driver && driver instanceof QAFExtendedWebDriver) {
+				ConfigurationManager.getBundle().setProperty("driver.actualCapabilities",
+						((QAFExtendedWebDriver) driver).getCapabilities().asMap());
+			}
 		}
 	}
 
