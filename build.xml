@@ -210,27 +210,7 @@ For any inquiry or need additional information, please contact support-qaf@infos
 	</manifest>
 </jar>
 </target>
-<target name="build-cucumber-report" depends="clean, compile" description="build basic version">
-<mkdir dir="${dist.dir}" />
-<!-- basic -->
 
-<jar destfile="${dist.dir}/qaf-cucumber-${version-num}.${build-num}.jar" basedir="${bin.dir}" includes="**/report/**,**/cucumber/**,**/core/**, **/keys/**,**/automation/util/**">
-	<metainf dir="." includes="LICENSE.txt,NOTICE.txt" />
-	<manifest>
-		<attribute name="Vendor" value="Infostretch Corp." />
-		<attribute name="Built-By" value="${user.name}" />
-
-		<section name="Build-Info">
-			<attribute name="qaf-Build-Time" value="${build.timestamp}" />
-
-			<!-- Information about the program itself -->
-			<attribute name="qaf-Version" value="${version-num}" />
-			<attribute name="qaf-Revision" value="${build-num}" />
-			<attribute name="qaf-Type" value="cucumber-reporting-plugin" />
-		</section>
-	</manifest>
-</jar>
-</target>
 <target name="publish" depends="init">
 <!-- Determine build number from previously published revisions -->
 <ivy:buildnumber resolver="local-m2-publish" organisation="${ivy.organisation}" module="${ivy.module}" revision="${release.num}" />
@@ -291,7 +271,7 @@ For any inquiry or need additional information, please contact support-qaf@infos
 </iajc>
 <echo level="info">--- test compile (finished) ---</echo>
 </target>
-<target name="test" depends="make-jar, test-compile">
+<target name="test" depends="build, test-compile">
 <taskdef resource="testngtasks" classpathref="test.classpath" />
 <testng classpathref="test.classpath" workingDir="${test.dir}" outputDir="${test.dir}/test-results" haltOnFailure="true" verbose="2">
 	<classpath location="${bin.dir}" />
