@@ -63,7 +63,7 @@ For any inquiry or need additional information, please contact support-qaf@infos
 		<!-- download Ivy from web site so that it can be used even without any 
 			special installation -->
 		<echo message="installing ivy..." />
-		<get src="http://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar" dest="${ivy.jar.file}" usetimestamp="true" />
+		<get src="https://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar" dest="${ivy.jar.file}" usetimestamp="true" />
 	</target>
 	<!-- ================================= target: install-ivy this target is 
 		not necessary if you put ivy.jar in your ant lib directory if you already 
