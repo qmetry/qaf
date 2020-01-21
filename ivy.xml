@@ -114,7 +114,9 @@ SOFTWARE.
 		<dependency org="org.seleniumhq.selenium" name="selenium-remote-driver"
 			rev="3.0.0" conf="compile->default"/>
 		<dependency org="org.seleniumhq.selenium" name="selenium-java"
-			rev="3.0.0" conf="compile->default"/>
+			rev="3.0.0" conf="compile->default">
+			<exclude org="com.codeborne"/>
+		</dependency>
 		<!-- -->
 		<dependency org="org.seleniumhq.selenium" name="selenium-leg-rc" rev="3.0.0"/>
         	
