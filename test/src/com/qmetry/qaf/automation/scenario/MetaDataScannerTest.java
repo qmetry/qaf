@@ -26,6 +26,7 @@ import static com.qmetry.qaf.automation.core.ConfigurationManager.getBundle;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.hamcrest.Matchers;
@@ -67,6 +68,7 @@ public class MetaDataScannerTest {
 		Validator.verifyThat(testStepMetaData, Matchers.hasEntry("TC_ID", (Object) "12110"));
 	}
 
+	@SuppressWarnings("unchecked")
 	@Test(description = "test metadata Formattor")
 	public void testFormattor() {
 		getBundle().setProperty(ApplicationProperties.METADATA_FORMTTOR_PREFIX.key+".custom-id", "<a herf=\"{0}\">{0}</a>");
@@ -81,6 +83,13 @@ public class MetaDataScannerTest {
 		System.out.println(metadata);
 		metadata.put("custom-id", Arrays.asList("ABC-123","DEF-123"));
 		MetaDataScanner.formatMetaData(metadata);
+		Validator.assertThat((List<String>)metadata.get("custom-id"), Matchers.hasItem("<a herf=\"ABC-123\">ABC-123</a>"));
+
+		// try to format again should not mesh up value
+		MetaDataScanner.formatMetaData(metadata);
+		Validator.assertThat((List<String>)metadata.get("custom-id"), Matchers.hasItem("<a herf=\"ABC-123\">ABC-123</a>"));
+
+
 		System.out.println(metadata);
 
 	}

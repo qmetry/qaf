@@ -185,7 +185,7 @@ public class MetaDataScanner {
 				List<Object> lVal = (List<Object>) value;
 				for (int i = 0; i < lVal.size(); i++) {
 					// if format exist apply only once
-					if (StringUtil.isNotBlank(format) && !matches(format, value.toString())) {
+					if (StringUtil.isNotBlank(format) && !matches(format, lVal.get(i).toString())) {
 						try {
 							String formattedVal = MessageFormat.format(format, lVal.get(i));
 							lVal.set(i, formattedVal);
