@@ -56,7 +56,7 @@ public class GherkinFileParser extends AbstractScenarioFileParser {
 	public static final String FEATURE = "Feature";
 	public static final String BACKGROUND = "Background";
 
-	protected void processStatements(Object[][] statements, String referece, List<Scenario> scenarios) {
+	protected void processStatements(Object[][] statements, String reference, List<Scenario> scenarios) {
 
 		for (int statementIndex = 0; statementIndex < statements.length; statementIndex++) {
 
@@ -80,9 +80,9 @@ public class GherkinFileParser extends AbstractScenarioFileParser {
 
 			// Custom step definition
 			if (type.equalsIgnoreCase(STEP_DEF)) {
-				statementIndex = parseStepDef(statements, statementIndex, referece);
+				statementIndex = parseStepDef(statements, statementIndex, reference);
 			} else if (type.equalsIgnoreCase(SCENARIO)) {
-				statementIndex = parseScenario(statements, statementIndex, referece, scenarios);
+				statementIndex = parseScenario(statements, statementIndex, reference, scenarios);
 			}
 		}
 

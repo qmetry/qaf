@@ -73,7 +73,7 @@ public class BDDFileParser2 extends AbstractScenarioFileParser {
 	
 	private static final List<String> DEF_INCLUDE_FOR_EXMAPLES = Arrays.asList("default");
 
-	protected void processStatements(Object[][] statements, String referece, List<Scenario> scenarios) {
+	protected void processStatements(Object[][] statements, String reference, List<Scenario> scenarios) {
 
 		for (int statementIndex = 0; statementIndex < statements.length; statementIndex++) {
 
@@ -97,9 +97,9 @@ public class BDDFileParser2 extends AbstractScenarioFileParser {
 
 			// Custom step definition
 			if (type.equalsIgnoreCase(STEP_DEF)) {
-				statementIndex = parseStepDef(statements, statementIndex, referece);
+				statementIndex = parseStepDef(statements, statementIndex, reference);
 			} else if (type.equalsIgnoreCase(SCENARIO)) {
-				statementIndex = parseScenario(statements, statementIndex, referece, scenarios);
+				statementIndex = parseScenario(statements, statementIndex, reference, scenarios);
 			}
 		}
 

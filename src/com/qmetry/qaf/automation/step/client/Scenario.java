@@ -322,10 +322,10 @@ public class Scenario extends WebDriverTestCase
 	}
 
 	protected String getPackage() {
-		if (null == metadata || !metadata.containsKey("referece")) {
+		if (null == metadata || !metadata.containsKey("reference")) {
 			return "";
 		}
-		String filePath = (String) metadata.get("referece");
+		String filePath = (String) metadata.get("reference");
 
 		return filePath.replaceAll("/", ".");
 	}

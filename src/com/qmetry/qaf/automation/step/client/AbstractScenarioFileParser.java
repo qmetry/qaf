@@ -111,7 +111,7 @@ public abstract class AbstractScenarioFileParser implements ScenarioFileParser {
 	 */
 	protected abstract Collection<Object[]> parseFile(String scenarioFile);
 
-	protected void processStatements(Object[][] statements, String referece, List<Scenario> scenarios) {
+	protected void processStatements(Object[][] statements, String reference, List<Scenario> scenarios) {
 
 		for (int statementIndex = 0; statementIndex < statements.length; statementIndex++) {
 
@@ -134,15 +134,15 @@ public abstract class AbstractScenarioFileParser implements ScenarioFileParser {
 
 			// Custom step definition
 			if (type.equalsIgnoreCase(STEP_DEF)) {
-				statementIndex = parseStepDef(statements, statementIndex, referece);
+				statementIndex = parseStepDef(statements, statementIndex, reference);
 			} else if (type.equalsIgnoreCase(SCENARIO)) {
-				statementIndex = parseScenario(statements, statementIndex, referece, scenarios);
+				statementIndex = parseScenario(statements, statementIndex, reference, scenarios);
 			}
 		}
 
 	}
 
-	protected int parseStepDef(Object[][] statements, int statementIndex, String referece) {
+	protected int parseStepDef(Object[][] statements, int statementIndex, String reference) {
 
 		Object[] stepDef = statements[statementIndex];
 
@@ -154,7 +154,7 @@ public abstract class AbstractScenarioFileParser implements ScenarioFileParser {
 
 		CustomStep customStep = new CustomStep(stepName, StringUtil.isBlank(description) ? stepName : description,
 				steps);
-		customStep.setFileName(referece);
+		customStep.setFileName(reference);
 		customStep.setLineNumber(lineNo);
 
 		String nextSteptype = "";
@@ -168,7 +168,7 @@ public abstract class AbstractScenarioFileParser implements ScenarioFileParser {
 				StringTestStep step = new StringTestStep((String) statements[statementIndex][0],
 						gson.fromJson((String) statements[statementIndex][1], Object[].class));
 				step.setResultParamName((String) statements[statementIndex][2]);
-				step.setFileName(referece);
+				step.setFileName(reference);
 				step.setLineNumber(lineNo);
 				steps.add(step);
 			}
@@ -212,7 +212,7 @@ public abstract class AbstractScenarioFileParser implements ScenarioFileParser {
 	}
 
 	@SuppressWarnings("unchecked")
-	protected int parseScenario(Object[][] statements, int statementIndex, String referece, List<Scenario> scenarios) {
+	protected int parseScenario(Object[][] statements, int statementIndex, String reference, List<Scenario> scenarios) {
 
 		String description = statements[statementIndex].length > 2 ? (String) statements[statementIndex][2] : "";
 		String stepName = statements[statementIndex].length > 1 ? ((String) statements[statementIndex][1]).trim() : "";
@@ -226,7 +226,7 @@ public abstract class AbstractScenarioFileParser implements ScenarioFileParser {
 		if (StringUtil.isNotBlank(description)) {
 			metadata.putAll(gson.fromJson(description, Map.class));
 		}
-		metadata.put("referece", referece);
+		metadata.put("reference", reference);
 		metadata.put("lineNo", lineNo);
 
 		/**
@@ -251,7 +251,7 @@ public abstract class AbstractScenarioFileParser implements ScenarioFileParser {
 
 			String currStepName = (String) statements[statementIndex][0];
 			if (!currStepName.equalsIgnoreCase(END)) {
-				TestStep step = parseStepCall(statements[statementIndex], referece, lineNo);
+				TestStep step = parseStepCall(statements[statementIndex], reference, lineNo);
 				steps.add(step);
 			}
 
@@ -267,7 +267,7 @@ public abstract class AbstractScenarioFileParser implements ScenarioFileParser {
 
 	}
 
-	protected TestStep parseStepCall(Object[] statement, String referece, int lineNo) {
+	protected TestStep parseStepCall(Object[] statement, String reference, int lineNo) {
 
 		String currStepName = (String) statement[0];
 		Object[] currStepArgs = null;
@@ -281,7 +281,7 @@ public abstract class AbstractScenarioFileParser implements ScenarioFileParser {
 
 		StringTestStep step = new StringTestStep(currStepName, currStepArgs);
 		step.setResultParamName(currStepRes);
-		step.setFileName(referece);
+		step.setFileName(reference);
 		step.setLineNumber(lineNo);
 
 		return step;

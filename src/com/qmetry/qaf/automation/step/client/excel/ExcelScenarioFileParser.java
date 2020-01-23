@@ -44,9 +44,9 @@ public class ExcelScenarioFileParser extends AbstractScenarioFileParser {
 			Workbook workbook = Workbook.getWorkbook(scenarioFile);
 			String[] sheets = workbook.getSheetNames();
 			for (int sheet = 0; sheet < workbook.getNumberOfSheets(); sheet++) {
-				String referece = scenarioFile.getPath() + ":" + sheets[sheet];
+				String reference = scenarioFile.getPath() + ":" + sheets[sheet];
 				Object[][] rows = ExcelUtil.getExcelData(scenarioFile.getAbsolutePath(), false, sheets[sheet]);
-				processStatements(rows, referece, scenarios);
+				processStatements(rows, reference, scenarios);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
