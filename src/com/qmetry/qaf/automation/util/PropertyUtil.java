@@ -175,7 +175,7 @@ public class PropertyUtil extends XMLConfiguration {
 	public void addAll(Map<String, ?> props) {
 		boolean b = props.keySet().removeAll(System.getProperties().keySet());
 		if (b) {
-			logger.debug("Found one or more system properties which will not modified");
+			logger.trace("Found one or more system properties which will not modified");
 		}
 		copy(new MapConfiguration(props));
 	}
@@ -344,7 +344,7 @@ public class PropertyUtil extends XMLConfiguration {
 		if (!System.getProperties().containsKey(key)) {
 			super.clearProperty(key);
 		} else {
-			logger.debug("clear system property ignored:" + key);
+			logger.trace("clear system property ignored:" + key);
 		}
 	}
 
