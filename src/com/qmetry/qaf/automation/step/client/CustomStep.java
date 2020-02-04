@@ -37,6 +37,7 @@ import com.qmetry.qaf.automation.core.LoggingBean;
 import com.qmetry.qaf.automation.core.MessageTypes;
 import com.qmetry.qaf.automation.core.QAFTestBase;
 import com.qmetry.qaf.automation.core.TestBaseProvider;
+import com.qmetry.qaf.automation.step.BDDStepMatcherFactory.DefaultBDDStepMatcher;
 import com.qmetry.qaf.automation.step.BaseTestStep;
 import com.qmetry.qaf.automation.step.StepExecutionTracker;
 import com.qmetry.qaf.automation.step.StepInvocationException;
@@ -59,6 +60,7 @@ public class CustomStep extends BaseTestStep implements TestStepCompositer {
 		super(name, description);
 		this.steps = steps;
 		this.def = description;
+		stepMatcher =  new DefaultBDDStepMatcher();
 	}
 
 	/*
@@ -225,6 +227,7 @@ public class CustomStep extends BaseTestStep implements TestStepCompositer {
 		if (null != actualArgs) {
 			cloneObj.actualArgs = actualArgs.clone();
 		}
+		cloneObj.setStepMatcher(getStepMatcher());
 		return cloneObj;
 	}
 

@@ -50,6 +50,7 @@ public abstract class BaseTestStep implements TestStep {
 	protected int lineNumber;
 	protected int threshold;
 	protected Map<String, Object> metaData = new HashMap<String, Object>();
+	protected BDDStepMatcher stepMatcher = null;
 
 	public BaseTestStep(String name, String description, Object... actualArgs) {
 		this.name = name;
@@ -221,5 +222,13 @@ public abstract class BaseTestStep implements TestStep {
 	public void setStepExecutionTracker(StepExecutionTracker stepExecutionTracker) {
 		this.stepExecutionTracker = stepExecutionTracker;
 	}
-
+	
+	@Override
+	public BDDStepMatcher getStepMatcher() {
+		return stepMatcher;
+	}
+	
+	public void setStepMatcher(BDDStepMatcher stepMatcher) {
+		this.stepMatcher = stepMatcher;
+	}
 }

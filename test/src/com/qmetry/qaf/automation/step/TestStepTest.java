@@ -26,6 +26,7 @@ import java.util.Map;
 import org.hamcrest.Matchers;
 import org.testng.annotations.Test;
 
+import com.google.gson.Gson;
 import com.qmetry.qaf.automation.core.ConfigurationManager;
 import com.qmetry.qaf.automation.util.JSONUtil;
 import com.qmetry.qaf.automation.util.Validator;
@@ -58,9 +59,28 @@ public class TestStepTest {
 //		StringTestStep.execute("comment", new Object[]{"aaahjg", " kjhkjh"});
 //
 //		StringTestStep.execute("comment");
-
 	}
+	@Test(description = "cucumber step with object arg from test data", enabled=false)
+	public void bug321() {
+		//ConfigurationManager.getBundle().setProperty("step.provider.pkg", "com.qmetry.qaf.automation.impl.step");
+		String json =" {\r\n" + 
+				"    \"nestedObject\": {\r\n" + 
+				"      \"keyName\": \"SOME TEXT WITH BLANK SPACES\"	  \r\n" + 
+				"    }\r\n" + 
+				"  }";
+		ConfigurationManager.getBundle().setProperty("nestedObject",  new Gson().fromJson(json,Object.class));
+		StringTestStep.execute("I parse nested object \"${nestedObject}\"");
+	}
+	
+	@Test(description = "Step with partial escap")
+	public void issue320() {
+		ConfigurationManager.getBundle().setProperty("step.provider.pkg", "com.qmetry.qaf.automation.impl.step");
 
+		Object res = StringTestStep.execute("test value(s) 'somevalue' with {esc}", new Object[]{});
+
+		Validator.verifyThat("result " + res,
+				res, Matchers.is("somevalue"));
+	}
 	@Test(description = "Method not annotted with QAFTestStep in class which is not step provider", expectedExceptions = RuntimeException.class)
 	public void stepExecuterTest2() {
 		StringTestStep.execute("normalMethod");

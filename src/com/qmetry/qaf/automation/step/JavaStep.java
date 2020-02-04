@@ -121,7 +121,7 @@ public class JavaStep extends BaseTestStep {
 		if (isBlank(description)) {
 			description = name;
 		}
-
+		stepMatcher = BDDStepMatcherFactory.getStepMatcher(this);
 	}
 
 	/*
@@ -248,6 +248,7 @@ public class JavaStep extends BaseTestStep {
 		if (null != actualArgs) {
 			cloneObj.actualArgs = actualArgs.clone();
 		}
+		setStepMatcher(getStepMatcher());
 		return cloneObj;
 	}
 

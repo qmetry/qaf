@@ -125,4 +125,9 @@ public class QAFTestStepImpl {
 	public Map<String, Object> testArguments(Map<String, Object> map) {
 		return map;
 	}
+	
+	@QAFTestStep(description = "test value\\(s) {str} with \\{esc}")
+	public String stepWithEsc(String str) {
+		return str;
+	}
 }

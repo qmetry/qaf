@@ -22,9 +22,11 @@
 package com.qmetry.qaf.automation.impl.step.cucumber;
 
 import java.util.List;
+import java.util.Map;
 
 import com.qmetry.qaf.automation.step.QAFTestStepProvider;
 
+import cucumber.api.DataTable;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -63,11 +65,22 @@ public class CucumberStepImpl {
 		System.out.printf("I get at least %d results\n", n);
 
 	}
-	
+
 	@Given("^I have \"(.?)\"(?: and \"(.?)\")?$")
 	public void optionalParameter(String param1, String optParam) {
 
-	    System.out.println("text:" + param1 + " forText:" + optParam);
+		System.out.println("text:" + param1 + " forText:" + optParam);
+	}
+
+	@Given("^I have \"(.?)\" with table$")
+	public void stepwithDataTable(String param1, List<Map> dataTable) {
+
+		System.out.println("text:" + param1 + " forText:" + dataTable);
+	}
+
+	@When("I parse nested object \"([^\"]*)\"")
+	public void IParseNestedObject(Map<String, Object> nestedObject) {
+		System.out.println(nestedObject.entrySet());
 	}
 
 }

@@ -59,7 +59,7 @@ public class QAFTestStepArgumentFormatterImpl implements QAFTestStepArgumentForm
 		Method method = (Method) context.get("__method");
 		int __paramIndex = (int) context.get("__paramIndex");
 
-		Type genericType = method.getGenericParameterTypes()[__paramIndex];
+		Type genericType = null!=method? method.getGenericParameterTypes()[__paramIndex]:((Type)context.get("__paramType"));
 		
 		if ((objVal instanceof String)) {
 			String pstr = (String) objVal;

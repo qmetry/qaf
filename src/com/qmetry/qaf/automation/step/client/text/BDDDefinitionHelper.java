@@ -156,7 +156,9 @@ public class BDDDefinitionHelper {
 		}
 
 		public static String getParamDefRegx() {
-			return "\\{([^\\}]).*?}";
+			//return "\\{([^\\}]).*?}";
+			//#320
+			return "(?<!\\\\)\\{([^\\}]).*?}";
 		}
 	}
 
@@ -197,7 +199,7 @@ public class BDDDefinitionHelper {
 
 			String nextGroup = i == argsInDef.size() - 1 ? wcopy
 					: wcopy.substring(0, wcopy.indexOf(argsInDef.get(i + 1)));
-			nextGroup = getFirstMatch(nextGroup, call);
+			nextGroup = getFirstMatch(Pattern.quote(nextGroup), call);
 			String temp = getFirstMatch(ParamType.getParamValueRegx() + nextGroup, call);
 			temp = temp.replaceAll(nextGroup, "");
 
@@ -250,7 +252,7 @@ public class BDDDefinitionHelper {
 			return false;
 		} else {
 			List<String[]> argsa = getArgsFromCall(origDef, call);
-			if (getArgNames(def).size() != argsa.size())
+			if (getArgNames(origDef).size() != argsa.size())
 				return false;
 		}
 		return true;

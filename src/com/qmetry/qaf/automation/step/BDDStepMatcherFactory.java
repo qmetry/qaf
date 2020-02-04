@@ -51,14 +51,23 @@ public class BDDStepMatcherFactory {
 
 		@Override
 		public boolean matches(String stepDescription, String stepCall, Map<String, Object> context) {
+			stepDescription=fixEsc(stepDescription);
 			stepCall = BDDDefinitionHelper.quoteParams(stepCall);
 			return BDDDefinitionHelper.matches(stepDescription, stepCall);
 		}
 
 		@Override
 		public List<String[]> getArgsFromCall(String stepDescription, String stepCall, Map<String, Object> context) {
+			stepDescription=fixEsc(stepDescription);
 			stepCall = BDDDefinitionHelper.quoteParams(stepCall);
 			return BDDDefinitionHelper.getArgsFromCall(stepDescription, stepCall);
+		}
+		private static String fixEsc(String s) {
+			Pattern p1 = Pattern.compile("\\\\\\((.*?)\\)");
+			Pattern p2 = Pattern.compile("\\\\\\{(.*?)\\}");
+			s = p1.matcher(s).replaceAll("\\\\\\($1\\\\\\)");
+			s = p2.matcher(s).replaceAll("\\\\\\{$1\\\\\\}");
+			return s;
 		}
 
 	}
@@ -74,6 +83,7 @@ public class BDDStepMatcherFactory {
 		@Override
 		public List<String[]> getArgsFromCall(String stepDescription, String stepCall, Map<String, Object> context) {
 			List<String[]> args = new ArrayList<String[]>();
+			//qaf#321 
 			stepCall = replaceParams(stepCall, context);
 			Matcher matcher = getMatcher(stepDescription, stepCall);
 			while (matcher.find()) {

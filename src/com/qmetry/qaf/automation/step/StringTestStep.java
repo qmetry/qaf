@@ -73,6 +73,7 @@ public class StringTestStep extends BaseTestStep {
 				step.setDescription(description);
 				step.getStepExecutionTracker()
 						.setContext(getStepExecutionTracker().getContext());
+				setStepMatcher(step.getStepMatcher());
 			}
 		}
 	}
@@ -171,6 +172,7 @@ public class StringTestStep extends BaseTestStep {
 		clone.setLineNumber(lineNumber);
 		clone.resultParameterName = resultParameterName;
 		clone.context = context;
+		clone.setStepMatcher(getStepMatcher());
 		return clone;
 	}
 
@@ -184,7 +186,7 @@ public class StringTestStep extends BaseTestStep {
 		} else if (getBundle().getBoolean("step.natural.lang.support", true)) {
 			Collection<TestStep> set = getStepMapping().values();
 			for (TestStep stepName : set) {
-				BDDStepMatcher matcher = BDDStepMatcherFactory.getStepMatcher(stepName);
+				BDDStepMatcher matcher = stepName.getStepMatcher();//BDDStepMatcherFactory.getStepMatcher(stepName);
 				if (matcher.matches(stepName.getDescription(), nameWithoutPrefix,
 						context)) {
 					List<String[]> parameters = matcher.getArgsFromCall(

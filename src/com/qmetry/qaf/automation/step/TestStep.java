@@ -50,4 +50,6 @@ public interface TestStep extends TestStepCaller {
 	int getThreshold();
 
 	Map<String, Object> getMetaData();
+	
+	public BDDStepMatcher getStepMatcher();
 }

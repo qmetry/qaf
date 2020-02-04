@@ -31,6 +31,7 @@ import org.hamcrest.Matchers;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import com.qmetry.qaf.automation.step.BDDStepMatcherFactory.DefaultBDDStepMatcher;
 import com.qmetry.qaf.automation.step.BDDStepMatcherFactory.GherkinStepMatcher;
 import com.qmetry.qaf.automation.step.client.Scenario;
 import com.qmetry.qaf.automation.step.client.text.BDDFileParser2;
@@ -131,6 +132,21 @@ public class BDD2ParserTest {
 		}
 	}
 
+	@Test(dataProvider = "testQAFStepMathcerDP")
+	public void testQAFStepMathcer(String stepDescription, String stepCall, boolean expectedMathch, Object[] expectedArgs) {
+		BDDStepMatcher matcher = new  DefaultBDDStepMatcher();
+		boolean result = matcher.matches(stepDescription, stepCall, new HashMap<String, Object>());
+		Validator.assertThat(result, Matchers.equalTo(expectedMathch));
+
+		List<String[]> rargs = matcher.getArgsFromCall(stepDescription, stepCall, new HashMap<String, Object>());
+		Validator.assertThat(rargs.size(), Matchers.equalTo(expectedArgs.length));
+		int i = 0;
+		for (String[] arg : rargs) {
+			Validator.assertThat(arg[0], Matchers.equalTo(expectedArgs[i]));
+			i++;
+		}
+
+	}
 	@Test(dataProvider = "testMathcerDP")
 	public void testMathcer(String stepDescription, String stepCall, boolean expectedMathch, Object[] expectedArgs) {
 		GherkinStepMatcher matcher = new GherkinStepMatcher();
@@ -144,9 +160,113 @@ public class BDD2ParserTest {
 			Validator.assertThat(arg[0], Matchers.equalTo(expectedArgs[i]));
 			i++;
 		}
-
 	}
-
+	
+	@DataProvider(name = "testQAFStepMathcerDP")
+	public Iterator<Object[]> getBDDtestMathcerData() {
+		List<Object[]> data = new ArrayList<Object[]>();
+		
+		data.add(new Object[] { "one {arg} in step",
+				"one \"arg\" in step", true,
+				new String[] { "arg" } });
+		data.add(new Object[] { "one \\* in step",
+				"one * in step", true,
+				new String[] { } });
+		data.add(new Object[] { "one \\* in step",
+				"one abc in step", false,
+				new String[] { } });
+		data.add(new Object[] { "1 \\[one] in step",
+				"1 [one] in step", true,
+				new String[] { } });
+		data.add(new Object[] { "one {arg} in step",
+				"one 10 in step", true,
+				new String[] { "10" } });
+		data.add(new Object[] { "one {arg} in step",
+				"one 10.0 in step", true,
+				new String[] { "10.0" } });
+		data.add(new Object[] { "one {arg} in step",
+				"one 'true' in step", true,
+				new String[] { "true" } });
+		data.add(new Object[] { "one {list} in step",
+				"one [\"arg\"] in step", true,
+				new String[] { "[\"arg\"]" } });
+		data.add(new Object[] { "one {list} in step",
+				"one [\"arg\", \"arg2\", 1] in step", true,
+				new String[] { "[\"arg\", \"arg2\", 1]"} });
+		data.add(new Object[] { "one {map} in step",
+				"one {\"arg\":1,\"arg2\":\"abc\"} in step", true,
+				new String[] { "{\"arg\":1,\"arg2\":\"abc\"}" } });
+		data.add(new Object[] { "\\{this} is not argument",
+				"{this} is not argument", true,
+				new String[] {} });
+		
+		data.add(new Object[] { "second {1} is before first {0}",
+				"second 10 is before first 20", true,
+				new String[] {"20","10"} });
+		
+		data.add(new Object[] { "second {1:arg} is before first {0:arg}",
+				"second \"abc\" is before first 20", true,
+				new String[] {"20","abc"} });
+		
+		data.add(new Object[] { "first {user} and second user {user2}",
+				"first 'user1' and second user 'user2'", true,
+				new String[] {"user1","user2"} });
+		
+		//Escape 
+		data.add(new Object[] { "system has user\\(s) record",
+				"system has user(s) record", true,
+				new String[] {} });
+		data.add(new Object[] { "system has user\\{s} record",
+				"system has user{s} record", true,
+				new String[] {} });
+		data.add(new Object[] { "system has user\\{s} {record}",
+				"system has user{s} 'record'", true,
+				new String[] {"record"} });
+		
+		data.add(new Object[] { "system has {num} user\\(s)",
+				"system has 10 user(s)", true,
+				new String[] {"10"} });
+		
+		data.add(new Object[] { "system has {data} \\{records}",
+				"system has 'user' {records}", true,
+				new String[] {"user"} });
+		
+		data.add(new Object[] { "system has {data} records\\?",
+				"system has 'user' records?", true,
+				new String[] {"user"} });
+		
+		data.add(new Object[] { "system has {data} \\[records]",
+				"system has 'user' [records]", true,
+				new String[] {"user"} });
+		data.add(new Object[] { "\\[system] has \\{user} {records} and {arg2}",
+				"[system] has {user} ['record1','r2'] and 'arg2'", true,
+				new String[] {"['record1','r2']","arg2"} });
+		//pattern
+		data.add(new Object[] { "system has user(s)? record",
+				"system has users record", true,
+				new String[] {} });
+		data.add(new Object[] { "system has user(s)? record",
+				"system has user record", true,
+				new String[] {} });
+		data.add(new Object[] { "system has {num} user(s) record",
+				"system has 10 users record", true,
+				new String[] {"10"} });
+		data.add(new Object[] { "system has {num} user(s) record",
+				"system has 1 user record", false,
+				new String[] {"1"} });
+		data.add(new Object[] { "system has {num} (user|users) record",
+				"system has 1 user record", true,
+				new String[] {"1"} });
+		String expr="start (step|transaction|time-tracker) (for|:) {task-name}";
+		data.add(new Object[] { expr,
+				"start step : 'step1'", true,
+				new String[] {"step1"} });
+		data.add(new Object[] { expr,
+				"start transaction for 'step1'", true,
+				new String[] {"step1"} });
+		/**/
+		return data.iterator();
+	}
 	@DataProvider(name = "testMathcerDP")
 	public Iterator<Object[]> gettestMathcerData() {
 		List<Object[]> data = new ArrayList<Object[]>();
