@@ -30,17 +30,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.qmetry.qaf.automation.core.AutomationError;
 import com.qmetry.qaf.automation.step.client.AbstractScenarioFileParser;
@@ -377,7 +374,7 @@ public class BDDFileParser2 extends AbstractScenarioFileParser {
 
 	@SuppressWarnings("unchecked")
 	private Map<String, Object> getMetaData(List<String> tags) {
-		Map<String, Object> metaData = new HashMap<String, Object>();
+		Map<String, Object> metaData = new TreeMap<String, Object>(String.CASE_INSENSITIVE_ORDER);
 		List<String> groups = new ArrayList<String>();
 		for (String tag : tags) {
 			if (StringUtil.isNotBlank(tag)) {

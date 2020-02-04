@@ -167,8 +167,13 @@ public class MetaDataScanner {
 	}
 
 	public static boolean hasDP(Map<String, Object> metadata) {
+		if (null == metadata) {
+			return false;
+		}
+		Map<String, Object> kv = new TreeMap<String, Object>(String.CASE_INSENSITIVE_ORDER);
+		kv.putAll(metadata);
 		for (params key : params.values()) {
-			if (metadata.containsKey(key.name())) {
+			if (kv.containsKey(key.name())) {
 				return true;
 			}
 		}
@@ -374,17 +379,17 @@ public class MetaDataScanner {
 						return "\nValue mismatch for Meta data [" + this + "]";
 					}
 				}
-			} else if (null!=required && required && isApplicable) {
+			} else if (null != required && required && isApplicable) {
 				return "\nMissing required meta data [" + this + "]";
 			}
 			return "";
 		}
 
 		private boolean isApplicable(Map<String, Object> metadata) {
-			if (null==depends){
+			if (null == depends) {
 				return true;
 			}
-			depends.required=true;
+			depends.required = true;
 			return StringUtil.isBlank(depends.apply(metadata));
 		}
 
