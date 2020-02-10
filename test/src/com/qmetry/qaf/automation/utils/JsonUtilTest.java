@@ -179,25 +179,6 @@ public class JsonUtilTest {
 		Validator.assertThat(actualString, Matchers.equalToIgnoringCase(s));
 	}
 
-	@DataProvider(name = "toStringDP")
-	public Iterator<Object[]> getPramData() {
-		List<Object[]> data = new ArrayList<Object[]>();
-		Map<String, Object> map = new LinkedTreeMap<String, Object>();
-		map.put("name", "a");
-		map.put("price", 2.10);
-		map.put("id", 1);
-		map.put("description", "item-1");
-
-		data.add(new Object[] { map, "{\"name\":\"a\",\"price\":2.10,\"id\":1,\"description\":\"item-1\"}" });
-		List<Object> l = new ArrayList<Object>();
-		l.add(map);
-		data.add(new Object[] { l, "[{\"name\":\"a\",\"price\":2.10,\"id\":1,\"description\":\"item-1\"}]" });
-		Object[] o = new Object[] { map };
-		data.add(new Object[] { o, "[{\"name\":\"a\",\"price\":2.10,\"id\":1,\"description\":\"item-1\"}]" });
-
-		return data.iterator();
-	}
-
 	@MetaData("{'issue':'285'}")
 	@Test
 	public void getJsonArrayOfMapsTest() {
