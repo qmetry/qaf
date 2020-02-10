@@ -25,9 +25,14 @@ import static com.qmetry.qaf.automation.core.ConfigurationManager.getBundle;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.text.StrLookup;
+import org.apache.commons.lang.text.StrSubstitutor;
+
+import com.qmetry.qaf.automation.util.JSONUtil;
 import com.qmetry.qaf.automation.util.StringMatcher;
 import com.qmetry.qaf.automation.util.StringUtil;
 
@@ -181,6 +186,58 @@ public class BDDDefinitionHelper {
 		return resultString;
 	}
 
+	/**
+	 * This method will convert gherkin parameter to qaf parameter.
+	 * Examples:<br/>
+	 *  <code>
+	 * 	a "&lt;param.a1>" and &lt;another> p&lt;a>ra${meter} and \&lt;param.a2> again
+	 * </code>
+	 *  <br/>will be converted to :<br/>
+	 *  <code>
+	 *  a "${param.a1}" and ${another} p${a}ra${meter} and &lt;param.a2> again
+	 *  </code><br/><br/>
+	 * <code>
+	 * 	a "&lt;param.a1>" and &lt;another> p&lt;a>ra${meter} and \\&lt;\&lt;param.a2> again
+	 * </code>
+	 *  <br/>will be converted to :<br/>
+	 *  <code>
+	 *  a "${param.a1}" and ${another} p${a}ra${meter} and \&lt;&lt;param.a2> again
+	 *  </code>
+	 * @param s
+	 * @return
+	 */
+	public static String convertPrameter(String s) {
+		String paramPattern = "(?<!\\\\)<([^>]).*?>";
+		Matcher m = Pattern.compile(paramPattern).matcher(s);
+		while (m.find()) {
+			String param = m.group();
+			String newParam = param.replace("<", "${").replace(">", "}");
+			s = s.replace(param, newParam);
+		}
+		return s.replace("\\<", "<");
+	}
+
+	public static String replaceParams(String stepCall, Map<String, Object> context) {
+		stepCall = convertPrameter(stepCall);
+		//don't resolve quoted parameters.
+		stepCall = stepCall.replace("\"${", "\"<%{");
+		//qaf#321 
+		StrLookup lookup = new StrLookup() {
+			public String lookup(String var) {
+
+				Object prop = context.get(var);
+				if(prop==null) {
+					prop = getBundle().getSubstitutor().getVariableResolver().lookup(var);
+				}
+				return (prop != null) ? JSONUtil.toString(prop) : null;
+			}
+		};		
+		StrSubstitutor interpol = new StrSubstitutor(lookup);
+		stepCall = interpol.replace(stepCall);
+		
+		stepCall = stepCall.replace( "\"<%{","\"${");
+		return stepCall;
+	}
 	public static List<String[]> getArgs(String call, String def, List<String> argsInDef) {
 
 		List<String[]> rlst = new ArrayList<String[]>();
@@ -247,7 +304,6 @@ public class BDDDefinitionHelper {
 	public static boolean matches(String def, String call) {
 		String origDef = def;
 		def = def.replaceAll(ParamType.getParamDefRegx(), ParamType.getParamValueRegx().replaceAll("\\\\", "\\\\\\\\"));
-		// System.out.println(def);
 		if (!StringMatcher.likeIgnoringCase("(((" + BDDKeyword.getKeyWordRegEx() + ")\\s)?" + def + ")").match(call)) {
 			return false;
 		} else {

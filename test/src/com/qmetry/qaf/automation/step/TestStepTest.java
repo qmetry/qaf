@@ -21,6 +21,8 @@
  ******************************************************************************/
 package com.qmetry.qaf.automation.step;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.hamcrest.Matchers;
@@ -28,6 +30,7 @@ import org.testng.annotations.Test;
 
 import com.google.gson.Gson;
 import com.qmetry.qaf.automation.core.ConfigurationManager;
+import com.qmetry.qaf.automation.step.BDDStepMatcherFactory.GherkinStepMatcher;
 import com.qmetry.qaf.automation.util.JSONUtil;
 import com.qmetry.qaf.automation.util.Validator;
 
@@ -60,16 +63,35 @@ public class TestStepTest {
 //
 //		StringTestStep.execute("comment");
 	}
-	@Test(description = "cucumber step with object arg from test data", enabled=false)
+	@SuppressWarnings("unchecked")
+	@Test(description = "cucumber step with object arg from test data", enabled=true)
 	public void bug321() {
-		//ConfigurationManager.getBundle().setProperty("step.provider.pkg", "com.qmetry.qaf.automation.impl.step");
+		
+		ConfigurationManager.getBundle().setProperty("step.provider.pkg", "com.qmetry.qaf.automation.impl.step");
 		String json =" {\r\n" + 
 				"    \"nestedObject\": {\r\n" + 
 				"      \"keyName\": \"SOME TEXT WITH BLANK SPACES\"	  \r\n" + 
 				"    }\r\n" + 
 				"  }";
+		
+		GherkinStepMatcher m = new GherkinStepMatcher();
+		
+		Map<String, Object> context = new HashMap<String, Object>();
+		context.put("nestedObject", JSONUtil.toObject(json));
+		boolean found = m.matches("^I parse nested object ((?:\"([^\"\\\\]*(\\\\.[^\"\\\\]*)*)\")|(?:'([^'\\\\]*(\\\\.[^'\\\\]*)*)'))$", "I parse nested object \"${nestedObject}\"", context);
+		System.out.println(found);
+		List<String[]> args = m.getArgsFromCall("^I parse nested object \"([^\"]*)\"$", "I parse nested object \"${nestedObject}\"", context);
+		System.out.println(JSONUtil.toString(args));
+		//^I have ((?:-?\d+)|(?:\d+)) cukes in my ((?:"([^"\\]*(\\.[^"\\]*)*)")|(?:'([^'\\]*(\\.[^'\\]*)*)'))s
+		//args = m.getArgsFromCall("^I have ((?:-?\\d+)|(?:\\d+)) cukes in my ((?:\"([^\"\\\\]*(\\\\.[^\"\\\\]*)*)\")|(?:'([^'\\\\]*(\\\\.[^'\\\\]*)*)'))s", "I have 10 cukes in my \"bag\"s", context);
+		//System.out.println(JSONUtil.toString(args));
 		ConfigurationManager.getBundle().setProperty("nestedObject",  new Gson().fromJson(json,Object.class));
-		StringTestStep.execute("I parse nested object \"${nestedObject}\"");
+		Object res = StringTestStep.execute("I parse nested object \"${nestedObject}\"");
+		Validator.assertThat(res, Matchers.instanceOf(Map.class));
+		Validator.assertThat(((Map<String, Object>)res).get("nestedObject"), Matchers.instanceOf(Map.class));
+		
+		System.out.println(JSONUtil.toString(res));
+
 	}
 	
 	@Test(description = "Step with partial escap")

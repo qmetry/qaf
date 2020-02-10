@@ -283,4 +283,11 @@ public class JSONUtil {
 		}
 	}
 	
+	public static String toString(Object o) {
+		if (String.class.isAssignableFrom(o.getClass()) || o.getClass().isPrimitive()) {
+			return String.valueOf(o);
+		}
+		return new Gson().toJson(o);
+	}
+	
 }

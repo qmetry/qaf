@@ -21,15 +21,14 @@
  ******************************************************************************/
 package com.qmetry.qaf.automation.step;
 
-import static com.qmetry.qaf.automation.core.ConfigurationManager.getBundle;
+import static com.qmetry.qaf.automation.step.client.text.BDDDefinitionHelper.quoteParams;
+import static com.qmetry.qaf.automation.step.client.text.BDDDefinitionHelper.replaceParams;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.commons.lang.text.StrSubstitutor;
 
 import com.qmetry.qaf.automation.step.client.text.BDDDefinitionHelper;
 import com.qmetry.qaf.automation.step.client.text.BDDDefinitionHelper.ParamType;
@@ -52,14 +51,17 @@ public class BDDStepMatcherFactory {
 		@Override
 		public boolean matches(String stepDescription, String stepCall, Map<String, Object> context) {
 			stepDescription=fixEsc(stepDescription);
-			stepCall = BDDDefinitionHelper.quoteParams(stepCall);
+			stepCall = replaceParams(stepCall, context);
+
+			stepCall = quoteParams(stepCall);
 			return BDDDefinitionHelper.matches(stepDescription, stepCall);
 		}
 
 		@Override
 		public List<String[]> getArgsFromCall(String stepDescription, String stepCall, Map<String, Object> context) {
 			stepDescription=fixEsc(stepDescription);
-			stepCall = BDDDefinitionHelper.quoteParams(stepCall);
+			stepCall = replaceParams(stepCall, context);
+			stepCall = quoteParams(stepCall);
 			return BDDDefinitionHelper.getArgsFromCall(stepDescription, stepCall);
 		}
 		private static String fixEsc(String s) {
@@ -83,8 +85,8 @@ public class BDDStepMatcherFactory {
 		@Override
 		public List<String[]> getArgsFromCall(String stepDescription, String stepCall, Map<String, Object> context) {
 			List<String[]> args = new ArrayList<String[]>();
-			//qaf#321 
 			stepCall = replaceParams(stepCall, context);
+			//stepCall = quoteParams(stepCall);
 			Matcher matcher = getMatcher(stepDescription, stepCall);
 			while (matcher.find()) {
 				for (int i = 1; i <= matcher.groupCount(); i++) {
@@ -94,13 +96,6 @@ public class BDDStepMatcherFactory {
 			}
 			return args;
 		}
-
-		private String replaceParams(String stepCall, Map<String, Object> context) {
-			stepCall = StrSubstitutor.replace(stepCall, context);
-			stepCall = getBundle().getSubstitutor().replace(stepCall);
-			return stepCall;
-		}
-
 		private Matcher getMatcher(String stepDescription, String stepName) {
 			Pattern pattern = getPattern(opArgs(stepDescription));
 
@@ -135,5 +130,5 @@ public class BDDStepMatcherFactory {
 		}
 
 	}
-
+	
 }

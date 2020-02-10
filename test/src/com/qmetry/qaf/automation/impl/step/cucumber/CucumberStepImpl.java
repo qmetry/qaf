@@ -26,7 +26,6 @@ import java.util.Map;
 
 import com.qmetry.qaf.automation.step.QAFTestStepProvider;
 
-import cucumber.api.DataTable;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -72,15 +71,10 @@ public class CucumberStepImpl {
 		System.out.println("text:" + param1 + " forText:" + optParam);
 	}
 
-	@Given("^I have \"(.?)\" with table$")
-	public void stepwithDataTable(String param1, List<Map> dataTable) {
-
-		System.out.println("text:" + param1 + " forText:" + dataTable);
-	}
-
-	@When("I parse nested object \"([^\"]*)\"")
-	public void IParseNestedObject(Map<String, Object> nestedObject) {
+	@When("^I parse nested object \"([^\"]*)\"$")
+	public Map<String, Object> IParseNestedObject(Map<String, Object> nestedObject) {
 		System.out.println(nestedObject.entrySet());
+		return nestedObject;
 	}
 
 }

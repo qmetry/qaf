@@ -27,19 +27,25 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.hamcrest.Matchers;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import org.testng.collections.Maps;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.reflect.TypeToken;
 import com.qmetry.qaf.automation.data.MetaData;
 import com.qmetry.qaf.automation.impl.Item;
 import com.qmetry.qaf.automation.util.ClassUtil;
 import com.qmetry.qaf.automation.util.JSONUtil;
 import com.qmetry.qaf.automation.util.Validator;
+
 
 public class JsonUtilTest {
 
@@ -115,6 +121,81 @@ public class JsonUtilTest {
 		// method.getGenericParameterTypes()[1]),JSONUtil.toObject(json,
 		// method.getGenericParameterTypes()[2]));
 
+	}
+
+	@Test()
+	public void testToString() {
+		Map<String, Object> map = new LinkedTreeMap<String, Object>();
+		map.put("name", "a");
+		map.put("price", 2.1);
+		map.put("id", 1);
+		map.put("description", "item-1");
+		String actualString = JSONUtil.toString(map);
+
+		Validator.assertThat(actualString, Matchers.containsString("\"price\":2.1"));
+		Validator.assertThat(actualString, Matchers.containsString("\"id\":1"));
+
+		Object[] o = new Object[] { "xyz", map, "abc" };
+		actualString = JSONUtil.toString(o);
+
+		Validator.assertThat(actualString, Matchers.containsString("\"price\":2.1"));
+		Validator.assertThat(actualString, Matchers.containsString("\"id\":1"));
+		Validator.assertThat(actualString, Matchers.containsString("abc"));
+		Validator.assertThat(actualString, Matchers.startsWith("["));
+
+
+		boolean b = true;
+		actualString = JSONUtil.toString(b);
+		Validator.assertThat(actualString, Matchers.equalTo("true"));
+
+		Map<Object, Object> m = Maps.newHashMap();
+		m.put("name", "a");
+		m.put("uname", "a");
+
+		m.put("id", 1);
+
+		Item item = new Gson().fromJson(new Gson().toJson(m), Item.class);
+		actualString = JSONUtil.toString(item);
+
+		Validator.assertThat(actualString, Matchers.containsString("\"name\":\"a\""));
+		Validator.assertThat(actualString, Matchers.containsString("\"id\":1"));
+
+		Validator.assertThat(actualString, Matchers.startsWith("{"));
+
+		List<Object> l = new ArrayList<Object>();
+		l.add(o);
+		l.add("some {s}");
+		l.add(map);
+		actualString = JSONUtil.toString(l);
+
+		Validator.assertThat(actualString, Matchers.containsString("\"price\":2.1"));
+		Validator.assertThat(actualString, Matchers.containsString("\"id\":1"));
+		Validator.assertThat(actualString, Matchers.containsString("abc"));
+		Validator.assertThat(actualString, Matchers.startsWith("["));
+
+
+		String s = "some {string}";
+		actualString = JSONUtil.toString(s);
+		Validator.assertThat(actualString, Matchers.equalToIgnoringCase(s));
+	}
+
+	@DataProvider(name = "toStringDP")
+	public Iterator<Object[]> getPramData() {
+		List<Object[]> data = new ArrayList<Object[]>();
+		Map<String, Object> map = new LinkedTreeMap<String, Object>();
+		map.put("name", "a");
+		map.put("price", 2.10);
+		map.put("id", 1);
+		map.put("description", "item-1");
+
+		data.add(new Object[] { map, "{\"name\":\"a\",\"price\":2.10,\"id\":1,\"description\":\"item-1\"}" });
+		List<Object> l = new ArrayList<Object>();
+		l.add(map);
+		data.add(new Object[] { l, "[{\"name\":\"a\",\"price\":2.10,\"id\":1,\"description\":\"item-1\"}]" });
+		Object[] o = new Object[] { map };
+		data.add(new Object[] { o, "[{\"name\":\"a\",\"price\":2.10,\"id\":1,\"description\":\"item-1\"}]" });
+
+		return data.iterator();
 	}
 
 	@MetaData("{'issue':'285'}")
