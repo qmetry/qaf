@@ -34,6 +34,8 @@ import org.testng.internal.annotations.IAnnotationFinder;
 import org.testng.xml.XmlSuite.ParallelMode;
 import org.testng.xml.XmlTest;
 
+import com.qmetry.qaf.automation.util.ClassUtil;
+
 /**
  * com.qmetry.qaf.automation.step.client.TestNGScenario.java
  * 
@@ -49,6 +51,11 @@ public class TestNGScenario extends TestNGMethod {
 	private Map<String, Object> metadata;
 	private String qualifiledName;
 
+	public TestNGScenario(TestNGMethod testNGMethod) {
+		this(testNGMethod.getConstructorOrMethod().getMethod(), (IAnnotationFinder) ClassUtil.getField("m_annotationFinder", testNGMethod), testNGMethod.getXmlTest(), testNGMethod.getInstance());
+		setTestClass(testNGMethod.getTestClass());
+	}
+	
 	public TestNGScenario(Method method, IAnnotationFinder finder, XmlTest xmlTest, Object instance) {
 		super(method, finder, xmlTest, instance);
 		init(instance);

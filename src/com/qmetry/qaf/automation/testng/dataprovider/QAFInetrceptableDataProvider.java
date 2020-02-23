@@ -176,7 +176,7 @@ public class QAFInetrceptableDataProvider {
 			}
 		}
 		
-		String cls = scenario.getMethod().getDeclaringClass().getSimpleName();
+		String cls = scenario.getConstructorOrMethod().getMethod().getDeclaringClass().getSimpleName();
 		String mtd = scenario.getMethodName();
 		testParameters = testParameters.replace("${class}", cls);
 		testParameters = testParameters.replace("${method}", mtd);

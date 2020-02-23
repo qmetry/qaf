@@ -163,6 +163,7 @@ For any inquiry or need additional information, please contact support-qaf@infos
 
 				<provider classname="com.qmetry.qaf.automation.testng.pro.QAFResultListener" />
 				<provider classname="com.qmetry.qaf.automation.testng.pro.QAFSuiteListener" />
+				<provider classname="com.qmetry.qaf.automation.testng.pro.QAFExecutionListener" />
 			</service>
 		</jar>
 
