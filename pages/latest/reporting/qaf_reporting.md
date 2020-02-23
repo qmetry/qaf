@@ -8,11 +8,11 @@ folder: latest
 
 ## Summary
 
+* QAF generates json reports that can be viewed using [report dashboard](https://github.com/infostretch/qaf-report). Open `dashboard.htm` to view report.
 * QAF reporting is a powerful and customizable reporting engine ensures that you have access to all relevant test data like test results,check points,test case time, test step time and environment information.Use powerful filters to slice and dice the data to drill down to exact result you seek.
 * Comprehensive drill-down reporting, with each step result, step command log and screenshots.
 * Live reporting enables you to view reports of executed tests without waiting for entire suite to finish.
 * Get Detailed Reporting including Trending,root cause analysis and Automated screen capture. 
-
  
 **Reporting of test run includes below details**
 
@@ -49,7 +49,7 @@ It provides high level information about automation failure, data failure and ap
 
 {% include inline_image.html file="errorAnalysis.png" alt="Error Analysis "  %}
 
-User can customize this error bucket categories in **isfw_dashboard.js** file.
+User can customize this error bucket categories in **qaf_dashboard.js** file.
  
 
  
