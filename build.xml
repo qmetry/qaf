@@ -212,6 +212,24 @@ For any inquiry or need additional information, please contact support-qaf@infos
 </jar>
 </target>
 
+<target name="deploy-local" depends="init" description="local ivy install">
+	<ivy:buildnumber resolver="local-ivy-publish" organisation="${ivy.organisation}" module="${ivy.module}" revision="${release.num}" />
+	<ivy:deliver deliverpattern="build/artifacts/jars/ivy.xml" pubrevision="${release.num}" status="release" />
+	<ivy:makepom ivyfile="build/artifacts/jars/ivy.xml" pomfile="build/artifacts/jars/qaf.pom">
+		<mapping conf="compile" scope="compile" />
+		<mapping conf="runtime" scope="runtime" />
+		<mapping conf="test" scope="test" />
+		<mapping conf="provided" scope="provided" />
+	</ivy:makepom>
+	<ivy:convertpom pomfile="build/artifacts/jars/qaf.pom" ivyfile="build/artifacts/jars/ivy.xml" description="create IVY" />
+		
+	<ivy:publish resolver="local-ivy-publish" pubrevision="${release.num}" forcedeliver="false" overwrite="true" status="release">
+		<artifacts pattern="build/artifacts/jars/[artifact].[ext]" />
+		<artifact name="${artifact.name}" pattern="build/artifacts/jars/[artifact].[ext]" ext="jar" classifier="sources" type="source" version="${release.num}" />
+		<artifact name="${artifact.name}" pattern="build/artifacts/jars/[artifact].[ext]" ext="jar" classifier="javadoc" type="javadoc" version="${release.num}" />
+	</ivy:publish>
+</target>
+
 <target name="publish" depends="init">
 <!-- Determine build number from previously published revisions -->
 <ivy:buildnumber resolver="local-m2-publish" organisation="${ivy.organisation}" module="${ivy.module}" revision="${release.num}" />

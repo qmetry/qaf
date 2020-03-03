@@ -10,13 +10,15 @@
 	OF ANY KIND, either express or implied. See the License for the specific 
 	language governing permissions and limitations under the License. -->
 <ivysettings>
-
+ 	<credentials host="oss.sonatype.org"
+                      realm="Sonatype Nexus Repository Manager"
+                      username="${sonatype.user}" passwd="${sonatype.pwd}"/>
 	<settings defaultResolver="qaf" />
 	<property name="nexus-public"
                    value="https://oss.sonatype.org/content/groups/public"/>
   	<property name="nexus-releases" value="https://oss.sonatype.org/content/repositories/releases"/>
   	<property name="nexus-snapshots" value="https://oss.sonatype.org/content/repositories/snapshots"/>
-	<property name="nexus-stating" value=" https://oss.sonatype.org/service/local/staging/deploy/maven2"/>
+	<property name="nexus-staging" value=" https://oss.sonatype.org/service/local/staging/deploy/maven2"/>
 	
 	<resolvers>
 		<chain name="qaf">
@@ -27,9 +29,14 @@
     	<ibiblio name="nexus" m2compatible="true" root="${nexus-public}"/>
     	<ibiblio name="nexus-releases" m2compatible="true" root="${nexus-releases}"/>
     	<ibiblio name="nexus-snapshots" m2compatible="true" root="${nexus-snapshots}" checkmodified="true" changingPattern="*-SNAPSHOT" useMavenMetadata="true" />
-		<ibiblio name="nexus-stating" m2compatible="true" root="${nexus-stating}" useMavenMetadata="true" />
+		<ibiblio name="nexus-staging" m2compatible="true" root="${nexus-staging}" useMavenMetadata="true" />
 		<filesystem name="local-m2-publish" m2compatible="true">
       		<artifact pattern="${basedir}/repository/[organisation]/[module]/[revision]/qaf-[revision](-[classifier]).[ext]"/>
+    	</filesystem>
+    	<filesystem name="local-ivy-publish" local="true">
+      		<artifact pattern="${ivy.default.ivy.user.dir}/cache/[organisation]/[module]/[type]s/[artifact]-[revision](-[classifier]).[ext]"/>
+      		<ivy pattern="${ivy.default.ivy.user.dir}/cache/[organisation]/[module]/ivy-[revision].xml"/>
+      		<artifact pattern="${ivy.default.ivy.user.dir}/cache/[organisation]/[module]/[type]s/[artifact]-[revision](-[classifier]).[ext]"/>
     	</filesystem>
 	</resolvers>
 	<publications>
