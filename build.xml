@@ -26,10 +26,7 @@ For any inquiry or need additional information, please contact support-qaf@infos
 -->
 
 <project basedir="." default="test" name="QMetryAutomationFramework" xmlns:ivy="antlib:org.apache.ivy.ant">
-
-
-	<get src="https://raw.githubusercontent.com/qmetry/qaf/master/shared-build-tasks.xml" dest="../common-build-tasks.xml" skipexisting="true" />
-	<import file="../common-build-tasks.xml" optional="false" />
+	<import file="common-build-tasks.xml" optional="false" />
 
 	<path id="build.classpath">
 		<fileset dir="${lib.dir}">
