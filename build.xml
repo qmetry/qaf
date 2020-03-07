@@ -25,12 +25,14 @@ For any inquiry or need additional information, please contact support-qaf@infos
 
 -->
 
-<project basedir="." default="test" name="QMetryAutomationFramework" xmlns:ivy="antlib:org.apache.ivy.ant">
-    <condition property="common-build-tasks.xml" value="../common-build-tasks.xml" else="https://raw.githubusercontent.com/qmetry/qaf-parent/master/common-build-tasks.xml">
-    	<resourceexists>
-    	  <file file="../common-build-tasks.xml"/>
-    	</resourceexists>
+<project basedir="." default="test" name="QMetryAutomationFramework" xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:if="ant:if" xmlns:unless="ant:unless">
+    <available file="../common-build-tasks.xml" property="common-build-tasks.present"/>
+	<get src="https://raw.githubusercontent.com/qmetry/qaf-parent/master/common-build-tasks.xml" dest="common-build-tasks.xml" unless:true="${common-build-tasks.present}"/>
+
+    <condition property="common-build-tasks.xml" value="../common-build-tasks.xml" else="common-build-tasks.xml">
+    	<istrue value="${common-build-tasks.present}"/>
     </condition>
+	
 	<import file="${common-build-tasks.xml}" optional="false"/>
 	
 	<path id="build.classpath">
