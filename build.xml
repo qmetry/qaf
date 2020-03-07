@@ -28,20 +28,8 @@ For any inquiry or need additional information, please contact support-qaf@infos
 <project basedir="." default="test" name="QMetryAutomationFramework" xmlns:ivy="antlib:org.apache.ivy.ant">
 
 
-	<!-- Sets the DSTAMP, TSTAMP, and TODAY properties in the current project -->
-	<tstamp>
-		<format property="build.timestamp" pattern="dd-MMM-yyyy HH:mm:ss" />
-	</tstamp>
-
-	<property name="bin.dir" value="${basedir}/bin" />
-	<property name="src.dir" value="${basedir}/src" />
-	<property name="test.dir" value="${basedir}/test" />
-	<property name="test.src.dir" value="${test.dir}/src" />
-	<property name="meta.dir" value="${basedir}/META-INF" />
-	<property name="debuglevel" value="source,lines,vars" />
-	<property name="target" value="1.8" />
-	<property name="source" value="1.8" />
-	<property file="build.properties" />
+	<get src="https://raw.githubusercontent.com/qmetry/qaf/master/shared-build-tasks.xml" dest="../common-build-tasks.xml" skipexisting="true" />
+	<import file="../common-build-tasks.xml" optional="false" />
 
 	<path id="build.classpath">
 		<fileset dir="${lib.dir}">
@@ -49,40 +37,9 @@ For any inquiry or need additional information, please contact support-qaf@infos
 			<include name="**/*.jar" />
 		</fileset>
 	</path>
-	<path id="test.classpath">
-		<fileset dir="${dist.dir}">
-			<include name="*.jar" />
-			<include name="**/*.jar" />
-		</fileset>
-		<path refid="build.classpath" />
-	</path>
-
-	<!-- IVY -->
-	<target name="download-ivy" unless="${skip.download}">
-		<mkdir dir="${ivy.jar.dir}" />
-		<!-- download Ivy from web site so that it can be used even without any 
-			special installation -->
-		<echo message="installing ivy..." />
-		<get src="https://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar" dest="${ivy.jar.file}" usetimestamp="true" />
-	</target>
-	<!-- ================================= target: install-ivy this target is 
-		not necessary if you put ivy.jar in your ant lib directory if you already 
-		have ivy in your ant lib, you can simply remove this target and the dependency 
-		the 'go' target has on it ================================= -->
-	<target name="install-ivy" depends="download-ivy" description="--> install ivy">
-		<!-- try to load ivy here from local ivy dir, in case the user has not 
-			already dropped it into ant's lib dir (note that the latter copy will always 
-			take precedence). We will not fail as long as local lib dir exists (it may 
-			be empty) and ivy is in at least one of ant's lib dir or the local lib dir. -->
-		<path id="ivy.lib.path">
-			<fileset dir="${ivy.jar.dir}" includes="*.jar" />
-		</path>
-		<taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path" />
-
-	</target>
 
 	<!-- ================================= target: resolve ================================= -->
-	<target name="resolve" description="--> retrieve dependencies with ivy" depends="install-ivy">
+	<target name="resolve" description="--> retrieve dependencies with ivy" depends="install-ivy, load-setting">
 
 
 		<ivy:resolve file="ivy.xml" />
@@ -95,22 +52,6 @@ For any inquiry or need additional information, please contact support-qaf@infos
 		<ivy:cachepath pathid="compile.path" conf="compile,provided" />
 		<ivy:cachepath pathid="test.path" conf="test,provided" />
 	</target>
-
-	<target name="init" depends="resolve">
-		<mkdir dir="${bin.dir}" />
-		<copy includeemptydirs="false" todir="${bin.dir}">
-			<fileset dir="${src.dir}">
-				<exclude name="**/*.java" />
-			</fileset>
-		</copy>
-	</target>
-
-
-	<target name="clean">
-		<delete dir="${bin.dir}" failonerror="false" />
-		<delete dir="${dist.dir}" failonerror="false" />
-	</target>
-
 
 	<target name="compile" depends="init">
 		<taskdef classpathref="build.classpath" resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties" />
@@ -194,86 +135,7 @@ For any inquiry or need additional information, please contact support-qaf@infos
 <!-- <delete dir="${dist.dir}/docs"> 
 </delete>-->
 </target>
-<target name="gensource" description="Generate Source" depends="init">
-<jar destfile="${dist.dir}/qaf-sources.jar" basedir="${src.dir}">
-	<metainf dir="." includes="LICENSE" />
-	<manifest>
-		<attribute name="Vendor" value="Infostretch Corp." />
-		<attribute name="Built-By" value="${user.name}" />
 
-		<section name="Build-Info">
-			<attribute name="qaf-Build-Time" value="${build.timestamp}" />
-			<!-- Information about the program itself -->
-			<attribute name="qaf-Version" value="${version-num}" />
-			<attribute name="qaf-Revision" value="${build-num}" />
-			<attribute name="qaf-Type" value="support" />
-		</section>
-	</manifest>
-</jar>
-</target>
-
-<target name="deploy-local" depends="init" description="local ivy install">
-	<ivy:buildnumber resolver="local-ivy-publish" organisation="${ivy.organisation}" module="${ivy.module}" revision="${release.num}" />
-	<ivy:deliver deliverpattern="build/artifacts/jars/ivy.xml" pubrevision="${release.num}" status="release" />
-	<ivy:makepom ivyfile="build/artifacts/jars/ivy.xml" pomfile="build/artifacts/jars/qaf.pom">
-		<mapping conf="compile" scope="compile" />
-		<mapping conf="runtime" scope="runtime" />
-		<mapping conf="test" scope="test" />
-		<mapping conf="provided" scope="provided" />
-	</ivy:makepom>
-	<ivy:convertpom pomfile="build/artifacts/jars/qaf.pom" ivyfile="build/artifacts/jars/ivy.xml" description="create IVY" />
-		
-	<ivy:publish resolver="local-ivy-publish" pubrevision="${release.num}" forcedeliver="false" overwrite="true" status="release">
-		<artifacts pattern="build/artifacts/jars/[artifact].[ext]" />
-		<artifact name="${artifact.name}" pattern="build/artifacts/jars/[artifact].[ext]" ext="jar" classifier="sources" type="source" version="${release.num}" />
-		<artifact name="${artifact.name}" pattern="build/artifacts/jars/[artifact].[ext]" ext="jar" classifier="javadoc" type="javadoc" version="${release.num}" />
-	</ivy:publish>
-</target>
-
-<target name="publish" depends="init">
-<!-- Determine build number from previously published revisions -->
-<ivy:buildnumber resolver="local-m2-publish" organisation="${ivy.organisation}" module="${ivy.module}" revision="${release.num}" />
-
-<!-- Resolve ivy dependencies and create a Maven POM file -->
-<ivy:deliver deliverpattern="${dist.dir}/ivy.xml" pubrevision="${release.num}" status="release" />
-<ivy:makepom ivyfile="${dist.dir}/ivy.xml" pomfile="${dist.dir}/qaf.pom">
-	<mapping conf="compile" scope="compile" />
-	<mapping conf="runtime" scope="runtime" />
-	<mapping conf="test" scope="test" />
-	<mapping conf="provided" scope="provided" />
-</ivy:makepom>
-
-<!-- Publish the local repo. Defaults to ~/.ivy2/local -->
-<ivy:publish resolver="local-m2-publish" forcedeliver="true" publishivy="true" pubrevision="${release.num}" overwrite="true">
-	<artifacts pattern="${dist.dir}/[artifact].[ext]" />
-	<!--<artifact name="qaf-standalone" pattern="${dist.dir}/[artifact].[ext]" ext="jar" classifier="standalone" type="standalone" version="${release.num}" /> -->
-	<artifact name="qaf" pattern="${dist.dir}/[artifact].[ext]" ext="pom" type="pom" version="${release.num}" />
-	<artifact name="qaf-sources" pattern="${dist.dir}/[artifact].[ext]" ext="jar" classifier="sources" type="sources" version="${release.num}" />
-	<artifact name="qaf-javadoc" pattern="${dist.dir}/[artifact].[ext]" ext="jar" classifier="javadoc" type="javadoc" version="${release.num}" />
-</ivy:publish>
-</target>
-
-<target name="ivy-publish-share" description="publish jar/source to maven repo mounted at ~/repo" depends="init">
-	<!-- Determine build number from previously published revisions -->
-	<ivy:buildnumber resolver="${publish.resolver}" organisation="${ivy.organisation}" module="${ivy.module}" revision="${release.num}" />
-
-	<!-- Resolve ivy dependencies and create a Maven POM file -->
-	<ivy:deliver deliverpattern="${dist.dir}/ivy.xml" pubrevision="${release.num}" status="${status}" />
-	<ivy:makepom ivyfile="${dist.dir}/ivy.xml" pomfile="${dist.dir}/${artifact.name}.pom" templatefile="pom.tmpl" >
-		<mapping conf="compile" scope="compile" />
-		<mapping conf="runtime" scope="runtime" />
-		<mapping conf="test" scope="test" />
-		<mapping conf="provided" scope="provided" />
-	</ivy:makepom>
-
-	<!-- Publish the local repo. Defaults to ~/.ivy2/local -->
-	<ivy:publish resolver="${publish.resolver}" forcedeliver="true" publishivy="false" pubrevision="${release.num}" overwrite="true" status="${status}">
-		<artifacts pattern="${dist.dir}/[artifact](-[classifier]).[ext]" />
-		<artifact name="${artifact.name}" pattern="${dist.dir}/[artifact].[ext]" ext="pom" type="pom" version="${release.num}" />
-		<artifact name="${artifact.name}" pattern="${dist.dir}/[artifact].[ext]" ext="jar" classifier="sources" type="sources" version="${release.num}" />
-		<artifact name="${artifact.name}" pattern="${dist.dir}/[artifact].[ext]" ext="jar" classifier="javadoc" type="javadoc" version="${release.num}" />
-	</ivy:publish>
-</target>
 
 <target name="test-compile" depends="init">
 <taskdef classpathref="test.classpath" resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties" />
