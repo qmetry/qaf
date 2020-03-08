@@ -210,7 +210,7 @@ public class ReporterUtil {
 			overview.setSkip(skip);
 			overview.setFail(fail);
 			if (null != result) {
-				overview.getClasses().add(result.getTestClass().getName());
+				overview.getClasses().add(getTestClassName(result));
 			}
 			if ((overview.getStartTime() > 0)) {
 				overview.setEndTime(System.currentTimeMillis());
@@ -414,7 +414,14 @@ public class ReporterUtil {
 	private static String getClassDir(ITestContext context, ITestResult result) {
 		String testName = getTestName(context);
 		return ApplicationProperties.JSON_REPORT_DIR.getStringVal() + "/" + testName + "/"
-				+ result.getTestClass().getName();
+				+ getTestClassName(result);
+	}
+	
+	private static String getTestClassName(ITestResult result){
+		if((result.getMethod() instanceof TestNGScenario)){
+			return ((TestNGScenario)result.getMethod()).getClassOrFileName();
+		}
+		return result.getTestClass().getName();
 	}
 
 	private static void appendReportInfo(Report report) {

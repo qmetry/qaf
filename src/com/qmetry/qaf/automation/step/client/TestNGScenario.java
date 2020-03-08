@@ -26,6 +26,9 @@ import static com.qmetry.qaf.automation.data.MetaDataScanner.getMetadata;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -34,7 +37,9 @@ import org.testng.internal.annotations.IAnnotationFinder;
 import org.testng.xml.XmlSuite.ParallelMode;
 import org.testng.xml.XmlTest;
 
+import com.qmetry.qaf.automation.step.TestStep;
 import com.qmetry.qaf.automation.util.ClassUtil;
+import com.qmetry.qaf.automation.util.StringUtil;
 
 /**
  * com.qmetry.qaf.automation.step.client.TestNGScenario.java
@@ -121,4 +126,23 @@ public class TestNGScenario extends TestNGMethod {
 		return qualifiledName;
 	}
 
+	public Collection<String> getSteps() {
+		if (scenario != null) {
+			List<String> steps = new ArrayList<String>();
+			for (TestStep step : scenario.getSteps()) {
+				steps.add(step.getDescription());
+			}
+			return steps;
+		}
+		return Collections.emptyList();
+	}
+	
+	public String getClassOrFileName(){
+		if (scenario != null) {
+			if (StringUtil.isNotBlank(scenario.getFileName())) {
+				return scenario.getFileName();
+			}
+		}
+		return getRealClass().getName();
+	}
 }

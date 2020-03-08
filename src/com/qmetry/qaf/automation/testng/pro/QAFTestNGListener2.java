@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.configuration.ConfigurationConverter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.LogFactoryImpl;
 import org.testng.IInvokedMethod;
@@ -97,13 +98,15 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 		logger.debug("onFinish: done");
 
 	}
+
 	@Override
 	public void onStart(ITestContext testContext) {
 		super.onStart(testContext);
-		if (!skipReporting()){
+		if (!skipReporting()) {
 			ReporterUtil.updateOverview(testContext, null);
 		}
 	}
+
 	@Override
 	public void onFinish(ITestContext testContext) {
 		if (skipReporting())
@@ -117,8 +120,8 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 	public void transform(ITestAnnotation testAnnotation, Class clazz, Constructor arg2, Method method) {
 		try {
 			if (null != method) {
-				if (null != method.getParameterTypes()
-						&& (method.getParameterTypes().length > 0) && !method.isAnnotationPresent(Parameters.class)) {
+				if (null != method.getParameterTypes() && (method.getParameterTypes().length > 0)
+						&& !method.isAnnotationPresent(Parameters.class)) {
 					DataProviderUtil.setQAFDataProvider(testAnnotation, method);
 				}
 
@@ -187,8 +190,6 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 	}
 
 	private void deployResult(ITestResult tr, ITestContext context) {
-		QAFTestBase stb = TestBaseProvider.instance().get();
-
 		try {
 			if ((tr.getMethod() instanceof TestNGScenario) && ((tr.getStatus() == ITestResult.FAILURE)
 					|| (tr.getStatus() == ITestResult.SUCCESS || tr.getStatus() == ITestResult.SKIP))) {
@@ -196,8 +197,9 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 				ConstructorOrMethod testCase = tr.getMethod().getConstructorOrMethod();
 
 				testCase.getMethod().getAnnotation(Test.class);
-				TestCaseRunResult result = tr.getStatus() == ITestResult.SUCCESS ? TestCaseRunResult.PASS
-						: tr.getStatus() == ITestResult.FAILURE ? TestCaseRunResult.FAIL : TestCaseRunResult.SKIPPED;
+				TestCaseRunResult.Status status = tr.getStatus() == ITestResult.SUCCESS ? TestCaseRunResult.Status.PASS
+						: tr.getStatus() == ITestResult.FAILURE ? TestCaseRunResult.Status.FAIL
+								: TestCaseRunResult.Status.SKIPPED;
 
 				// String method = testCase.getName();
 				String updator = getBundle().getString("result.updator");
@@ -211,8 +213,15 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 					Map<String, Object> params = new HashMap<String, Object>(scenario.getMetaData());
 					params.put("duration", tr.getEndMillis() - tr.getStartMillis());
 
-					ResultUpdator.updateResult(result, stb.getHTMLFormattedLog() + stb.getAssertionsLog(), updatorObj,
-							params);
+					Map<String, Object> executionInfo = new HashMap<String, Object>();
+					executionInfo.put("testName", tr.getTestContext().getCurrentXmlTest().getName());
+					executionInfo.put("suiteName", tr.getTestContext().getSuite().getName());
+					executionInfo.put("env", ConfigurationConverter.getMap(getBundle().subset("env")));
+
+					TestCaseRunResult testCaseRunResult = new TestCaseRunResult(status, scenario.getMetaData(),
+							tr.getParameters(), executionInfo, scenario.getSteps(), tr.getStartMillis());
+					testCaseRunResult.setClassName(scenario.getClassOrFileName());
+					ResultUpdator.updateResult(testCaseRunResult, updatorObj);
 				}
 
 			}

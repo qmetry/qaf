@@ -21,8 +21,6 @@
  ******************************************************************************/
 package com.qmetry.qaf.automation.integration;
 
-import java.util.Map;
-
 /**
  * @author chirag
  */
@@ -36,7 +34,7 @@ public interface TestCaseResultUpdator {
 	 *            run details to be send like assertion/verification log
 	 * @return
 	 */
-	public boolean updateResult(Map<String, ? extends Object> params, TestCaseRunResult result, String details);
+	public boolean updateResult(TestCaseRunResult result);
 
 	/**
 	 * @return tool name

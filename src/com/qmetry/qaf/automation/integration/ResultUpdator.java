@@ -22,7 +22,6 @@
 package com.qmetry.qaf.automation.integration;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -43,29 +42,24 @@ public class ResultUpdator extends Thread {
 	 * integrated here
 	 */
 	private static final Log logger = LogFactoryImpl.getLog(ResultUpdator.class);
-	private Map<String, ?> params;
 	private TestCaseRunResult result;
-	private String details;
 	// IntegarionTools tool;
 	private TestCaseResultUpdator updator;
 
 	protected ResultUpdator() {
 	}
 
-	protected ResultUpdator(TestCaseRunResult result, String details, TestCaseResultUpdator updator,
-			Map<String, ?> params) {
+	protected ResultUpdator(TestCaseRunResult result, TestCaseResultUpdator updator) {
 		this.result = result;
 		this.updator = updator;
-		this.details = details;
-		this.params = params;
-		logger.info(String.format("Result updator: %s", params));
+		logger.info(String.format("Result updator: %s", result.getMetaData()));
 	}
 
 	@Override
 	public void run() {
 		try {
 			System.out.println("started to updated result");
-			updator.updateResult(params, result, details);
+			updator.updateResult(result);
 		} catch (Throwable t) {
 			logger.error("Unable to update result on " + updator.getToolName(), t);
 		}
@@ -135,10 +129,9 @@ public class ResultUpdator extends Thread {
 	 * @param tool
 	 * @param params
 	 */
-	public static void updateResult(TestCaseRunResult result, String assertLog, TestCaseResultUpdator toolUpdator,
-			Map<String, ?> params) {
+	public static void updateResult(TestCaseRunResult result, TestCaseResultUpdator toolUpdator) {
 
-		ResultUpdator updator = new ResultUpdator(result, assertLog, toolUpdator, params);
+		ResultUpdator updator = new ResultUpdator(result, toolUpdator);
 
 		getPool().execute(updator);
 	}
