@@ -115,7 +115,7 @@ For any inquiry or need additional information, please contact support-qaf@infos
 		<delete dir="${dist.dir}/docs" />
 
 		<mkdir dir="${dist.dir}/docs" />
-		<javadoc access="protected" sourcepath="${src.dir}" packagenames="com.qmetry.**.*" destdir="${dist.dir}/docs" verbose="true" author="true" version="true" use="true" windowtitle="QMetry Automation Framework - ${version-num}.${build-num}" overview="${basedir}/QAF-Overview.htm">
+		<javadoc access="protected" sourcepath="${src.dir}" packagenames="com.qmetry.**.*" destdir="${dist.dir}/docs" verbose="false" author="true" version="true" use="true" windowtitle="QMetry Automation Framework - ${version-num}.${build-num}" overview="${basedir}/QAF-Overview.htm">
 			<doctitle>
 				<![CDATA[<h1>QMetry Automation Framework - ${version-num}.${build-num}</h1>]]>
 				</doctitle>
@@ -123,7 +123,7 @@ For any inquiry or need additional information, please contact support-qaf@infos
 			<![CDATA[<i>Copyright &#169; 2000 Infostretch Corp.</i>]]>
 			</bottom>
 	<classpath refid="build.classpath" />
-	<tag name="todo" scope="all" description="To do:" />
+	<tag name="Todo" scope="all" description="To do:" />
 	<group title="qaf Properties" packages="com.qmetry.qaf.automation.keys*" />
 	<group title="qaf Web Driver" packages="com.qmetry.qaf.automation.ui.*" />
 	<group title="qaf Web Service" packages="com.qmetry.qaf.automation.ws.*" />
