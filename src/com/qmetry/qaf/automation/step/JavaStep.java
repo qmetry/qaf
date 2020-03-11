@@ -286,7 +286,7 @@ public class JavaStep extends BaseTestStep {
 
 	@SuppressWarnings("unchecked")
 	private boolean isTestStepAnnotation(Annotation annotation) {
-		List<String> annotationPkgs = getBundle().getList("step.annotation.pkgs", Arrays.asList("cucumber.api.java"));
+		List<String> annotationPkgs = getBundle().getList("step.annotation.pkgs", Arrays.asList("cucumber.api.java","io.cucumber.java"));
 
 		for (String pkg : annotationPkgs) {
 			if (annotation.annotationType().getName().indexOf(pkg) >= 0) {

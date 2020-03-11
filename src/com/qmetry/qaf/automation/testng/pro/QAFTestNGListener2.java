@@ -158,7 +158,7 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 	public void afterInvocation(final IInvokedMethod method, final ITestResult tr, final ITestContext context) {
 		super.afterInvocation(method, tr, context);
 		// pro
-		if (method.isTestMethod() && !shouldRetry(tr)) {
+		if (method.isTestMethod() && !shouldRetry(tr) && !skipReporting()) {
 			deployResult(tr, context);
 		}
 	}
