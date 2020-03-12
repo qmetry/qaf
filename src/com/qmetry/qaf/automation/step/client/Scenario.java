@@ -296,7 +296,7 @@ public class Scenario extends WebDriverTestCase
 	public String getFileName() {
 		if (metadata.containsKey("fileName"))
 			return (String) metadata.get("fileName");
-		return "";
+		return (String) metadata.getOrDefault("reference", "");
 	}
 
 	@Override

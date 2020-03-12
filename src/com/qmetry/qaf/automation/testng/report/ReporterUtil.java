@@ -43,6 +43,7 @@ import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.configuration.Configuration;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.LogFactoryImpl;
 import org.testng.ISuite;
@@ -419,7 +420,12 @@ public class ReporterUtil {
 	
 	private static String getTestClassName(ITestResult result){
 		if((result.getMethod() instanceof TestNGScenario)){
-			return ((TestNGScenario)result.getMethod()).getClassOrFileName();
+			String classOrFile = ((TestNGScenario)result.getMethod()).getClassOrFileName();
+			File f = new File(classOrFile);
+			if(f.exists()) {
+				return FilenameUtils.removeExtension(f.getName());
+			}
+			return classOrFile;
 		}
 		return result.getTestClass().getName();
 	}
