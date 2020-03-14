@@ -46,8 +46,7 @@ import com.qmetry.qaf.automation.step.TestStepCompositer;
  * construct scenario inside your test method and run it. It supports step
  * listeners and also support dry run just like scenario in BDD file.
  * 
- * <h6>Usage:</h6>
- * <code>
+ * <h6>Usage:</h6> <code>
  * <pre>@Test(description="")
  *	public void test() {
  *		scenario().
@@ -66,13 +65,13 @@ import com.qmetry.qaf.automation.step.TestStepCompositer;
   * <pre>@Test(description="")
  *	public void testCustom() {
  *		scenario().
- *		add("परिस्थिति दी गई है",()->{
+ *		step("परिस्थिति दी गई है",()->{
  *			//write appropriate code...
  *		}).
- *		add("जब कुछ कार्रवाई हुई",()->{
+ *		step("जब कुछ कार्रवाई हुई",()->{
  *			//write appropriate code...
  *		}).
- *		add("तब इसके अपेक्षित परिणाम होने चाहिए",()->{
+ *		step("तब इसके अपेक्षित परिणाम होने चाहिए",()->{
  *			//write appropriate code...
  *		}).
  *		execute();
@@ -80,6 +79,7 @@ import com.qmetry.qaf.automation.step.TestStepCompositer;
  *
  * </pre>
  * </code>
+ * 
  * @author chirag.jayswal
  *
  */
@@ -120,17 +120,15 @@ public class RuntimeScenarioFactory {
 
 		@Override
 		protected Object doExecute() {
-			if (!ConfigurationManager.getBundle().getBoolean(ApplicationProperties.DRY_RUN_MODE.key, false)) {
-				stepProvider.stepDefinition();
-			}
+			stepProvider.stepDefinition();
 			return null;
 		}
 	}
 
 	public static interface RuntimeScenario {
-		public RuntimeScenario add(String description, RuntimeTestStepProvider step);
+		public RuntimeScenario step(String description, RuntimeTestStepProvider step);
 
-		public RuntimeScenario add(String description, RuntimeTestStepProvider step, Map<String, Object> metadata);
+		public RuntimeScenario step(String description, RuntimeTestStepProvider step, Map<String, Object> metadata);
 
 		public RuntimeScenario given(String description, RuntimeTestStepProvider step);
 
@@ -169,54 +167,46 @@ public class RuntimeScenarioFactory {
 			return new RuntimeTestStep(description, stepDefinition, metaData);
 		}
 
-		public RuntimeScenario add(String description, RuntimeTestStepProvider step) {
+		public RuntimeScenario given(String description, RuntimeTestStepProvider step) {
+			return step("Given " + description, step);
+		}
+
+		public RuntimeScenario when(String description, RuntimeTestStepProvider step) {
+			return step("When " + description, step);
+		}
+
+		public RuntimeScenario then(String description, RuntimeTestStepProvider step) {
+			return step("Then " + description, step);
+		}
+
+		public RuntimeScenario and(String description, RuntimeTestStepProvider step) {
+			return step("And " + description, step);
+		}
+
+		public RuntimeScenario step(String description, RuntimeTestStepProvider step) {
 			steps.add(from(description, step));
 			return this;
 		}
 
-		public RuntimeScenario given(String description, RuntimeTestStepProvider step) {
-			steps.add(from("Given " + description, step));
-			return this;
-		}
-
-		public RuntimeScenario when(String description, RuntimeTestStepProvider step) {
-			steps.add(from("When " + description, step));
-			return this;
-		}
-
-		public RuntimeScenario then(String description, RuntimeTestStepProvider step) {
-			steps.add(from("Then " + description, step));
-			return this;
-		}
-
-		public RuntimeScenario and(String description, RuntimeTestStepProvider step) {
-			steps.add(from("And " + description, step));
-			return this;
-		}
-
-		public RuntimeScenario add(String description, RuntimeTestStepProvider step, Map<String, Object> metadata) {
+		public RuntimeScenario step(String description, RuntimeTestStepProvider step, Map<String, Object> metadata) {
 			steps.add(from(description, step, metadata));
 			return this;
 		}
 
 		public RuntimeScenario given(String description, RuntimeTestStepProvider step, Map<String, Object> metadata) {
-			steps.add(from("Given " + description, step, metadata));
-			return this;
+			return step("Given " + description, step, metadata);
 		}
 
 		public RuntimeScenario when(String description, RuntimeTestStepProvider step, Map<String, Object> metadata) {
-			steps.add(from("When " + description, step, metadata));
-			return this;
+			return step("When " + description, step, metadata);
 		}
 
 		public RuntimeScenario then(String description, RuntimeTestStepProvider step, Map<String, Object> metadata) {
-			steps.add(from("Then " + description, step, metadata));
-			return this;
+			return step("Then " + description, step, metadata);
 		}
 
 		public RuntimeScenario and(String description, RuntimeTestStepProvider step, Map<String, Object> metadata) {
-			steps.add(from("And " + description, step, metadata));
-			return this;
+			return step("And " + description, step, metadata);
 		}
 
 		public RuntimeScenario withThreshold(int thresold) {

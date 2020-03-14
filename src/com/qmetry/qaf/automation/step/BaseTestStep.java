@@ -144,7 +144,10 @@ public abstract class BaseTestStep implements TestStep {
 		beforExecute(defaultListener);
 		try {
 			stepExecutionTracker.setStartTime(System.currentTimeMillis());
-			Object retval = doExecute();
+			Object retval=null;
+			if (!ApplicationProperties.DRY_RUN_MODE.getBoolenVal(false)) {
+				retval = doExecute();
+			}
 			stepExecutionTracker.setResult(retval);
 			stepExecutionTracker.setEndTime(System.currentTimeMillis());
 
