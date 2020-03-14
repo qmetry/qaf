@@ -68,6 +68,7 @@ import com.qmetry.qaf.automation.ui.util.QAFWebDriverWait;
 import com.qmetry.qaf.automation.ui.util.QAFWebElementExpectedConditions;
 import com.qmetry.qaf.automation.ui.webdriver.CommandTracker.Stage;
 import com.qmetry.qaf.automation.util.LocatorUtil;
+import static org.openqa.selenium.remote.CapabilityType.SUPPORTS_JAVASCRIPT;
 
 /**
  * com.qmetry.qaf.automation.ui.webdriver.QAFWebDriver.java
@@ -173,8 +174,8 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 
 	/**
 	 * @param locator
-	 *            - selenium 1 type locator for example "id=eleid",
-	 *            "name=eleName" etc...
+	 *            - selenium 1 type locator for example "id=eleid", "name=eleName"
+	 *            etc...
 	 * @return
 	 */
 	public QAFWebElement findElement(String locator) {
@@ -257,8 +258,7 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.openqa.selenium.TakesScreenshot#getScreenshotAs(org.openqa.selenium
+	 * @see org.openqa.selenium.TakesScreenshot#getScreenshotAs(org.openqa.selenium
 	 * .OutputType)
 	 */
 	@Override
@@ -477,7 +477,7 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 
 	public void waitForAllElementPresent(QAFWebElement... elements) {
 		new DynamicWait<List<QAFWebElement>>(Arrays.asList(elements))
-		.until(QAFWebElementExpectedConditions.allElementPresent());
+				.until(QAFWebElementExpectedConditions.allElementPresent());
 	}
 
 	public void waitForAnyElementVisible(QAFWebElement... elements) {
@@ -487,18 +487,19 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 
 	public void waitForAllElementVisible(QAFWebElement... elements) {
 		new DynamicWait<List<QAFWebElement>>(Arrays.asList(elements))
-		.until(QAFWebElementExpectedConditions.allElementVisible());
-	}
-	
-	public void waitForWindowTitle(String title, long... timeout){
-		new QAFWebDriverWait(this, timeout).withMessage("Wait for window title time out.")
-		.until(QAFWebDriverExpectedConditions.windowTitle(title));
+				.until(QAFWebElementExpectedConditions.allElementVisible());
 	}
 
-	public void waitForNoOfWindows(int count, long... timeout){
+	public void waitForWindowTitle(String title, long... timeout) {
 		new QAFWebDriverWait(this, timeout).withMessage("Wait for window title time out.")
-		.until(QAFWebDriverExpectedConditions.noOfwindowsPresent(count));
+				.until(QAFWebDriverExpectedConditions.windowTitle(title));
 	}
+
+	public void waitForNoOfWindows(int count, long... timeout) {
+		new QAFWebDriverWait(this, timeout).withMessage("Wait for window title time out.")
+				.until(QAFWebDriverExpectedConditions.noOfwindowsPresent(count));
+	}
+
 	@Override
 	public void beforeInitialize(Capabilities desiredCapabilities) {
 		// can't do anything over here...
@@ -507,8 +508,8 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 	/**
 	 * This method is useful to extract underlying driver specific interface
 	 * implementation from the driver object. For Example, Assuming desired
-	 * capability rotatable is true you can extract Rotatable interface from
-	 * driver as below. <br />
+	 * capability rotatable is true you can extract Rotatable interface from driver
+	 * as below. <br />
 	 * <code>
 	 * {@link Rotatable} rotatable = driver.getCapabilityImpl();<br />
 	 * rotatable.rotate(ScreenOrientation.LANDSCAPE);
@@ -523,8 +524,7 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 	}
 
 	/*
-	 * public <X extends RemoteWebDriver> X toX(X x){ x.getSessionId(); return
-	 * x; }
+	 * public <X extends RemoteWebDriver> X toX(X x){ x.getSessionId(); return x; }
 	 */
 
 	public QAFExtendedWebElement findElementByCustomStretegy(String stetegy, String loc) {
@@ -540,7 +540,7 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 		quit();
 	}
 
-/*	@Override
+	@Override
 	public Object executeScript(String script, Object... args) {
 		if (!getCapabilities().isJavascriptEnabled()) {
 			throw new UnsupportedOperationException(
@@ -559,7 +559,7 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 
 	@Override
 	public Object executeAsyncScript(String script, Object... args) {
-		if (!getCapabilities().isJavascriptEnabled()) {
+		if (!isJavascriptEnabled()) {
 			throw new UnsupportedOperationException(
 					"You must be using an underlying instance of " + "WebDriver that supports executing javascript");
 		}
@@ -572,6 +572,11 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 		Map<String, ?> params = ImmutableMap.of("script", script, "args", Lists.newArrayList(convertedArgs));
 
 		return execute(DriverCommand.EXECUTE_ASYNC_SCRIPT, params).getValue();
-	}*/
+	}
+
+	boolean isJavascriptEnabled() {
+		return ((null == getCapabilities().getCapability(SUPPORTS_JAVASCRIPT))
+				|| getCapabilities().is(SUPPORTS_JAVASCRIPT));
+	}
 
 }
