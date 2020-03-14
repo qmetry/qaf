@@ -30,12 +30,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.qmetry.qaf.automation.core.CheckpointResultBean;
-import com.qmetry.qaf.automation.core.ConfigurationManager;
 import com.qmetry.qaf.automation.core.LoggingBean;
 import com.qmetry.qaf.automation.core.MessageTypes;
 import com.qmetry.qaf.automation.core.QAFTestBase;
 import com.qmetry.qaf.automation.core.TestBaseProvider;
-import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.step.BaseTestStep;
 import com.qmetry.qaf.automation.step.StepExecutionTracker;
 import com.qmetry.qaf.automation.step.TestStep;
@@ -92,17 +90,22 @@ public class RuntimeScenarioFactory {
 	public static RuntimeScenario scenario() {
 		return new RuntimeScenarioImpl();
 	}
-
+	
+	public static void step(String description, RuntimeTestStepProvider stepDefinition) {
+		new RuntimeTestStep(description, stepDefinition, Collections.emptyMap()).execute();
+	}
+	
+	public static void step(String description, RuntimeTestStepProvider stepDefinition,
+			Map<String, Object> metaData) {
+		new RuntimeTestStep(description, stepDefinition, metaData).execute();
+	}
+	
 	private static class RuntimeTestStep extends BaseTestStep {
 		RuntimeTestStepProvider stepProvider;
 
-		private RuntimeTestStep(String description, RuntimeTestStepProvider stepImpl) {
+		private RuntimeTestStep(String description, RuntimeTestStepProvider stepImpl, Map<String, Object> metaData) {
 			super(description, description);
 			this.stepProvider = stepImpl;
-		}
-
-		private RuntimeTestStep(String description, RuntimeTestStepProvider stepImpl, Map<String, Object> metaData) {
-			this(description, stepImpl);
 			if (metaData != null) {
 				this.metaData = new HashMap<String, Object>(metaData);
 			}
@@ -127,27 +130,16 @@ public class RuntimeScenarioFactory {
 
 	public static interface RuntimeScenario {
 		public RuntimeScenario step(String description, RuntimeTestStepProvider step);
-
 		public RuntimeScenario step(String description, RuntimeTestStepProvider step, Map<String, Object> metadata);
-
 		public RuntimeScenario given(String description, RuntimeTestStepProvider step);
-
 		public RuntimeScenario given(String description, RuntimeTestStepProvider step, Map<String, Object> metadata);
-
 		public RuntimeScenario when(String description, RuntimeTestStepProvider step);
-
 		public RuntimeScenario when(String description, RuntimeTestStepProvider step, Map<String, Object> metadata);
-
 		public RuntimeScenario then(String description, RuntimeTestStepProvider step);
-
 		public RuntimeScenario then(String description, RuntimeTestStepProvider step, Map<String, Object> metadata);
-
 		public RuntimeScenario and(String description, RuntimeTestStepProvider step);
-
 		public RuntimeScenario and(String description, RuntimeTestStepProvider step, Map<String, Object> metadata);
-
 		public RuntimeScenario withThreshold(int thresold);
-
 		public void execute();
 	}
 
@@ -157,58 +149,37 @@ public class RuntimeScenarioFactory {
 		private RuntimeScenarioImpl() {
 			steps = new ArrayList<TestStep>();
 		}
-
-		private TestStep from(String description, RuntimeTestStepProvider stepDefinition) {
-			return new RuntimeTestStep(description, stepDefinition);
-		}
-
-		private TestStep from(String description, RuntimeTestStepProvider stepDefinition,
-				Map<String, Object> metaData) {
-			return new RuntimeTestStep(description, stepDefinition, metaData);
-		}
-
 		public RuntimeScenario given(String description, RuntimeTestStepProvider step) {
-			return step("Given " + description, step);
+			return given(description, step, Collections.emptyMap());
 		}
-
 		public RuntimeScenario when(String description, RuntimeTestStepProvider step) {
-			return step("When " + description, step);
+			return when(description, step, Collections.emptyMap());
 		}
-
 		public RuntimeScenario then(String description, RuntimeTestStepProvider step) {
-			return step("Then " + description, step);
+			return then(description, step, Collections.emptyMap());
 		}
-
 		public RuntimeScenario and(String description, RuntimeTestStepProvider step) {
-			return step("And " + description, step);
+			return and(description, step, Collections.emptyMap());
 		}
-
 		public RuntimeScenario step(String description, RuntimeTestStepProvider step) {
-			steps.add(from(description, step));
+			return step(description, step, Collections.emptyMap());
+		}
+		public RuntimeScenario step(String description, RuntimeTestStepProvider stepDefinition, Map<String, Object> metadata) {
+			steps.add(new RuntimeTestStep(description, stepDefinition, metadata));
 			return this;
 		}
-
-		public RuntimeScenario step(String description, RuntimeTestStepProvider step, Map<String, Object> metadata) {
-			steps.add(from(description, step, metadata));
-			return this;
-		}
-
 		public RuntimeScenario given(String description, RuntimeTestStepProvider step, Map<String, Object> metadata) {
 			return step("Given " + description, step, metadata);
 		}
-
 		public RuntimeScenario when(String description, RuntimeTestStepProvider step, Map<String, Object> metadata) {
 			return step("When " + description, step, metadata);
 		}
-
 		public RuntimeScenario then(String description, RuntimeTestStepProvider step, Map<String, Object> metadata) {
 			return step("Then " + description, step, metadata);
 		}
-
 		public RuntimeScenario and(String description, RuntimeTestStepProvider step, Map<String, Object> metadata) {
 			return step("And " + description, step, metadata);
 		}
-
 		public RuntimeScenario withThreshold(int thresold) {
 			if (!steps.isEmpty())
 				((RuntimeTestStep) steps.get(steps.size() - 1)).setThreshold(thresold);
