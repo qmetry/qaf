@@ -41,12 +41,14 @@ import com.qmetry.qaf.automation.step.TestStepCompositer;
 
 /**
  * This class is to support BDD with test case implementation in Java. You can
- * construct scenario inside your test method and run it. It supports step
- * listeners and also support dry run just like scenario in BDD file.
+ * construct scenario inside your test method and run it. It supports reporting (including not run steps), step
+ * listeners and also support dry run just like scenario in BDD file. 
  * 
- * <h6>Usage:</h6> <code>
+ * <h6>Usage:</h6> 
+ * <code>
+ *  import static com.qmetry.qaf.automation.step.client.RuntimeScenarioFactory.scenario;
  * <pre>@Test(description="")
- *	public void test() {
+ *	public void testWithGivenWhenThen() {
  *		scenario().
  *		given("a precondition",()->{
  *			//write appropriate code...
@@ -61,8 +63,11 @@ import com.qmetry.qaf.automation.step.TestStepCompositer;
  *	}
  * </pre>
   * <pre>@Test(description="")
- *	public void testCustom() {
+ *	public void testWithCustomKeywords() {
  *		scenario().
+ *		step("Provided a precondition",()->{
+ *		//write appropriate code...
+ *		}).
  *		step("परिस्थिति दी गई है",()->{
  *			//write appropriate code...
  *		}).
@@ -74,10 +79,9 @@ import com.qmetry.qaf.automation.step.TestStepCompositer;
  *		}).
  *		execute();
  *	}
- *
  * </pre>
  * </code>
- * 
+ * </pre></code>
  * @author chirag.jayswal
  *
  */
