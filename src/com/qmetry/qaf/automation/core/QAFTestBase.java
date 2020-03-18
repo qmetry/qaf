@@ -64,6 +64,8 @@ public class QAFTestBase {
 	private static final String CONTEXT = "qafcontext";
 	private static final String VERIFICATION_ERRORS = "verificationErrors";
 	public static final String SELENIUM_DEFAULT_TIMEOUT = "selenium.wait.timeout";
+	private static final boolean REPORT_SUCCESS = !ApplicationProperties.REPORT_SKIP_SUCCESS.getBoolenVal(false);
+
 	private Map<String, UiDriver> driverContext;
 
 	private final Log logger = LogFactoryImpl.getLog(QAFTestBase.class);
@@ -382,24 +384,27 @@ public class QAFTestBase {
 
 	public void addAssertionLog(String msg, MessageTypes type) {
 		logger.debug(type.formatText(msg));
-		CheckpointResultBean bean = new CheckpointResultBean();
-		bean.setMessage(msg);
-		bean.setType(type);
-		boolean added = addCheckpoint(bean);
+		if (!type.equals(MessageTypes.Pass) || REPORT_SUCCESS) {
 
-		if (added && StringUtil.isBlank(getLastCapturedScreenShot())
-				&& ((ApplicationProperties.FAILURE_SCREENSHOT.getBoolenVal(true) && (type.isFailure()))
-						|| ((type != MessageTypes.Info)
-								&& ApplicationProperties.SUCEESS_SCREENSHOT.getBoolenVal(false)))) {
+			CheckpointResultBean bean = new CheckpointResultBean();
+			bean.setMessage(msg);
+			bean.setType(type);
+			boolean added = addCheckpoint(bean);
 
-			takeScreenShot();
-		}
-		bean.setScreenshot(getLastCapturedScreenShot());
-		setLastCapturedScreenShot("");
+			if (added && StringUtil.isBlank(getLastCapturedScreenShot())
+					&& ((ApplicationProperties.FAILURE_SCREENSHOT.getBoolenVal(true) && (type.isFailure()))
+							|| ((type != MessageTypes.Info)
+									&& ApplicationProperties.SUCEESS_SCREENSHOT.getBoolenVal(false)))) {
 
-		if (type == MessageTypes.Fail) {
-			int verificationErrors = getVerificationErrors() + 1;
-			getContext().setProperty(VERIFICATION_ERRORS, verificationErrors);
+				takeScreenShot();
+			}
+			bean.setScreenshot(getLastCapturedScreenShot());
+			setLastCapturedScreenShot("");
+
+			if (type == MessageTypes.Fail) {
+				int verificationErrors = getVerificationErrors() + 1;
+				getContext().setProperty(VERIFICATION_ERRORS, verificationErrors);
+			}
 		}
 
 	}

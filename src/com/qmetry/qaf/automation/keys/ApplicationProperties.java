@@ -47,6 +47,11 @@ import com.qmetry.qaf.automation.ws.rest.RestClientFactory;
  */
 public enum ApplicationProperties {
 	/**
+	 * <b>key</b>: <code>report.log.skip.success</code><br/>
+	 * <b>value</b>: boolean, when true it will not show verification success message in report.
+	 */
+	REPORT_SKIP_SUCCESS("report.log.skip.success"),
+	/**
 	 * <b>key</b>: <code>test.results.dir </code><br/>
 	 * <b>value</b>: dir to place generated result files
 	 */
