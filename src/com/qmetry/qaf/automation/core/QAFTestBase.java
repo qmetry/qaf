@@ -64,7 +64,6 @@ public class QAFTestBase {
 	private static final String CONTEXT = "qafcontext";
 	private static final String VERIFICATION_ERRORS = "verificationErrors";
 	public static final String SELENIUM_DEFAULT_TIMEOUT = "selenium.wait.timeout";
-	private static final boolean REPORT_SUCCESS = !ApplicationProperties.REPORT_SKIP_SUCCESS.getBoolenVal(false);
 
 	private Map<String, UiDriver> driverContext;
 
@@ -384,7 +383,7 @@ public class QAFTestBase {
 
 	public void addAssertionLog(String msg, MessageTypes type) {
 		logger.debug(type.formatText(msg));
-		if (!type.equals(MessageTypes.Pass) || REPORT_SUCCESS) {
+		if (type.shouldReport()) {
 
 			CheckpointResultBean bean = new CheckpointResultBean();
 			bean.setMessage(msg);

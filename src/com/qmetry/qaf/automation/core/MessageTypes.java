@@ -21,9 +21,13 @@
  ******************************************************************************/
 package com.qmetry.qaf.automation.core;
 
-public enum MessageTypes {
-	Pass, Fail, Info, TestStep, TestStepPass, TestStepFail, Warn;
+import com.qmetry.qaf.automation.keys.ApplicationProperties;
 
+public enum MessageTypes {
+	Info, Pass, Warn, Fail, TestStep, TestStepPass, TestStepFail;
+	private static final boolean REPORT_SUCCESS = !ApplicationProperties.REPORT_SKIP_SUCCESS.getBoolenVal(false);
+	private static final MessageTypes REPORT_LOG_LEVEL = getLogLevel();
+	private Boolean shouldReport = null;
 	/**
 	 * Get message in HTML format for the type.
 	 * 
@@ -52,5 +56,20 @@ public enum MessageTypes {
 	public boolean isFailure() {
 		return name().toUpperCase().contains("FAIL");
 	}
-
+	
+	public boolean shouldReport() {
+		if (null == shouldReport) {
+			shouldReport = REPORT_LOG_LEVEL.ordinal() >= ordinal()
+					&& (!this.equals(MessageTypes.Pass) || REPORT_SUCCESS);
+		}
+		return shouldReport;
+	}
+	private static MessageTypes getLogLevel() {
+		try {
+			return MessageTypes.valueOf(ApplicationProperties.REPORT_LOG_LEVEL.getStringVal("Info"));
+		} catch (Exception e) {
+			System.err.println("Invalid log level value for report.log.level. It can be one of \"Info\", \"Pass\", \"Fail\".\nUsing default \"Info\".");
+			return MessageTypes.Info;
+		}
+	}
 }

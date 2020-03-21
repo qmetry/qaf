@@ -47,6 +47,16 @@ import com.qmetry.qaf.automation.ws.rest.RestClientFactory;
  */
 public enum ApplicationProperties {
 	/**
+	 * <b>key</b>: <code>report.log.level</code><br/>
+	 * <b>value</b>: one of Info, Pass, Fail
+	 * <DL>
+	 * <DT>Info <DD>will report Info, pass and fail messages
+	 * <DT>Pass <DD>will report pass and fail messages but not Info
+	 * <DT>Fail <DD>will report fail messages but not Info or Pass
+	 * </DL>
+	 */
+	REPORT_LOG_LEVEL("report.log.level"),
+	/**
 	 * <b>key</b>: <code>report.log.skip.success</code><br/>
 	 * <b>value</b>: boolean, when true it will not show verification success message in report.
 	 */
