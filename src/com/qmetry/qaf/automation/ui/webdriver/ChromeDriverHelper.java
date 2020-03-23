@@ -25,7 +25,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.impl.LogFactoryImpl;
 import org.openqa.selenium.chrome.ChromeDriverService;
 
 import com.qmetry.qaf.automation.core.AutomationError;
@@ -65,7 +65,7 @@ public class ChromeDriverHelper {
 	}
 
 	private ChromeDriverHelper() {
-		logger = LogFactory.getLog(getClass());
+		logger = LogFactoryImpl.getLog(getClass());
 	}
 
 	/**
@@ -91,7 +91,10 @@ public class ChromeDriverHelper {
 	 * 
 	 */
 	public static void teardownService() {
-		SingletonHolder.INSTANCE.stopService();
+		try {
+			SingletonHolder.INSTANCE.stopService();
+		} catch (Exception e) {
+		}
 	}
 
 }
