@@ -39,7 +39,7 @@ public class ReporterTest {
 	// early initialization of static constants for performance will not allow to reset and
 	// hence only one at time combination can be tested in isolation
 
-	@Test(dataProvider = "shouldReportDP", enabled = false)
+	@Test(dataProvider = "shouldReportDP", enabled = true)
 	public void testShouldReport(Object skipSuccess, String logLevel, MessageTypes type, boolean expected) {
 		Validator.assertThat(type.shouldReport(), Matchers.is(expected));
 	}
@@ -51,7 +51,7 @@ public class ReporterTest {
 		// need to set before class loaded
 		// getBundle().setProperty(REPORT_SKIP_SUCCESS.key,false);
 		// getBundle().setProperty(REPORT_LOG_LEVEL.key,"Info");
-
+		/*
 		data.add(new Object[] { true, "Info", MessageTypes.TestStepFail, true });
 		data.add(new Object[] { true, "Info", MessageTypes.TestStepPass, true });
 		data.add(new Object[] { true, "Info", MessageTypes.TestStep, true });
@@ -60,7 +60,7 @@ public class ReporterTest {
 		data.add(new Object[] { true, "Info", MessageTypes.Pass, true });
 		data.add(new Object[] { true, "Info", MessageTypes.Info, true });
 
-		/*
+		
 		 * data.add(new Object[]{false,"Pass",MessageTypes.TestStepFail, true});
 		 * data.add(new Object[]{false,"Pass",MessageTypes.TestStepPass, true});
 		 * data.add(new Object[]{false,"Pass",MessageTypes.TestStep, true});
@@ -154,16 +154,16 @@ public class ReporterTest {
 		 * MessageTypes.TestStepPass, true }); data.add(new Object[] { null, "Info",
 		 * MessageTypes.TestStepFail, true }); data.add(new Object[] { null, "Info",
 		 * MessageTypes.Info, true });
-		 * 
-		 * // default should report all messages data.add(new
-		 * Object[]{null,null,MessageTypes.Fail, true}); data.add(new
-		 * Object[]{null,null,MessageTypes.Pass, true}); data.add(new
-		 * Object[]{null,null,MessageTypes.Warn, true}); data.add(new
-		 * Object[]{null,null,MessageTypes.TestStep, true}); data.add(new
-		 * Object[]{null,null,MessageTypes.TestStepPass, true}); data.add(new
-		 * Object[]{null,null,MessageTypes.TestStepFail, true}); data.add(new
-		 * Object[]{null,null,MessageTypes.Info, true});
-		 */
+		 * */
+		  // default should report all messages 
+		data.add(new Object[] { null, null, MessageTypes.Fail, true });
+		data.add(new Object[] { null, null, MessageTypes.Pass, true });
+		data.add(new Object[] { null, null, MessageTypes.Warn, true });
+		data.add(new Object[] { null, null, MessageTypes.TestStep, true });
+		data.add(new Object[] { null, null, MessageTypes.TestStepPass, true });
+		data.add(new Object[] { null, null, MessageTypes.TestStepFail, true });
+		data.add(new Object[] { null, null, MessageTypes.Info, true });
+
 		return data.iterator();
 	}
 }
