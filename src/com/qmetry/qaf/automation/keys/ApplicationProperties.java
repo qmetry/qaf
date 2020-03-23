@@ -683,8 +683,8 @@ public enum ApplicationProperties {
 	 * @return
 	 */
 	public String getStringVal(String... defaultVal) {
-		return System.getProperty(key, ConfigurationManager.getBundle().getString(key,
-				(null != defaultVal) && (defaultVal.length > 0) ? defaultVal[0] : ""));
+		Object o = getObject(key, defaultVal);
+		return System.getProperty(key, null!=o?o.toString(): "");
 	}
 
 	/**

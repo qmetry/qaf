@@ -399,11 +399,10 @@ public class QAFTestBase {
 			}
 			bean.setScreenshot(getLastCapturedScreenShot());
 			setLastCapturedScreenShot("");
-
-			if (type == MessageTypes.Fail) {
-				int verificationErrors = getVerificationErrors() + 1;
-				getContext().setProperty(VERIFICATION_ERRORS, verificationErrors);
-			}
+		}
+		if (type == MessageTypes.Fail) {
+			int verificationErrors = getVerificationErrors() + 1;
+			getContext().setProperty(VERIFICATION_ERRORS, verificationErrors);
 		}
 
 	}
