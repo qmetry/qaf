@@ -21,6 +21,8 @@
  ******************************************************************************/
 package com.qmetry.qaf.automation.integration;
 
+import static com.qmetry.qaf.automation.core.ConfigurationManager.getBundle;
+
 import java.util.HashMap;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -38,14 +40,20 @@ import org.apache.commons.logging.impl.LogFactoryImpl;
  */
 public class ResultUpdator extends Thread {
 	/****
-	 * Last updated: 5-Mar-2011 Removed ThreadPoolExecutor form BaseTestCase and
+	 * 5-Mar-2011 Removed ThreadPoolExecutor form BaseTestCase and
 	 * integrated here
+	 * 
+	 * Last updated: 22-Mar-2020 Added single thread executor support.
 	 */
 	private static final Log logger = LogFactoryImpl.getLog(ResultUpdator.class);
 	private TestCaseRunResult result;
 	// IntegarionTools tool;
 	private TestCaseResultUpdator updator;
 
+	private static boolean hasActivePool = false;
+	private static boolean hasActiveSingleThreadedPool = false;
+	private static String[] updators = getBundle().getStringArray("result.updator",new String[] {});
+	
 	protected ResultUpdator() {
 	}
 
@@ -58,7 +66,7 @@ public class ResultUpdator extends Thread {
 	@Override
 	public void run() {
 		try {
-			System.out.println("started to updated result");
+			System.out.println("started to update result");
 			updator.updateResult(result);
 		} catch (Throwable t) {
 			logger.error("Unable to update result on " + updator.getToolName(), t);
@@ -81,6 +89,20 @@ public class ResultUpdator extends Thread {
 	}
 
 	/**
+	 * Provides thread safe {@link LinkedBlockingDeque} without a predefined
+	 * capacity will cause new tasks to wait in the queue when all corePoolSize
+	 * threads are busy. Thus, no more than corePoolSize threads will ever be
+	 * created.(And the value of the maximumPoolSize therefore doesn't have any
+	 * effect.)
+	 * 
+	 * @author chirag
+	 */
+	private static class SingleTheradExecutorHolder {
+
+		private static final ThreadPoolExecutor INSTANCE = new ThreadPoolExecutor(0, 1, 5, TimeUnit.MINUTES,
+				new LinkedBlockingDeque<Runnable>());;
+	}
+	/**
 	 * Provides thread safe lazy initialized ThreadPoolExecutor
 	 * 
 	 * @return
@@ -90,33 +112,53 @@ public class ResultUpdator extends Thread {
 		return ExecutorHolder.INSTANCE;
 	}
 
-	private static boolean hasActivePool = false;
+	/**
+	 * Provides thread safe lazy initialized ThreadPoolExecutor
+	 * 
+	 * @return
+	 */
+	public static ThreadPoolExecutor getSingleThreadedPool() {
+		hasActiveSingleThreadedPool = true;
+		return SingleTheradExecutorHolder.INSTANCE;
+	}
 
 	public static int getActiveCount() {
 		if (hasActivePool) {
 			getPool().getActiveCount();
 		}
+		if (hasActiveSingleThreadedPool) {
+			getSingleThreadedPool().getActiveCount();
+		}
 		return 0;
 	}
 
 	public static void awaitTermination() {
+		if(hasActiveSingleThreadedPool) {
+			ThreadPoolExecutor pool = getSingleThreadedPool();
+			awaitTermination(pool);
+			hasActiveSingleThreadedPool=false;
+		}
 		if (hasActivePool) {
 			ThreadPoolExecutor pool = getPool();
-			while (pool.getActiveCount() > 0) {
-				logger.info("Result updator : Remaining " + pool.getActiveCount() + " result to be update.");
-				try {
-					pool.awaitTermination(5, TimeUnit.SECONDS);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-			System.out.println("Result updator : Remaining " + pool.getActiveCount() + " result to be update.");
+			awaitTermination(pool);
+			hasActivePool = false;
+		}
+	}
+	
+	private static void awaitTermination(ThreadPoolExecutor pool) {
+		while (pool.getActiveCount() > 0) {
+			logger.info("Result updator: Completed "+ pool.getActiveCount()+" Remaining " + pool.getActiveCount() + " result to be update.");
 			try {
-				pool.shutdownNow();
-			} catch (Exception e) {
+				pool.awaitTermination(5, TimeUnit.SECONDS);
+			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			hasActivePool = false;
+		}
+		System.out.println("Result updator: Completed "+ pool.getActiveCount()+" Remaining " + pool.getActiveCount() + " result to be update.");
+		try {
+			pool.shutdownNow();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -129,11 +171,24 @@ public class ResultUpdator extends Thread {
 	 * @param tool
 	 * @param params
 	 */
-	public static void updateResult(TestCaseRunResult result, TestCaseResultUpdator toolUpdator) {
-
+	private static void updateResult(TestCaseRunResult result, TestCaseResultUpdator toolUpdator) {
 		ResultUpdator updator = new ResultUpdator(result, toolUpdator);
-
-		getPool().execute(updator);
+		ThreadPoolExecutor executor = toolUpdator.allowParallel()?getPool():getSingleThreadedPool();
+		executor.execute(updator);
 	}
 
+	public static void updateResult(TestCaseRunResult result) {
+		for(String updator: updators) {
+			try {
+				Class<?> updatorCls = Class.forName(updator);
+				updateResult(result, (TestCaseResultUpdator)updatorCls.newInstance());
+			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+				logger.error("Unable to update result using " + updator, e);
+			}
+		}
+	}
+	
+	public static int getResultUpdatorsCnt() {
+		return null==updators?0:updators.length;
+	}
 }

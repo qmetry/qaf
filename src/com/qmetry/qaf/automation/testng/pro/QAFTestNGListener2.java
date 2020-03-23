@@ -48,7 +48,6 @@ import com.qmetry.qaf.automation.core.LoggingBean;
 import com.qmetry.qaf.automation.core.QAFTestBase;
 import com.qmetry.qaf.automation.core.TestBaseProvider;
 import com.qmetry.qaf.automation.integration.ResultUpdator;
-import com.qmetry.qaf.automation.integration.TestCaseResultUpdator;
 import com.qmetry.qaf.automation.integration.TestCaseRunResult;
 import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.step.client.TestNGScenario;
@@ -191,7 +190,7 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 
 	private void deployResult(ITestResult tr, ITestContext context) {
 		try {
-			if ((tr.getMethod() instanceof TestNGScenario) && ((tr.getStatus() == ITestResult.FAILURE)
+			if (ResultUpdator.getResultUpdatorsCnt()>0 && (tr.getMethod() instanceof TestNGScenario) && ((tr.getStatus() == ITestResult.FAILURE)
 					|| (tr.getStatus() == ITestResult.SUCCESS || tr.getStatus() == ITestResult.SKIP))) {
 
 				ConstructorOrMethod testCase = tr.getMethod().getConstructorOrMethod();
@@ -201,34 +200,23 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 						: tr.getStatus() == ITestResult.FAILURE ? TestCaseRunResult.Status.FAIL
 								: TestCaseRunResult.Status.SKIPPED;
 
-				// String method = testCase.getName();
-				String updator = getBundle().getString("result.updator");
+				TestNGScenario scenario = (TestNGScenario) tr.getMethod();
+				Map<String, Object> params = new HashMap<String, Object>(scenario.getMetaData());
+				params.put("duration", tr.getEndMillis() - tr.getStartMillis());
 
-				if (StringUtil.isNotBlank(updator)) {
-					Class<?> updatorCls = Class.forName(updator);
+				Map<String, Object> executionInfo = new HashMap<String, Object>();
+				executionInfo.put("testName", tr.getTestContext().getCurrentXmlTest().getName());
+				executionInfo.put("suiteName", tr.getTestContext().getSuite().getName());
+				executionInfo.put("env", ConfigurationConverter.getMap(getBundle().subset("env")));
 
-					TestCaseResultUpdator updatorObj = (TestCaseResultUpdator) updatorCls.newInstance();
-
-					TestNGScenario scenario = (TestNGScenario) tr.getMethod();
-					Map<String, Object> params = new HashMap<String, Object>(scenario.getMetaData());
-					params.put("duration", tr.getEndMillis() - tr.getStartMillis());
-
-					Map<String, Object> executionInfo = new HashMap<String, Object>();
-					executionInfo.put("testName", tr.getTestContext().getCurrentXmlTest().getName());
-					executionInfo.put("suiteName", tr.getTestContext().getSuite().getName());
-					executionInfo.put("env", ConfigurationConverter.getMap(getBundle().subset("env")));
-
-					TestCaseRunResult testCaseRunResult = new TestCaseRunResult(status, scenario.getMetaData(),
-							tr.getParameters(), executionInfo, scenario.getSteps(), tr.getStartMillis());
-					testCaseRunResult.setClassName(scenario.getClassOrFileName());
-					ResultUpdator.updateResult(testCaseRunResult, updatorObj);
-				}
-
+				TestCaseRunResult testCaseRunResult = new TestCaseRunResult(status, scenario.getMetaData(),
+						tr.getParameters(), executionInfo, scenario.getSteps(), tr.getStartMillis());
+				testCaseRunResult.setClassName(scenario.getClassOrFileName());
+				ResultUpdator.updateResult(testCaseRunResult);
 			}
 		} catch (Exception e) {
 			logger.warn("Unable to deploy result", e);
 		}
-
 	}
 
 	private boolean skipReporting() {

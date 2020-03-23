@@ -422,7 +422,7 @@ public class ReporterUtil {
 		if((result.getMethod() instanceof TestNGScenario)){
 			String classOrFile = ((TestNGScenario)result.getMethod()).getClassOrFileName();
 			File f = new File(classOrFile);
-			if(f.exists()) {
+			if(f.exists() && !classOrFile.equalsIgnoreCase(result.getTestClass().getName())) {
 				return FilenameUtils.removeExtension(f.getName());
 			}
 			return classOrFile;

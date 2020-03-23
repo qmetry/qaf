@@ -59,6 +59,7 @@ public class TestCaseRunResult {
 		QAFTestBase testBase = TestBaseProvider.instance().get();
 		checkPoints = new ArrayList<CheckpointResultBean>(testBase.getCheckPointResults());
 		commandLogs = new ArrayList<LoggingBean>(testBase.getLog());
+		this.status=status;
 		this.metaData = new TreeMap<String, Object>(String.CASE_INSENSITIVE_ORDER);
 		if (null != metaData) {
 			this.metaData.putAll(metaData);

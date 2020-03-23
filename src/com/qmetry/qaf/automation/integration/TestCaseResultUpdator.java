@@ -40,5 +40,13 @@ public interface TestCaseResultUpdator {
 	 * @return tool name
 	 */
 	public String getToolName();
-
+	
+	/**
+	 * By default result updator uses separate multi-threaded pool, if you want to run in single thread set it to false.
+	 * @return
+	 */
+	default public boolean allowParallel() {
+		return true;
+	}
+	
 }
