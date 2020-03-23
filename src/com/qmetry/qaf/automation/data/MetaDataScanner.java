@@ -30,6 +30,7 @@ import java.text.MessageFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -54,6 +55,8 @@ import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.step.client.Scenario;
 import com.qmetry.qaf.automation.step.client.TestNGScenario;
 import com.qmetry.qaf.automation.testng.dataprovider.QAFDataProvider.params;
+import com.qmetry.qaf.automation.util.ClassUtil;
+import com.qmetry.qaf.automation.util.JSONUtil;
 import com.qmetry.qaf.automation.util.StringUtil;
 
 /**
@@ -73,6 +76,7 @@ public class MetaDataScanner {
 	 */
 	public static Map<String, Object> getMetadata(AccessibleObject methodOrFileld, boolean excludeTest) {
 		Map<String, Object> metadata = new TreeMap<String, Object>(String.CASE_INSENSITIVE_ORDER);
+		metadata.putAll(metadataFromClass(methodOrFileld));
 
 		try {
 			Annotation[] allAnnotations = methodOrFileld.getAnnotations();
@@ -93,9 +97,22 @@ public class MetaDataScanner {
 				}
 			}
 		} catch (Exception e) {
-			System.err.println(e.toString());
+			logger.error(e);
 		}
 		return metadata;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static Map<String, Object> metadataFromClass(AccessibleObject methodOrFileld){
+		try {
+			MetaData metaData = ClassUtil.getAnnotation(((Method)methodOrFileld).getDeclaringClass(),MetaData.class);
+			if(null!=metaData) {
+				return JSONUtil.toObject(metaData.value(), Map.class);
+			}
+		} catch (Exception e) {
+			logger.error(e);
+		}
+		return Collections.emptyMap();
 	}
 
 	/**
