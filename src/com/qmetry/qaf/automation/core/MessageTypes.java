@@ -59,8 +59,8 @@ public enum MessageTypes {
 	
 	public boolean shouldReport() {
 		if (null == shouldReport) {
-			shouldReport = REPORT_LOG_LEVEL.ordinal() >= ordinal()
-					&& (!this.equals(MessageTypes.Pass) || REPORT_SUCCESS);
+			shouldReport = isFailure() || (this.ordinal() >= REPORT_LOG_LEVEL.ordinal()
+					&& (!this.equals(MessageTypes.Pass) || REPORT_SUCCESS));
 		}
 		return shouldReport;
 	}
