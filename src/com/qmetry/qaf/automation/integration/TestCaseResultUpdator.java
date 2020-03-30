@@ -26,13 +26,10 @@ package com.qmetry.qaf.automation.integration;
  */
 public interface TestCaseResultUpdator {
 	/**
-	 * @param params
-	 *            parameters for ws call
+	 * 
 	 * @param result
-	 *            test case result
-	 * @param details
-	 *            run details to be send like assertion/verification log
-	 * @return
+	 *            - test case result
+	 * @return status of update call
 	 */
 	public boolean updateResult(TestCaseRunResult result);
 
@@ -40,13 +37,32 @@ public interface TestCaseResultUpdator {
 	 * @return tool name
 	 */
 	public String getToolName();
-	
+
 	/**
-	 * By default result updator uses separate multi-threaded pool, if you want to run in single thread set it to false.
+	 * By default result updator uses separate multi-threaded pool, if you want to
+	 * run in single thread set it to false.
+	 * 
 	 * @return
 	 */
 	default public boolean allowParallel() {
 		return true;
 	}
 	
+	/**
+	 * Set weather configuration methods and retry also should be reported or not.
+	 * @return
+	 */
+	default public boolean allowConfigAndRetry() {
+		return false;
+	}
+	/**
+	 * Each Updator class can define implementation for this method. This method
+	 * will be invoked at the end of execution either all test completed or force
+	 * exit. Separate instance will be created to execute this method.
+	 * 
+	 * @return
+	 */
+	default public void beforeShutDown() {
+	}
+
 }

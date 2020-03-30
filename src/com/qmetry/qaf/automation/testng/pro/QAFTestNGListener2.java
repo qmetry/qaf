@@ -40,8 +40,6 @@ import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.annotations.ITestAnnotation;
 import org.testng.annotations.Parameters;
-import org.testng.annotations.Test;
-import org.testng.internal.ConstructorOrMethod;
 
 import com.qmetry.qaf.automation.core.CheckpointResultBean;
 import com.qmetry.qaf.automation.core.LoggingBean;
@@ -157,7 +155,7 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 	public void afterInvocation(final IInvokedMethod method, final ITestResult tr, final ITestContext context) {
 		super.afterInvocation(method, tr, context);
 		// pro
-		if (method.isTestMethod() && !shouldRetry(tr) && !skipReporting()) {
+		if (!skipReporting()) {
 			deployResult(tr, context);
 		}
 	}
@@ -193,9 +191,6 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 			if (ResultUpdator.getResultUpdatorsCnt()>0 && (tr.getMethod() instanceof TestNGScenario) && ((tr.getStatus() == ITestResult.FAILURE)
 					|| (tr.getStatus() == ITestResult.SUCCESS || tr.getStatus() == ITestResult.SKIP))) {
 
-				ConstructorOrMethod testCase = tr.getMethod().getConstructorOrMethod();
-
-				testCase.getMethod().getAnnotation(Test.class);
 				TestCaseRunResult.Status status = tr.getStatus() == ITestResult.SUCCESS ? TestCaseRunResult.Status.PASS
 						: tr.getStatus() == ITestResult.FAILURE ? TestCaseRunResult.Status.FAIL
 								: TestCaseRunResult.Status.SKIPPED;
@@ -210,8 +205,13 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 				executionInfo.put("env", ConfigurationConverter.getMap(getBundle().subset("env")));
 
 				TestCaseRunResult testCaseRunResult = new TestCaseRunResult(status, scenario.getMetaData(),
-						tr.getParameters(), executionInfo, scenario.getSteps(), tr.getStartMillis());
+						tr.getParameters(), executionInfo, scenario.getSteps(), tr.getStartMillis(),shouldRetry(tr),scenario.isTest() );
 				testCaseRunResult.setClassName(scenario.getClassOrFileName());
+				if (scenario.getGroups() != null && scenario.getGroups().length > 0) {
+					testCaseRunResult.getMetaData().put("groups", scenario.getGroups());
+				}
+				testCaseRunResult.getMetaData().put("description",scenario.getDescription());
+				testCaseRunResult.setThrowable(tr.getThrowable());
 				ResultUpdator.updateResult(testCaseRunResult);
 			}
 		} catch (Exception e) {

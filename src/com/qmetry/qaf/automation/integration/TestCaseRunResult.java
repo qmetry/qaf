@@ -50,16 +50,21 @@ public class TestCaseRunResult {
 	private Map<String, Object> executionInfo;
 	//java class name or BDD file name
 	private String className;
+	private boolean willRetry;
+	private boolean isTest;
+	private Throwable throwable;
 
 
 	public TestCaseRunResult(Status status, Map<String, Object> metaData, Object[] testData,
-			Map<String, Object> executionInfo, Collection<String> steps, long starttime) {
+			Map<String, Object> executionInfo, Collection<String> steps, long starttime, boolean willRetry, boolean isTest) {
 		this.endtime = System.currentTimeMillis();
 		this.starttime = starttime;
 		QAFTestBase testBase = TestBaseProvider.instance().get();
 		checkPoints = new ArrayList<CheckpointResultBean>(testBase.getCheckPointResults());
 		commandLogs = new ArrayList<LoggingBean>(testBase.getLog());
 		this.status=status;
+		this.willRetry=willRetry;
+		this.isTest=isTest;
 		this.metaData = new TreeMap<String, Object>(String.CASE_INSENSITIVE_ORDER);
 		if (null != metaData) {
 			this.metaData.putAll(metaData);
@@ -163,6 +168,22 @@ public class TestCaseRunResult {
 	public void setExecutionInfo(Map<String, Object> executionInfo) {
 		this.executionInfo.clear();
 		this.executionInfo.putAll(executionInfo);
+	}
+
+	public boolean willRetry() {
+		return willRetry;
+	}
+
+	public boolean isTest() {
+		return isTest;
+	}
+	
+	public Throwable getThrowable() {
+		return throwable;
+	}
+
+	public void setThrowable(Throwable throwable) {
+		this.throwable = throwable;
 	}
 
 	/**

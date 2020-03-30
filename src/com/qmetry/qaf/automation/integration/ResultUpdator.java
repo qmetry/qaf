@@ -66,7 +66,7 @@ public class ResultUpdator extends Thread {
 	@Override
 	public void run() {
 		try {
-			System.out.println("started to update result");
+			logger.debug("started to update result");
 			updator.updateResult(result);
 		} catch (Throwable t) {
 			logger.error("Unable to update result on " + updator.getToolName(), t);
@@ -133,15 +133,26 @@ public class ResultUpdator extends Thread {
 	}
 
 	public static void awaitTermination() {
-		if(hasActiveSingleThreadedPool) {
-			ThreadPoolExecutor pool = getSingleThreadedPool();
-			awaitTermination(pool);
-			hasActiveSingleThreadedPool=false;
-		}
-		if (hasActivePool) {
-			ThreadPoolExecutor pool = getPool();
-			awaitTermination(pool);
-			hasActivePool = false;
+		if (hasActiveSingleThreadedPool || hasActivePool) {
+			if (hasActiveSingleThreadedPool) {
+				ThreadPoolExecutor pool = getSingleThreadedPool();
+				awaitTermination(pool);
+				hasActiveSingleThreadedPool = false;
+			}
+			if (hasActivePool) {
+				ThreadPoolExecutor pool = getPool();
+				awaitTermination(pool);
+				hasActivePool = false;
+			}
+			for (String updator : updators) {
+				try {
+					Class<?> updatorCls = Class.forName(updator);
+					TestCaseResultUpdator tcu = (TestCaseResultUpdator) updatorCls.newInstance();
+					tcu.beforeShutDown();
+				} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+					logger.error("Unable to call beforeShutDown for " + updator, e);
+				}
+			}
 		}
 	}
 	
@@ -173,8 +184,10 @@ public class ResultUpdator extends Thread {
 	 */
 	private static void updateResult(TestCaseRunResult result, TestCaseResultUpdator toolUpdator) {
 		ResultUpdator updator = new ResultUpdator(result, toolUpdator);
-		ThreadPoolExecutor executor = toolUpdator.allowParallel()?getPool():getSingleThreadedPool();
-		executor.execute(updator);
+		if(toolUpdator.allowConfigAndRetry() || (result.isTest() && !result.willRetry())) {
+			ThreadPoolExecutor executor = toolUpdator.allowParallel() ? getPool() : getSingleThreadedPool();
+			executor.execute(updator);
+		}
 	}
 
 	public static void updateResult(TestCaseRunResult result) {
