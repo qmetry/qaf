@@ -400,8 +400,9 @@ public class ReporterUtil {
 				metadata.putAll((Map<String, Object>)result.getParameters()[0]);
 			}
 		}
-		if(metadata.containsKey(identifierKey)){
-			id= metadata.get(identifierKey).toString();
+		String idFromMetaData = metadata.getOrDefault(identifierKey,"").toString();
+		if (StringUtil.isNotBlank(idFromMetaData) ) {
+			id = idFromMetaData;
 		}
 		id=StringUtil.toTitleCaseIdentifier(id);
 		
