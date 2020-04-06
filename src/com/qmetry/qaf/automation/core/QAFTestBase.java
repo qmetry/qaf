@@ -419,7 +419,7 @@ public class QAFTestBase {
 				}
 				return contextFromTr;
 			}
-		} catch (ClassNotFoundException e) {
+		} catch (Exception e) {
 			// ignore - none TestNG implementation
 		}
 		return context;
