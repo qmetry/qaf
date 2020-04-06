@@ -201,6 +201,7 @@ public class QAFTestBase {
 		if (getDriverName().equalsIgnoreCase(driverName)) {
 			setDriver("");
 		}
+		ConfigurationManager.getBundle().clearProperty("driver.actualCapabilities");
 	}
 
 	public void setDriver(String driverName) {
@@ -408,17 +409,20 @@ public class QAFTestBase {
 	}
 
 	public PropertyUtil getContext() {
-		ITestResult tr = Reporter.getCurrentTestResult();
-		if (null != tr) {
-			PropertyUtil contextFromTr = (PropertyUtil) Reporter.getCurrentTestResult().getAttribute(CONTEXT);
-			if (null == contextFromTr) {
-				Reporter.getCurrentTestResult().setAttribute(CONTEXT, context);
-				return context;
+		try {
+			ITestResult tr = Reporter.getCurrentTestResult();
+			if (null != tr) {
+				PropertyUtil contextFromTr = (PropertyUtil) Reporter.getCurrentTestResult().getAttribute(CONTEXT);
+				if (null == contextFromTr) {
+					Reporter.getCurrentTestResult().setAttribute(CONTEXT, context);
+					return context;
+				}
+				return contextFromTr;
 			}
-			return contextFromTr;
+		} catch (ClassNotFoundException e) {
+			// ignore - none TestNG implementation
 		}
-		return context;// (PropertyUtil)
-						// Reporter.getCurrentTestResult().getAttribute(CONTEXT);
+		return context;
 	}
 
 	// base logging and checkpoint
