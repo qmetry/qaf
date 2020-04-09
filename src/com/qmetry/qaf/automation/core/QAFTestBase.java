@@ -201,7 +201,6 @@ public class QAFTestBase {
 		if (getDriverName().equalsIgnoreCase(driverName)) {
 			setDriver("");
 		}
-		ConfigurationManager.getBundle().clearProperty("driver.actualCapabilities");
 	}
 
 	public void setDriver(String driverName) {
@@ -215,6 +214,8 @@ public class QAFTestBase {
 				ConfigurationManager.getBundle().setProperty("driver.actualCapabilities",
 						((QAFExtendedWebDriver) driver).getCapabilities().asMap());
 			}
+		}else {
+			ConfigurationManager.getBundle().clearProperty("driver.actualCapabilities");
 		}
 	}
 
