@@ -50,6 +50,7 @@ public class BDD2ParserTest {
 		Validator.assertThat(scenarios, Matchers.hasSize(7));
 		for (Scenario scenario : scenarios) {
 			Validator.assertThat(scenario.getM_groups(), Matchers.hasItemInArray("Web"));
+			Validator.assertThat(scenario.getMetadata(), Matchers.hasKey("Feature"));
 		}
 	}
 	

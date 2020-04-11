@@ -213,6 +213,7 @@ public class BDDFileParser2 extends AbstractScenarioFileParser {
 							if (type.equalsIgnoreCase(FEATURE)) {
 								bglobalTags = false;
 								outline = false;
+								globalTags.add(FEATURE+":"+ cols[1]);
 							} else {
 								outline = type.equalsIgnoreCase(SCENARIO_OUTELINE) || hasDP(metadata);
 							}
