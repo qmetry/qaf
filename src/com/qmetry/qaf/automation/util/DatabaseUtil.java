@@ -21,6 +21,8 @@
  ******************************************************************************/
 package com.qmetry.qaf.automation.util;
 
+import java.sql.Blob;
+import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -32,6 +34,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.apache.commons.configuration.Configuration;
 import org.apache.log4j.Logger;
@@ -45,6 +48,10 @@ import com.qmetry.qaf.automation.core.ConfigurationManager;
  */
 
 public class DatabaseUtil {
+	public static final String DB_CONNECTION_URL = "db.connection.url";
+	public static final String DB_DRIVER_CLASS = "db.driver.class";
+	public static final String DB_USER = "db.user";
+	public static final String DB_PWD = "db.pwd";
 	private static Logger log = Logger.getLogger(DatabaseUtil.class);
 
 	/**
@@ -140,12 +147,7 @@ public class DatabaseUtil {
 	 * @throws Exception
 	 */
 	public static Connection getConnection() throws Exception {
-		PropertyUtil props = ConfigurationManager.getBundle();
-		String url = props.getString("db.connection.url");
-		String driverclass = props.getString("db.driver.class");
-		String user = props.getString("db.user");
-		String pwd = props.getString("db.pwd");
-		return getConnection(driverclass, url, user, pwd);
+		return getConnection("");
 	}
 
 	/**
@@ -172,10 +174,10 @@ public class DatabaseUtil {
 	public static Connection getConnection(String prefix) throws Exception {
 		Configuration props = StringUtil.isBlank(prefix) ? ConfigurationManager.getBundle()
 				: ConfigurationManager.getBundle().subset(prefix);
-		String url = props.getString("db.connection.url");
-		String driverclass = props.getString("db.driver.class");
-		String user = props.getString("db.user");
-		String pwd = props.getString("db.pwd");
+		String url = props.getString(DB_CONNECTION_URL);
+		String driverclass = props.getString(DB_DRIVER_CLASS);
+		String user = props.getString(DB_USER);
+		String pwd = props.getString(DB_PWD);
 		return getConnection(driverclass, url, user, pwd);
 	}
 
@@ -213,7 +215,7 @@ public class DatabaseUtil {
 				int colsCnt = rs.getMetaData().getColumnCount();
 				Object[] cols = new Object[colsCnt];
 				for (int indx = 0; indx < colsCnt; indx++) {
-					cols[indx] = rs.getObject(indx + 1);
+					cols[indx] = getValue(rs, indx + 1);
 				}
 				rows.add(cols);
 			}
@@ -248,7 +250,7 @@ public class DatabaseUtil {
 
 				int colsCnt = rs.getMetaData().getColumnCount();
 				for (int indx = 1; indx <= colsCnt; indx++) {
-					map.put(rs.getMetaData().getColumnLabel(indx), (rs.getObject(indx)));
+					map.put(rs.getMetaData().getColumnLabel(indx), getValue(rs, indx));
 				}
 				rows.add(new Object[] { map });
 			}
@@ -289,11 +291,11 @@ public class DatabaseUtil {
 			rs = stmt.executeQuery(query);
 
 			while (rs.next()) {
-				HashMap<String, Object> map = new HashMap<String, Object>();
+				Map<String, Object> map = new TreeMap<String, Object>(String.CASE_INSENSITIVE_ORDER);
 
 				int colsCnt = rs.getMetaData().getColumnCount();
 				for (int indx = 1; indx <= colsCnt; indx++) {
-					map.put(rs.getMetaData().getColumnLabel(indx), rs.getObject(indx));
+					map.put(rs.getMetaData().getColumnLabel(indx), getValue(rs,indx));
 				}
 				rows.add(map);
 			}
@@ -305,5 +307,19 @@ public class DatabaseUtil {
 			DatabaseUtil.close(con);
 		}
 		return rows;
+	}
+	
+	private static Object getValue(ResultSet rs, int colIndex) throws SQLException {
+		Object oVal = rs.getObject(colIndex);
+		try {
+			if(oVal instanceof Blob) {
+				oVal = rs.getBytes(colIndex);
+			}else if(oVal instanceof Clob) {
+				oVal = rs.getString(colIndex);
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+		return oVal;
 	}
 }
