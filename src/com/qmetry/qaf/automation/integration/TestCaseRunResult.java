@@ -26,6 +26,7 @@ import static com.qmetry.qaf.automation.core.ConfigurationManager.getBundle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -78,10 +79,9 @@ public class TestCaseRunResult {
 		if (null != executionInfo) {
 			this.executionInfo.putAll(executionInfo);
 		}
-
-		Object capabilities = getBundle().getObject("driver.actualCapabilities");
-		if(capabilities!=null) {
-			this.executionInfo.put("capabilities", capabilities);
+		Map<String, String> cap = getActualCapabilities();
+		if(!cap.isEmpty()) {
+			executionInfo.put("driverCapabilities", cap);
 		}
 		this.steps = new ArrayList<String>(steps);
 		
@@ -227,5 +227,22 @@ public class TestCaseRunResult {
 		public String toQmetry6() {
 			return qmetry6;
 		}
+	}
+	
+	private static Map<String, String> getActualCapabilities() {
+		@SuppressWarnings("unchecked")
+		Map<String, Object> map =
+				(Map<String, Object>) getBundle().getObject("driver.actualCapabilities");
+		Map<String, String> newMap = new HashMap<String, String>();
+		if (null != map) {
+			for (String key : map.keySet()) {
+				try {
+					newMap.put(key, String.valueOf(map.get(key)));
+				} catch (Exception e) {
+
+				}
+			}
+		}
+		return newMap;
 	}
 }

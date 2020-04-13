@@ -212,10 +212,6 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 				if(retryCount>0) {
 					executionInfo.put("retryCount", getBundle().getInt(RetryAnalyzer.RETRY_INVOCATION_COUNT, 0));
 				}
-				Map<String, String> cap = getActualCapabilities();
-				if(!cap.isEmpty()) {
-					executionInfo.put("driverCapabilities", cap);
-				}
 				TestCaseRunResult testCaseRunResult = new TestCaseRunResult(status, scenario.getMetaData(),
 						tr.getParameters(), executionInfo, scenario.getSteps(), tr.getStartMillis(),shouldRetry(tr),scenario.isTest() );
 				testCaseRunResult.setClassName(scenario.getClassOrFileName());
@@ -234,21 +230,5 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 	private boolean skipReporting() {
 		return getBundle().getBoolean("disable.qaf.testng.reporter", false)
 				|| getBundle().getBoolean("cucumber.run.mode", false);
-	}
-	private static Map<String, String> getActualCapabilities() {
-		@SuppressWarnings("unchecked")
-		Map<String, Object> map =
-				(Map<String, Object>) getBundle().getObject("driver.actualCapabilities");
-		Map<String, String> newMap = new HashMap<String, String>();
-		if (null != map) {
-			for (String key : map.keySet()) {
-				try {
-					newMap.put(key, String.valueOf(map.get(key)));
-				} catch (Exception e) {
-
-				}
-			}
-		}
-		return newMap;
 	}
 }
