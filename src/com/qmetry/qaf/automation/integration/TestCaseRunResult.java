@@ -21,6 +21,8 @@
  ******************************************************************************/
 package com.qmetry.qaf.automation.integration;
 
+import static com.qmetry.qaf.automation.core.ConfigurationManager.getBundle;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -28,13 +30,9 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import com.qmetry.qaf.automation.core.CheckpointResultBean;
-import com.qmetry.qaf.automation.core.ConfigurationManager;
 import com.qmetry.qaf.automation.core.LoggingBean;
 import com.qmetry.qaf.automation.core.QAFTestBase;
 import com.qmetry.qaf.automation.core.TestBaseProvider;
-import com.qmetry.qaf.automation.util.PropertyUtil;
-
-import static com.qmetry.qaf.automation.core.ConfigurationManager.getBundle;
 /**
  * Bean Class that provides required details to {@link TestCaseResultUpdator}
  * 
@@ -56,7 +54,6 @@ public class TestCaseRunResult {
 	private boolean willRetry;
 	private boolean isTest;
 	private Throwable throwable;
-	private PropertyUtil context;
 
 
 	public TestCaseRunResult(Status status, Map<String, Object> metaData, Object[] testData,
@@ -81,9 +78,8 @@ public class TestCaseRunResult {
 		if (null != executionInfo) {
 			this.executionInfo.putAll(executionInfo);
 		}
-		context=getBundle();
 
-		Object capabilities = context.getObject("driver.actualCapabilities");
+		Object capabilities = getBundle().getObject("driver.actualCapabilities");
 		if(capabilities!=null) {
 			this.executionInfo.put("capabilities", capabilities);
 		}
@@ -198,13 +194,6 @@ public class TestCaseRunResult {
 		this.throwable = throwable;
 	}
 
-	/**
-	 * Result updator will be running in separate thread(s). Use this method instead of {@link ConfigurationManager#getBundle()}
-	 * @return configuration used for test case.
-	 */
-	public PropertyUtil getContext() {
-		return context;
-	}
 	/**
 	 *
 	 * Useful to convert result to test management tool specific string

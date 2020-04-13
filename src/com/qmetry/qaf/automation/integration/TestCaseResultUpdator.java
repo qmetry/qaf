@@ -64,5 +64,12 @@ public interface TestCaseResultUpdator {
 	 */
 	default public void beforeShutDown() {
 	}
-
+	
+	/**
+	 * Useful when registered with service, to enable disable based on some condition.
+	 * @return
+	 */
+	default public boolean enabled() {
+		return true;
+	}
 }

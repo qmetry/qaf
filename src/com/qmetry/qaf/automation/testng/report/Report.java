@@ -21,7 +21,7 @@
  ******************************************************************************/
 package com.qmetry.qaf.automation.testng.report;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * com.qmetry.qaf.automation.testng.report.Report.java
@@ -33,7 +33,7 @@ public class Report implements Comparable<Report> {
 	// exclude from json serialization
 	transient private String dir;
 	private String status;
-	private List<String> tests;
+	private Set<String> tests;
 
 	private int total;
 	private int pass;
@@ -90,7 +90,7 @@ public class Report implements Comparable<Report> {
 	/**
 	 * @return the tests
 	 */
-	public List<String> getTests() {
+	public Set<String> getTests() {
 		return tests;
 	}
 
@@ -98,7 +98,7 @@ public class Report implements Comparable<Report> {
 	 * @param tests
 	 *            the tests to set
 	 */
-	public void setTests(List<String> tests) {
+	public void setTests(Set<String> tests) {
 		this.tests = tests;
 	}
 

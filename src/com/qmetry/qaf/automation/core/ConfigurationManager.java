@@ -124,6 +124,7 @@ public class ConfigurationManager {
 									"resources/application.properties"));
 					p.setProperty("isfw.build.info", getBuildInfo());
 					p.setEncoding(p.getString(ApplicationProperties.LOCALE_CHAR_ENCODING.key, "UTF-8"));
+					p.setProperty("execution.start.ts", System.currentTimeMillis());
 
 					File prjDir = new File(".").getAbsoluteFile().getParentFile();
 					p.setProperty("project.path", prjDir.getAbsolutePath());
@@ -286,6 +287,10 @@ public class ConfigurationManager {
 
 	public static PropertyUtil getBundle() {
 		return ConfigurationManager.LocalProps.get();
+	}
+
+	public static void setBundle(PropertyUtil bundle) {
+		LocalProps.set(bundle);
 	}
 
 	private static Map<String, String> getBuildInfo() {

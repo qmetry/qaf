@@ -29,7 +29,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -86,7 +85,7 @@ public class ReporterUtil {
 	private static Map<XmlSuite, Collection<ISuiteResult>> resultMap= new HashMap<XmlSuite, Collection<ISuiteResult>>();
 	private static void createMetaInfo(ISuite suite, boolean listEntry) {
 		List<XmlTest> tests = suite.getXmlSuite().getTests();
-		List<String> testNames = new ArrayList<String>();
+		Set<String> testNames = new HashSet<String>();
 		for (XmlTest test : tests) {
 			testNames.add(getTestName(test));
 		}
@@ -201,6 +200,11 @@ public class ReporterUtil {
 
 			}
 
+			Map<String, String> dc = getActualCapabilities();
+			if(null!=dc && !dc.isEmpty()) {
+				overview.getEnvInfo().put("browser-desired-capabilities", getBundle().getObject("driver.desiredCapabilities"));
+				overview.getEnvInfo().put("browser-actual-capabilities", dc);	
+			}
 			int pass = getPassCnt(context);
 			int fail = getFailCnt(context) + getFailWithPassPerCnt(context);
 			int skip = getSkipCnt(context);

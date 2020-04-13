@@ -110,7 +110,7 @@ public class MetaDataScanner {
 				return JSONUtil.toObject(metaData.value(), Map.class);
 			}
 		} catch (Exception e) {
-			logger.error(e);
+			logger.trace(e);
 		}
 		return Collections.emptyMap();
 	}

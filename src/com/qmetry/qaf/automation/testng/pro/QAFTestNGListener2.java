@@ -154,10 +154,6 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 	@Override
 	public void afterInvocation(final IInvokedMethod method, final ITestResult tr, final ITestContext context) {
 		super.afterInvocation(method, tr, context);
-		// pro
-		if (!skipReporting()) {
-			deployResult(tr, context);
-		}
 	}
 
 	private boolean shouldRetry(ITestResult tr) {
@@ -172,21 +168,26 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 	@Override
 	protected void report(ITestResult tr) {
 		super.report(tr);
-		if (skipReporting())
-			return;
-		QAFTestBase stb = TestBaseProvider.instance().get();
-		final List<CheckpointResultBean> checkpoints = new ArrayList<CheckpointResultBean>(stb.getCheckPointResults());
+		if(!getBundle().getBoolean("cucumber.run.mode", false)) {
+			deployResult(tr);
+			if (!getBundle().getBoolean("disable.qaf.testng.reporter", false)) {
+				QAFTestBase stb = TestBaseProvider.instance().get();
+				final List<CheckpointResultBean> checkpoints = new ArrayList<CheckpointResultBean>(
+						stb.getCheckPointResults());
 
-		// pro
-		final List<LoggingBean> logs = new ArrayList<LoggingBean>(stb.getLog());
-		ITestContext testContext = (ITestContext) tr.getAttribute("context");
-		ReporterUtil.createMethodResult(testContext, tr, logs, checkpoints);
+				// pro
+				final List<LoggingBean> logs = new ArrayList<LoggingBean>(stb.getLog());
+				ITestContext testContext = (ITestContext) tr.getAttribute("context");
+				ReporterUtil.createMethodResult(testContext, tr, logs, checkpoints);
+			}
+		}
 		if (tr.getStatus() != ITestResult.SKIP) {
 			getBundle().clearProperty(RetryAnalyzer.RETRY_INVOCATION_COUNT);
 		}
 	}
 
-	private void deployResult(ITestResult tr, ITestContext context) {
+	@SuppressWarnings("unchecked")
+	private void deployResult(ITestResult tr) {
 		try {
 			if (ResultUpdator.getResultUpdatorsCnt()>0 && (tr.getMethod() instanceof TestNGScenario) && ((tr.getStatus() == ITestResult.FAILURE)
 					|| (tr.getStatus() == ITestResult.SUCCESS || tr.getStatus() == ITestResult.SKIP))) {
@@ -202,8 +203,19 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 				Map<String, Object> executionInfo = new HashMap<String, Object>();
 				executionInfo.put("testName", tr.getTestContext().getCurrentXmlTest().getName());
 				executionInfo.put("suiteName", tr.getTestContext().getSuite().getName());
-				executionInfo.put("env", ConfigurationConverter.getMap(getBundle().subset("env")));
-
+				
+				Map<String, Object> runPrams = new HashMap<String, Object>(
+						tr.getTestContext().getCurrentXmlTest().getAllParameters());
+				runPrams.putAll(ConfigurationConverter.getMap(getBundle().subset("env")));
+				executionInfo.put("env", runPrams);
+				int retryCount = getBundle().getInt(RetryAnalyzer.RETRY_INVOCATION_COUNT, 0);
+				if(retryCount>0) {
+					executionInfo.put("retryCount", getBundle().getInt(RetryAnalyzer.RETRY_INVOCATION_COUNT, 0));
+				}
+				Map<String, String> cap = getActualCapabilities();
+				if(!cap.isEmpty()) {
+					executionInfo.put("driverCapabilities", cap);
+				}
 				TestCaseRunResult testCaseRunResult = new TestCaseRunResult(status, scenario.getMetaData(),
 						tr.getParameters(), executionInfo, scenario.getSteps(), tr.getStartMillis(),shouldRetry(tr),scenario.isTest() );
 				testCaseRunResult.setClassName(scenario.getClassOrFileName());
@@ -222,5 +234,21 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 	private boolean skipReporting() {
 		return getBundle().getBoolean("disable.qaf.testng.reporter", false)
 				|| getBundle().getBoolean("cucumber.run.mode", false);
+	}
+	private static Map<String, String> getActualCapabilities() {
+		@SuppressWarnings("unchecked")
+		Map<String, Object> map =
+				(Map<String, Object>) getBundle().getObject("driver.actualCapabilities");
+		Map<String, String> newMap = new HashMap<String, String>();
+		if (null != map) {
+			for (String key : map.keySet()) {
+				try {
+					newMap.put(key, String.valueOf(map.get(key)));
+				} catch (Exception e) {
+
+				}
+			}
+		}
+		return newMap;
 	}
 }
