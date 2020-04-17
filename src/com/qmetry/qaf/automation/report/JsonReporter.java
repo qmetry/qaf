@@ -180,7 +180,7 @@ public class JsonReporter implements TestCaseResultUpdator {
 		methodInfo.setArgs(result.getTestData().toArray());
 		methodInfo.setIndex(index);
 		methodInfo.setType(result.isTest() ? "test" : "config");
-		methodInfo.setResult(result.getStatus().name().toLowerCase());
+		methodInfo.setResult(result.getStatus().toQAF());
 		
 		Map<String, Object> metaData = result.getMetaData();
 		metaData.put("name", result.getName());
@@ -196,7 +196,6 @@ public class JsonReporter implements TestCaseResultUpdator {
 		} else {
 			logger.warn("methodInfo already wrritten for " + methodInfo.getName());
 		}
-	
 	}
 
 	private void updateSuiteMetaData(TestCaseRunResult result, StatusCounter suiteStatusCounter,

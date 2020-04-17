@@ -201,15 +201,16 @@ public class TestCaseRunResult {
 	 *
 	 */
 	public enum Status {
-		PASS("Pass", "pass", "Passed", "Passed"), FAIL("Fail", "fail", "Failed", "Failed"), SKIPPED("Not Testable",
-				"notrun", "No Run", "Not Run");
-		private String rally, qmetry, qc, qmetry6;
+		PASS("Pass", "pass", "Passed", "Passed","pass"), FAIL("Fail", "fail", "Failed", "Failed","fail"), SKIPPED("Not Testable",
+				"notrun", "No Run", "Not Run","skip");
+		private String rally, qmetry, qc, qmetry6,qaf;
 
-		private Status(String toRally, String toQmetry, String toQC, String toQmetry6) {
+		private Status(String toRally, String toQmetry, String toQC, String toQmetry6,String toQAF) {
 			rally = toRally;
 			qmetry = toQmetry;
 			qmetry6 = toQmetry6;
 			qc = toQC;
+			qaf = toQAF;
 		}
 
 		public String toRally() {
@@ -226,6 +227,10 @@ public class TestCaseRunResult {
 
 		public String toQmetry6() {
 			return qmetry6;
+		}
+		
+		public String toQAF() {
+			return qaf;
 		}
 	}
 	

@@ -73,7 +73,7 @@ public class BDDGenerator implements TestCaseResultUpdator {
 		try {
 			File feature = new File(REPORT_DIR + "/" + storyfileName + ".feature");
 			String featureName = tr.getMetaData()
-					.getOrDefault("story", tr.getMetaData().getOrDefault("feature", storyfileName)).toString();
+					.getOrDefault("story", tr.getMetaData().getOrDefault("Feature", storyfileName)).toString();
 
 			if (!feature.exists()) {
 				String header = "Feature: " + featureName;
@@ -131,7 +131,7 @@ public class BDDGenerator implements TestCaseResultUpdator {
 
 	private void addMetadata(StringBuffer data, TestCaseRunResult tr) {
 		data.append("\n\n");
-		List<String> exclude = new ArrayList<String>(Arrays.asList("sign", "Story", "name"));
+		List<String> exclude = new ArrayList<String>(Arrays.asList("sign", "name","lineNo","Feature","reference"));
 		for (params param : QAFDataProvider.params.values()) {
 			exclude.add(param.name());
 		}
