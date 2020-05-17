@@ -23,6 +23,7 @@ package com.qmetry.qaf.automation.keys;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.testng.IRetryAnalyzer;
@@ -684,10 +685,13 @@ public enum ApplicationProperties {
 	 * @return
 	 */
 	public String getStringVal(String... defaultVal) {
-		Object o = getObject(Arrays.asList(defaultVal).toArray());
-		return System.getProperty(key, null!=o?o.toString(): "");
+		return System.getProperty(key, getObjectVal(defaultVal).toString());
 	}
 
+	private Object getObjectVal(String...defaultVal){
+		List<?> list = ConfigurationManager.getBundle().getList(key,Arrays.asList(defaultVal));
+		return list!=null && !list.isEmpty()?list.get(list.size()-1):"";
+	}
 	/**
 	 * @param defaultVal
 	 *            optional

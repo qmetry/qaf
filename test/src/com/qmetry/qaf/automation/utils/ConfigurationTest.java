@@ -25,6 +25,7 @@ import org.hamcrest.Matchers;
 import org.testng.annotations.Test;
 
 import com.qmetry.qaf.automation.core.ConfigurationManager;
+import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.util.Validator;
 
 /**
@@ -106,6 +107,43 @@ public class ConfigurationTest {
 		val=ConfigurationManager.getBundle().getString("target");
 		System.out.println(val);
 		Validator.assertThat(val, Matchers.equalTo("abcdef"));
+
+	}
+	
+	@Test
+	public void testBug334(){
+		String s = ApplicationProperties.ELEMENT_GLOBAL_METADATA.getStringVal();// {'sendkeys-options':'clear'}
+		Validator.verifyThat(s, Matchers.equalToIgnoringCase("{'sendkeys-options':'clear'}"));
+
+		String sb = ApplicationProperties.FAILURE_SCREENSHOT.getStringVal();// "true"
+		Validator.verifyThat(sb, Matchers.equalToIgnoringCase("true"));
+
+		boolean b = ApplicationProperties.FAILURE_SCREENSHOT.getBoolenVal();// true
+		Validator.verifyThat(b, Matchers.equalTo(true));
+
+		b = ApplicationProperties.FAILURE_SCREENSHOT.getBoolenVal(false);// true
+		Validator.verifyThat(b, Matchers.equalTo(true));
+
+		b = ApplicationProperties.SUCEESS_SCREENSHOT.getBoolenVal(); // false
+		Validator.verifyThat(b, Matchers.equalTo(false));
+
+		b = ApplicationProperties.SUCEESS_SCREENSHOT.getBoolenVal(true); // true
+		Validator.verifyThat(b, Matchers.equalTo(true));
+
+		String si = ApplicationProperties.SELENIUM_WAIT_TIMEOUT.getStringVal(); // "200"
+		Validator.verifyThat(si, Matchers.equalToIgnoringCase("200"));
+
+		int i = ApplicationProperties.SELENIUM_WAIT_TIMEOUT.getIntVal(); // 200
+		Validator.verifyThat(i, Matchers.equalTo(200));
+
+		i = ApplicationProperties.SELENIUM_WAIT_TIMEOUT.getIntVal(500); // 200
+		Validator.verifyThat(i, Matchers.equalTo(200));
+
+		i = ApplicationProperties.RETRY_CNT.getIntVal(); // 0
+		Validator.verifyThat(i, Matchers.equalTo(0));
+
+		i = ApplicationProperties.RETRY_CNT.getIntVal(500);// 500
+		Validator.verifyThat(i, Matchers.equalTo(500));
 
 	}
 }
