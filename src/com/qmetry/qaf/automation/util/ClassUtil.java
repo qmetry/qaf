@@ -216,7 +216,7 @@ public final class ClassUtil {
 				String clsName = packageName + '.' + file.getName().substring(0, file.getName().lastIndexOf("."));
 				try {
 					classes.add(Class.forName(clsName));
-				} catch (ClassNotFoundException e) {
+				} catch (ClassNotFoundException | NoClassDefFoundError e) {
 					// ignore it
 				}
 			}
@@ -600,7 +600,7 @@ public final class ClassUtil {
 			modifiersField.setAccessible(true);
 			modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
 			field.set(classObj, value);
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			e.printStackTrace();
 		}
 	}
@@ -624,7 +624,7 @@ public final class ClassUtil {
 			Field field = getField(fieldName, classObj.getClass());
 			field.setAccessible(true);
 			return field.get(classObj);
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			e.printStackTrace();
 		}
 		return null;

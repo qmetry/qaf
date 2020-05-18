@@ -85,7 +85,7 @@ public class LiveIsExtendedWebDriver extends QAFExtendedWebDriver {
 			CommandExecutor executor = getCommandExecutor();
 			setField("commandCodec", executor, Dialect.W3C.getCommandCodec());
 			setField("responseCodec", executor, Dialect.W3C.getResponseCodec());
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			logger.error("Unable to set W3C codec", e);
 		}
 	}

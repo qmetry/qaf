@@ -44,17 +44,22 @@ import com.qmetry.qaf.automation.step.client.TestNGScenario;
 public class TestRunnerFactory implements ITestRunnerFactory {
 	
 	private IConfiguration configuration;
+	private ITestRunnerFactory testRunnerFactory;
+	
 	public TestRunnerFactory(IConfiguration configuration) {
 		this.configuration = configuration;
+	}
+	public TestRunnerFactory(ITestRunnerFactory testRunnerFactory) {
+		this.testRunnerFactory = testRunnerFactory;
 	}
 
 	@Override
 	public TestRunner newTestRunner(ISuite suite, XmlTest test, Collection<IInvokedMethodListener> listeners,
 			List<IClassListener> classListeners) {
-		TestRunner runner =
+		TestRunner runner = null!=testRunnerFactory?testRunnerFactory.newTestRunner(suite, test, listeners, classListeners):
 	              new TestRunner(configuration, suite, test,
-	                  false /*skipFailedInvocationCounts */,
-	                  listeners,classListeners);
+		                  false /*skipFailedInvocationCounts */,
+		                  listeners,classListeners);;
 		init(runner);
 		return runner;
 	}

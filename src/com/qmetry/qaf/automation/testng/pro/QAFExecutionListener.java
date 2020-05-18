@@ -46,13 +46,19 @@ public class QAFExecutionListener implements IExecutionListener {
 			if (tng != null) {
 				tng.addMethodSelector(QAFMethodSelector.class.getName(), 0);
 				System.out.println("Added \"QAFMethodSelector\"");
-				IConfiguration configuration = (IConfiguration) ClassUtil.getField("m_configuration", tng);
-				ITestRunnerFactory testRunnerFactory = new TestRunnerFactory(configuration );
-				ClassUtil.setField("m_testRunnerFactory", tng, testRunnerFactory);
+				ITestRunnerFactory oTestRunnerFactory = (ITestRunnerFactory) ClassUtil.getField("m_testRunnerFactory", tng);
+				if (null != oTestRunnerFactory) {
+					ITestRunnerFactory testRunnerFactory = new TestRunnerFactory(oTestRunnerFactory);
+					ClassUtil.setField("m_testRunnerFactory", tng, testRunnerFactory);
+				}else{
+					IConfiguration configuration = (IConfiguration) ClassUtil.getField("m_configuration", tng);
+					ITestRunnerFactory testRunnerFactory = new TestRunnerFactory(configuration );
+					ClassUtil.setField("m_testRunnerFactory", tng, testRunnerFactory);	
+				}
 			} else {
 				System.err.println("Unable to add \"QAFMethodSelector\". You may add it in you xml configuration file.");
 			}
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			System.err.println(e.getMessage());
 		}
 	}
@@ -76,7 +82,7 @@ public class QAFExecutionListener implements IExecutionListener {
 				Field field = ClassUtil.getField("m_instance", TestNG.class);
 				field.setAccessible(true);
 				return (TestNG) field.get(null);
-			} catch (Exception e1) {
+			} catch (Throwable e1) {
 			}
 		}
 		return null;
