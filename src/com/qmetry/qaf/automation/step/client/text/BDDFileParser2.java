@@ -38,7 +38,6 @@ import java.util.TreeMap;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.google.gson.Gson;
 import com.qmetry.qaf.automation.core.AutomationError;
 import com.qmetry.qaf.automation.step.client.AbstractScenarioFileParser;
 import com.qmetry.qaf.automation.step.client.Scenario;
@@ -148,7 +147,7 @@ public class BDDFileParser2 extends AbstractScenarioFileParser {
 						continue;
 					}
 					if (type.equalsIgnoreCase(MULTI_LINE_COMMENT_END)) {
-						cols[1] = new Gson().toJson(new String[] { currLine.replace("\"\"\"", "") });
+						cols[1] = JSONUtil.toString(new String[] { currLine.replace("\"\"\"", "") });
 					} else if (type == "") {
 						// this is a statement
 						cols[0] = outline ? convertParam(currLine) : currLine;
@@ -177,18 +176,18 @@ public class BDDFileParser2 extends AbstractScenarioFileParser {
 							scenarioTags.clear();
 
 							List<String> groups = (List<String>) tags.get("groups");
-							Map<String, Object> metadata = new Gson().fromJson((String) scenario[2], Map.class);
+							Map<String, Object> metadata = JSONUtil.toMap((String) scenario[2]);
 							if(groups.isEmpty() || include(tags,DEF_INCLUDE_FOR_EXMAPLES) ){
 								excludeExamples = false;
 								// scenario[2] = new Gson().toJson(metadata);
 								List<String> scenariogroups = (List<String>) metadata.get("groups");
 								scenariogroups.addAll(groups);
-								scenario[2] = new Gson().toJson(metadata);
+								scenario[2] = JSONUtil.toString(metadata);
 								
 								String exampleMetadata = (String) cols[1];
 								if (StringUtil.isNotBlank(exampleMetadata) && exampleMetadata.trim().startsWith("{")) {
-									metadata.putAll(new Gson().fromJson(exampleMetadata, Map.class));
-									scenario[2] = new Gson().toJson(metadata);
+									metadata.putAll(JSONUtil.toMap(exampleMetadata));
+									scenario[2] = JSONUtil.toString(metadata);
 									currLineBuffer = new StringBuffer();
 									continue;
 								}
@@ -196,7 +195,7 @@ public class BDDFileParser2 extends AbstractScenarioFileParser {
 								excludeExamples = true;
 								if(!metadata.containsKey(params.JSON_DATA_TABLE.name())){
 									metadata.put(params.JSON_DATA_TABLE.name(), "[]");
-									scenario[2] = new Gson().toJson(metadata);
+									scenario[2] = JSONUtil.toString(metadata);
 								}
 								currLineBuffer = new StringBuffer();
 								continue;
@@ -208,7 +207,7 @@ public class BDDFileParser2 extends AbstractScenarioFileParser {
 							// String metadata =
 							// String.format("{\"groups\":%s}", new
 							// Gson().toJson(scenarioTags));
-							cols[2] = new Gson().toJson(metadata);
+							cols[2] = JSONUtil.toString(metadata);
 							scenarioTags.clear();
 							if (type.equalsIgnoreCase(FEATURE)) {
 								bglobalTags = false;
@@ -217,7 +216,6 @@ public class BDDFileParser2 extends AbstractScenarioFileParser {
 							} else {
 								outline = type.equalsIgnoreCase(SCENARIO_OUTELINE) || hasDP(metadata);
 							}
-
 						}
 					}
 
@@ -324,13 +322,12 @@ public class BDDFileParser2 extends AbstractScenarioFileParser {
 		}
 
 		if (isScenario) {
-			@SuppressWarnings("unchecked")
-			Map<Object, Object> metadata = new Gson().fromJson((String) cols[2], Map.class);
-			metadata.put(params.JSON_DATA_TABLE.name(), new Gson().toJson(data));
-			cols[2] = new Gson().toJson(metadata);
+			Map<String, Object> metadata = JSONUtil.toMap((String) cols[2]);
+			metadata.put(params.JSON_DATA_TABLE.name(),JSONUtil.toString(data));
+			cols[2] =JSONUtil.toString(metadata);
 
 		} else {
-			cols[0] = cols[0] + new Gson().toJson(data);
+			cols[0] = cols[0] + JSONUtil.toString(data);
 		}
 	}
 

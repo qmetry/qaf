@@ -55,6 +55,7 @@ Given system may have following user:
 |name|type|
 |auser|admin|
 |test|user|
+|test| |
 And system may have following user:
 |name|type|
 |auser|admin|

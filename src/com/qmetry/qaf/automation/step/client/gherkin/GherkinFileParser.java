@@ -35,12 +35,12 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.google.gson.Gson;
 import com.qmetry.qaf.automation.core.AutomationError;
 import com.qmetry.qaf.automation.step.client.AbstractScenarioFileParser;
 import com.qmetry.qaf.automation.step.client.Scenario;
 import com.qmetry.qaf.automation.step.client.text.BehaviorScanner;
 import com.qmetry.qaf.automation.testng.dataprovider.QAFDataProvider.params;
+import com.qmetry.qaf.automation.util.JSONUtil;
 import com.qmetry.qaf.automation.util.StringUtil;
 
 /**
@@ -88,7 +88,6 @@ public class GherkinFileParser extends AbstractScenarioFileParser {
 
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected Collection<Object[]> parseFile(String strFile) {
 		ArrayList<Object[]> rows = new ArrayList<Object[]>();
@@ -153,21 +152,21 @@ public class GherkinFileParser extends AbstractScenarioFileParser {
 							Object[] scenario = rows.get(lastScenarioIndex);
 							scenario[0] = SCENARIO;
 
-							Map<Object, Object> metadata = new Gson().fromJson((String) scenario[2], Map.class);
-							// scenario[2] = new Gson().toJson(metadata);
+							Map<String, Object> metadata = JSONUtil.toMap((String) scenario[2]);
+							// scenario[2] = JSONUtil.toString(metadata);
 
 							String exampleMetadata = (String) cols[1];
 
 							if (StringUtil.isNotBlank(exampleMetadata) && exampleMetadata.trim().startsWith("{")) {
-								metadata.putAll(new Gson().fromJson(exampleMetadata, Map.class));
-								scenario[2] = new Gson().toJson(metadata);
+								metadata.putAll(JSONUtil.toMap(exampleMetadata));
+								scenario[2] = JSONUtil.toString(metadata);
 								currLineBuffer = new StringBuffer();
 								continue;
 							}
 
 						} else {
 							scenarioTags.addAll(globalTags);
-							String metadata = String.format("{\"groups\":%s}", new Gson().toJson(scenarioTags));
+							String metadata = String.format("{\"groups\":%s}", JSONUtil.toString(scenarioTags));
 							cols[2] = metadata;
 							scenarioTags.clear();
 							if (type.equalsIgnoreCase(FEATURE)) {
@@ -282,13 +281,12 @@ public class GherkinFileParser extends AbstractScenarioFileParser {
 		}
 
 		if (isScenario) {
-			@SuppressWarnings("unchecked")
-			Map<Object, Object> metadata = new Gson().fromJson((String) cols[2], Map.class);
-			metadata.put(params.JSON_DATA_TABLE.name(), new Gson().toJson(data));
-			cols[2] = new Gson().toJson(metadata);
+			Map<String, Object> metadata = JSONUtil.toMap((String) cols[2]);
+			metadata.put(params.JSON_DATA_TABLE.name(), JSONUtil.toString(data));
+			cols[2] = JSONUtil.toString(metadata);
 
 		} else {
-			cols[0] = cols[0] + new Gson().toJson(data);
+			cols[0] = cols[0] + JSONUtil.toString(data);
 		}
 	}
 

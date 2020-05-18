@@ -23,6 +23,7 @@ package com.qmetry.qaf.automation.impl.step.qaf;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.hamcrest.Matchers;
@@ -94,6 +95,10 @@ public class QAFTestStepImpl {
 	public void oneOrMoreUser(Map<String, Object>... users) {
 	    System.out.println("users:" + users);
 	    Validator.verifyThat(true, Matchers.is(users.getClass().isArray()));
+	    for(Map<String, Object> user : users){
+		    Validator.verifyThat(user, Matchers.hasKey("name"));
+		    Validator.verifyThat(user, Matchers.hasKey("type"));
+	    }
 	}
 	@QAFTestStep(description="I may see following color:{colors}")
 	public void oneOrMoreColors(String... colors) {
@@ -129,5 +134,19 @@ public class QAFTestStepImpl {
 	@QAFTestStep(description = "test value\\(s) {str} with \\{esc}")
 	public String stepWithEsc(String str) {
 		return str;
+	}
+	
+	@QAFTestStep(description = "it should have  {cols} columns in {data}")
+	public void itShouldHaveColsInData(String[] cols, Map<String, Object> data) {
+		for(String col:cols){
+			Validator.verifyThat("contains col " + col, data, Matchers.hasKey(col));
+		}
+	}
+	
+	@QAFTestStep(description = "it should have  {entries} in {data}")
+	public void itShouldHaveEntriesInData(Map<String, Object> entries, Map<String, Object> data) {
+		for(Entry<String, Object> entry:entries.entrySet()){
+			Validator.verifyThat("contains entry " + entry, data, Matchers.hasEntry(entry.getKey(),entry.getValue()));
+		}
 	}
 }

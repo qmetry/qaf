@@ -174,7 +174,7 @@ public class JSONUtil {
 
 		File f = new File(file);
 		try {
-			Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
+			Gson gson = new GsonBuilder().disableHtmlEscaping().serializeNulls().setPrettyPrinting().create();
 			String jsonStr = gson.toJson(obj, obj.getClass());
 
 			FileUtil.writeStringToFile(f, jsonStr, "UTF-8");
@@ -287,7 +287,8 @@ public class JSONUtil {
 		if (String.class.isAssignableFrom(o.getClass()) || o.getClass().isPrimitive()) {
 			return String.valueOf(o);
 		}
-		return new Gson().toJson(o);
+		GsonBuilder builder = new GsonBuilder().setLenient().serializeNulls();
+		return builder.create().toJson(o);
 	}
 	
 }
