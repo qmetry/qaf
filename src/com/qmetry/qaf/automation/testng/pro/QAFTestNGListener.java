@@ -230,14 +230,12 @@ public class QAFTestNGListener {
 			return;
 		QAFTestBase stb = TestBaseProvider.instance().get();
 		tr.setAttribute("browser", stb.getBrowser());
-		final List<CheckpointResultBean> checkpoints =
-				new ArrayList<CheckpointResultBean>(stb.getCheckPointResults());
 
 		org.testng.Reporter.setCurrentTestResult(tr);
-
-		HtmlCheckpointResultFormatter checkpointResultFormatter =
-				new HtmlCheckpointResultFormatter();
-		org.testng.Reporter.log(checkpointResultFormatter.getResults(checkpoints));
+		if (getBundle().getBoolean("report.log.testngoutput", false)) {
+			HtmlCheckpointResultFormatter checkpointResultFormatter = new HtmlCheckpointResultFormatter();
+			org.testng.Reporter.log(checkpointResultFormatter.getResults(stb.getCheckPointResults()));
+		}
 	}
 
 	protected void processResult(ITestResult tr, ITestContext context) {
