@@ -66,7 +66,7 @@ public class StringUtilsTest {
 				new Object[] { " \" a \" , 1 , true , 1.5 ", ',', new Object[] { " a ",1, true, 1.5}},
 
 				new Object[] { "a,1,true,1.5,a\\, bc", ',', new Object[] { "a",1, true, 1.5, "a, bc"}},
-				new Object[] { "a,1,true,1.5,a\\, bc,", ',', new Object[] { "a",1, true, 1.5, "a, bc",null}},
+				new Object[] { "a,1,true,1.5,a\\, bc,", ',', new Object[] { "a",1, true, 1.5, "a, bc",""}},
 
 				new Object[] { " a | 1 | true | 1.5 ", '|', new Object[] { "a",1, true, 1.5}},
 				new Object[] { "\" a \"|	1 |true|	1.5	", '|', new Object[] { " a ",1, true, 1.5}},
@@ -81,17 +81,19 @@ public class StringUtilsTest {
 				new Object[] { "a b|\"'abc' d efgh.\"|1|true|1.5", '|', new Object[] { "a b","'abc' d efgh.",1, true, 1.5}},
 				
 				//ensure first and last value empty
-				new Object[] { "| QMetry Automation Framework |", '|', new Object[] { null,"QMetry Automation Framework",null}},
-				new Object[] { "||", '|', new Object[] { null,null,null}},
-				//ensure all null
-				new Object[] { "		,		,		", ',', new Object[] { null,null,null}},
-				new Object[] { ",,", ',', new Object[] { null,null,null}},
+				new Object[] { "| QMetry Automation Framework |", '|', new Object[] { "","QMetry Automation Framework",""}},
+				new Object[] { "||", '|', new Object[] { "","",""}},
+				//ensure all blank, space and null
+				new Object[] { "		,		,		", ',', new Object[] { "","",""}},
+				new Object[] { ",,", ',', new Object[] { "","",""}},
+				new Object[] { " ,\" \",\"\",null,\"null\"", ',', new Object[] { ""," ","",null,null}},
+				new Object[] { "1,\" 1\" ,\"1\",null,\"null\"", ',', new Object[] { 1," 1",1,null,null}},
 				
-				new Object[] { "| Selenium ISFW | Infostretch, Test Automation Framework | 10 |", '|', new Object[] { null,"Selenium ISFW", "Infostretch, Test Automation Framework", 10,null}},
-				new Object[] { "| Selenium ISFW | \"Infostretch, Test Automation Framework\" | 10 |", '|', new Object[] { null,"Selenium ISFW", "Infostretch, Test Automation Framework", 10,null}},
-				new Object[] { " | \"Selenium ISFW\" | Chirag's Test Automation Framework | 10 |", '|', new Object[] { null,"Selenium ISFW", "Chirag's Test Automation Framework", 10,null}},
-				new Object[] { " | \"Selenium ISFW\" | \"Chirag's Test Automation Framework\" | 10 |", '|', new Object[] { null,"Selenium ISFW", "Chirag's Test Automation Framework", 10,null}},
-				new Object[] { " | \"Selenium ISFW\" | 'My \"Test Automation Framework\"' | 10 |", '|', new Object[] { null,"Selenium ISFW", "My \"Test Automation Framework\"", 10,null}}
+				new Object[] { "| Selenium ISFW | Infostretch, Test Automation Framework | 10 |", '|', new Object[] { "","Selenium ISFW", "Infostretch, Test Automation Framework", 10,""}},
+				new Object[] { "| Selenium ISFW | \"Infostretch, Test Automation Framework\" | 10 |", '|', new Object[] { "","Selenium ISFW", "Infostretch, Test Automation Framework", 10,""}},
+				new Object[] { " | \"Selenium ISFW\" | Chirag's Test Automation Framework | 10 |", '|', new Object[] { "","Selenium ISFW", "Chirag's Test Automation Framework", 10,""}},
+				new Object[] { " | \"Selenium ISFW\" | \"Chirag's Test Automation Framework\" | 10 |", '|', new Object[] { "","Selenium ISFW", "Chirag's Test Automation Framework", 10,""}},
+				new Object[] { " | \"Selenium ISFW\" | 'My \"Test Automation Framework\"' | 10 |", '|', new Object[] { "","Selenium ISFW", "My \"Test Automation Framework\"", 10,""}}
 		};
 	}
 

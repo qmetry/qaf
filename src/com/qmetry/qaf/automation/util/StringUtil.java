@@ -520,13 +520,13 @@ public class StringUtil extends StringUtils {
 
 	/**
 	 * Try to convert a string into java primitive type, java object or null. If the
-	 * string can't be converted, return the string. It will return null for empty string.
+	 * string can't be converted, return the string. From 3.0.0 It will return "" for empty string.
 	 * 
 	 * @param string
 	 * @return Object
 	 */
 	public static Object toObject(String string) {
-		if(StringUtil.isNotEmpty(string)){
+		if(null!=string){
 			return JSONObject.stringToValue(string);
 		}
 		return null;
