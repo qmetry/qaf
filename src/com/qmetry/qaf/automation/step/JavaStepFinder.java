@@ -70,7 +70,7 @@ public final class JavaStepFinder {
 			try {
 				List<Class<?>> classes = CLASS_FINDER.getClasses(pkg);
 				steps.addAll(getAllMethodsWithAnnotation(classes, QAFTestStep.class));
-			} catch (Exception e) {
+			} catch (Throwable e) {
 				System.err.println("Unable to load steps for package: " + pkg);
 			}
 		}

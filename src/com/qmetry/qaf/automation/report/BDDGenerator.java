@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -129,6 +130,7 @@ public class BDDGenerator implements TestCaseResultUpdator {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private void addMetadata(StringBuffer data, TestCaseRunResult tr) {
 		data.append("\n\n");
 		List<String> exclude = new ArrayList<String>(Arrays.asList("sign", "name","lineNo","Feature","reference"));
@@ -138,7 +140,21 @@ public class BDDGenerator implements TestCaseResultUpdator {
 		for (Entry<String, Object> kv : tr.getMetaData().entrySet()) {
 			if (!exclude.stream().anyMatch(kv.getKey()::equalsIgnoreCase) && kv.getValue() != null
 					&& StringUtil.isNotBlank(kv.getValue().toString()))
-				data.append("\n@" + kv.getKey() + ": " + JSONUtil.toString(kv.getValue()));
+				if (kv.getKey().equalsIgnoreCase("groups")) {
+					Object groups = kv.getValue();
+					String[] allgroups;
+					if (groups instanceof Collection) {
+						allgroups = ((Collection<String>) groups).toArray(new String[((Collection<?>) groups).size()]);
+					} else {
+						allgroups = (String[]) groups;
+					}
+					for (String group : allgroups) {
+						data.append("\n@" + group);
+					}
+
+				} else {
+					data.append("\n@" + kv.getKey() + ": " + JSONUtil.toString(kv.getValue()));
+				}
 		}
 	}
 

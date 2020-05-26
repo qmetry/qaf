@@ -46,8 +46,8 @@ import com.qmetry.qaf.automation.util.ClassUtil;
  *
  */
 public class QAFTestStepArgumentFormatterImpl implements QAFTestStepArgumentFormatter<Object> {
-	private static final GsonBuilder gsonBuilder = new GsonBuilder().setDateFormat("dd-MM-yyyy").serializeNulls();
-	private static final Gson gson = gsonBuilder.create();
+	private final GsonBuilder gsonBuilder = new GsonBuilder().setDateFormat("dd-MM-yyyy").serializeNulls();
+	private final Gson gson = gsonBuilder.create();
 			// .registerTypeAdapter(ObjectWrapper.class, new
 			// GsonDeserializerObjectWrapper())
 			//.create();
@@ -170,12 +170,12 @@ public class QAFTestStepArgumentFormatterImpl implements QAFTestStepArgumentForm
 			return o;
 		}
 		if (paramType.isArray()) {
-			return getBundle().getList(key).toArray();
+			List<?> lst = getBundle().getList(key);
+			return lst.toArray(new Object[lst.size()]);
 		}
 		if (o instanceof List) {
 			return ((List<?>) o).get(0);
 		}
 		return o;
 	}
-
 }

@@ -198,7 +198,7 @@ public class JavaStep extends BaseTestStep {
 			if ((noOfParams == (objects.length - 1)) && method.getParameterTypes()[noOfParams - 1].isArray()) {
 				// case of optional arguments!...
 				System.arraycopy(objects, 0, params, 0, objects.length);
-				params[noOfParams - 1] = "[]";
+				//params[noOfParams - 1] = "[]";
 			} else {
 				System.arraycopy(objects, 0, params, 0, noOfParams);
 			}
