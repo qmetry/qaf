@@ -1,0 +1,8 @@
+#empty or null not allowed for Primitive types step argument
+description, name , married , age 
+csv go right , uname  , true , 5 
+csv go right , "uname  ", false , 0 
+csv check null , null , null , null 
+ csv check null , "null" , "null" , "null" 
+ csv check empty ,  ,  ,  
+

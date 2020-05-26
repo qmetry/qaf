@@ -526,10 +526,14 @@ public class StringUtil extends StringUtils {
 	 * @return Object
 	 */
 	public static Object toObject(String string) {
-		if(null!=string){
-			return JSONObject.stringToValue(string);
+		if(null==string || JSONObject.NULL==string){
+			return null;
 		}
-		return null;
+		Object val = JSONObject.stringToValue(string);
+		if(null==val || JSONObject.NULL==val){
+			return null;
+		}
+		return val;
 	}
 
 	private static String ensuerStringQuated(String data, char seperator) {

@@ -37,6 +37,7 @@ import java.util.TreeMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.json.JSONObject;
 
 import com.qmetry.qaf.automation.core.AutomationError;
 import com.qmetry.qaf.automation.step.client.AbstractScenarioFileParser;
@@ -299,7 +300,7 @@ public class BDDFileParser2 extends AbstractScenarioFileParser {
 				Map<String, Object> map = new LinkedHashMap<String, Object>();
 				for (int k = 0; k < keys.size(); k++) {
 					Object val = examplesTable.get(i).get(k);
-					map.put(keys.get(k), null!=val?val.toString().trim():null);
+					map.put(keys.get(k), val);
 				}
 				dataMapList.add(map);
 			}

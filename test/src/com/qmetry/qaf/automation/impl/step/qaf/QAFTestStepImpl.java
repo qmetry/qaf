@@ -149,4 +149,16 @@ public class QAFTestStepImpl {
 			Validator.verifyThat("contains entry " + entry, data, Matchers.hasEntry(entry.getKey(),entry.getValue()));
 		}
 	}
+	
+	@QAFTestStep(description = "it should have {age} status {married} of {name}")
+	public void acceptTestDataWithPrimitive (int age, boolean mstatus, String name ) {
+		System.out.println("acceptTestDataWithPrimitive age: " + age + " status: " + mstatus+" name: "+name );
+		System.out.println("acceptTestDataWithPrimitive is Name not null: " + (null!=name? "yes":"No"));
+	}
+	@QAFTestStep(description = "it can have {age} status {married} of {name}")
+	public void acceptTestDataWithClass(Integer age, Boolean mstatus, String name ) {
+		System.out.println("acceptTestDataWithClass age: " + age + " status: " + mstatus+" name: "+name );
+		System.out.println("acceptTestDataWithClass is Name not null: " + (null!=name? "yes":"No"));
+
+	}
 }
