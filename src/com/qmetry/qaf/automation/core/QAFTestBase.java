@@ -214,8 +214,6 @@ public class QAFTestBase {
 				ConfigurationManager.getBundle().setProperty("driver.actualCapabilities",
 						((QAFExtendedWebDriver) driver).getCapabilities().asMap());
 			}
-		}else {
-			ConfigurationManager.getBundle().clearProperty("driver.actualCapabilities");
 		}
 	}
 
