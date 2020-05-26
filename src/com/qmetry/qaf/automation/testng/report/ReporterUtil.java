@@ -31,6 +31,7 @@ import java.io.InputStream;
 import java.net.InetAddress;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -333,6 +334,10 @@ public class ReporterUtil {
 				metadata.put("description", desc);
 			}
 			metadata.put("name", getMethodName(result));
+			try {
+				metadata.values().removeAll(Collections.singleton(null));
+			} catch (Throwable e) {
+			}
 			methodInfo.setMetaData(metadata);
 			getBundle().clearProperty(ApplicationProperties.CURRENT_TEST_DESCRIPTION.key);
 

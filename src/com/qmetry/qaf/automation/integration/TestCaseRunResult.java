@@ -26,6 +26,7 @@ import static com.qmetry.qaf.automation.core.ConfigurationManager.getBundle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -68,6 +69,10 @@ public class TestCaseRunResult {
 		this.willRetry=willRetry;
 		this.isTest=isTest;
 		this.metaData = new TreeMap<String, Object>(String.CASE_INSENSITIVE_ORDER);
+		try {
+			metaData.values().removeAll(Collections.singleton(null));
+		} catch (Throwable e) {
+		}
 		if (null != metaData) {
 			this.metaData.putAll(metaData);
 		}
@@ -81,7 +86,7 @@ public class TestCaseRunResult {
 		}
 		Map<String, String> cap = getActualCapabilities();
 		if(!cap.isEmpty()) {
-			executionInfo.put("driverCapabilities", cap);
+			this.executionInfo.put("driverCapabilities", cap);
 		}
 		this.steps = new ArrayList<String>(steps);
 		
