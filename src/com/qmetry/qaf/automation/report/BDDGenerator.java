@@ -33,6 +33,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.json.JSONObject;
+
 import com.qmetry.qaf.automation.core.CheckpointResultBean;
 import com.qmetry.qaf.automation.integration.TestCaseResultUpdator;
 import com.qmetry.qaf.automation.integration.TestCaseRunResult;
@@ -69,10 +71,10 @@ public class BDDGenerator implements TestCaseResultUpdator {
 		if (testCnt == 0) {
 			FileUtil.deleteQuietly(new File(REPORT_DIR));
 		}
-		String storyfileName = tr.getClassName();
+		String storyfileName = tr.getClassName().replace(".feature", "").replace(".bdd", "").replace('.', '/');
 		testCnt++;
 		try {
-			File feature = new File(REPORT_DIR + "/" + storyfileName + ".feature");
+			File feature = new File(REPORT_DIR , storyfileName + ".feature");
 			String featureName = tr.getMetaData()
 					.getOrDefault("story", tr.getMetaData().getOrDefault("Feature", storyfileName)).toString();
 
@@ -96,7 +98,7 @@ public class BDDGenerator implements TestCaseResultUpdator {
 				// add example to outline
 				scenario.append("\n  | ");
 				for (Object value : testData.values()) {
-					scenario.append(" " + value + " |");
+					scenario.append(" " + warp(value) + " |");
 				}
 
 			} else {
@@ -130,6 +132,15 @@ public class BDDGenerator implements TestCaseResultUpdator {
 		}
 	}
 
+	private Object warp(Object o) {
+		if(null==o)
+			return o;
+		String s = o.toString();
+		if(s.length()!=s.trim().length()) {
+			return JSONObject.quote(s);
+		}
+		return o;
+	}
 	@SuppressWarnings("unchecked")
 	private void addMetadata(StringBuffer data, TestCaseRunResult tr) {
 		data.append("\n\n");
@@ -148,10 +159,12 @@ public class BDDGenerator implements TestCaseResultUpdator {
 					} else {
 						allgroups = (String[]) groups;
 					}
-					for (String group : allgroups) {
-						data.append("\n@" + group);
+					if (null != allgroups && allgroups.length > 0) {
+						data.append("\n");
+						for (String group : allgroups) {
+							data.append("@" + group + " ");
+						}
 					}
-
 				} else {
 					data.append("\n@" + kv.getKey() + ": " + JSONUtil.toString(kv.getValue()));
 				}
