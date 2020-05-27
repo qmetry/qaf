@@ -35,6 +35,7 @@ import com.qmetry.qaf.automation.core.CheckpointResultBean;
 import com.qmetry.qaf.automation.core.LoggingBean;
 import com.qmetry.qaf.automation.core.QAFTestBase;
 import com.qmetry.qaf.automation.core.TestBaseProvider;
+import com.qmetry.qaf.automation.testng.dataprovider.QAFDataProvider.params;
 /**
  * Bean Class that provides required details to {@link TestCaseResultUpdator}
  * 
@@ -71,6 +72,7 @@ public class TestCaseRunResult {
 		this.metaData = new TreeMap<String, Object>(String.CASE_INSENSITIVE_ORDER);
 		try {
 			metaData.values().removeAll(Collections.singleton(null));
+			metaData.remove(params.JSON_DATA_TABLE.name());
 		} catch (Throwable e) {
 		}
 		if (null != metaData) {
