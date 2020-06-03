@@ -220,7 +220,7 @@ public class BDDDefinitionHelper {
 	public static String replaceParams(String stepCall, Map<String, Object> context) {
 		stepCall = convertPrameter(stepCall);
 		//don't resolve quoted parameters.
-		stepCall = stepCall.replace("\"${", "\"<%{");
+		stepCall = stepCall.replace("\"${", "\"<%{").replace("'${", "'<%{");
 		//qaf#321 
 		StrLookup lookup = new StrLookup() {
 			public String lookup(String var) {
@@ -235,7 +235,7 @@ public class BDDDefinitionHelper {
 		StrSubstitutor interpol = new StrSubstitutor(lookup);
 		stepCall = interpol.replace(stepCall);
 		
-		stepCall = stepCall.replace( "\"<%{","\"${");
+		stepCall = stepCall.replace( "\"<%{","\"${").replace( "'<%{","'${");
 		return stepCall;
 	}
 	public static List<String[]> getArgs(String call, String def, List<String> argsInDef) {
