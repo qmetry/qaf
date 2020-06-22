@@ -41,6 +41,7 @@ import com.qmetry.qaf.automation.step.client.TestNGScenario;
  */
 public class RetryAnalyzer implements IRetryAnalyzer {
 	public static String RETRY_INVOCATION_COUNT = "retry.invocation.count";
+	public static String WILL_RETRY = "retry.invocation.willretry";
 
 	/*
 	 * (non-Javadoc)
@@ -64,6 +65,8 @@ public class RetryAnalyzer implements IRetryAnalyzer {
 					"Retrying [" + result.getName() + "]" + toStringWithSufix(retryInvocationCount) + " time.");
 
 			getBundle().addProperty(RETRY_INVOCATION_COUNT, retryInvocationCount);
+			getBundle().addProperty(WILL_RETRY, true);
+
 
 			// correct failed invocation numbers for data driven test case.
 			List<Integer> failedInvocations = result.getMethod().getFailedInvocationNumbers();
@@ -74,6 +77,7 @@ public class RetryAnalyzer implements IRetryAnalyzer {
 
 		} else {
 			getBundle().clearProperty(RETRY_INVOCATION_COUNT);
+			getBundle().clearProperty(WILL_RETRY);
 		}
 
 		return shouldRetry;

@@ -34,7 +34,6 @@ import org.apache.commons.configuration.ConfigurationConverter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.LogFactoryImpl;
 import org.testng.IInvokedMethod;
-import org.testng.IRetryAnalyzer;
 import org.testng.ISuite;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
@@ -156,15 +155,6 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 		super.afterInvocation(method, tr, context);
 	}
 
-	private boolean shouldRetry(ITestResult tr) {
-		IRetryAnalyzer retryAnalyzer = tr.getMethod().getRetryAnalyzer();
-		boolean shouldRetry = false;
-		if (null != retryAnalyzer && retryAnalyzer instanceof RetryAnalyzer) {
-			shouldRetry = (((RetryAnalyzer) retryAnalyzer).shouldRetry(tr));
-		}
-		return shouldRetry;
-	}
-
 	@Override
 	protected void report(ITestResult tr) {
 		super.report(tr);
@@ -209,11 +199,13 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 				runPrams.putAll(ConfigurationConverter.getMap(getBundle().subset("env")));
 				executionInfo.put("env", runPrams);
 				int retryCount = getBundle().getInt(RetryAnalyzer.RETRY_INVOCATION_COUNT, 0);
+				boolean willRetry =  getBundle().getBoolean(RetryAnalyzer.WILL_RETRY, false);
+				getBundle().clearProperty(RetryAnalyzer.WILL_RETRY);
 				if(retryCount>0) {
-					executionInfo.put("retryCount", getBundle().getInt(RetryAnalyzer.RETRY_INVOCATION_COUNT, 0));
+					executionInfo.put("retryCount", retryCount);
 				}
 				TestCaseRunResult testCaseRunResult = new TestCaseRunResult(status, scenario.getMetaData(),
-						tr.getParameters(), executionInfo, scenario.getSteps(), tr.getStartMillis(),shouldRetry(tr),scenario.isTest() );
+						tr.getParameters(), executionInfo, scenario.getSteps(), tr.getStartMillis(),willRetry,scenario.isTest() );
 				testCaseRunResult.setClassName(scenario.getClassOrFileName());
 				if (scenario.getGroups() != null && scenario.getGroups().length > 0) {
 					testCaseRunResult.getMetaData().put("groups", scenario.getGroups());
