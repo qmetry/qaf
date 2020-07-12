@@ -50,8 +50,8 @@ public class HtmlCommandLogFormatter implements CommandLogFormatter {
 		}
 		StringBuilder sb = new StringBuilder(HEADER);
 		for (LoggingBean b : collection) {
-			String param1 = quoteHtml(b.getArgs()[0]);
-			String param2 = b.getArgs().length > 1 ? quoteHtml(b.getArgs()[1]) : "";
+			String param1 = b.getArgs()!=null && b.getArgs().length>0?quoteHtml(b.getArgs()[0]):"";
+			String param2 = b.getArgs()!=null && b.getArgs().length > 1 ? quoteHtml(b.getArgs()[1]) : "";
 			String result = b.getResult();
 			int warningIndex = result == null ? 0 : result.toUpperCase().indexOf("(WARNING");
 			sb.append(MessageFormat.format(COMMAND_LOG_FORMAT, b.getCommandName(), param1, param2,
