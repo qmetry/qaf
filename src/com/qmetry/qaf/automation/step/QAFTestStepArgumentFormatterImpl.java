@@ -76,7 +76,7 @@ public class QAFTestStepArgumentFormatterImpl implements QAFTestStepArgumentForm
 			}
 
 		}
-		if (String.class.isAssignableFrom(paramType)) {
+		if (null==objVal || paramType.isAssignableFrom(objVal.getClass())) {
 			return objVal;
 		}
 		try {
