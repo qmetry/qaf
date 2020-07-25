@@ -142,7 +142,7 @@ public class PropertyUtil extends XMLConfiguration {
 						super.addPropertyDirect("default.socket.factory", HttpsURLConnection.getDefaultSSLSocketFactory());
 						super.addPropertyDirect("default.hostname.verifier",HttpsURLConnection.getDefaultHostnameVerifier());
 					}
-					logger.info("Seeting behavior to accept all certitificate and host name");
+					logger.info("Seeting behavior to accept all certificate and host name");
 					ignoreSSLCetrificatesAndHostVerification();
 				} catch (KeyManagementException e) {
 					logger.error("Unable to set behavior to ignore certificate and host name verification", e);
