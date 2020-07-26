@@ -23,6 +23,8 @@ package com.qmetry.qaf.automation.core;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.InetAddress;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -30,6 +32,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.jar.Attributes;
@@ -88,6 +91,39 @@ public class ConfigurationManager {
 	private ConfigurationManager() {
 		AbstractConfiguration.setDefaultListDelimiter(';');
 		registerLookups();
+		setHostName();
+	}
+
+	private void setHostName() {
+		try {
+			System.setProperty("host.name",
+					InetAddress.getLocalHost().getHostName());
+		} catch (Exception | Error e) {
+			// This code added for MAC to fetch hostname
+			InputStream stream=null;
+			Scanner s = null;
+			try {
+				Process proc = Runtime.getRuntime().exec("hostname");
+				stream = proc.getInputStream();
+				if (stream != null) {
+					s = new Scanner(stream);
+					s.useDelimiter("\\A");
+					String val = s.hasNext() ? s.next() : "";
+					stream.close();
+					s.close();
+					System.setProperty("host.name",val);
+				}
+			} catch (Exception | Error e1) {
+				log.trace(e1);
+			}finally {
+				try {
+					if(null!=s)s.close();
+					if(null!=stream)stream.close();
+				} catch (Exception e2) {
+					log.trace(e2);
+				}
+			}
+		}
 	}
 
 	private void registerLookups(){

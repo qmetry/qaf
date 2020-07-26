@@ -26,7 +26,6 @@ import static com.qmetry.qaf.automation.util.JSONUtil.getJsonObjectFromFile;
 import static com.qmetry.qaf.automation.util.JSONUtil.writeJsonObjectToFile;
 
 import java.io.File;
-import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -49,7 +48,6 @@ import com.qmetry.qaf.automation.testng.report.MethodInfo;
 import com.qmetry.qaf.automation.testng.report.MethodResult;
 import com.qmetry.qaf.automation.testng.report.Report;
 import com.qmetry.qaf.automation.testng.report.ReportEntry;
-import com.qmetry.qaf.automation.testng.report.ReporterUtil;
 import com.qmetry.qaf.automation.testng.report.TestOverview;
 import com.qmetry.qaf.automation.util.DateUtil;
 import com.qmetry.qaf.automation.util.FileUtil;
@@ -274,13 +272,7 @@ public class JsonReporter implements TestCaseResultUpdator {
 			executionEnvInfo.put("java.arch", System.getProperty("sun.arch.data.model"));
 	
 			executionEnvInfo.put("user.name", System.getProperty("user.name"));
-			try {
-				executionEnvInfo.put("host", InetAddress.getLocalHost().getHostName());
-			} catch (Exception e) {
-				// This code added for MAC to fetch hostname
-				String hostname = ReporterUtil.execHostName("hostname");
-				executionEnvInfo.put("host", hostname);
-			}
+			executionEnvInfo.put("host", System.getProperty("host.name"));
 		}
 		testOverview.setEndTime(result.getEndtime());
 		testOverview.setPass(testStatusCounter.getPass());

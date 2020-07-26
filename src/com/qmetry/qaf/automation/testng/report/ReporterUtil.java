@@ -26,9 +26,6 @@ import static com.qmetry.qaf.automation.util.JSONUtil.getJsonObjectFromFile;
 import static com.qmetry.qaf.automation.util.JSONUtil.writeJsonObjectToFile;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.InetAddress;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -37,7 +34,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -188,14 +184,7 @@ public class ReporterUtil {
 						System.getProperty("sun.arch.data.model"));
 
 				executionEnvInfo.put("user.name", System.getProperty("user.name"));
-				try {
-					executionEnvInfo.put("host",
-							InetAddress.getLocalHost().getHostName());
-				} catch (Exception e) {
-					// This code added for MAC to fetch hostname
-					String hostname = execHostName("hostname");
-					executionEnvInfo.put("host", hostname);
-				}
+				executionEnvInfo.put("host", System.getProperty("host.name"));
 
 				envInfo.put("execution-env-info", executionEnvInfo);
 
@@ -548,23 +537,4 @@ public class ReporterUtil {
 				: testname.replaceAll("[^a-zA-Z0-9_]+", "");
 	}
 
-	public static String execHostName(String execCommand) {
-		InputStream stream;
-		Scanner s;
-		try {
-			Process proc = Runtime.getRuntime().exec(execCommand);
-			stream = proc.getInputStream();
-			if (stream != null) {
-				s = new Scanner(stream);
-				s.useDelimiter("\\A");
-				String val = s.hasNext() ? s.next() : "";
-				stream.close();
-				s.close();
-				return val;
-			}
-		} catch (IOException ioException) {
-			ioException.printStackTrace();
-		}
-		return "";
-	}
 }
