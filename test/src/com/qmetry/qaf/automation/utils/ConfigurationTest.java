@@ -22,6 +22,7 @@
 package com.qmetry.qaf.automation.utils;
 
 import org.hamcrest.Matchers;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.qmetry.qaf.automation.core.ConfigurationManager;
@@ -145,5 +146,22 @@ public class ConfigurationTest {
 		i = ApplicationProperties.RETRY_CNT.getIntVal(500);// 500
 		Validator.verifyThat(i, Matchers.equalTo(500));
 
+	}
+	@Test
+	public void testDefaultNull(){
+		String defvalue = null;
+		String desc = ApplicationProperties.INTEGRATION_PARAM_QMETRY_PRJ
+				.getStringVal(defvalue);
+		Validator.verifyThat(desc, Matchers.isEmptyString());
+	}
+	
+	@Test(invocationCount=2, threadPoolSize=5, dataProvider="testDP")
+	public void testInvocationCount(String s){
+		System.out.println("should work " + s);
+	}
+	
+	@DataProvider(name="testDP")
+	Object[][] testDP(){
+		return new Object[][]{{"a"}};
 	}
 }

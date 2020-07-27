@@ -32,6 +32,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.testng.ITestClass;
+import org.testng.ITestNGMethod;
+import org.testng.internal.BaseTestMethod;
+import org.testng.internal.NoOpTestClass;
 import org.testng.internal.TestNGMethod;
 import org.testng.internal.annotations.IAnnotationFinder;
 import org.testng.xml.XmlSuite.ParallelMode;
@@ -144,5 +148,25 @@ public class TestNGScenario extends TestNGMethod {
 			}
 		}
 		return getRealClass().getName();
+	}
+	
+	public BaseTestMethod clone() {
+		TestNGScenario clone = new TestNGScenario(getConstructorOrMethod().getMethod(), getAnnotationFinder(),
+				getXmlTest(), getInstance());
+
+		ITestClass tc = getTestClass();
+		NoOpTestClass testClass = new NoOpTestClass(tc);
+		testClass.setBeforeTestMethods(clone(tc.getBeforeTestMethods()));
+		testClass.setAfterTestMethod(clone(tc.getAfterTestMethods()));
+		clone.m_testClass = testClass;
+		return clone;
+	}
+
+	private ITestNGMethod[] clone(ITestNGMethod[] sources) {
+		ITestNGMethod[] clones = new ITestNGMethod[sources.length];
+		for (int i = 0; i < sources.length; i++) {
+			clones[i] = sources[i].clone();
+		}
+		return clones;
 	}
 }
