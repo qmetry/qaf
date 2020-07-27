@@ -4,6 +4,7 @@ com.qmetry.qaf.automation.gson
 com.qmetry.qaf.automation.http
 com.qmetry.qaf.automation.integration
 com.qmetry.qaf.automation.keys
+com.qmetry.qaf.automation.report
 com.qmetry.qaf.automation.step
 com.qmetry.qaf.automation.step.client
 com.qmetry.qaf.automation.step.client.csv

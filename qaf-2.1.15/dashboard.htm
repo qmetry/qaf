@@ -1,0 +1,230 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>QMetry Automation Studio Reporter</title>
+    <link href="./dashboard/css/style.css" rel="stylesheet" />
+    <link rel="stylesheet" href="./dashboard/jquery/jqplot/jquery.jqplot.min.css" />
+    <link rel="stylesheet" href="./dashboard/jquery/ui/css/smoothness/jquery-ui-1.9.0.custom.min.css" />
+    <link rel="stylesheet" href="./dashboard/jquery/layout/layout-default-latest.css" />
+    <link rel="stylesheet" type="text/css" href="./dashboard/jquery/jqplot/examples.min.css" />
+    <link type="text/css" rel="stylesheet" href="./dashboard/jquery/jqplot/syntaxhighlighter/styles/shCoreDefault.min.css" />
+    <link type="text/css" rel="stylesheet" href="./dashboard/jquery/jqplot/syntaxhighlighter/styles/shThemejqPlot.min.css" />
+    <link href="./dashboard/css/stylesheet_master.css" media="screen" rel="stylesheet" type="text/css">
+    <script src="./dashboard/jquery/jquery-1.8.2.min.js"></script>
+    <script src="./dashboard/jquery/jquery.tinysort.min.js"></script>
+ 	<script src="./dashboard/jquery/jquery.timer.js"></script>
+    <script src="./dashboard/jquery/ui/jquery-ui-1.9.0.custom.min.js"></script>
+    <script type="text/javascript" src="./dashboard/jquery/tmpl/jquery.tmpl.min.js"></script>
+    <script type="text/javascript" src="./dashboard/jquery/tmpl/jquery.tmplPlus.min.js"></script>
+    <script src="./dashboard/jquery/layout/jquery.layout-latest.min.js"></script>
+    <script src="./dashboard/jquery/jqplot/jquery.jqplot.min.js"></script>
+    <script src="./dashboard/jquery/jqplot/plugins/jqplot.pieRenderer.min.js"></script>
+    <script src="./dashboard/jquery/jqplot/plugins/jqplot.donutRenderer.min.js"></script>
+    <script type="text/javascript" src="./dashboard/jquery/jqplot/plugins/jqplot.barRenderer.min.js"></script>
+    <script type="text/javascript" src="./dashboard/jquery/jqplot/plugins/jqplot.categoryAxisRenderer.min.js"></script>
+    <script type="text/javascript" src="./dashboard/jquery/jqplot/plugins/jqplot.canvasAxisTickRenderer.min.js"></script>
+    <script type="text/javascript" src="./dashboard/jquery/jqplot/plugins/jqplot.enhancedLegendRenderer.min.js"></script>
+    <script type="text/javascript" src="./dashboard/jquery/jqplot/plugins/jqplot.canvasAxisLabelRenderer.min.js"></script>
+    <script type="text/javascript" src="./dashboard/jquery/jqplot/plugins/jqplot.cursor.min.js"></script>
+    <script type="text/javascript" src="./dashboard/jquery/jqplot/plugins/jqplot.canvasTextRenderer.min.js"></script>
+    <script type="text/javascript" src="./dashboard/jquery/jqplot/plugins/jqplot.highlighter.min.js"></script>
+    <script type="text/javascript" src="./dashboard/jquery/jqplot/syntaxhighlighter/scripts/shCore.min.js"></script>
+    <script type="text/javascript" src="./dashboard/jquery/jqplot/syntaxhighlighter/scripts/shBrushJScript.min.js"></script>
+    <script type="text/javascript" src="./dashboard/jquery/jqplot/syntaxhighlighter/scripts/shBrushXml.min.js"></script>
+    <!--[if lt IE 9]><script language="javascript" type="text/javascript" src="./jquery/jqplot/excanvas.min.js"></script><![endif]-->
+    <!--<link href="./css/jquery.clearable.css" rel="stylesheet" />
+		<script src="./js/jquery.clearable.js"></script>
+		-->
+    <script src="./dashboard/jquery/qaf_dashboard.js"></script>
+    
+    <link href="./dashboard/css/jquery.mCustomScrollbar.css" rel="stylesheet" />
+    <script src="./dashboard/jquery/jqueryFileTree/jquery.easing.js"></script>
+    <script src="./dashboard/jquery/jquery.mCustomScrollbar.concat.min.js"></script>
+    
+    <link href="./dashboard/css/prettify.css"  rel="stylesheet" />
+    <script src="./dashboard/jquery/prettify.js"></script>
+    <script src="./dashboard/jquery/vkbeautify.0.99.00.beta.js"></script>
+</head>
+
+<body>
+    <div class="ui-layout-north ">
+        <div class="logo_area">
+<!-- 		<object data="./dashboard/images/logo_qaf_icon.svg" width="180px" -->
+<!-- 		 height="56px" type="image/svg+xml"> -->
+<!-- 		 	<img src="./dashboard/images/logo_qaf_aicon.png" /> -->
+<!-- 		</object> -->
+		<img src="./dashboard/images/logo_qaf_icon.svg" alt="QAF Logo" onerror="this.src='./dashboard/images/logo.png'">
+	</div>
+	<div class="my_logo_area">
+		<img src="app-logo.png" height="60px" onerror="this.height='0px'">
+	</div>
+    </div>
+    <div class="ui-layout-center content" style="margin-left: 1px;">
+        <div class="main_cont ui-layout-center">
+            <section id="data_area">
+                <div class="button_area">
+                    <div class="auto_refresh_btn">
+                        <button class="nav-toggle" title="Auto Refresh" id="refreshBtn"></button>
+                    </div>
+                    <div class="fright">
+                        <ul class="tabs">
+                            <li onclick="showTrendChart(this)">
+                                <a href="#"><span
+									class="margin_r_two"><img
+										src="dashboard/images/trands_icon.png" width="25" height="19"
+										alt=""></span><span>Trends</span></a>
+                            </li>
+                            <li onclick="showOverview(this)" id="overview-tab">
+                                <a href="javascript:void(0);"><span class="margin_r_two"><img
+										src="dashboard/images/overview_icon.png" width="19"
+										height="23" alt=""></span><span>Overview</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="data_cont">
+                    <div class="container tab_container">
+                        <div id="trends-tab-content" class="tab_content">
+                            <div class="title_bg">
+                                Trend Chart
+                            </div>
+                            <div class="cont_data">
+                                <div id="trends-chart"></div>
+                                <center>
+                                    <div id="trends-chart-loading"></div>
+                                </center>
+                            </div>
+                        </div>
+                        <div id="overview-tab-content" class="tab_content"></div>
+                    </div>
+                </div>
+            </section>
+            <div id="report_details" style="display: none;width:100%">
+                <section class="report">
+                    <div class="tool_cont">
+                        <div class="tool_title">
+                            Tools
+                        </div>
+                        <div class="filter_cont">
+                            <ul>
+                                <li class="topic_title">
+                                    Filter: <input type="search" onchange="doFilter('')" id="inputSerach"/><span id="filterResultCnt"></span><span id="allResultCnt"></span>
+                                </li>
+                                <li class="topic_data">
+                                    <input name="fpass" type="checkbox" value="pass" id="fpass" onclick="doFilter('pass')" checked="checked" />
+                                    <label for="fpass">Pass</label>
+                                    <input name="ffail" type="checkbox" value="fail" id="ffail" checked="checked" onclick="doFilter('fail')" />
+                                    <label for="ffail">Fail</label>
+                                    <input name="fskip" id="fskip" type="checkbox" value="skip" onclick="doFilter('skip')" checked="checked" />
+                                    <label for="fskip">Skip</label>
+                                    <input name="fconfig" id="fconfig" type="checkbox" value="config" onclick="doFilter('config')" />
+                                    <label for="fconfig">Configuration</label>
+                                    <input name="ftest" id="ftest" type="checkbox" value="test" onclick="doFilter('test')" checked="checked" />
+                                    <label for="ftest">Test</label>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="filter_cont">
+                            <ul>
+                                <li class="topic_title">
+                                    Order
+                                </li>
+                                <li class="topic_data">
+                                    <input name="order" type="radio" value="pass" id="opass" onclick="doSort('pass')" />
+                                    <label for="opass">Pass</label>
+                                    <input name="order" type="radio" value="fail" id="ofail" onclick="doSort('fail')" />
+                                    <label for="ofail">Fail</label>
+                                    <input name="order" type="radio" value="skip" id="oskip" onclick="doSort('skip')" />
+                                    <label for="oskip">Skip</label>
+                                    <input name="order" type="radio" value="execution" id="oexecution" onclick="doSortE()" />
+                                    <label for="oexecution">Execution</label>
+                                    <input name="order" type="radio" value="execution" id="oname" onclick="doSortN(true)" />
+                                    <label for="oname">Name</label>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="details_cont">
+                            <ul>
+                                <li class="topic_title">
+                                    Details <span id="loading-info"> <span id="progress" class="tiny-green"> </span> <span class="tiny-blue"> <button id="stop" style="height: 20px;"></button> </span> </span>
+                                </li>
+                                <li class="topic_data">
+                                    <input value="true" id="oexpand" name="expandcollapse" onclick="expandCollapseAll(true)" type="radio" />
+                                    <label for="oexpand">Expand All</label>
+                                    <input value="false" name="expandcollapse" onclick="expandCollapseAll(false)" type="radio" id="ocollapse" />
+                                    <label for="ocollapse">Collapse All&nbsp;</label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+                <section class="environment_info">
+                    <div id="env_header" class="title_bg collapse">
+                        <ul>
+                            <li class="info_icon"></li>
+                            <li class="txt">
+                                Environment Information
+                            </li>
+                        </ul>
+                        <div class="accordien_arrow"></div>
+                    </div>
+                    <div id="env_details" class="ui-layout-content">
+                        <table border="0" cellspacing="0" cellpadding="0" class="back_tab_bg">
+                            <tr>
+                                <td>
+                                    <table border="0" cellspacing="1" cellpadding="0" class="environment_tab">
+                                        <tr>
+                                            <th>Execution On</th>
+                                            <th>QAF build</th>
+                                            <th>Desired Capabilities</th>
+                                            <th>Actual Capabilities</th>
+                                            <th>Run Parameters</th>
+                                        </tr>
+                                        <tr>
+                                            <td id="execution_env_info">QAF-Type : Pro</td>
+                                            <td id="isfw_build_info">QAF-Type : Pro</td>
+                                            <td id="desired_capabilities">Platform : ANY</td>
+                                            <td id="actual-capabilities">Platform : XP</td>
+                                            <td id="run-parameters">default.locale : en</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <!--<section class="error_analysis"> -->
+                    <div id="error_analysis_header" class="title_bg error_analysis collapse" style="margin-top: 10px;">
+                        <ul>
+                            <li class="icon"></li>
+                            <li class="txt">
+                                Error Analysis
+                            </li>
+                        </ul>
+                        <div class="accordien_arrow"></div>
+                    </div>
+                    <div id="error_analysis_details" class="ui-layout-content"></div>
+                    <!-- </section> -->
+                    <div id="method-results"></div>
+                </section>
+            </div>
+        </div>
+    </div>
+    <div class="ui-layout-west">
+        <div id="reportlist_scroll" class="ui-layout-content" style="border-left:1px solid #fff;">
+            <ul id="reportlist"></ul>
+        </div>
+    </div>
+    <div id="dialog" title="An Image!">
+        <a id="newwin" href="" target="_blank"> <img id="image" src="" style="width: 100%;" /></a>
+    </div>
+    
+    <div id="cmd-dialog" title="Request Details">
+    	<h3 onclick="$('request-details').toggle();">Request</h3>
+    	<div id="request-details"></div>
+    	<h3 onclick="$('reponse-details').toggle();">Reponse</h3>
+    	<div id="response-details"></div>
+    </div>
+</body>
+
+</html>

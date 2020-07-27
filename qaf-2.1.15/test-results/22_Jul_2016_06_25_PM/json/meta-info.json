@@ -1,0 +1,13 @@
+{
+  "name": "QAF Demo",
+  "status": "pass",
+  "tests": [
+    "AppiumContactManager"
+  ],
+  "total": 2,
+  "pass": 2,
+  "fail": 0,
+  "skip": 0,
+  "startTime": 1469192124301,
+  "endTime": 1469192198186
+}

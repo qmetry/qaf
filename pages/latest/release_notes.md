@@ -5,6 +5,13 @@ sidebar: qaf_latest-sidebar
 permalink: latest/release_notes.html
 folder: latest
 ---
+## VER-3.0.0 Release Notes:
+
+ - Closed [3.0.0 milestone](https://github.com/qmetry/qaf/milestone/8?closed=1)
+ - Minimum selenium version set to 3.0.0
+ - Minimum Java version set to 8
+ - Breaking changes in ResultUpdator interface
+ - [Elasticsearch integration](https://github.com/qmetry/qaf-support-elasticsearch) for cross execution dashboard using kibana.
 
 ## VER-2.1.15 Release Notes:
 

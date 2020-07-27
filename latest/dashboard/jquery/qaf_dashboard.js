@@ -1,31 +1,25 @@
 /*******************************************************************************
- * QMetry Automation Framework provides a powerful and versatile platform to
- * author Automated Test Cases in Behavior Driven, Keyword Driven or Code Driven
- * approach
+ * MIT License
  * 
- * Copyright 2016 Infostretch Corporation
+ * Copyright (c) 2019 Infostretch Corporation
  * 
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or any later version.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
- * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
- * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
- * OR OTHER DEALINGS IN THE SOFTWARE
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program in the name of LICENSE.txt in the root folder of the
- * distribution. If not, see https://opensource.org/licenses/gpl-3.0.html
- * 
- * See the NOTICE.TXT file in root folder of this source files distribution for
- * additional information regarding copyright ownership and licenses of other
- * open source software / files used by QMetry Automation Framework.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  * 
  * For any inquiry or need additional information, please contact
  * support-qaf@infostretch.com
@@ -105,7 +99,7 @@ var testOverviewTemplate = '<tr>'
 var methodHeaderTemplate = '<div class="mehod ${result} ${type}" id="${result}_cont">'
 		+ '<div class="mehodheader" onclick="mehodheaderClick(this);">'
 		+ '<span class="statusicon ${result}"> &nbsp;<span class="status" style="display:none">${result}</span></span>'
-		+ '<b class="ui-icon-text">{{if (typeof metaData != \'undefined\') }} {{each(i,v) metaData}} {{if (i == \'name\')}}${v} {{/if}}{{/each}} {{else}} ${name} {{/if}}</b> {{if ((typeof args != \'undefined\') && args.length>0)}}'
+		+ '<b class="ui-icon-text">{{if (typeof metaData != \'undefined\') }} {{each(i,v) metaData}} {{if (i == \'name\')}}${v} {{/if}}{{/each}} {{else}} ${name} {{/if}}</b> {{if ((typeof args != \'undefined\') && args.length>0 && isMap(args[0]))}}'
 		+ ' <span class="mehod-args"> ${args[0][\'tcId\']} ${args[0][\'recId\']}</span> {{/if}}'
 		+ '<div style="float: right; ">'
 		+ '{{if typeof retryCount != \'undefined\' && retryCount>0}}'
@@ -184,7 +178,7 @@ var checkpointTemplate = '<pre class="prettyprint" style="border: none !importan
 		+ '<div class="checkpoint ${getContainerClass(type)}" style="border:none;">'
 		+ '<div {{if subCheckPoints}}onclick="$(this).closest(\'.checkpoint\').children(\'.subcheckpoints\').toggle();$(this).children(\'span\').toggleClass(\'ui-icon-triangle-1-e ui-icon-triangle-1-s\');" {{/if}}>'
 		+ '<span class="ui-icon {{if subCheckPoints.length > 0}} ui-icon-triangle-1-e {{else}} ${getIcon(type)} {{/if}}" style="float:left;margin-top:0.0em;margin-left:5px;" title="${type}"></span>'
-		+ '<span style="vertical-align:top;margin-left:25px;display:block;word-wrap: break-word;">{{html message}}'
+		+ '<span style="vertical-align:top;margin-left:25px;display:block;word-wrap: break-word;">{{html escapHtml(message)}}'
 		+ '{{if screenshot}}<a class="screenshot" href="${screenshot}" style="width:auto;margin-top:0.0em;vertical-align:middle;" title="Screenshot"></a>'
 		+ '{{/if}}'
 		+ '{{if duration}}'
@@ -930,6 +924,10 @@ function trunck(str) {
 				+ '...</span>';
 	}
 	return str;
+}
+
+function escapHtml(str){
+	return str.replace(/<(?!(a |\/a))/gi,"&lt;");
 }
 
 function formatedRes(res) {
@@ -1698,6 +1696,15 @@ function jsonToString(value) {
 isString = function(o) {
 	return o == null || typeof o == "string"
 			|| (typeof o == "object" && o.constructor === String);
+}
+
+function isMap(o) {
+    try {
+        Map.prototype.has.call(o); // throws if o is not an object or has no [[MapData]]
+        return true;
+    } catch(e) {
+        return false;
+    }
 }
 
 function msToDateStr(ms) {
