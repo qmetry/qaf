@@ -8,7 +8,12 @@ tags: [bdd,scenario,bdl,java]
 
 
 
-Test step can be defined in .java or .bdl files. It consists of description, with which it is known.
+Test step can be defined in .java (coded) or .bdl (code-less) files. Test step consists of implementation and description, with which it is known. Description is also used to reporting the step. Description must have same number of placeholder as number of arguments expected in step. The argument placeholder can be argument number or meaningful name for the argument. 
+
+Features:
+ * Ease of implementation
+ * Support complex objects
+ * Supports argument formatter `QAFTestStepArgumentFormatter` for BDD
 
 ## Step in Java
 
@@ -66,11 +71,17 @@ Given COMMENT: '${args[1]}'
 END
 ``` 
 
+```
+STEP-DEF: user (log|sign)ins with {0:map}
+Given COMMENT: '${args[0]}'
+END
+``` 
+
 As well as
 
 ```
 STEP-DEF: Login
-Meta-Data: user (log|sign)ins with {0:map}
+Meta-Data: {'description' : 'user (log|sign)ins with {0:map}'}
 Given COMMENT: '${args[0]}'
 END
 ``` 

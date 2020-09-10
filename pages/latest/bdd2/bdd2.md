@@ -7,6 +7,19 @@ folder: latest
 tags: [bdd,scenario]
 ---
 
+## Features
+
+BDD2 syntax is derived from QAF BDD, Jbehave and Gherkin. Following are features of BDD2:
+
+  * Custom [Meta-Data](scenario-meta-data.html) that supports [meta-data filters](scenario_metadatata_filter_include_exclude_prop.html), [meta-data rules](meta-data-rules.html) and [formatter](scenario-meta-data.html#meta-data-formatter)
+  * Parameter support in step argument
+  * Data driven test using embedded or external test data
+  	 * External test data from external source (CSV, XML, JSON, EXCEL, DB)
+     * Embedded test data using Examples
+  * Background support
+  * Compatible with QAF-geherkin or any other gherkin editor.
+  * Supported by TestNG runner using [BDDTestFactory2](bdd-configuration.html#factory-class) and by cucumber runner using [QAF-cucumber](qaf_cucumber.html)
+
 ## Comment
 
 Comments can be placed any where in the bdd file. Comment can be single line or multiline. Single line comment starts with `#` or `!`.
@@ -30,6 +43,7 @@ To break statement in multiple line you can use `_&` as line break.
 
 ## Meta-data 
 
+Unlike BDD, in BDD2 meta-data are provided before scenario declaration  using `@` as key value pair separated with `:` sign. Meta-data not provided as key value pair will be considered as `groups`.
 * There are predefined meta-key available to use which are listed in [meta-data](scenario.html#meta-data).
 * You can define your custom meta-key to categorize scenarios as per AUT. You can choose whatever names are most appropriate for the information they are trying to convey.
 * The meta-data are collected as part of the scenario parsing and made available for different uses, e.g. Scenario selection, setting priority

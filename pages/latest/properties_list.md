@@ -5,7 +5,7 @@ permalink: latest/properties_list.html
 folder: latest
 tags: [getting_started]
 ---
-Framwork uses different proprties those are defined in [ApplicationProperties.java](javadoc/com/qmetry/qaf/automation/keys/ApplicationProperties.html). Below are few useful and important properties. Refer [different ways of providing properties](different_ways_of_providing_prop.html) to get details on how to set any property.
+Framework uses different properties those are defined in [ApplicationProperties.java](javadoc/com/qmetry/qaf/automation/keys/ApplicationProperties.html). Below are few useful and important properties. Refer [different ways of providing properties](different_ways_of_providing_prop.html) to get details on how to set any property.
 
 | Key | Default Value | Description | 
 |-------|--------|---------|

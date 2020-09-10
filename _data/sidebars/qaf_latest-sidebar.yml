@@ -31,11 +31,11 @@ entries:
     - title: Release Notes
       url: release_notes.html
       output: web, pdf
-    - title: QAF 2.1.14 Docs
-      url: ../qaf-2.1.14/docs.html
-      output: web, pdf
     - title: QAF 2.1.15 Docs
       url: ../qaf-2.1.15/docs.html
+      output: web, pdf
+    - title: QAF 2.1.14 Docs
+      url: ../qaf-2.1.14/docs.html
       output: web, pdf
     - title: QAF 2.1.13 Docs
       url: ../qaf-2.1.13/docs.html
@@ -252,6 +252,10 @@ entries:
     output: web, pdf
     folderitems:
 
+    - title: Properties
+      url: properties_configuration.html
+      output: web, pdf
+  
     - title: Locales
       url: managing_locales.html
       output: web, pdf
@@ -270,6 +274,10 @@ entries:
 
     - title: BDD Configuration
       url: bdd-configuration.html
+      output: web, pdf
+
+    - title: Using Cucumber
+      url: qaf_cucumber.html
       output: web, pdf
 
     - title: Meta-data Filter
@@ -300,9 +308,6 @@ entries:
       url: testing_mobile_web_in_desktop_browser.html
       output: web, pdf
 
-    - title: QAF Cucumber
-      url: qaf_cucumber.html
-      output: web, pdf
   - title: Reporting
     output: web, pdf
     folderitems:
