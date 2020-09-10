@@ -8,7 +8,7 @@ folder: latest
 
 Using QAF you can integrate any Test Management Tool to update Test-Result after test execution completed.
 
-1. Create a class which implements [TestCaseResultUpdator](/javadoc/com/qmetry/qaf/automation/integration/TestCaseResultUpdator.html) interface.
+1. Create a class which implements [TestCaseResultUpdator](javadoc/com/qmetry/qaf/automation/integration/TestCaseResultUpdator.html) interface.
 2. Specify qualified class name in `result.updator` property.
 3. Overide methods to provide test management tool specific implementation/method calls
 

@@ -34,7 +34,7 @@ The general syntax of a parameter is ${prefix:name}. The prefix tells Configurat
 | rnd |	generates random based on provided format. Format uses `a` for alphabet and `9` for digit in resulting value 
 | expr | evaluates expression
 
-** Parameter Examples with prefix: **
+<b>Parameter Examples with prefix:</b>
 
 ```
 ${rnd:aaa-aaa-aaa}
