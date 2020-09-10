@@ -12,6 +12,14 @@ folder: latest
  - Minimum Java version set to 8
  - Breaking changes in ResultUpdator interface
  - [Elasticsearch integration](https://github.com/qmetry/qaf-support-elasticsearch) for cross execution dashboard using kibana.
+ - New Features: 
+      - Support to have multiple result updater
+      - Random data and expression in variable interpolation support 
+      - Parameter in parameter interpolation support
+      - Runtime Scenario factory
+      - BDD Generator - generates feature file from code or bdd with embedded examples. 
+      - New property `report.log.level` to set report level, `report.log.skip.success` for not reporting success message(s)
+      - Inherit meta-data from @meta-data annotation on test class
 
 ## VER-2.1.15 Release Notes:
 
