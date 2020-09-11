@@ -45,4 +45,4 @@ Just like reading from BDD or Feature file, [RuntimeScenarioFactory](javadoc/com
 
 ## BDD Generator
 
-When using Runtime Scenario, bdd plain text files or feature file or are not required to run your tests. In case, if you required to have feature file for any reason you can generate feature files using [Behavior Generator](bdd_generator.html).
+When using Runtime Scenario, bdd plain text files or feature file are not required to run your tests. In case, if you required to have feature file for any reason you can generate feature files using [Behavior Generator](bdd_generator.html).
