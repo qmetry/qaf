@@ -205,7 +205,9 @@ entries:
             - title: Keyword Synonyms
               output: web, pdf
               url: BDD_Keywords_Synonyms.html
-           
+            - title: BDD in JAVA
+              output: web, pdf
+              url: runtime_scenario.html
 
       - title: KWD
         output: web, pdf
