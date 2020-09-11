@@ -293,7 +293,14 @@ var timer = $.timer(function() {
 var pageLayout;
 
 $(document).ready(function() {
-
+	//Fix XML Parsing Error: not well-formed
+	$.ajaxSetup({beforeSend: function(xhr){
+		  if (xhr.overrideMimeType)
+		  {
+		    xhr.overrideMimeType("application/json");
+		  }
+		}
+		});
 	$("#reportlist_scroll").mCustomScrollbar({
 		scrollButtons : {
 			enable : true
