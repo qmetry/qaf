@@ -6,6 +6,6 @@ permalink: tag_news.html
 sidebar: qaf_latest-sidebar
 folder: latest
 ---
-{% include taglogic.html %}
+{% include latest/taglogic.html %}
 
-{% include links.html %}
+{% include latest/links.html %}
