@@ -208,6 +208,9 @@ entries:
             - title: BDD in JAVA
               output: web, pdf
               url: runtime_scenario.html
+            - title: BDD2 Generator
+              output: web, pdf
+              url: bdd_generator.html
 
       - title: KWD
         output: web, pdf

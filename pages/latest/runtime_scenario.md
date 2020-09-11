@@ -45,12 +45,4 @@ Just like reading from BDD or Feature file, [RuntimeScenarioFactory](javadoc/com
 
 ## BDD Generator
 
-When using Runtime Scenario, bdd plain text files or feature file or are not required to run your tests. 
-In case, if you required to have feature file for any reason you can generate feature files from your java/non-java implementation using [Behavior Generator](javadoc/com/qmetry/qaf/automation/report/BDDGenerator.html). Generated feature files can be used as proof or to share with other team(s) within project and will enable development team to follow behavior driven development with test automation implementation in best efficient way.
-
-To generate feature files on demand: 
-  - add result updater `com.qmetry.qaf.automation.report.BDDGenerator`
-  - set `dryrun.mode=true`
-  - run your tests
-  
-Even if you don't provide dryrun mode or it is false, BDD generator will generate feature files. The generated feature files can be found under `auto_generated/features` folder under project root (it can be changed by using `bddgenerator.dest` property). Each generated file will be using BDD2 syntax. In case of data driven test/scenario, generated scenario in feature file will have embedded examples, regardless of test data provider.
+When using Runtime Scenario, bdd plain text files or feature file or are not required to run your tests. In case, if you required to have feature file for any reason you can generate feature files using [Behavior Generator](bdd_generator.html).

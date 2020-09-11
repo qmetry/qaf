@@ -16,8 +16,8 @@ folder: latest
       - Support to have multiple result updater
       - Random data and expression in variable interpolation support 
       - Parameter in parameter interpolation support
-      - Runtime Scenario factory
-      - BDD Generator - generates feature file from code or bdd with embedded examples. 
+      - [Runtime Scenario factory](runtime_scenario.html)
+      - [BDD Generator](bdd_generator.html) - generates feature file from code or bdd with embedded examples. 
       - New property `report.log.level` to set report level, `report.log.skip.success` for not reporting success message(s)
       - Inherit meta-data from @meta-data annotation on test class
 
