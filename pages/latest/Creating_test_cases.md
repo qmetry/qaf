@@ -3,10 +3,13 @@ title: Creating test cases - Java
 sidebar: qaf_latest-sidebar
 permalink: latest/Creating_test_cases.html
 folder: latest
+tags: [scenario,java]
+
 ---
 
 
-You can create a new test case or suit by extending **WebDriverTestCase** class. Now you can create test same as in TestNG. If you are new to TestNG, here is the [documentation](http://testng.org/doc/documentation-main.html). 
+You can create a new test case or suit by extending `TestNGTestCase`. More specific flavor for web services is `WSTestCase` and for web and mobile is `WebDriverTestCase`. Now you can create test same as in TestNG. If you are new to TestNG, here is the [documentation](http://testng.org/doc/documentation-main.html). You also can employ BDD using [runtime scenario](runtime_scenario.html).
+
 
 On extending WebDriverTestCase following object will be available to use in your test.
 
