@@ -1,8 +1,8 @@
 ---
 title: Creating test cases - Java
-sidebar: qaf_latest-sidebar
-permalink: latest/Creating_test_cases.html
-folder: latest
+sidebar: qaf_2_1_14-sidebar
+permalink: qaf-2.1.14/Creating_test_cases.html
+folder: qaf-2.1.14
 tags: [scenario,java]
 
 ---
