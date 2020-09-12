@@ -15,17 +15,6 @@ You can use QAF as a Maven Artifact. Users would need to add this to their pom.x
 
 **Repository entry:**
 
-```xml
-<repository>
-    <id>qaf</id>
-    <url>{{site.data.strings.qaf_repository}}</url>
-</repository>
-<repository>
-	<id>jai</id>
-	<url>https://repository.jboss.org/nexus/content/repositories/thirdparty-releases</url>
-</repository>
-```
-
 **Maven Dependency Entry:**
 
 ```xml
@@ -43,24 +32,6 @@ You can use QAF as a Maven Artifact. Users would need to add this to their pom.x
 
 ## IVY
 
-Create or update ivysettings.xml file to add new repository. Alternately you can add settings block into ivy.xml as well.
-
-**IVY settings**
-
-```xml
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<ivysettings>
-    <settings defaultResolver="qaf"/>
-    <resolvers>
-        <chain name="qaf">
-            <ibiblio name="central" m2compatible="true"/>
-            <ibiblio name="QAF" m2compatible="true" root="{{site.data.strings.qaf_repository}}" />
-            <ibiblio name="jai" m2compatible="true"
-				root="https://repository.jboss.org/nexus/content/repositories/thirdparty-releases" />
-        </chain>
-    </resolvers>
-</ivysettings>
-```
 
 **IVY Dependency Entry**
 
@@ -71,9 +42,9 @@ Create or update ivysettings.xml file to add new repository. Alternately you can
 
 ## Direct Download
 
-You can download QAF jar from [here](https://qmetry.github.io/qaf/dist).
+You can download QAF jar from [here](https://mvnrepository.com/artifact/com.qmetry/qaf).
 
-You can download QAF Support jar from [here](https://qmetry.github.io/qaf/dist).
+You can download QAF Support jar from [here](https://mvnrepository.com/artifact/com.qmetry/qaf-support).
 
 ## QAF BDD Editors For Eclipse
 

@@ -14,8 +14,8 @@ folder: latest
  - [Elasticsearch integration](https://github.com/qmetry/qaf-support-elasticsearch) for cross execution dashboard using kibana.
  - New Features: 
       - Support to have multiple result updater
-      - Random data and expression in variable interpolation support 
-      - Parameter in parameter interpolation support
+      - Random data and expression in [parameter interpolation](properties_configuration.html#parameter-interpolation) support 
+      - [Parameter within parameter](properties_configuration.html#parameter-within-parameter) interpolation support
       - [Runtime Scenario factory](runtime_scenario.html)
       - [BDD Generator](bdd_generator.html) - generates feature file from code or bdd with embedded examples. 
       - New property `report.log.level` to set report level, `report.log.skip.success` for not reporting success message(s)
