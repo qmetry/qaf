@@ -23,10 +23,12 @@ Just like reading from BDD or Feature file, [RuntimeScenarioFactory](javadoc/com
 ```java
  import static com.qmetry.qaf.automation.step.client.RuntimeScenarioFactory.scenario;
  
+ @MetaData("{'story':'testing for fun', 'module':'m1', 'storyId':'PRJ-111'}")
+ public class SampleTestSuite extends TestNGTestCase {
 
- @MetaData("{'TestCaseID':'TC-12345'}")
- @Test(description="a sample scenario", ...)
- public void testWithGivenWhenThen() {
+     @MetaData("{'status':'InProgress', 'testCaseId':'TEST-1', 'issueId':'PRJ-112'}")
+     @Test(description="a sample scenario", ...)
+     public void testWithGivenWhenThen() {
 
         scenario().
         given("a precondition",()->{
@@ -39,6 +41,7 @@ Just like reading from BDD or Feature file, [RuntimeScenarioFactory](javadoc/com
                 //write appropriate code...
         }).
         execute();
+     }
  }
 
 ```
