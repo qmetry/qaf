@@ -31,9 +31,11 @@ Framework uses different properties those are defined in [ApplicationProperties.
 | selenium.singletone | |	To define driver instance scope.Possible value can be Tests or Methods or Groups.
 |driver.init.retry.timeout|0|Duration in multiplication of 10 seconds for example 50. Set time out for retry driver initialization when driver initialization fail (since 2.1.9).
 |step.provider.sharedinstance|false|specify wherether to share class object among step in the same class. (since 2.1.9)
-|https.accept.all.cert|false|Set true to trust all certificates and ignore host name verification  for web-services (:new:since 2.1.13)
+|https.accept.all.cert|false|Set true to trust all certificates and ignore host name verification  for web-services (:since 2.1.13)
 |element.default.listener|true|Specify weather to attach `ElementMetaDataListener` or not. (:new:since 2.1.13)
-|element.default.metadata||To set default meta-data for webelement. Meta-data provided with locator has higher preference than default values. (:new:since 2.1.13)
+|element.default.metadata||To set default meta-data for webelement. Meta-data provided with locator has higher preference than default values. (:since 2.1.13)
 |password.decryptor.impl||full qualified name of the class that implements `PasswordDecryptor`. This implementation will be used to decrypt password. When configuration manager found any key starts with `encrypted` (:new:since 2.1.13)
-|tc.identifier.key|testCaseId|test case identifier meta-key which will be used to as file name of test case result json file. (:new:since 2.1.13)
+|tc.identifier.key|testCaseId|test case identifier meta-key which will be used to as file name of test case result json file. (:since 2.1.13)
+|report.log.level|Info|Set checkpoint messages reporting level in qaf json/html report. Possible values: Info, Pass, Warn, Fail. <br/>Info: will report all type messages including Info, pass, warn and fail messages <br/>Pass: will report pass, warn and fail messages but not Info <br/>Fail: will report fail messages but not Info, pass or warn (:new:since 3.0.0)
+|report.log.skip.success|false|set true to disable success checkpoints messages in report. (:new:since 3.0.0)
 
