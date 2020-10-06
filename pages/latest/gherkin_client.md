@@ -13,7 +13,7 @@ QAF Gherkin Scenario Factory allows to author test case in Gherkin format that C
 The predominant benefit is, you can run Gherkin as QAF scenario so it will have all QAF execution **features like run configuration, reporting, parallel execution, step listener**.
 
 
-## Why QAF-Gherkin Scenario Factory
+## Why QAF Scenario Factory for Gherkin
 Gherkin is well known behavior driven language that Cucumber understands. However with Cucumber JVM there are few challenges like:
 
 -  Lake of run configuration: you need to be dependent on other java unit testing framework JUnit or TestNG just for run configuration. Even if you use TestNG with Cucumber, you can't take full advantage of all features provided by TestNG!
@@ -30,7 +30,7 @@ Another open challenge for web and mobile test automation is, cucumber is unit t
 In order to overcome such challenges, We provided Scenario Factory for Gherkin so Gherkin can be used as QAF test step client in addition to BDD, CSV, Excel, and XML client.  
 
 
-### Benefits of using QAF-Gherkin Scenario Factory
+### Benefits of using QAF Scenario Factory for Gherkin
 
 - While you are authoring test in Gherkin format you can provide step implementation using `@QAFTestStep` annotation or Cucumber step annotations (`@Given`, `@When`, `@Then`, `@And`, `@But`). 
 
@@ -50,13 +50,13 @@ In order to overcome such challenges, We provided Scenario Factory for Gherkin s
 
 ## How to use it
 
-1.	Author test cases in Gherkin format. Refer [feature files](https://github.com/qmetry/qaf/tree/master/test/resources/features). You can use QAF Gherkin editor or standard Cucumber editor for authoring feature file.
+1.	Author test cases in Gherkin or BDD2 format. [BDD2](https://qmetry.github.io/qaf/latest/bdd2.html) is preferred over gherkin. Refer [feature files](https://github.com/qmetry/qaf/tree/master/test/resources/features). You can use QAF Gherkin editor or standard Cucumber editor for authoring feature file in Gherkin or BDD2 format.
 
 2.  Step Implementation
 	1.	You can use in-built QAF steps. 
 	2.  In order to create new steps either use QAF Step implementation way refer example[QAFTestStepImpl.java](https://github.com/qmetry/qaf/blob/master/test/src/com/qmetry/qaf/automation/impl/step/qaf/QAFTestStepImpl.java) or cucumber way Refer example[CucumberStepImpl.java](https://github.com/qmetry/qaf/blob/master/test/src/com/qmetry/qaf/automation/impl/step/cucumber/CucumberStepImpl.java) of step implementation. You need to provide either one of the implementation (you can have mixed implementation as well)
 
-3.	Use `com.qmetry.qaf.automation.step.client.gherkin.GherkinScenarioFactory` Factory class for run configuration XML
+3.	Use `com.qmetry.qaf.automation.step.client.text.BDDTestFactory2` Factory class to run configuration XML
 
 	> ``` xml
 	> 
@@ -64,7 +64,7 @@ In order to overcome such challenges, We provided Scenario Factory for Gherkin s
 	>    <parameter name="step.provider.pkg" value="com.qmetry.qaf.automation.impl.step.qaf" />
 	>    <parameter name="scenario.file.loc" value="resources/features" />
 	>    <classes>
-	>       <class name="com.qmetry.qaf.automation.step.client.gherkin.GherkinScenarioFactory" />
+	>       <class name="com.qmetry.qaf.automation.step.client.text.BDDTestFactory2" />
 	>    </classes>
 	> </test>
 	> 
@@ -80,8 +80,7 @@ Existing project implemented using cucumber can also be run using QAF-Gherkin Sc
 
 -  Use GherkinScenarioFactory to run feature files written in **standard gherkin language**
 -  Convert Cucumber hooks to appropriate TestNG listener, for example convert @before implementation to testng method listener's beforeMethod
--  Place @QAFTestStepProvider annotation at class defining cucumber steps
+-  If you are using cucumber 4 or lower, place @QAFTestStepProvider annotation at class defining cucumber steps. For cucumber 5+ add [qaf-cucumber](https://github.com/qmetry/qaf-cucumber#qaf-cucumber) dependency.
 -  Use ‘step.provider.pkg’ instead of glue
 -  You can use tags as groups for run-configuration-filter
-
 
