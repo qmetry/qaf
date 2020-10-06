@@ -11,7 +11,7 @@ Framework uses different properties those are defined in [ApplicationProperties.
 |-------|--------|---------|
 | env.baseurl |	| Base URL of web application under test
 | env.resources | resources |	List of files or folder from that you want to load resources like testdata, locators and properties.
-| global.datadriven.parallel | false |Only for data driven testcases (test/scenario with data provider). Set `true` to run data-driven tests in parallel. If your test case is data driven and data provider returns 10 records, those will run in parallel. It will use `data-provider-thread-count` from testng configuration. If you want to set parallel behavior specific to testcase/scenario you can set using `<methodname>.parallel`.
+| global.datadriven.parallel | false |Only for data driven testcases (test/scenario with data provider). Set `true` to run data-driven tests in parallel. If your test case is data driven and data provider returns 10 records, set this property true/false to run in parallel/sequential. It will use `data-provider-thread-count` from testng configuration. If you want to set parallel behavior specific to testcase/scenario you can set using `<methodname>.parallel`.
 | step.provider.pkg | |	Provide a list of packages to load teststep, required only for step client other than java.
 | scenario.file.loc | scenarios | list of file/folder from where bdd/kwd scenarios need to be executed
 | remote.server | localhost |	If you are using remote driver, specify server.
