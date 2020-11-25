@@ -55,9 +55,12 @@ QMetry Automation Framework provides a powerful and versatile platform to author
 <h3>QMetry Automation Framework Key Features</h3>
 
 <h4>Test Authoring:</h4> 
-	- Behavior Driven Development (QAF BDD or Gherkin) 
-	- Keyword Driven (Test case in CSV or EXCEL or XML)
-	- Code Driven Development (TestNG test)
+
+<ul>
+	<li>Behavior Driven Development (QAF BDD or Gherkin) </li>
+	<li>Keyword Driven (Test case in CSV or EXCEL or XML)</li>
+	<li>Code Driven Development (TestNG test)</li>
+</ul>
 
 <h4>Test Data Management:</h4> Data driven testing with external Test
 		Data Support (CSV, JSON, XML, excel, database), locator repository, support for multiple
