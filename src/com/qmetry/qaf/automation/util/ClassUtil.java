@@ -47,6 +47,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 import org.apache.commons.lang.ClassUtils;
+import org.apache.commons.lang.reflect.FieldUtils;
 
 /**
  * com.qmetry.qaf.automation.util.ClassUtil.java
@@ -601,7 +602,12 @@ public final class ClassUtil {
 			modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
 			field.set(classObj, value);
 		} catch (Throwable e) {
-			e.printStackTrace();
+			try {
+				//should work except for final fields
+				FieldUtils.writeField(classObj, fieldName, value, true);
+			} catch (IllegalAccessException e1) {
+				e1.printStackTrace();
+			}
 		}
 	}
 
