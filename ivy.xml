@@ -85,7 +85,8 @@ SOFTWARE.
 		<dependency org="net.sourceforge.jexcelapi" name="jxl" rev="2.6.12" conf="compile->default">
 			<artifact name="jxl" type="jar"></artifact>
 		</dependency>
-
+		<dependency org="org.apache.poi" name="poi" rev="4.1.2" conf="provided->default"/>
+		<dependency org="org.apache.poi" name="poi-ooxml" rev="4.1.2" conf="provided->default"/>
 
 		<dependency org="commons-codec" name="commons-codec" rev="1.8" conf="compile->default"/>
 		<dependency org="commons-configuration" name="commons-configuration"
