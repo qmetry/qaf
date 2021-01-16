@@ -61,6 +61,7 @@ import com.qmetry.qaf.automation.util.DatabaseUtil;
 import com.qmetry.qaf.automation.util.ExcelUtil;
 import com.qmetry.qaf.automation.util.JSONUtil;
 import com.qmetry.qaf.automation.util.ListUtils;
+import com.qmetry.qaf.automation.util.PoiExcelUtil;
 import com.qmetry.qaf.automation.util.StringUtil;
 
 /**
@@ -318,6 +319,13 @@ public class QAFInetrceptableDataProvider {
 							(String) metadata.get(params.SHEETNAME.name()));
 				}
 				return ExcelUtil.getExcelDataAsMap(file, (String) metadata.get(params.SHEETNAME.name()));
+			}
+			if (file.endsWith("xlsx")) {
+				if (isNotBlank(key)) {
+					return PoiExcelUtil.getTableDataAsMap(file, ((String) metadata.get(params.KEY.name())),
+							(String) metadata.get(params.SHEETNAME.name()));
+				}
+				return PoiExcelUtil.getExcelDataAsMap(file, (String) metadata.get(params.SHEETNAME.name()));
 			}
 			// csv, text
 			List<Object[]> csvData = CSVUtil.getCSVDataAsMap(file);
