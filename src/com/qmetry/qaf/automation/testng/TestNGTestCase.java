@@ -87,11 +87,12 @@ public abstract class TestNGTestCase extends Validator {
 		this.context = context;
 	}
 
+	/* #359 Termination will impact if there are multiple suites. It is already taken care with shutdown hook.
 	@AfterSuite(alwaysRun = true)
 	final public void afterSuit(ITestContext testContext) {
 		TestBaseProvider.instance().stopAll();
 		ResultUpdator.awaitTermination();
-	}
+	}*/
 
 	public PropertyUtil getProps() {
 		return ConfigurationManager.getBundle();
