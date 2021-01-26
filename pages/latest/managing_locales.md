@@ -55,8 +55,8 @@ At the time of execution you need to specify local to load and default local for
 
 ```properties
 #you can load one or more locale at a time
-load.locales=hi;fr
-default.locale=hi
+env.load.locales=hi;fr
+env.default.locale=hi
 ```
 
 As you can load more than one local for execution, if you want to access other loaded local which is not default (French in this example):
