@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/qmetry/qaf.svg?branch=master)](https://travis-ci.com/qmetry/qaf)
+[![Build Status](https://travis-ci.org/qmetry/qaf.svg?branch=master)](https://travis-ci.org/qmetry/qaf)
 [![License](https://img.shields.io/github/license/qmetry/qaf.svg)](http://www.opensource.org/licenses/mit-license.php)
 [![Release](https://img.shields.io/github/release/qmetry/qaf.svg)](https://github.com/qmetry/qaf/releases)
 [![GitHub tag](https://img.shields.io/github/tag/qmetry/qaf.svg)](https://github.com/qmetry/qaf/tags)
