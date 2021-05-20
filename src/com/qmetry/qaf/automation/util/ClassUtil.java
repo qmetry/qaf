@@ -25,8 +25,10 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.GenericArrayType;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
@@ -287,11 +289,30 @@ public final class ClassUtil {
 			Class<C> class1 = (Class<C>) ((ParameterizedType) ClassUtil.class.getMethod("getInstance")
 					.getGenericReturnType()).getActualTypeArguments()[0].getClass();
 
-			return class1.newInstance();
+			return class1.getDeclaredConstructor().newInstance();
 		} catch (Exception e) {
 			return null;
 		}
 
+	}
+	
+	public static <T> T newInstanceOrNull(Class<T> clazz) {
+		try {
+			Constructor<T> constructor = clazz.getConstructor();
+			return newInstance(constructor);
+		} catch (ExceptionInInitializerError | SecurityException e) {
+			throw new RuntimeException("Cannot instantiate class " + clazz.getName(), e);
+		} catch (NoSuchMethodException e) {
+			return null;
+		}
+	}
+
+	public static <T> T newInstance(Constructor<T> constructor, Object... parameters) {
+		try {
+			return constructor.newInstance(parameters);
+		} catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+			throw new RuntimeException("Cannot instantiate class " + constructor.getDeclaringClass().getName(), e);
+		}
 	}
 
 	public static String getMethodSignture(Method m, boolean includeClass) {

@@ -34,6 +34,7 @@ import org.apache.commons.configuration.ConfigurationConverter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.LogFactoryImpl;
 import org.testng.IInvokedMethod;
+import org.testng.IRetryAnalyzer;
 import org.testng.ISuite;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
@@ -112,7 +113,7 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 		ReporterUtil.updateOverview(testContext, null);
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void transform(ITestAnnotation testAnnotation, Class clazz, Constructor arg2, Method method) {
 		try {
 			if (null != method) {
@@ -140,8 +141,8 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 					testAnnotation.setDescription(desc);
 				}
 				testAnnotation.setDescription(getBundle().getSubstitutor().replace(testAnnotation.getDescription()));
-
-				testAnnotation.setRetryAnalyzer(Class
+				
+				testAnnotation.setRetryAnalyzer((Class<? extends IRetryAnalyzer>)Class
 						.forName(ApplicationProperties.RETRY_ANALYZER.getStringVal(RetryAnalyzer.class.getName())));
 
 			}

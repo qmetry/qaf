@@ -68,6 +68,7 @@ import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.step.client.Scenario;
 import com.qmetry.qaf.automation.step.client.text.BDDTestFactory;
 import com.qmetry.qaf.automation.testng.MethodPriorityComparator;
+import com.qmetry.qaf.automation.util.ClassUtil;
 import com.qmetry.qaf.automation.util.StringUtil;
 
 /**
@@ -86,9 +87,9 @@ public class QAFTestNGListener {
 	public void onFinish(ISuite suite) {
 		try {
 			generateTestFailedXML(suite);
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			logger.debug(e.getStackTrace());
-			logger.info("Unable to create testng-failed-qas.xml");
+			logger.info("Unable to create testng-failed-qas.xml: " + e.getMessage());
 		}
 	}
 
@@ -229,7 +230,7 @@ public class QAFTestNGListener {
 		if (null != groups && Arrays.asList(groups).contains("cucumber"))
 			return;
 		QAFTestBase stb = TestBaseProvider.instance().get();
-		tr.setAttribute("browser", stb.getBrowser());
+		tr.setAttribute("browser", stb.getDriverName());
 
 		org.testng.Reporter.setCurrentTestResult(tr);
 		if (getBundle().getBoolean("report.log.testngoutput", false)) {
@@ -362,16 +363,17 @@ public class QAFTestNGListener {
 				if (xmlSuite == null) {
 					xmlSuite = new XmlSuite();
 					xmlSuite.setName(suite.getName());
-					xmlSuite.setParallel(suite.getParallel());
+					xmlSuite.setParallel(XmlSuite.ParallelMode.getValidParallel(suite.getParallel()));
+					
 					xmlSuite.setThreadCount(suite.getXmlSuite().getThreadCount());
 					xmlSuite.setListeners(suite.getXmlSuite().getListeners());
 					xmlSuite.setParameters(suite.getXmlSuite().getParameters());
 				}
 				XmlTest test = new XmlTest(xmlSuite);
 				test.setName(suiteResult.getValue().getTestContext().getName());
-				test.setPreserveOrder("true");
+				test.setPreserveOrder(true);
 				test.setParameters(suiteResult.getValue().getTestContext()
-						.getCurrentXmlTest().getTestParameters());
+						.getCurrentXmlTest().getLocalParameters());
 				XmlMethodSelectors methodSelectors = new XmlMethodSelectors();
 				XmlMethodSelector methodSelector = new XmlMethodSelector();
 				methodSelectors.setMethodSelector(methodSelector);
@@ -391,7 +393,7 @@ public class QAFTestNGListener {
 						}
 					}
 				}
-				xmlScript.setScript(scriptDataPart);
+				setScript(xmlScript,scriptDataPart);
 				methodSelector.setScript(xmlScript);
 				ArrayList<XmlMethodSelector> selectors =
 						new ArrayList<XmlMethodSelector>();
@@ -413,6 +415,21 @@ public class QAFTestNGListener {
 			FileWriter writer = new FileWriter(file);
 			writer.write(xmlSuite.toXml());
 			writer.close();
+		}
+	}
+	
+	private void setScript(XmlScript xmlScript, String script) {
+		try {
+			Method setter = null;
+			try {
+				setter = ClassUtil.getMethod(XmlScript.class, "setScript");
+			} catch (NoSuchMethodException e) {
+				//tng - 7.1.1+
+				setter = ClassUtil.getMethod(XmlScript.class, "setExpression");
+			}
+			setter.invoke(xmlScript, script);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
 		}
 	}
 

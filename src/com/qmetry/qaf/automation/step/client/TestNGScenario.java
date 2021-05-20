@@ -89,7 +89,7 @@ public class TestNGScenario extends TestNGMethod {
 			setTimeOut(scenario.getTimeOut());
 			
 		} else {
-			metadata = getMetadata(getMethod(), true);
+			metadata = getMetadata(getConstructorOrMethod().getMethod(), true);
 			qualifiledName = getRealClass().getName() + "." + getMethodName();
 		}
 		metadata.put("name", getMethodName());

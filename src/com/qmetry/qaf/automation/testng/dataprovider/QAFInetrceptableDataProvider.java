@@ -42,7 +42,6 @@ import org.json.JSONObject;
 import org.testng.ITestContext;
 import org.testng.ITestNGMethod;
 import org.testng.annotations.DataProvider;
-import org.testng.internal.ClassHelper;
 import org.testng.internal.Configuration;
 import org.testng.internal.MethodInvocationHelper;
 import org.testng.internal.annotations.IAnnotationFinder;
@@ -207,7 +206,7 @@ public class QAFInetrceptableDataProvider {
 					TreeMap<String, Object> parametes = new TreeMap<String, Object>(String.CASE_INSENSITIVE_ORDER);
 					parametes.putAll(scenario.getMetaData());
 					parametes.put("method", scenario.getMethodName());
-					parametes.put("class", scenario.getMethod().getDeclaringClass().getSimpleName());
+					parametes.put("class", scenario.getConstructorOrMethod().getMethod().getDeclaringClass().getSimpleName());
 					
 					filter = StrSubstitutor.replace(filter, parametes);
 					filter = getBundle().getSubstitutor().replace(filter);
@@ -245,7 +244,7 @@ public class QAFInetrceptableDataProvider {
 								if (values.length > pi && paramTypes[pi].isAssignableFrom(values[pi].getClass())) {
 									params[pi] = values[pi];
 								} else if (DataBean.class.isAssignableFrom(paramTypes[pi])) {
-									DataBean bean = (DataBean) paramTypes[pi].newInstance();
+									DataBean bean = (DataBean) paramTypes[pi].getDeclaredConstructor().newInstance();
 									bean.fillData(record);
 									params[pi] = bean;
 
@@ -263,7 +262,7 @@ public class QAFInetrceptableDataProvider {
 				} else if (!Map.class.isAssignableFrom(paramTypes[0])) {
 					if (DataBean.class.isAssignableFrom(paramTypes[0])) {
 						try {
-							DataBean bean = (DataBean) paramTypes[0].newInstance();
+							DataBean bean = (DataBean) paramTypes[0].getDeclaredConstructor().newInstance();
 							bean.fillData(record);
 							testdata.set(i, new Object[] { bean });
 
@@ -353,7 +352,7 @@ public class QAFInetrceptableDataProvider {
 				m = getDataProviderMethod(dp, methodClass);
 			}
 			Object instanceToUse = m.getDeclaringClass().equals(tm.getConstructorOrMethod().getDeclaringClass()) ? tm.getInstance()
-					: ClassHelper.newInstanceOrNull(m.getDeclaringClass());
+					: ClassUtil.newInstanceOrNull(m.getDeclaringClass());
 			return InvocatoinHelper.invokeDataProvider(instanceToUse, m, tm, c, null,
 					new Configuration().getAnnotationFinder());
 		} else {
@@ -397,7 +396,7 @@ public class QAFInetrceptableDataProvider {
 			try {
 				Class<?> listenerClass = Class.forName(listener);
 				if (QAFDataProviderIntercepter.class.isAssignableFrom(listenerClass)) {
-					QAFDataProviderIntercepter intercepter = (QAFDataProviderIntercepter) listenerClass.newInstance();
+					QAFDataProviderIntercepter intercepter = (QAFDataProviderIntercepter) listenerClass.getDeclaredConstructor().newInstance();
 					intercepters.add(intercepter);
 				}
 			} catch (Exception e) {
