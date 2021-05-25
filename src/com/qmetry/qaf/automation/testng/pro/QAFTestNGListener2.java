@@ -40,6 +40,7 @@ import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.annotations.ITestAnnotation;
 import org.testng.annotations.Parameters;
+import org.testng.xml.XmlSuite;
 
 import com.qmetry.qaf.automation.core.CheckpointResultBean;
 import com.qmetry.qaf.automation.core.LoggingBean;
@@ -192,8 +193,14 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 				params.put("duration", tr.getEndMillis() - tr.getStartMillis());
 
 				Map<String, Object> executionInfo = new HashMap<String, Object>();
-				executionInfo.put("testName", tr.getTestContext().getCurrentXmlTest().getName());
-				executionInfo.put("suiteName", tr.getTestContext().getSuite().getName());
+				XmlSuite suite = tr.getTestContext().getSuite().getXmlSuite();
+				if(suite.getParentSuite()==null) {
+					executionInfo.put("testName", tr.getTestContext().getName());
+					executionInfo.put("suiteName", suite.getName());
+				}else {
+					executionInfo.put("testName", suite.getName()+"_"+tr.getTestContext().getName());
+					executionInfo.put("suiteName", suite.getParentSuite().getName());
+				}
 				
 				Map<String, Object> runPrams = new HashMap<String, Object>(
 						tr.getTestContext().getCurrentXmlTest().getAllParameters());
