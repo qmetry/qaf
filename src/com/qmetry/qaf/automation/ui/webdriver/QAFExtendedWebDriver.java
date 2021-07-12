@@ -21,6 +21,8 @@
  ******************************************************************************/
 package com.qmetry.qaf.automation.ui.webdriver;
 
+import static org.openqa.selenium.remote.CapabilityType.SUPPORTS_JAVASCRIPT;
+
 import java.lang.reflect.Proxy;
 import java.net.URL;
 import java.util.Arrays;
@@ -57,6 +59,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.qmetry.qaf.automation.core.ConfigurationManager;
+import com.qmetry.qaf.automation.core.MessageTypes;
 import com.qmetry.qaf.automation.core.QAFListener;
 import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.ui.JsToolkit;
@@ -68,7 +71,7 @@ import com.qmetry.qaf.automation.ui.util.QAFWebDriverWait;
 import com.qmetry.qaf.automation.ui.util.QAFWebElementExpectedConditions;
 import com.qmetry.qaf.automation.ui.webdriver.CommandTracker.Stage;
 import com.qmetry.qaf.automation.util.LocatorUtil;
-import static org.openqa.selenium.remote.CapabilityType.SUPPORTS_JAVASCRIPT;
+import com.qmetry.qaf.automation.util.StringMatcher;
 
 /**
  * com.qmetry.qaf.automation.ui.webdriver.QAFWebDriver.java
@@ -489,15 +492,78 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 		new DynamicWait<List<QAFWebElement>>(Arrays.asList(elements))
 				.until(QAFWebElementExpectedConditions.allElementVisible());
 	}
-
-	public void waitForWindowTitle(String title, long... timeout) {
-		new QAFWebDriverWait(this, timeout).withMessage("Wait for window title time out.")
-				.until(QAFWebDriverExpectedConditions.windowTitle(title));
+	
+	public void waitForWindowTitle(StringMatcher titlematcher, long... timeout) {
+		new QAFWebDriverWait(this, timeout).withMessage("Timed out waiting for window title " + titlematcher.toString())
+				.until(QAFWebDriverExpectedConditions.windowTitle(titlematcher));
+	}
+	public void waitForCurrentUrl(StringMatcher matcher, long... timeout) {
+		new QAFWebDriverWait(this, timeout).withMessage("Timed out waiting for url " + matcher.toString() + " timed out")
+				.until(QAFWebDriverExpectedConditions.currentURL(matcher));
 	}
 
 	public void waitForNoOfWindows(int count, long... timeout) {
-		new QAFWebDriverWait(this, timeout).withMessage("Wait for window title time out.")
+		new QAFWebDriverWait(this, timeout).withMessage("Timed out waiting for no of windows " + count)
 				.until(QAFWebDriverExpectedConditions.noOfwindowsPresent(count));
+	}
+	
+	public boolean verifyTitle(StringMatcher text, long... timeout) {
+
+		boolean outcome = true;
+		try {
+			waitForWindowTitle(text, timeout);
+		} catch (Exception e) {
+			outcome = false;
+		}
+		report("title", outcome, text, getTitle());
+
+		return outcome;
+	}
+	
+
+	public boolean verifyCurrentUrl(StringMatcher text, long... timeout) {
+
+		boolean outcome = true;
+		try {
+			waitForCurrentUrl(text, timeout);
+		} catch (Exception e) {
+			outcome = false;
+		}
+		report("currentUrl", outcome, text, getCurrentUrl());
+
+		return outcome;
+	}
+
+	public boolean verifyNoOfWindows(int count, long... timeout) {
+
+		boolean outcome = true;
+		try {
+			waitForNoOfWindows(count, timeout);;
+		} catch (Exception e) {
+			outcome = false;
+		}
+		report("NoOfWindows", outcome, count, getWindowHandles().size());
+
+		return outcome;
+	}
+
+	public void assertTitle(StringMatcher text, long... timeout) {
+		if (!verifyTitle(text, timeout)) {
+			throw new AssertionError();
+		}
+	}
+	
+	
+	public void assertCurrentUrl(StringMatcher text, long... timeout) {
+		if (!verifyCurrentUrl(text, timeout)) {
+			throw new AssertionError();
+		}
+	}
+
+
+	protected void report(String op, boolean outcome, Object... args) {
+		getReporter().addMessage(WebDriverCommandLogger.getMsgForDriverOp(op, outcome, args),
+				(outcome ? MessageTypes.Pass : MessageTypes.Fail));
 	}
 
 	@Override

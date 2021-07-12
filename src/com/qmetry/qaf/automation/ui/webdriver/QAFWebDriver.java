@@ -40,23 +40,57 @@ import org.openqa.selenium.internal.FindsByName;
 import org.openqa.selenium.internal.FindsByTagName;
 import org.openqa.selenium.internal.FindsByXPath;
 
+import com.qmetry.qaf.automation.ui.JsToolkit;
 import com.qmetry.qaf.automation.ui.UiDriver;
+import com.qmetry.qaf.automation.util.StringMatcher;
 
 public interface QAFWebDriver extends UiDriver, WebDriver, TakesScreenshot, JavascriptExecutor, FindsById,
 		FindsByClassName, FindsByLinkText, FindsByName, FindsByCssSelector, FindsByCustomStretegy, FindsByTagName,
 		FindsByXPath, HasInputDevices, HasCapabilities {
 
-	QAFWebElement findElement(By by);
+	public QAFWebElement findElement(By by);
 
-	List<QAFWebElement> getElements(By by);
+	public List<QAFWebElement> getElements(By by);
 
-	QAFWebElement findElement(String locator);
+	public QAFWebElement findElement(String locator);
 
-	List<QAFWebElement> findElements(String locator);
+	public List<QAFWebElement> findElements(String locator);
 
-	Mouse getMouse();
+	public Mouse getMouse();
 
-	Keyboard getKeyboard();
+	public Keyboard getKeyboard();
 
-	TouchScreen getTouchScreen();
+	public TouchScreen getTouchScreen();
+	
+	
+	public void waitForAjax(JsToolkit toolkit, long... timeout);
+
+	public void waitForAjax(long... timeout);
+
+	public void waitForAnyElementPresent(QAFWebElement... elements);
+
+	public void waitForAllElementPresent(QAFWebElement... elements);
+
+	public void waitForAnyElementVisible(QAFWebElement... elements);
+
+	public void waitForAllElementVisible(QAFWebElement... elements);
+	
+	
+	public void waitForWindowTitle(StringMatcher titlematcher, long... timeout);
+	
+	public void waitForCurrentUrl(StringMatcher matcher, long... timeout) ;
+	
+	public void waitForNoOfWindows(int count, long... timeout);
+	
+	public boolean verifyTitle(StringMatcher text, long... timeout);
+
+	public boolean verifyCurrentUrl(StringMatcher text, long... timeout);
+
+	public boolean verifyNoOfWindows(int count, long... timeout);
+
+	public void assertTitle(StringMatcher text, long... timeout);
+	
+	
+	public void assertCurrentUrl(StringMatcher text, long... timeout);
+
 }

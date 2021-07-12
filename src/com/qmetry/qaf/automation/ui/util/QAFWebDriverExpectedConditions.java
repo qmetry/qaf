@@ -25,6 +25,7 @@ import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 
 import com.qmetry.qaf.automation.ui.webdriver.QAFExtendedWebDriver;
+import com.qmetry.qaf.automation.util.StringMatcher;
 
 /**
  * com.qmetry.qaf.automation.core.ui.QAFWebDriverExpectedConditions.java
@@ -109,15 +110,25 @@ public class QAFWebDriverExpectedConditions {
 		};
 	}
 	
-	public static ExpectedCondition<QAFExtendedWebDriver, Boolean> windowTitle(final String title) {
+	public static ExpectedCondition<QAFExtendedWebDriver, Boolean> windowTitle(final StringMatcher title) {
 		return new ExpectedCondition<QAFExtendedWebDriver, Boolean>() {
 			@Override
 			public Boolean apply(QAFExtendedWebDriver driver) {
 				try {
-					return title.equalsIgnoreCase(driver.getTitle());
+					return title.match(driver.getTitle());
 				} catch (Exception e) {
+
 				}
 				return false;
+			}
+		};
+	}
+	
+	public static ExpectedCondition<QAFExtendedWebDriver, Boolean> currentURL(final StringMatcher url) {
+		return new ExpectedCondition<QAFExtendedWebDriver, Boolean>() {
+			@Override
+			public Boolean apply(QAFExtendedWebDriver driver) {
+					return url.match(driver.getCurrentUrl());
 			}
 		};
 	}

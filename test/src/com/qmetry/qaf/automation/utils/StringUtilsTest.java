@@ -35,7 +35,6 @@ public class StringUtilsTest {
 	void seleniumEqualsTest(String expectedPattern, String actulaString, boolean expectedResult) {
 		boolean actualResult = StringUtil.seleniumEquals(expectedPattern, actulaString);
 		Validator.assertThat(actualResult, Matchers.equalTo(expectedResult));
-
 	}
 
 	@Test(dataProvider = "bvTestData")
@@ -102,14 +101,37 @@ public class StringUtilsTest {
 		return new Object[][] {
 				// String expectedPattern,String actulaString, boolean
 				// expectedResult
-				new Object[] { "exact:ab*cd", "ab*cd", true }, new Object[] { "ab*cd", "ab*cd", true },
-				new Object[] { "***", "***", true }, new Object[] { "*abc*", "anythig abcshould fine", true },
-				new Object[] { "*abc", "anythig abcshould fine", false }, new Object[] { "*abc", "abc", true },
+				new Object[] { "exact:ab*cd", "ab*cd", true },
+				new Object[] { "ab*cd", "ab*cd", true },
+				new Object[] { "ab*cd", "ab somethiong cd", false }, //default to exact pattern
+				new Object[] { "glob:ab*cd", "ab somethiong cd", true },
+
+				new Object[] { "***", "***", true },
+				new Object[] { "*abc*", "anythig abcshould fine", false }, ////default exact pattern
+				new Object[] { "glob:*abc*", "anythig abcshould fine", true },
+
+				new Object[] { "this is lable. ", "this is lable  ", false },
+				new Object[] { "is this question?", "is this question!", false },//default exact pattern
+				new Object[] { "glob:is this question?", "is this question!", true },
+				new Object[] { "is this question?", "is this question?", true },
+				new Object[] { "is this question.", "is this question.", true },
+
+
+				new Object[] { "*abc", "anythig abcshould fine", false }, 
+				new Object[] { "*abc", "abc", false }, //default exact pattern
+				new Object[] { "glob:*abc", "abc", true },
+
 				new Object[] { "abc", "a*c", false }, new Object[] { "exact:*abc", "abc", false },
 
-				new Object[] { "*ab*cd", "*ab*cd", true }, new Object[] { "start:aB", "Ab*cd", false },
+				new Object[] { "*ab*cd", "*ab*cd", true },
+				new Object[] { "start:aB", "Ab*cd", false },
+				new Object[] { "start:Ab", "Ab.cd", true },
+				new Object[] { "startanycase:aB", "Ab*cd", true },
+				new Object[] { "startnocase:aB", "Ab*cd", true },
+				new Object[] { "startignoringcase:aB", "Abcd", true },
+				new Object[] { "startignorecase:aB", "Abcd", true }, new Object[] { "eq:1", "1.0", true },
+				new Object[] { "eq:aB", "aB", true }, new Object[] { "eq:aB", "Ab", false },
 				new Object[] { "start:ab", "ab*cd", true }
-
 		};
 	}
 

@@ -293,7 +293,7 @@ public class QAFExtendedWebElement extends RemoteWebElement implements QAFWebEle
 		super.setId(id);
 	}
 
-	private void load() {
+	protected void load() {
 		if (null==id || (id == "-1")) {
 			Map<String, ?> parameters = new HashMap<String, String>();
 			CommandTracker commandTracker = new CommandTracker(DriverCommand.FIND_ELEMENT, parameters);

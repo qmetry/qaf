@@ -24,6 +24,9 @@ package com.qmetry.qaf.automation.util;
 import java.lang.reflect.Method;
 import java.util.regex.Pattern;
 
+import com.qmetry.qaf.automation.core.AutomationError;
+import com.qmetry.qaf.automation.core.ConfigurationManager;
+
 public abstract class StringMatcher {
 	protected String stringToMatch;
 
@@ -36,11 +39,39 @@ public abstract class StringMatcher {
 		return this.getClass().getSimpleName() + ":" + stringToMatch;
 	}
 
-	abstract public boolean match(String target);
+	/**
+	 * Match expected string to actual string
+	 * 
+	 * @param actual - actual string
+	 * @return
+	 */
+	abstract public boolean match(String actual);
+
+	public static boolean match(String val1, String val2) {
+		if (null == val1 || null == val2) {
+			return val1 == val2;
+		}
+		StringMatcher matcher = getMatcherOrNull(val1);
+		if (matcher != null) {
+			return matcher.match(val2);
+		}
+		matcher = getMatcherOrNull(val2);
+		if (matcher != null) {
+			return matcher.match(val1);
+		}
+
+		String defaultMatcherType = ConfigurationManager.getBundle().getString("stringmatcher.default.matcher",
+				"exact");
+		matcher = get(defaultMatcherType, val1);
+		if (matcher != null) {
+			return matcher.match(val2);
+		}
+		throw new AutomationError(String.format("Wrong matcher type [%s]", defaultMatcherType));
+	}
 
 	/**
-	 * provision for define matcher in external data file, that can be converted
-	 * to actual one in code!
+	 * provision for define matcher in external data file, that can be converted to
+	 * actual one in code!
 	 * 
 	 * @param type
 	 * @param stringToMatch
@@ -48,12 +79,94 @@ public abstract class StringMatcher {
 	 */
 	public static StringMatcher get(String type, String stringToMatch) {
 		try {
+			type = type.toLowerCase().replace("nocase", "ignoringcase").replace("anycase", "ignoringcase")
+					.replace("ignorecase", "ignoringcase");
 			Method m = ClassUtil.getMethod(StringMatcher.class, type);
 			return (StringMatcher) m.invoke(null, stringToMatch);
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
 		return null;
+	}
+
+	private static StringMatcher getMatcherOrNull(String stringWithMatcher) {
+		if (stringWithMatcher.indexOf(":") > 0) {
+
+			try {
+				String[] parts = stringWithMatcher.split(":", 2);
+				return get(parts[0], parts[1]);
+			} catch (Exception e) {
+			}
+		}
+		return null;
+	}
+
+	public static StringMatcher expected(String stringWithMatcher) {
+		if (StringUtil.isNullOrEmpty(stringWithMatcher)) {
+			return new NullOrEmpty();
+		}
+		String[] parts = stringWithMatcher.split(":", 2);
+		if (StringUtil.isNotBlank(parts[0])) {
+			try {
+				return get(parts[0], parts[1]);
+			} catch (Exception e) {
+
+			}
+		}
+		return getDefultMatcher(stringWithMatcher);
+	}
+
+	private static StringMatcher getDefultMatcher(String expectedString) {
+		String defaultMatcherType = ConfigurationManager.getBundle().getString("stringmatcher.default.matcher",
+				"exact");
+		StringMatcher matcher = get(defaultMatcherType, expectedString);
+		if (matcher != null) {
+			return matcher;
+		}
+		throw new AutomationError(String.format("Wrong matcher type [%s]", defaultMatcherType));
+	}
+
+	public static StringMatcher blank(String...nothig) {
+		return new Blank();
+	}
+
+	public static StringMatcher in(String stringToMatch) {
+		return new Contains(stringToMatch);
+	}
+
+	public static StringMatcher end(String stringToMatch) {
+		return new EndsWith(stringToMatch);
+	}
+
+	public static StringMatcher endIgnoringCase(String stringToMatch) {
+		return new EndsWith(stringToMatch);
+	}
+
+	public static StringMatcher start(String stringToMatch) {
+		return new StartsWith(stringToMatch);
+	}
+
+	public static StringMatcher startIgnoringCase(String stringToMatch) {
+		return new StartsWithIgnoringCase(stringToMatch);
+	}
+
+	public static StringMatcher regex(String stringToMatch) {
+		return new Like(stringToMatch);
+	}
+
+	public static StringMatcher regexp(String stringToMatch) {
+		return new Like(stringToMatch);
+	}
+
+	public static StringMatcher regexi(String stringToMatch) {
+		return new LikeIgnoringCase(stringToMatch);
+	}
+
+	public static StringMatcher regexpi(String stringToMatch) {
+		return new LikeIgnoringCase(stringToMatch);
+	}
+
+	public static StringMatcher glob(String stringToMatch) {
+		return new Global(stringToMatch);
 	}
 
 	public static StringMatcher exact(String stringToMatch) {
@@ -89,8 +202,7 @@ public abstract class StringMatcher {
 	}
 
 	/**
-	 * @param stringToMatch
-	 *            : valid regular expression
+	 * @param stringToMatch : valid regular expression
 	 * @return
 	 */
 	public static StringMatcher like(String stringToMatch) {
@@ -98,8 +210,7 @@ public abstract class StringMatcher {
 	}
 
 	/**
-	 * @param stringToMatch
-	 *            : valid regular expression
+	 * @param stringToMatch : valid regular expression
 	 * @return
 	 */
 	public static StringMatcher likeIgnoringCase(String stringToMatch) {
@@ -147,7 +258,8 @@ public abstract class StringMatcher {
 	}
 
 	/**
-	 * Numeric equal
+	 * Numeric equal, for string equality use either {@link #exact(String)} or
+	 * {@link #exactIgnoringCase(String)}
 	 * 
 	 * @param stringToMatch
 	 * @return
@@ -224,7 +336,28 @@ public abstract class StringMatcher {
 			return target.endsWith(stringToMatch);
 		}
 	}
+	
+	private static class NullOrEmpty extends StringMatcher {
+		NullOrEmpty() {
+			super("");
+		}
 
+		@Override
+		public boolean match(String target) {
+			return StringUtil.isNullOrEmpty(stringToMatch);
+		}
+	}
+	
+	private static class Blank extends StringMatcher {
+		Blank() {
+			super("");
+		}
+
+		@Override
+		public boolean match(String target) {
+			return StringUtil.isBlank(stringToMatch);
+		}
+	}
 	private static class ContainsIgnoringCase extends StringMatcher {
 		ContainsIgnoringCase(String stringToMatch) {
 			super(stringToMatch);
@@ -270,6 +403,20 @@ public abstract class StringMatcher {
 		}
 	}
 
+	private static class Global extends StringMatcher {
+		Global(String stringToMatch) {
+			super(stringToMatch);
+		}
+
+		@Override
+		public boolean match(String target) {
+			String expectedGlob = stringToMatch.replaceAll("([\\]\\[\\\\{\\}$\\(\\)\\|\\^\\+.])", "\\\\$1");
+			expectedGlob = expectedGlob.replaceAll("\\*", ".*");
+			expectedGlob = expectedGlob.replaceAll("\\?", ".");
+			return Pattern.compile(expectedGlob, Pattern.DOTALL).matcher(target).matches();
+		}
+	}
+
 	private static class EQ extends StringMatcher {
 		EQ(String stringToMatch) {
 			super(stringToMatch);
@@ -282,12 +429,14 @@ public abstract class StringMatcher {
 				double actual = Double.parseDouble(target);
 
 				return actual == expected;
+			} catch (NumberFormatException e) {
+				return target == null ? target == stringToMatch : target.equals(stringToMatch);
 			} catch (Exception e) {
 				return false;
 			}
 		}
 	}
-
+	
 	private static class LT extends StringMatcher {
 		LT(String stringToMatch) {
 			super(stringToMatch);

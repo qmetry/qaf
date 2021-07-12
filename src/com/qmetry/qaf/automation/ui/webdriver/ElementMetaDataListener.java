@@ -101,7 +101,7 @@ public class ElementMetaDataListener extends QAFWebElementCommandAdapter {
 	 */
 	public static final String TYPE = "type";
 
-	private static final List<String> COMMANDS_REQUIRES_SCROLL = Arrays.asList(DriverCommand.CLICK_ELEMENT,
+	public static final List<String> COMMANDS_REQUIRES_SCROLL = Arrays.asList(DriverCommand.CLICK_ELEMENT,
 			DriverCommand.SEND_KEYS_TO_ELEMENT, DriverCommand.CLICK, DriverCommand.CLICK_ELEMENT,
 			DriverCommand.DOUBLE_CLICK, DriverCommand.MOVE_TO, DriverCommand.MOUSE_DOWN, DriverCommand.MOUSE_UP,
 			DriverCommand.ELEMENT_SCREENSHOT);

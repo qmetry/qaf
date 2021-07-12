@@ -190,71 +190,20 @@ public class StringUtil extends StringUtils {
 		}
 		return retVal;
 	}
-
-	public static boolean seleniumEquals(String expectedPattern, String actual) {
-
-		if ((expectedPattern == null) || (actual == null)) {
-			return expectedPattern == actual;
-		}
-		if (actual.startsWith("regexp:") || actual.startsWith("regex:") || actual.startsWith("regexpi:")
-				|| actual.startsWith("regexi:") || actual.startsWith("start:") || actual.startsWith("end:")
-				|| actual.startsWith("in:")) {
-			// swap 'em
-			String tmp = actual;
-			actual = expectedPattern;
-			expectedPattern = tmp;
-		}
-		if (expectedPattern.startsWith("start:")) {
-			return actual.startsWith(expectedPattern.replaceFirst("start:", ""));
-		}
-		if (expectedPattern.startsWith("end:")) {
-			return actual.endsWith(expectedPattern.replaceFirst("end:", ""));
-		}
-		if (expectedPattern.startsWith("in:")) {
-			return actual.contains(expectedPattern.replaceFirst("in:", ""));
-		}
-		Boolean b;
-		b = handleRegex("regexp:", expectedPattern, actual, 0);
-		if (b != null) {
-			return b.booleanValue();
-		}
-		b = handleRegex("regex:", expectedPattern, actual, 0);
-		if (b != null) {
-			return b.booleanValue();
-		}
-		b = handleRegex("regexpi:", expectedPattern, actual, Pattern.CASE_INSENSITIVE);
-		if (b != null) {
-			return b.booleanValue();
-		}
-		b = handleRegex("regexi:", expectedPattern, actual, Pattern.CASE_INSENSITIVE);
-		if (b != null) {
-			return b.booleanValue();
-		}
-
-		if (expectedPattern.startsWith("exact:")) {
-			String expectedExact = expectedPattern.replaceFirst("exact:", "");
-			if (!expectedExact.equals(actual)) {
-				System.out.println("expected " + actual + " to match " + expectedPattern);
-				return false;
-			}
-			return true;
-		}
-
-		String expectedGlob = expectedPattern.replaceFirst("glob:", "");
-		expectedGlob = expectedGlob.replaceAll("([\\]\\[\\\\{\\}$\\(\\)\\|\\^\\+.])", "\\\\$1");
-
-		expectedGlob = expectedGlob.replaceAll("\\*", ".*");
-		expectedGlob = expectedGlob.replaceAll("\\?", ".");
-		if (!Pattern.compile(expectedGlob, Pattern.DOTALL).matcher(actual).matches()) {
-			System.out.println("expected \"" + actual + "\" to match glob \"" + expectedPattern
-					+ "\" (had transformed the glob into regexp \"" + expectedGlob + "\"");
-			return false;
-		}
-		return true;
-	}
-
+	
 	/**
 	 * 
+	 * @param expectedPattern
+	 * @param actual
+	 * @return
+	 */
+	public static boolean seleniumEquals(String expectedPattern, String actual) {
+		return StringMatcher.match(expectedPattern,actual);
+	}
+
+
+	/**
+	 * @deprecated - unused method will be removed in future.
 	 * @param prefix
 	 * @param expectedPattern
 	 * @param actual
