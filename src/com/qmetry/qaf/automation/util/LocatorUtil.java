@@ -36,6 +36,7 @@ import com.qmetry.qaf.automation.ui.webdriver.ByCustom;
 import com.qmetry.qaf.automation.ui.webdriver.ByExtCompQuery;
 import com.qmetry.qaf.automation.ui.webdriver.ByExtDomQuery;
 import com.qmetry.qaf.automation.ui.webdriver.ByJQuery;
+import com.qmetry.qaf.automation.ui.webdriver.ByJS;
 
 public class LocatorUtil {
 
@@ -114,10 +115,14 @@ public class LocatorUtil {
 				return By.className(parts[1]);
 			} else if (parts[0].equalsIgnoreCase("tagName")) {
 				return By.tagName(parts[1]);
-			} else {
+			} else if (parts[0].equalsIgnoreCase("js")) {
+				return new ByJS(parts[1]);
+			}else {
 				return new ByCustom(parts[0], parts[1]);
 			}
-		} else {
+		}else if(loc.startsWith("#") || loc.startsWith(".")) {
+			return By.cssSelector(loc);
+		}else {
 			return By.xpath(String.format("//*[@name='%s' or @id='%s' or @value='%s']", loc, loc, loc));
 		}
 	}
@@ -138,7 +143,6 @@ public class LocatorUtil {
 			System.err.println("Unable to parse: " + str);
 			e.printStackTrace();
 		}
-
 		return str;
 
 	}
