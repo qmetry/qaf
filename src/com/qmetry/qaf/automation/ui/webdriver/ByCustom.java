@@ -24,6 +24,8 @@ package com.qmetry.qaf.automation.ui.webdriver;
 import java.lang.reflect.Constructor;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
@@ -35,6 +37,7 @@ import com.qmetry.qaf.automation.core.ConfigurationManager;
  * @author Chirag
  */
 public class ByCustom extends By {
+	private static final Log logger = LogFactory.getLog(ByCustom.class);
 
 	private String stretegy;
 	private String loc;
@@ -74,8 +77,16 @@ public class ByCustom extends By {
 				throw new AutomationError("Unable to create by using class" + s + " for locator " + loc, e);
 			}
 		} catch (ClassNotFoundException e) {
-			System.out.println("No class registerd for stretegy" + s + ". Will use '" + s + "' as custom stretegy");
+			logger.info("No class registerd for stretegy" + s + ". Will use '" + s + "' as custom stretegy");
 		}
 		return null;
+	}
+	
+	@Override
+	public String toString() {
+		if (null != by){
+			return by.toString();
+		}
+		return String.format("Using %s: %s", stretegy, loc);
 	}
 }
