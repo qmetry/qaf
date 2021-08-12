@@ -19,7 +19,7 @@ Generally, "include" property can be used to include test cases/scenario at run 
 
 **For example,**
 
-There are two scenarios with different meta-data.
+Below are two scenarios with different [meta-data](scenario-meta-data.html) using bdd format.
 
 
 ```	
@@ -114,14 +114,5 @@ Now apply filter to these two scenarios using below include and exclude property
 include={'channel':['Mobile','MobileWeb'],'module':['PDP','search']} exclude={'channel': ['web'], 'module': ['cart', 'profile']}
 ```
 
- It will include scenario which has meta-data 'channel' with value Mobile OR MobileWeb AND 'module' with value PDP OR search and exclude scenario which has meta-data channel with value web OR module with value cart OR profile.
+ It will include scenario which has meta-data `channel` with value `Mobile` OR `MobileWeb` AND `module` with value `PDP` OR `search` and exclude scenario which has meta-data `channel` with value `web` OR `module` with value `cart` OR `profile`.
 
-**NOTE:** Meta-data filter uses method selector `com.qmetry.qaf.automation.testng.pro.QAFMethodSelector`. Please make sure that your ant script or maven pom provided this method selector. Alternately you can add method selector in your xml configuration file. 
-
-```xml
-<method-selectors>
-	<method-selector>
-		<selector-class name="com.qmetry.qaf.automation.testng.pro.QAFMethodSelector" />
-	</method-selector>
-</method-selectors>
-```
