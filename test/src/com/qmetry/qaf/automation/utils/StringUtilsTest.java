@@ -21,11 +21,17 @@
  ******************************************************************************/
 package com.qmetry.qaf.automation.utils;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.script.ScriptException;
+
 import org.hamcrest.Matchers;
 import org.json.JSONArray;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import com.qmetry.qaf.automation.core.ConfigurationManager;
 import com.qmetry.qaf.automation.util.StringUtil;
 import com.qmetry.qaf.automation.util.Validator;
 
@@ -51,6 +57,36 @@ public class StringUtilsTest {
 
 		Validator.assertThat("Unable to parse: " + csvStr, csv, Matchers.arrayContaining(expectedResult));
 		
+	}
+	
+	@Test
+	public void evalTest() throws ScriptException {
+		Validator.assertThat(StringUtil.eval("2-3"), Matchers.equalTo(-1));
+		
+		Map<String, Object> context = new HashMap<String, Object>();
+		context.put("my-Key", 451);
+		context.put("myKey", 456);
+		context.put("my Key", "my value");
+		context.put("contextProp", "some value");
+
+
+
+		Validator.assertThat(StringUtil.eval("_ctx['my-Key']>99 && _ctx['my-Key']<1000",context), Matchers.equalTo(true));
+		Validator.assertThat(StringUtil.eval("_ctx['my key']==\"my value\"",context), Matchers.equalTo(true));
+		Validator.assertThat(StringUtil.eval("_ctx['my key']=='my value'",context), Matchers.equalTo(true));
+		Validator.assertThat(StringUtil.eval("mykey==456",context), Matchers.equalTo(true));
+		Validator.assertThat(StringUtil.eval("myKey - _ctx['my-Key']",context), Matchers.equalTo(5));
+
+		Validator.assertThat(StringUtil.eval("java.lang.Math.min(_ctx['my-Key'],99)",context), Matchers.equalTo(99));
+		Validator.assertThat(StringUtil.eval("java.lang.Math.max(myKey,_ctx['my-Key'])",context), Matchers.equalTo(456));
+		
+		ConfigurationManager.getBundle().setProperty("exptest.random", "${rnd:1}");
+		ConfigurationManager.getBundle().setProperty("exptest.prop", "some value");
+
+		Validator.assertThat(StringUtil.eval("exptest.prop.equalsIgnoreCase('some value')"), Matchers.equalTo(true));
+		Validator.assertThat(StringUtil.eval("exptest.prop.equalsIgnoreCase(contextProp)",context), Matchers.equalTo(true));
+		Validator.assertThat(StringUtil.eval("contextProp.equalsIgnoreCase('some value')",context), Matchers.equalTo(true));
+		Validator.assertThat(StringUtil.eval("contextProp.equalsIgnoreCase(exptest.prop)",context), Matchers.equalTo(true));
 	}
 	
 	@DataProvider(name = "csvTestDp")
@@ -170,7 +206,12 @@ public class StringUtilsTest {
 				new Object[] { null, false, false, "null with default false" }, };
 	}
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ScriptException {
+		ConfigurationManager.getBundle().setProperty("test", "${rnd:12}");
+		System.out.println(ConfigurationManager.getBundle().getProperty("test"));
+		System.out.println(ConfigurationManager.getBundle().getInt("test"));
 		
+		System.out.println("res: "+ StringUtil.eval("test>9"));
+
 	}
 }

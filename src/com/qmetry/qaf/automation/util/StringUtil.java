@@ -35,11 +35,12 @@ import java.util.WeakHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.script.ScriptContext;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
+import org.apache.commons.jexl3.JexlBuilder;
+import org.apache.commons.jexl3.JexlContext;
+import org.apache.commons.jexl3.JexlEngine;
+import org.apache.commons.jexl3.JexlExpression;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 import org.json.CDL;
@@ -64,7 +65,7 @@ public class StringUtil extends StringUtils {
 	 */
 	public static String toCamelCaseIdentifier(String formStr) {
 		StringBuffer res = new StringBuffer();
-		if(isEmpty(formStr)){
+		if (isEmpty(formStr)) {
 			return "";
 		}
 		formStr = formStr.replaceAll("\\{(\\d)*(\\s)*\\}", "");
@@ -102,8 +103,7 @@ public class StringUtil extends StringUtils {
 	}
 
 	/**
-	 * @param str
-	 *            : string to check
+	 * @param str : string to check
 	 * @return true if string contains any number, false otherwise
 	 */
 	public boolean containsNumbers(String str) {
@@ -124,12 +124,9 @@ public class StringUtil extends StringUtils {
 	 * </ul>
 	 * </p>
 	 * 
-	 * @param dateStr
-	 *            : date string to be formated
-	 * @param formatFrom
-	 *            : format of the given date string
-	 * @param formatTo
-	 *            : String expected format
+	 * @param dateStr    : date string to be formated
+	 * @param formatFrom : format of the given date string
+	 * @param formatTo   : String expected format
 	 * @return date string in expected format
 	 */
 	public static String getFormatedDate(String dateString, String formatFrom, String formatTo) {
@@ -190,7 +187,7 @@ public class StringUtil extends StringUtils {
 		}
 		return retVal;
 	}
-	
+
 	/**
 	 * 
 	 * @param expectedPattern
@@ -198,9 +195,8 @@ public class StringUtil extends StringUtils {
 	 * @return
 	 */
 	public static boolean seleniumEquals(String expectedPattern, String actual) {
-		return StringMatcher.match(expectedPattern,actual);
+		return StringMatcher.match(expectedPattern, actual);
 	}
-
 
 	/**
 	 * @deprecated - unused method will be removed in future.
@@ -229,14 +225,11 @@ public class StringUtil extends StringUtils {
 	/**
 	 * get map form key value pair separated by char (default char is ",")
 	 * 
-	 * @param csvKeyVal
-	 *            or other char separated key=value pair. For example:
-	 *            "foo=bar,xxx=yyy"
-	 * @param ensureKeyUppercase
-	 *            : if true then it will set upper-case key for value
-	 * @param ch
-	 *            (optional) char used to separate key=value pair. default
-	 *            separator char is ","
+	 * @param csvKeyVal          or other char separated key=value pair. For
+	 *                           example: "foo=bar,xxx=yyy"
+	 * @param ensureKeyUppercase : if true then it will set upper-case key for value
+	 * @param ch                 (optional) char used to separate key=value pair.
+	 *                           default separator char is ","
 	 * @return
 	 */
 	public static Map<String, String> toMap(String csvKeyVal, boolean ensureKeyUppercase, char... ch) {
@@ -246,10 +239,8 @@ public class StringUtil extends StringUtils {
 	}
 
 	/**
-	 * @param csvKeyVal
-	 *            array of key=value pair.
-	 * @param ensureKeyUppercase
-	 *            : if true then it will set upper-case key for value
+	 * @param csvKeyVal          array of key=value pair.
+	 * @param ensureKeyUppercase : if true then it will set upper-case key for value
 	 * @return map
 	 */
 	public static Map<String, String> toMap(String[] csvKeyVal, boolean ensureKeyUppercase) {
@@ -281,15 +272,14 @@ public class StringUtil extends StringUtils {
 	 * <li>"a, b"| 1 |true| 1.5 ->Separator |["a, b",1,true,1.5]
 	 * <li>a b | 1 |true| 1.5 ->Separator |["a b",1,true,1.5]
 	 * <li>"a\" b" | 1 |true| 1.5 ->Separator |["a\" b",1,true,1.5]
-	 * <li> | | |  ->Separator |[null,null,null,null]
+	 * <li>| | | ->Separator |[null,null,null,null]
 	 * <li>"a"" b" | 1 |true| 1.5 ->Separator |["a\" b",1,true,1.5]
-
+	 * 
 	 * 
 	 * @param data
-	 * @param char[]
-	 *            optional char args<br>
-	 *            char[0] : Separator - default value ','<br>
-	 *            char[1] : escape charter - default value '\'
+	 * @param char[] optional char args<br>
+	 *               char[0] : Separator - default value ','<br>
+	 *               char[1] : escape charter - default value '\'
 	 * @return
 	 */
 	public static Object[] parseCSV(String data, char... ch) {
@@ -297,22 +287,22 @@ public class StringUtil extends StringUtils {
 		boolean hasSeperator = null != ch && ch.length > 0 && ch[0] != NULL && ch[0] != ',';
 		char seperator = hasSeperator ? ch[0] : ',';
 		char escapeChar = ((null == ch) || (ch.length < 2) || (ch[1] == NULL)) ? '\\' : ch[1];
-		
+
 		if (data.indexOf(escapeChar + "" + seperator) < 0) {
-			//without escape char for separator
+			// without escape char for separator
 			if (hasSeperator && data.contains(",")) {
 				data = ensuerStringQuated(data, seperator);
 			}
-			
+
 			String commaSperatoredData = data.replace(seperator, ',');
-			//fix ignored end column if it is null 
-			if(commaSperatoredData.trim().endsWith(",")){
-				commaSperatoredData = commaSperatoredData+"\"\"";
+			// fix ignored end column if it is null
+			if (commaSperatoredData.trim().endsWith(",")) {
+				commaSperatoredData = commaSperatoredData + "\"\"";
 			}
-			
+
 			return getArrayFromCsv(commaSperatoredData);
 		}
-		//to continue support old way with use of escape char without quoted string
+		// to continue support old way with use of escape char without quoted string
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < data.length(); ++i) {
 			char c = data.charAt(i);
@@ -353,8 +343,7 @@ public class StringUtil extends StringUtils {
 	 * Takes a list of Strings and combines them into a single comma-separated
 	 * String.
 	 * 
-	 * @param strings
-	 *            The Strings to combine.
+	 * @param strings The Strings to combine.
 	 * @return The combined, comma-separated, String.
 	 */
 	public static String commaSeparate(Collection<String> strings) {
@@ -373,16 +362,13 @@ public class StringUtil extends StringUtils {
 	/**
 	 * This method will will consider:
 	 * <ul>
-	 * <li>"true", "True", "T", "t", "Y", "Yes", "YES", "On", "ON", "oN" as
-	 * true.
-	 * <li>"0" is false, "1" as true ("0" or negative as false and non-zero
-	 * positive integer as true.)
+	 * <li>"true", "True", "T", "t", "Y", "Yes", "YES", "On", "ON", "oN" as true.
+	 * <li>"0" is false, "1" as true ("0" or negative as false and non-zero positive
+	 * integer as true.)
 	 * </ul>
 	 * 
-	 * @param sVal
-	 *            string value
-	 * @param defaultValue
-	 *            value to be return if provided string is blank or null
+	 * @param sVal         string value
+	 * @param defaultValue value to be return if provided string is blank or null
 	 * @return boolean value for the string.
 	 */
 	public static boolean booleanValueOf(String sVal, Boolean defaultValue) {
@@ -402,10 +388,8 @@ public class StringUtil extends StringUtils {
 	 * This method will will consider:
 	 * <ul>
 	 * <li>Blank or null as false
-	 * <li>"true", "True", "T", "t", "Y", "Yes", "YES", "On", "ON", "oN" as
-	 * true.
-	 * <li>"0" or negative as false and non-zero positive positive integer as
-	 * true.
+	 * <li>"true", "True", "T", "t", "Y", "Yes", "YES", "On", "ON", "oN" as true.
+	 * <li>"0" or negative as false and non-zero positive positive integer as true.
 	 * </ul>
 	 * 
 	 * @param sVal
@@ -417,8 +401,8 @@ public class StringUtil extends StringUtils {
 	}
 
 	/**
-	 * Convert number to string with suffix. For example: 1 -> 1st, 2 -> 2nd and
-	 * so on.
+	 * Convert number to string with suffix. For example: 1 -> 1st, 2 -> 2nd and so
+	 * on.
 	 * 
 	 * @param number
 	 * @return string with suffix
@@ -442,6 +426,7 @@ public class StringUtil extends StringUtils {
 	}
 
 	/**
+	 * @see #eval(String, Map)
 	 * 
 	 * @param expression
 	 * @return
@@ -453,6 +438,20 @@ public class StringUtil extends StringUtils {
 
 	/**
 	 * 
+	 * <ul>
+	 * <li>In addition to context provided in method call, any property and static
+	 * methods/variables with fully qualified class name are supported as variable
+	 * in expression.
+	 * <li>Variable names are case-sensitive, e.g. var1 and Var1 are different
+	 * variables. However those provided in context are case insensitive.
+	 * <li>If variable names are not following jexl standards for variable names, it
+	 * can be referenced with <code>_ctx</code>. For example: 
+	 * <br />commons-logging // invalid variable name (hyphenated) can be used in expression as <code>_ctx['commons-logging']</code>
+	 * <li>static methods and variables are allowed in expressions. For example,
+	 * <br />eval("java.lang.Math.min(23,a)", context)
+	 * </ul>
+	 * Refer <a href="https://commons.apache.org/proper/commons-jexl/reference/syntax.html">documentation</a> for expression syntax.
+	 * 
 	 * @param expression
 	 * @param context
 	 * @return
@@ -461,36 +460,42 @@ public class StringUtil extends StringUtils {
 	@SuppressWarnings("unchecked")
 	public static <T> T eval(String expression, Map<? extends String, ? extends Object> context)
 			throws ScriptException {
-		ScriptEngineManager engineManager = new ScriptEngineManager();
-		ScriptEngine jsEngine = engineManager.getEngineByName("JavaScript");
-		jsEngine.getBindings(ScriptContext.ENGINE_SCOPE).putAll(context);
-		return (T) jsEngine.eval(expression);
+		try {
+			JexlEngine jexlEngine = new JexlBuilder().create();
+			JexlExpression expr = jexlEngine.createExpression(expression);
+			JexlContext jc = new QAFJexlContext(context);
+
+			return (T) expr.evaluate(jc);
+		} catch (Exception e) {
+			throw new ScriptException(e);
+		}
 	}
 
 	/**
 	 * Try to convert a string into java primitive type, java object or null. If the
-	 * string can't be converted, return the string. From 3.0.0 It will return "" for empty string.
+	 * string can't be converted, return the string. From 3.0.0 It will return ""
+	 * for empty string.
 	 * 
 	 * @param string
 	 * @return Object
 	 */
 	public static Object toObject(String string) {
-		if(null==string || JSONObject.NULL==string){
+		if (null == string || JSONObject.NULL == string) {
 			return null;
 		}
 		Object val = JSONObject.stringToValue(string);
-		if(null==val || JSONObject.NULL==val){
+		if (null == val || JSONObject.NULL == val) {
 			return null;
 		}
 		return val;
 	}
 
 	private static String ensuerStringQuated(String data, char seperator) {
-		if(isBlank(data) || data.indexOf(seperator)<0){
+		if (isBlank(data) || data.indexOf(seperator) < 0) {
 			return data;
 		}
 		StringBuilder sb = new StringBuilder();
-		String[] parts = data.split(Pattern.quote(String.valueOf(seperator)),-1);
+		String[] parts = data.split(Pattern.quote(String.valueOf(seperator)), -1);
 		for (String part : parts) {
 			part = part.trim();
 			if (part.indexOf(',') >= 0 && !part.startsWith("\"") && !part.endsWith("\"")) {
@@ -502,19 +507,19 @@ public class StringUtil extends StringUtils {
 		}
 		return sb.deleteCharAt(sb.length() - 1).toString();
 	}
-	
+
 	/**
 	 * 
 	 * @param csv
 	 * @return
 	 */
-	private static Object[] getArrayFromCsv(String csv){
+	private static Object[] getArrayFromCsv(String csv) {
 		JSONArray obj = CDL.rowToJSONArray(new JSONTokener(csv));
-	
+
 		List<Object> strings = obj.toList();
 		Object[] array = new Object[strings.size()];
-		for (int i=0; i<strings.size();i++){
-			array[i]=toObject((String) strings.get(i));
+		for (int i = 0; i < strings.size(); i++) {
+			array[i] = toObject((String) strings.get(i));
 		}
 		return array;
 	}
