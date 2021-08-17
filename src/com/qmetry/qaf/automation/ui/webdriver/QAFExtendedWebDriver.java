@@ -560,6 +560,11 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 		}
 	}
 
+	public void assertNoOfWindows(int count, long... timeout) {
+		if (!verifyNoOfWindows(count, timeout)) {
+			throw new AssertionError();
+		}
+	}
 
 	protected void report(String op, boolean outcome, Object... args) {
 		getReporter().addMessage(WebDriverCommandLogger.getMsgForDriverOp(op, outcome, args),
