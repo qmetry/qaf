@@ -58,10 +58,11 @@ import com.qmetry.qaf.automation.core.QAFListener;
 import com.qmetry.qaf.automation.core.QAFTestBase.STBArgs;
 import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.ui.selenium.webdriver.SeleniumDriverFactory;
-import com.qmetry.qaf.automation.ui.webdriver.ChromeDriverHelper;
 import com.qmetry.qaf.automation.ui.webdriver.QAFExtendedWebDriver;
 import com.qmetry.qaf.automation.ui.webdriver.QAFWebDriverCommandListener;
 import com.qmetry.qaf.automation.util.StringUtil;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
 
 /**
  * com.qmetry.qaf.automation.ui.UiDriverFactory.java
@@ -409,10 +410,11 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 			Collection<QAFWebDriverCommandListener> listners = getDriverListeners();
 			beforeInitialize(desiredCapabilities, listners);
 			try {
-				if (this.name().equalsIgnoreCase("chrome")) {
+				/*if (this.name().equalsIgnoreCase("chrome")) {
 					return new QAFExtendedWebDriver(ChromeDriverHelper.getService().getUrl(), desiredCapabilities,
 							reporter);
-				}
+				}*/
+				setUpDriverExecutable(driverCls);
 				WebDriver driver = getDriverObj(driverCls, desiredCapabilities, urlstr);// driverCls.newInstance();
 				return new QAFExtendedWebDriver(driver, reporter);
 			} catch (Throwable e) {
@@ -420,6 +422,23 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 
 				throw new AutomationError("Unable to Create Driver Instance for " + browserName + ": " + e.getMessage(),
 						e);
+			}
+		}
+		
+		private static void setUpDriverExecutable(Class<? extends WebDriver> driverClass) {
+			try {
+				if (ConfigurationManager.getBundle().getBoolean("manage.driver.executable", true)) {
+					logger.info(
+							"Automatic driver executable management is enabled. Set manage.driver.executable=false to disable it!...");
+					WebDriverManager.getInstance(driverClass).setup();
+				} else {
+					logger.info(
+							"Automatic driver executable management is disabled. Set manage.driver.executable=true to enable it!...");
+				}
+			} catch (Throwable e) {
+				logger.error(
+						"Unable to setup driver executable: "+e.getMessage());
+
 			}
 		}
 
