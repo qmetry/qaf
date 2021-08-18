@@ -162,7 +162,7 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 		super.report(tr);
 		if(!getBundle().getBoolean("cucumber.run.mode", false)) {
 			deployResult(tr);
-			if (!getBundle().getBoolean("disable.qaf.testng.reporter", false)) {
+			if (!getBundle().getBoolean("disable.qaf.testng.reporter", true)) {
 				QAFTestBase stb = TestBaseProvider.instance().get();
 				final List<CheckpointResultBean> checkpoints = new ArrayList<CheckpointResultBean>(
 						stb.getCheckPointResults());
@@ -228,7 +228,7 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 	}
 
 	private boolean skipReporting() {
-		return getBundle().getBoolean("disable.qaf.testng.reporter", false)
+		return getBundle().getBoolean("disable.qaf.testng.reporter", true)
 				|| getBundle().getBoolean("cucumber.run.mode", false);
 	}
 }

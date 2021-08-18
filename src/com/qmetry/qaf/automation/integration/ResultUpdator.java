@@ -36,6 +36,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.LogFactoryImpl;
 
+import com.qmetry.qaf.automation.report.JsonReporter;
 import com.qmetry.qaf.automation.util.PropertyUtil;
 
 /**
@@ -47,8 +48,7 @@ import com.qmetry.qaf.automation.util.PropertyUtil;
  */
 public class ResultUpdator extends Thread {
 	/****
-	 * 5-Mar-2011 Removed ThreadPoolExecutor form BaseTestCase and
-	 * integrated here
+	 * 5-Mar-2011 Removed ThreadPoolExecutor form BaseTestCase and integrated here
 	 * 
 	 * Last updated: 22-Mar-2020 Added single thread executor support.
 	 */
@@ -62,7 +62,7 @@ public class ResultUpdator extends Thread {
 
 	private static boolean hasActivePool = false;
 	private static boolean hasActiveSingleThreadedPool = false;
-	
+
 	protected ResultUpdator(TestCaseRunResult result, TestCaseResultUpdator updator) {
 		context = getBundle();
 		this.result = result;
@@ -74,10 +74,10 @@ public class ResultUpdator extends Thread {
 				this.updator = updator;
 			}
 		} else {
-			//use same instance for single threaded
+			// use same instance for single threaded
 			this.updator = updator;
 		}
-		logger.info(String.format("%s: %s",updator.getToolName(), result.getMetaData()));
+		logger.info(String.format("%s: %s", updator.getToolName(), result.getMetaData()));
 	}
 
 	@Override
@@ -120,6 +120,7 @@ public class ResultUpdator extends Thread {
 		private static final ThreadPoolExecutor INSTANCE = new ThreadPoolExecutor(0, 1, 5, TimeUnit.MINUTES,
 				new LinkedBlockingDeque<Runnable>());;
 	}
+
 	/**
 	 * Provides thread safe lazy initialized ThreadPoolExecutor
 	 * 
@@ -171,17 +172,19 @@ public class ResultUpdator extends Thread {
 			}
 		}
 	}
-	
+
 	private static void awaitTermination(ThreadPoolExecutor pool) {
 		while (pool.getActiveCount() > 0) {
-			logger.info("Result updator: Completed "+ pool.getCompletedTaskCount()+" Remaining " + pool.getActiveCount() + " result to be update.");
+			logger.info("Result updator: Completed " + pool.getCompletedTaskCount() + " Remaining "
+					+ pool.getActiveCount() + " result to be update.");
 			try {
 				pool.awaitTermination(5, TimeUnit.SECONDS);
 			} catch (InterruptedException e) {
 				logger.error(e);
 			}
 		}
-		System.out.println("Result updator: Completed "+ pool.getCompletedTaskCount()+" Remaining " + pool.getActiveCount() + " result to be update.");
+		System.out.println("Result updator: Completed " + pool.getCompletedTaskCount() + " Remaining "
+				+ pool.getActiveCount() + " result to be update.");
 		try {
 			pool.shutdownNow();
 		} catch (Exception e) {
@@ -190,8 +193,8 @@ public class ResultUpdator extends Thread {
 	}
 
 	/**
-	 * Executes result updating process in separate thread so that test runner
-	 * can continue for next test case.
+	 * Executes result updating process in separate thread so that test runner can
+	 * continue for next test case.
 	 * 
 	 * @param result
 	 * @param assertLog
@@ -200,14 +203,14 @@ public class ResultUpdator extends Thread {
 	 */
 	private static void updateResult(TestCaseRunResult result, TestCaseResultUpdator toolUpdator) {
 		ResultUpdator updator = new ResultUpdator(result, toolUpdator);
-		if(toolUpdator.allowConfigAndRetry() || (result.isTest() && !result.willRetry())) {
+		if (toolUpdator.allowConfigAndRetry() || (result.isTest() && !result.willRetry())) {
 			ThreadPoolExecutor executor = toolUpdator.allowParallel() ? getPool() : getSingleThreadedPool();
 			executor.execute(updator);
 		}
 	}
 
 	public static void updateResult(TestCaseRunResult result) {
-		for(TestCaseResultUpdator updator: updators) {
+		for (TestCaseResultUpdator updator : updators) {
 			try {
 				updateResult(result, updator);
 			} catch (Exception e) {
@@ -215,35 +218,41 @@ public class ResultUpdator extends Thread {
 			}
 		}
 	}
-	
+
 	public static int getResultUpdatorsCnt() {
 		return updators.size();
 	}
-	
+
 	private static Set<TestCaseResultUpdator> registerUpdators() {
-		 Set<TestCaseResultUpdator> allUpdators = new LinkedHashSet<TestCaseResultUpdator>();
-		 try {
+		Set<TestCaseResultUpdator> allUpdators = new LinkedHashSet<TestCaseResultUpdator>();
+		TestCaseResultUpdator jsonReporter = new JsonReporter();
+		if (jsonReporter.enabled()) {
+			allUpdators.add(jsonReporter);
+			logger.info("Using " + jsonReporter.getToolName());
+		}
+		try {
 			String[] testCaseResultUpdatorCls = getBundle().getStringArray("result.updator");
-			 if(null!=testCaseResultUpdatorCls) {
-				 for(String updaterCls : testCaseResultUpdatorCls) {
-					 try {
+			if (null != testCaseResultUpdatorCls) {
+				for (String updaterCls : testCaseResultUpdatorCls) {
+					try {
 						TestCaseResultUpdator updator = (TestCaseResultUpdator) Class.forName(updaterCls).newInstance();
-						if(updator.enabled()) {
-							if(allUpdators.add(updator))
-							logger.info("Registered " + updator.getToolName());
+						if (updator.enabled()) {
+							if (allUpdators.add(updator))
+								logger.info("Registered " + updator.getToolName());
 						}
 					} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
 						e.printStackTrace();
 					}
-				 }
-			 }
-			ServiceLoader<TestCaseResultUpdator> testCaseResultUpdators =  ServiceLoader.load(TestCaseResultUpdator.class);
+				}
+			}
+			ServiceLoader<TestCaseResultUpdator> testCaseResultUpdators = ServiceLoader
+					.load(TestCaseResultUpdator.class);
 			Iterator<TestCaseResultUpdator> testCaseResultUpdatorsIter = testCaseResultUpdators.iterator();
-			while(testCaseResultUpdatorsIter.hasNext()) {
+			while (testCaseResultUpdatorsIter.hasNext()) {
 				TestCaseResultUpdator updator = testCaseResultUpdatorsIter.next();
-				if(updator.enabled()) {
-					if(allUpdators.add(updator))
-					logger.info("Registered " + updator.getToolName());
+				if (updator.enabled()) {
+					if (allUpdators.add(updator))
+						logger.info("Registered " + updator.getToolName());
 				}
 			}
 		} catch (Exception e) {

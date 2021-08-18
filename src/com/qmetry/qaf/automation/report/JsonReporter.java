@@ -22,6 +22,7 @@
 package com.qmetry.qaf.automation.report;
 
 import static com.qmetry.qaf.automation.core.ConfigurationManager.getBundle;
+import static com.qmetry.qaf.automation.data.MetaDataScanner.formatMetaData;
 import static com.qmetry.qaf.automation.util.JSONUtil.getJsonObjectFromFile;
 import static com.qmetry.qaf.automation.util.JSONUtil.writeJsonObjectToFile;
 
@@ -104,7 +105,7 @@ public class JsonReporter implements TestCaseResultUpdator {
 
 	@Override
 	public boolean enabled() {
-		return getBundle().getBoolean("disable.qaf.testng.reporter", false)
+		return getBundle().getBoolean("disable.qaf.testng.reporter", true)
 				&& getBundle().getBoolean("qaf.json.reporter", true);
 	}
 
@@ -183,6 +184,7 @@ public class JsonReporter implements TestCaseResultUpdator {
 		Map<String, Object> metaData = result.getMetaData();
 		metaData.put("name", result.getName());
 		metaData.put("resultFileName", methodResultFile);
+		formatMetaData(metaData);
 		methodInfo.setMetaData(metaData);
 		int retryCount = (int) result.getExecutionInfo().getOrDefault("retryCount", 0);
 		if (retryCount > 0) {

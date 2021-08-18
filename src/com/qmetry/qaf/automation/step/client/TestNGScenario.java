@@ -95,7 +95,7 @@ public class TestNGScenario extends TestNGMethod {
 		metadata.put("name", getMethodName());
 		metadata.put("sign", getSignature());
 
-		formatMetaData(metadata);
+		//formatMetaData(metadata);
 	}
 
 	@Override
