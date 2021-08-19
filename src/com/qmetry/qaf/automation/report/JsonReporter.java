@@ -71,8 +71,8 @@ public class JsonReporter implements TestCaseResultUpdator {
 	@Override
 	public boolean updateResult(TestCaseRunResult result) {
 		String suiteName = result.getExecutionInfo().getOrDefault("suiteName", "Default Suite").toString();
-		String testName = StringUtil.toCamelCaseIdentifier((String) result.getExecutionInfo().getOrDefault("testName", "Default Set"));
-		String suitReportDir = REPORT_DIR + "/" + StringUtil.toCamelCaseIdentifier(suiteName);
+		String testName = StringUtil.toTitleCaseIdentifier(suiteName) + "/" +StringUtil.toTitleCaseIdentifier((String) result.getExecutionInfo().getOrDefault("testName", "Default Set"));
+		String suitReportDir = REPORT_DIR ;
 		String testReportDir = suitReportDir + "/" + testName;
 
 		StatusCounter suiteStatusCounter = getStatusCounter(suiteStatusCounters,
