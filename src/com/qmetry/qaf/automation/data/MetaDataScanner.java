@@ -265,21 +265,26 @@ public class MetaDataScanner {
 	 * @see MetaDataScanner#applyMetafilter(Map) for none TestNG implementation
 	 */
 	public static boolean applyMetafilter(ITestNGMethod imethod) {
-		Map<String, Object> scenarioMetadata = new HashMap<String, Object>();
+		try {
+			Map<String, Object> scenarioMetadata = new HashMap<String, Object>();
 
-		// ideally ITestNGMethod should converted to TestNGScenario but if
-		// framework class not loaded then need to process separately
-		if (imethod instanceof TestNGScenario) {
-			TestNGScenario method = (TestNGScenario) imethod;
-			scenarioMetadata = method.getMetaData();
+			// ideally ITestNGMethod should converted to TestNGScenario but if
+			// framework class not loaded then need to process separately
+			if (imethod instanceof TestNGScenario) {
+				TestNGScenario method = (TestNGScenario) imethod;
+				scenarioMetadata = method.getMetaData();
 
-		} else if (Scenario.class.isAssignableFrom(imethod.getRealClass())) {
-			Scenario method = (Scenario) imethod.getInstance();
-			scenarioMetadata = method.getMetadata();
-		} else {
-			scenarioMetadata = getMetadata(imethod.getConstructorOrMethod().getMethod(), false);
+			} else if (Scenario.class.isAssignableFrom(imethod.getRealClass())) {
+				Scenario method = (Scenario) imethod.getInstance();
+				scenarioMetadata = method.getMetadata();
+			} else {
+				scenarioMetadata = getMetadata(imethod.getConstructorOrMethod().getMethod(), false);
+			}
+			return applyMetafilter(imethod, scenarioMetadata);
+		} catch (Exception e) {
+			logger.debug("Unable to apply meta-data filter ",e);
+			return true;
 		}
-		return applyMetafilter(imethod, scenarioMetadata);
 	}
 
 	@SuppressWarnings("unchecked")
