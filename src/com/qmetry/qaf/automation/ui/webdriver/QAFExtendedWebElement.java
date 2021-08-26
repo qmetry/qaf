@@ -179,11 +179,11 @@ public class QAFExtendedWebElement extends RemoteWebElement implements QAFWebEle
 		this.parentElement = parentElement;
 	}
 
-	protected void setBy(By by) {
+	public void setBy(By by) {
 		this.by = by;
 	}
 
-	protected By getBy() {
+	public By getBy() {
 		if ((null == by) && StringUtils.isNotBlank(locator)) {
 			by = LocatorUtil.getBy(locator);
 		}
