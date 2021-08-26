@@ -284,4 +284,13 @@ public class JsonReporter implements TestCaseResultUpdator {
 	
 		writeJsonObjectToFile(file, testOverview);
 	}
+	
+	public boolean equals(Object obj) {
+		return null !=obj && obj.getClass() == this.getClass();
+	};
+	
+	@Override
+	public int hashCode() {
+		return getToolName().hashCode();
+	}
 }

@@ -188,10 +188,8 @@ public class PropertyUtil extends XMLConfiguration {
 	public boolean load(String... files) {
 		boolean r = true;
 		for (String file : files) {
-
 			file = getSubstitutor().replace(file);
 			loadFile(new File(file));
-
 		}
 		return r;
 	}
@@ -236,6 +234,7 @@ public class PropertyUtil extends XMLConfiguration {
 		boolean success = false;
 		InputStream in = null;
 		try {
+			propertyFile = getSubstitutor().replace(propertyFile);
 			in = cls.getResourceAsStream(propertyFile);
 			load(in);
 			success = true;

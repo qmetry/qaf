@@ -32,8 +32,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.Map.Entry;
+import java.util.Scanner;
+import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
@@ -84,6 +85,8 @@ public class ConfigurationManager {
 	// early initialization
 	static final Log log = LogFactoryImpl.getLog(ConfigurationManager.class);
 	private static final ConfigurationManager INSTANCE = new ConfigurationManager();
+	private static final ServiceLoader<QAFConfigurationListener> CONFIG_LISTENERS = ServiceLoader
+			.load(QAFConfigurationListener.class);
 
 	/**
 	 * Private constructor, prevents instantiation from other classes
@@ -174,6 +177,9 @@ public class ConfigurationManager {
 					}
 					ConfigurationListener cl = new PropertyConfigurationListener();
 					p.addConfigurationListener(cl);
+					
+					//p.setProperty("execute.initialValuelisteners", true);
+					executeOnLoadListeners(p);
 					return p;
 				}
 
@@ -182,6 +188,7 @@ public class ConfigurationManager {
 					PropertyUtil cp = new PropertyUtil(parentValue);
 					ConfigurationListener cl = new PropertyConfigurationListener();
 					cp.addConfigurationListener(cl);
+					
 					return cp;
 				}
 
@@ -398,6 +405,39 @@ public class ConfigurationManager {
 				new KwdTestFactory(Arrays.asList("kwl")), new ExcelTestFactory()};
 	}
 
+	private static void executeOnLoadListeners(PropertyUtil bundle) {
+		String[] listners = getBundle().getStringArray(ApplicationProperties.QAF_LISTENERS.key);
+		Iterator<QAFConfigurationListener> iter = CONFIG_LISTENERS.iterator();
+		while (iter.hasNext()) {
+			iter.next().onLoad(bundle);
+		}
+		for (String listener : listners) {
+			try {
+				QAFListener cls = (QAFListener) Class.forName(listener).newInstance();
+				if (QAFConfigurationListener.class.isAssignableFrom(cls.getClass()))
+					((QAFConfigurationListener) cls).onLoad(bundle);
+			} catch (Exception e) {
+				log.error("Unable to invoke onLoad(PropertyUtil) from " + listener, e);
+			}
+		}
+	}
+	private static void executeOnChangeListeners() {
+		String[] listners = getBundle().getStringArray(ApplicationProperties.QAF_LISTENERS.key);
+		Iterator<QAFConfigurationListener> iter = CONFIG_LISTENERS.iterator();
+		while (iter.hasNext()) {
+			iter.next().onChange();
+		}
+		for (String listener : listners) {
+			try {
+				QAFListener cls = (QAFListener) Class.forName(listener).newInstance();
+				if (QAFConfigurationListener.class.isAssignableFrom(cls.getClass()))
+					((QAFConfigurationListener)cls).onChange();
+			} catch (Exception e) {
+				log.error("Unable to invoke onChange() from " + listener, e);
+			}
+		}
+	}
+	
 
 	private static class PropertyConfigurationListener implements ConfigurationListener {
 		String oldValue;
@@ -453,6 +493,7 @@ public class ConfigurationManager {
 							log.info("Adding resources from: " + res);
 							ConfigurationManager.addBundle(res);
 						}
+						executeOnChangeListeners();
 					}
 				}
 				// Locale loading
@@ -464,6 +505,7 @@ public class ConfigurationManager {
 						addLocal(getBundle(), (String) event.getPropertyValue(),
 								fileOrDir);
 					}
+					executeOnChangeListeners();
 				}
 				// step provider package re-load
 				if (key.equalsIgnoreCase(ApplicationProperties.STEP_PROVIDER_PKG.key)) {
