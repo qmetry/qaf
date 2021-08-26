@@ -406,7 +406,7 @@ public class ConfigurationManager {
 	}
 
 	private static void executeOnLoadListeners(PropertyUtil bundle) {
-		String[] listners = getBundle().getStringArray(ApplicationProperties.QAF_LISTENERS.key);
+		String[] listners = bundle.getStringArray(ApplicationProperties.QAF_LISTENERS.key);
 		Iterator<QAFConfigurationListener> iter = CONFIG_LISTENERS.iterator();
 		while (iter.hasNext()) {
 			iter.next().onLoad(bundle);
