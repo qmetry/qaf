@@ -35,6 +35,7 @@ import com.qmetry.qaf.automation.ui.webdriver.QAFExtendedWebElement;
 import com.qmetry.qaf.automation.ui.webdriver.QAFWebDriverCommandAdapter;
 import com.qmetry.qaf.automation.ui.webdriver.QAFWebDriverCommandListener;
 import com.qmetry.qaf.automation.ui.webdriver.QAFWebElementCommandListener;
+import com.qmetry.qaf.automation.util.PropertyUtil;
 
 /**
  * Adapter class for all QAF listeners. Register listener using
@@ -46,7 +47,7 @@ public class QAFListenerAdapter extends QAFWebDriverCommandAdapter
 		implements
 			QAFWebElementCommandListener,
 			QAFWebDriverCommandListener,
-			QAFTestStepListener, QAFDataProviderIntercepter {
+			QAFTestStepListener, QAFDataProviderIntercepter, QAFConfigurationListener {
 
 	@Override
 	public void onFailure(StepExecutionTracker stepExecutionTracker) {
@@ -88,5 +89,13 @@ public class QAFListenerAdapter extends QAFWebDriverCommandAdapter
 	@Override
 	public void beforeFech(TestNGScenario scenario, ITestContext context) {
 		
+	}
+
+	@Override
+	public void onLoad(PropertyUtil bundle) {
+	}
+
+	@Override
+	public void onChange() {
 	}
 }
