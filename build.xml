@@ -29,7 +29,6 @@ For any inquiry or need additional information, please contact support-qaf@infos
     <available file="../common-build-tasks.xml" property="common-build-tasks.present"/>
 	<get src="https://raw.githubusercontent.com/qmetry/qaf-parent/master/common-build-tasks.xml" dest="../common-build-tasks.xml" unless:true="${common-build-tasks.present}" skipexisting="true"/>
 	
-	<import file="../common-build-tasks.xml" optional="false"/>
 	
 	<path id="build.classpath">
 		<fileset dir="${lib.dir}">
@@ -207,4 +206,6 @@ For any inquiry or need additional information, please contact support-qaf@infos
 	</service>
 </jar>
 </target>
+<import file="../common-build-tasks.xml" optional="false"/>
+
 </project>
