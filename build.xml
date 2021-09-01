@@ -37,14 +37,14 @@ For any inquiry or need additional information, please contact support-qaf@infos
 		</fileset>
 	</path>
 
-	<!-- ================================= target: resolve ================================= -->
-	<target name="resolve" description="--> retrieve dependencies with ivy" depends="install-ivy, load-setting">
+	<!-- ================================= target: resolve needs to be removed from here================================= -->
+	<target name="resolve-remove" description="--> retrieve dependencies with ivy" depends="install-ivy, load-setting">
 
 
 		<ivy:resolve file="ivy.xml" />
 		<ivy:cachepath pathid="lib.path.id" />
 
-
+		<ivy:dependencytree />
 		<ivy:addpath topath="build.classpath">
 			<path refid="lib.path.id" />
 		</ivy:addpath>
