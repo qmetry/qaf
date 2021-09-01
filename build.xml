@@ -137,31 +137,7 @@ For any inquiry or need additional information, please contact support-qaf@infos
 </target>
 
 
-<target name="test-compile" depends="init">
-<taskdef classpathref="test.classpath" resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties" />
 
-<echo level="info">--- test compile (start) ---</echo>
-<iajc source="${source}" target="${target}" showweaveinfo="true" verbose="true" destdir="${bin.dir}" debug="false">
-	<inpath location="${src.dir}">
-	</inpath>
-	<sourceroots>
-		<pathelement location="${test.src.dir}" />
-	</sourceroots>
-	<classpath refid="test.classpath">
-	</classpath>
-</iajc>
-<echo level="info">--- test compile (finished) ---</echo>
-</target>
-<target name="test" depends="build, test-compile">
-<taskdef resource="testngtasks" classpathref="test.classpath" />
-<testng classpathref="test.classpath" workingDir="${test.dir}" outputDir="${test.dir}/test-results" haltOnFailure="true" verbose="2">
-	<classpath location="${bin.dir}" />
-	<xmlfileset dir="${test.dir}/config" includes="testrun_config.xml" />
-	<sysproperty key="log4j.configuration" value="file:///${test.dir}/log4j.properties" />
-	<sysproperty key="outputDir" value="test-results" />
-
-</testng>
-</target>
 <target name="make-standalone-jar" depends="clean, compile" description="generate stand-alone jar">
 <delete dir="dependencies" failonerror="false" />
 <mkdir dir="dependencies" />
