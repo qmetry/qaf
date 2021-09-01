@@ -207,11 +207,7 @@ public class PropertyUtil extends XMLConfiguration {
 			if (file.getName().endsWith("xml") || file.getName().contains(".xml.")) {
 				load(new FileInputStream(file));
 			} else {
-				PropertiesConfiguration propertiesConfiguration = new PropertiesConfiguration();
-				propertiesConfiguration.setEncoding(getString(ApplicationProperties.LOCALE_CHAR_ENCODING.key, "UTF-8"));
-				propertiesConfiguration.load(new FileInputStream(file));
-				copy(propertiesConfiguration);
-				propertiesConfiguration.clear();
+				loadProperties(new FileInputStream(file));
 			}
 			return true;
 		} catch (ConfigurationException e) {
@@ -223,6 +219,13 @@ public class PropertyUtil extends XMLConfiguration {
 		return false;
 	}
 
+	private void loadProperties(InputStream in) throws ConfigurationException {
+		PropertiesConfiguration propertiesConfiguration = new PropertiesConfiguration();
+		propertiesConfiguration.setEncoding(getString(ApplicationProperties.LOCALE_CHAR_ENCODING.key, "UTF-8"));
+		propertiesConfiguration.load(in);
+		copy(propertiesConfiguration);
+		propertiesConfiguration.clear();
+	}
 	/**
 	 * load property inside java/jar package
 	 * 
@@ -236,7 +239,11 @@ public class PropertyUtil extends XMLConfiguration {
 		try {
 			propertyFile = getSubstitutor().replace(propertyFile);
 			in = cls.getResourceAsStream(propertyFile);
-			load(in);
+			if (propertyFile.endsWith("xml") || propertyFile.contains(".xml.")) {
+				load(in);
+			}else {
+				loadProperties(in);
+			}
 			success = true;
 		} catch (Exception e) {
 			logger.error("Unable to load properties from file:" + propertyFile, e);

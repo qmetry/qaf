@@ -175,11 +175,12 @@ public class ConfigurationManager {
 					for (String resource : resources) {
 						addBundle(p, resource);
 					}
+					//p.setProperty("execute.initialValuelisteners", true);
+					executeOnLoadListeners(p);
+					
 					ConfigurationListener cl = new PropertyConfigurationListener();
 					p.addConfigurationListener(cl);
 					
-					//p.setProperty("execute.initialValuelisteners", true);
-					executeOnLoadListeners(p);
 					return p;
 				}
 
