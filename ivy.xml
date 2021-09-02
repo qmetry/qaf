@@ -119,7 +119,9 @@ SOFTWARE.
 			<exclude org="com.codeborne"/>
 		</dependency>
 		<!-- -->
-		<dependency org="org.seleniumhq.selenium" name="selenium-leg-rc" rev="3.0.0"/>
+		<dependency org="org.seleniumhq.selenium" name="selenium-leg-rc" rev="3.0.0">
+			<exclude org="org.testng"/>
+		</dependency>
         	
 		
 		<!-- ws 
