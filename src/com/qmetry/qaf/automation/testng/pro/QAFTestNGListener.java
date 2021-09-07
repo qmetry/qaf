@@ -58,10 +58,8 @@ import org.testng.xml.XmlScript;
 import org.testng.xml.XmlSuite;
 import org.testng.xml.XmlTest;
 
-import com.qmetry.qaf.automation.core.CheckpointResultBean;
 import com.qmetry.qaf.automation.core.ConfigurationManager;
 import com.qmetry.qaf.automation.core.HtmlCheckpointResultFormatter;
-import com.qmetry.qaf.automation.core.MessageTypes;
 import com.qmetry.qaf.automation.core.QAFTestBase;
 import com.qmetry.qaf.automation.core.TestBaseProvider;
 import com.qmetry.qaf.automation.keys.ApplicationProperties;
@@ -69,6 +67,7 @@ import com.qmetry.qaf.automation.step.client.Scenario;
 import com.qmetry.qaf.automation.step.client.text.BDDTestFactory;
 import com.qmetry.qaf.automation.testng.MethodPriorityComparator;
 import com.qmetry.qaf.automation.util.ClassUtil;
+import com.qmetry.qaf.automation.util.ReportUtils;
 import com.qmetry.qaf.automation.util.StringUtil;
 
 /**
@@ -207,23 +206,7 @@ public class QAFTestNGListener {
 		logger.debug("afterInvocation: Done");
 	}
 
-	public CheckpointResultBean getLastFailedCheckpointResultBean(
-			List<CheckpointResultBean> checkPointResults) {
-		if ((null == checkPointResults) || checkPointResults.isEmpty()) {
-			return null;
-		}
 
-		// There may be not run check point at the end. Visit form bottom, we
-		// need to visit up to failure check point found.
-		for (int index = checkPointResults.size() - 1; index >= 0; index--) {
-			CheckpointResultBean checkpointResultBean = checkPointResults.get(index);
-			MessageTypes type = MessageTypes.valueOf(checkpointResultBean.getType());
-			if (type.isFailure())
-				return checkpointResultBean;
-		}
-
-		return null;
-	}
 
 	protected void report(ITestResult tr) {
 		String[] groups = tr.getMethod().getGroups();
@@ -248,49 +231,7 @@ public class QAFTestNGListener {
 		}
 
 		if (tr.getStatus() == ITestResult.FAILURE) {
-			String failiremsg = getFailureMessage(tr.getThrowable());
-			CheckpointResultBean lastFailedChkPoint =
-					getLastFailedCheckpointResultBean(stb.getCheckPointResults());
-
-			// not an assertion of verification failure
-			if (null != lastFailedChkPoint) {
-				// ensure last failed check-point has screenshot
-
-				if (StringUtil.isBlank(lastFailedChkPoint.getScreenshot())) {
-					// get last failed sub-checkpoint
-					CheckpointResultBean lastFailedSubChkPoint =
-							getLastFailedCheckpointResultBean(
-									lastFailedChkPoint.getSubCheckPoints());
-
-					if (lastFailedSubChkPoint != null && StringUtil
-							.isNotBlank(lastFailedSubChkPoint.getScreenshot())) {
-						lastFailedChkPoint
-								.setScreenshot(lastFailedSubChkPoint.getScreenshot());
-
-					} else {
-						stb.takeScreenShot();
-						lastFailedChkPoint.setScreenshot(stb.getLastCapturedScreenShot());
-					}
-				}
-			} else if (StringUtil.isNotBlank(failiremsg)) {
-				logger.error(tr.getThrowable());
-
-				// stb.addAssertionLogWithScreenShot(failiremsg,
-				// MessageTypes.Fail);
-				stb.takeScreenShot();
-				CheckpointResultBean stepResultBean = new CheckpointResultBean();
-				stepResultBean.setMessage(failiremsg);
-				stepResultBean.setType(MessageTypes.Fail);
-				stepResultBean.setScreenshot(stb.getLastCapturedScreenShot());
-				stb.getCheckPointResults().add(stepResultBean);
-
-			}
-			// discontinue support for "selenium.wait.failure.setskip". Use QAS
-			// listener instead
-			// if ((tr.getThrowable() instanceof WaitTimedOutException)
-			// && (getBundle().getBoolean("selenium.wait.failure.setskip"))) {
-			// setSkip(tr, context);
-			// }
+			ReportUtils.setScreenshot(tr.getThrowable());
 		}
 	}
 
@@ -431,15 +372,6 @@ public class QAFTestNGListener {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	private String getFailureMessage(Throwable t) {
-		if (null == t)
-			return "";
-		String msg = t.getMessage();
-		if (StringUtil.isNotBlank(msg))
-			return msg;
-		return t.toString();
 	}
 
 }
