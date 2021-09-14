@@ -39,17 +39,16 @@ import com.qmetry.qaf.automation.core.ConfigurationManager;
 public class ByCustom extends By {
 	private static final Log logger = LogFactory.getLog(ByCustom.class);
 
-	private String stretegy;
-	private String loc;
-
 	private By by;
 
-	public ByCustom(String stretegy, String loc) {
-		this.loc = loc;
-		this.stretegy = stretegy;
-		by = getBy(stretegy, loc);
+	public ByCustom(String strategy, String loc) {
+		by = getBy(strategy, loc);
 	}
 
+	@Override
+	public WebElement findElement(SearchContext context) {
+		return by.findElement(context);
+	}
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -58,14 +57,11 @@ public class ByCustom extends By {
 	 */
 	@Override
 	public List<WebElement> findElements(SearchContext context) {
-		if (null != by){
-			return by.findElements(context);
-		}
-		return ((FindsByCustomStretegy) context).findElementsByCustomStretegy(stretegy, loc);
+		return by.findElements(context);
 	}
 
-	private By getBy(String s, String loc) {
-		s = ConfigurationManager.getBundle().getString(s, s);
+	private By getBy(String srategy, String loc) {
+		final String s = ConfigurationManager.getBundle().getString(srategy,srategy);
 		try {
 			@SuppressWarnings("unchecked")
 			Class<? extends By> cls = (Class<? extends By>) Class.forName(s);
@@ -74,19 +70,38 @@ public class ByCustom extends By {
 				con.setAccessible(true);
 				return con.newInstance(loc);
 			} catch (Exception e) {
-				throw new AutomationError("Unable to create by using class" + s + " for locator " + loc, e);
+				throw new AutomationError("Unable to create By using class" + s + " for locator " + loc, e);
 			}
 		} catch (ClassNotFoundException e) {
-			logger.info("No class registerd for stretegy" + s + ". Will use '" + s + "' as custom stretegy");
+			logger.info("No class registerd for strategy" + s + ". Will use '" + s + "' as custom strategy");
+
+			return new By() {
+				@Override
+				public List<WebElement> findElements(SearchContext context) {
+					return ((FindsByCustomStretegy) context).findElementsByCustomStretegy(s, loc);
+				}
+
+				@Override
+				public WebElement findElement(SearchContext context) {
+					return ((FindsByCustomStretegy) context).findElementByCustomStretegy(s, loc);
+				}
+				@Override
+				public String toString() {
+					return String.format("Using %s: %s", s, loc);
+				}
+			};
 		}
-		return null;
 	}
 	
 	@Override
 	public String toString() {
-		if (null != by){
-			return by.toString();
-		}
-		return String.format("Using %s: %s", stretegy, loc);
+		return by.toString();
+	}
+	
+	/**
+	 * @return 
+	 */
+	public By getBy() {
+		return by;
 	}
 }

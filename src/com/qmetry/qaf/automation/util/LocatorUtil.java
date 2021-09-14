@@ -118,7 +118,7 @@ public class LocatorUtil {
 			} else if (parts[0].equalsIgnoreCase("js")) {
 				return new ByJS(parts[1]);
 			}else {
-				return new ByCustom(parts[0], parts[1]);
+				return new ByCustom(parts[0], parts[1]).getBy();
 			}
 		}else if(loc.startsWith("#") || loc.startsWith(".")) {
 			return By.cssSelector(loc);
