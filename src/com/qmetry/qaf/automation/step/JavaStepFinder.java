@@ -52,15 +52,14 @@ import com.qmetry.qaf.automation.util.ClassUtil;
  * @author chirag.jayswal
  */
 public final class JavaStepFinder {
-	public static final String STEPS_PACKAGE = "com.qmetry.qaf.automation.step";
+	public static final Set<String> GLOBAL_STEPS_PACKAGES = new HashSet<String>(Arrays.asList("com.qmetry.qaf.automation.step"));
 	private static final Log logger = LogFactoryImpl.getLog(JavaStepFinder.class);
     private static final ClassFinder CLASS_FINDER = ClassFinderFactory.getClassFinder();
 	public static Map<String, TestStep> getAllJavaSteps() {
 		Map<String, TestStep> stepMapping = new HashMap<String, TestStep>();
 		Set<Method> steps = new LinkedHashSet<Method>();
 
-		List<String> pkgs = new ArrayList<String>();
-		pkgs.add(STEPS_PACKAGE);
+		List<String> pkgs = new ArrayList<String>(GLOBAL_STEPS_PACKAGES);
 
 		if (getBundle().containsKey(STEP_PROVIDER_PKG.key)) {
 			pkgs.addAll(Arrays.asList(getBundle().getStringArray(STEP_PROVIDER_PKG.key)));
