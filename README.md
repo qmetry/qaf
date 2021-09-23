@@ -1,12 +1,11 @@
 [![Build Status](https://travis-ci.org/qmetry/qaf.svg?branch=master)](https://travis-ci.org/qmetry/qaf)
 [![License](https://img.shields.io/github/license/qmetry/qaf.svg)](http://www.opensource.org/licenses/mit-license.php)
-[![Release](https://img.shields.io/github/release/qmetry/qaf.svg)](https://github.com/qmetry/qaf/releases)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.qmetry/qaf/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.qmetry/qaf)
 [![GitHub tag](https://img.shields.io/github/tag/qmetry/qaf.svg)](https://github.com/qmetry/qaf/tags)
 [![javadoc](https://javadoc.io/badge2/com.qmetry/qaf/javadoc.svg)](https://javadoc.io/doc/com.qmetry/qaf)
 [![StackExchange]( https://img.shields.io/badge/questions-Stack_Overflow-lightgray.svg?maxAge=2592000)](http://stackoverflow.com/questions/tagged/qaf)
 [![Users-group]( https://img.shields.io/badge/users-Group-blue.svg?maxAge=2592000)](https://groups.google.com/forum/#!forum/qaf-users)
 [![Help]( https://img.shields.io/badge/help-Documentation-blue.svg?maxAge=2592000)](https://qmetry.github.io/qaf/)
-
 
 
 # QMetry Automation Framework
