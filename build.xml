@@ -56,7 +56,7 @@ For any inquiry or need additional information, please contact support-qaf@infos
 		<taskdef classpathref="build.classpath" resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties" />
 
 		<echo level="info">--- compile (start) ---</echo>
-		<iajc source="${source}" target="${target}" showweaveinfo="true" verbose="true" destdir="${bin.dir}" debug="false">
+		<iajc source="${source}" target="${target}" showweaveinfo="true" verbose="true" destdir="${bin.dir}" debug="false" encoding="utf-8">
 			<inpath location="${src.dir}">
 			</inpath>
 			<sourceroots>
@@ -115,7 +115,8 @@ For any inquiry or need additional information, please contact support-qaf@infos
 
 		<mkdir dir="${dist.dir}/docs" />
 		<javadoc access="protected" additionalparam="-Xdoclint:none" sourcepath="${src.dir}" packagenames="com.qmetry.**.*" destdir="${dist.dir}/docs"
-			verbose="false" author="true" version="true" use="true" windowtitle="QMetry Automation Framework - ${version-num}.${build-num}" overview="${basedir}/QAF-Overview.htm">
+			verbose="false" author="true" version="true" use="true" windowtitle="QMetry Automation Framework - ${version-num}.${build-num}" 
+			overview="${basedir}/QAF-Overview.htm" encoding="utf-8">
 			<doctitle>
 				<![CDATA[<h1>QMetry Automation Framework - ${version-num}.${build-num}</h1>]]>
 				</doctitle>
