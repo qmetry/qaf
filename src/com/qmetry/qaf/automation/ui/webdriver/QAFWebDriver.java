@@ -44,9 +44,8 @@ import com.qmetry.qaf.automation.ui.JsToolkit;
 import com.qmetry.qaf.automation.ui.UiDriver;
 import com.qmetry.qaf.automation.util.StringMatcher;
 
-public interface QAFWebDriver extends UiDriver, WebDriver, TakesScreenshot, JavascriptExecutor, FindsById,
-		FindsByClassName, FindsByLinkText, FindsByName, FindsByCssSelector, FindsByCustomStretegy, FindsByTagName,
-		FindsByXPath, HasInputDevices, HasCapabilities {
+public interface QAFWebDriver extends UiDriver, WebDriver, TakesScreenshot, JavascriptExecutor, FindsByCustomStretegy, 
+		 HasInputDevices, HasCapabilities {
 
 	public QAFWebElement findElement(By by);
 

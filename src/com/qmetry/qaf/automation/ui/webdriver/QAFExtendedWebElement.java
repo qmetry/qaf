@@ -21,9 +21,7 @@
  ******************************************************************************/
 package com.qmetry.qaf.automation.ui.webdriver;
 
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -43,17 +41,15 @@ import org.openqa.selenium.Point;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.CommandPayload;
 import org.openqa.selenium.remote.DriverCommand;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.remote.Response;
-import org.openqa.selenium.remote.internal.JsonToWebElementConverter;
+//import org.openqa.selenium.remote.internal.JsonToWebElementConverter;
 import org.testng.SkipException;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.qmetry.qaf.automation.core.AutomationError;
 import com.qmetry.qaf.automation.core.ConfigurationManager;
 import com.qmetry.qaf.automation.core.MessageTypes;
 import com.qmetry.qaf.automation.core.QAFListener;
@@ -241,6 +237,15 @@ public class QAFExtendedWebElement extends RemoteWebElement implements QAFWebEle
 		}
 	}
 
+	@Override
+	public void sendKeys(CharSequence... keysToSend) {
+		super.sendKeys(keysToSend);
+	}
+	
+	
+	protected Response execute(CommandPayload payload) {
+		return execute(payload.getName(),payload.getParameters());
+	}
 	@SuppressWarnings({ "unchecked" })
 	@Override
 	protected Response execute(String command, Map<String, ?> parameters) {
@@ -391,7 +396,7 @@ public class QAFExtendedWebElement extends RemoteWebElement implements QAFWebEle
 		return (QAFExtendedWebDriver) parent;
 	}
 
-	public static class JsonConvertor extends JsonToWebElementConverter {
+	/*public static class JsonConvertor extends JsonToWebElementConverter {
 		private final RemoteWebDriver driver;
 
 		public JsonConvertor(QAFExtendedWebDriver driver) {
@@ -437,7 +442,7 @@ public class QAFExtendedWebElement extends RemoteWebElement implements QAFWebEle
 				throw new AutomationError("Unable to create element using "+elemImpl+". Make sure it is subclass of QAFExtendedWebElement and has consrtuctor excepting QAFExtendedWebDriver argument", e);
 			}
 		}
-	}
+	}*/
 
 	@Override
 	public QAFExtendedWebElement findElement(By by) {

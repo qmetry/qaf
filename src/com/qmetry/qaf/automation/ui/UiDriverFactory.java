@@ -42,11 +42,17 @@ import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.ie.InternetExplorerOptions;
+import org.openqa.selenium.opera.OperaOptions;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.safari.SafariOptions;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -273,21 +279,23 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 	}
 
 	private enum Browsers {
-		edge(DesiredCapabilities.edge(), EdgeDriver.class),
+		edge(new EdgeOptions(), EdgeDriver.class),
 
-		firefox(DesiredCapabilities.firefox(), FirefoxDriver.class), iexplorer(DesiredCapabilities.internetExplorer(),
-				InternetExplorerDriver.class), chrome(DesiredCapabilities.chrome(), ChromeDriver.class), opera(
-						DesiredCapabilities.operaBlink(),
+		firefox(new FirefoxOptions(), FirefoxDriver.class), iexplorer(new InternetExplorerOptions(),
+				InternetExplorerDriver.class), chrome(new ChromeOptions(), ChromeDriver.class), opera(
+						new OperaOptions(),
 						"com.opera.core.systems.OperaDriver"), android(new DesiredCapabilities("android", "", Platform.ANDROID),
 								"org.openqa.selenium.android.AndroidDriver"), iphone(
 										new DesiredCapabilities("iPhone", "", Platform.MAC),
 										"org.openqa.selenium.iphone.IPhoneDriver"), ipad(
 												new DesiredCapabilities("iPad", "", Platform.MAC),
 												"org.openqa.selenium.iphone.IPhoneDriver"), safari(
-														DesiredCapabilities.safari(),
-														"org.openqa.selenium.safari.SafariDriver"), appium(
-																new DesiredCapabilities(),
-																"io.appium.java_client.AppiumDriver"), perfecto(
+														new SafariOptions(),
+														"org.openqa.selenium.safari.SafariDriver"), 
+//																appium(
+//																new DesiredCapabilities(),
+//																"io.appium.java_client.AppiumDriver"), 
+																perfecto(
 																		new DesiredCapabilities()),
 
 		/**
@@ -308,7 +316,7 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 			this.desiredCapabilities = new DesiredCapabilities(desiredCapabilities.asMap());
 			this.desiredCapabilities.setCapability(CapabilityType.SUPPORTS_JAVASCRIPT,true);
 			this.desiredCapabilities.setCapability(CapabilityType.TAKES_SCREENSHOT, true);
-			this.desiredCapabilities.setCapability(CapabilityType.SUPPORTS_FINDING_BY_CSS, true);
+			//this.desiredCapabilities.setCapability(CapabilityType.SUPPORTS_FINDING_BY_CSS, true);
 
 		}
 

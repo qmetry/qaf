@@ -23,6 +23,10 @@ package com.qmetry.qaf.automation.ui.webdriver;
 
 import static org.openqa.selenium.remote.CapabilityType.SUPPORTS_JAVASCRIPT;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
+import java.lang.reflect.Field;
 import java.lang.reflect.Proxy;
 import java.net.URL;
 import java.util.Arrays;
@@ -30,6 +34,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -47,16 +53,17 @@ import org.openqa.selenium.interactions.TouchScreen;
 import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.CommandExecutor;
+import org.openqa.selenium.remote.CommandPayload;
 import org.openqa.selenium.remote.DriverCommand;
 import org.openqa.selenium.remote.RemoteTouchScreen;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.Response;
 import org.openqa.selenium.remote.ScreenshotException;
 import org.openqa.selenium.remote.internal.WebElementToJsonConverter;
+//import org.openqa.selenium.remote.internal.WebElementToJsonConverter;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.qmetry.qaf.automation.core.ConfigurationManager;
 import com.qmetry.qaf.automation.core.MessageTypes;
@@ -78,12 +85,15 @@ import com.qmetry.qaf.automation.util.StringMatcher;
  * 
  * @author chirag
  */
+@SuppressWarnings("deprecation")
 public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDriver, QAFWebDriverCommandListener {
-	protected Log logger = LogFactory.getLog(getClass());
+	protected final Log logger = LogFactory.getLog(getClass());
 	private WebDriverCommandLogger commandLogger;
 	private Set<QAFWebDriverCommandListener> listners;
 	private WebDriver underLayingDriver;
 	private Capabilities capabilities;
+	private QAFElementConverter qafElementConverter;
+
 
 	public QAFExtendedWebDriver(URL url, Capabilities capabilities) {
 		this(url, capabilities, null);
@@ -132,7 +142,8 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 	}
 
 	private void init(WebDriverCommandLogger reporter) {
-		setElementConverter(new QAFExtendedWebElement.JsonConvertor(this));
+		//setElementConverter(new QAFExtendedWebElement.JsonConvertor(this));
+		qafElementConverter = new QAFElementConverter(this);
 		try {
 			listners = new LinkedHashSet<QAFWebDriverCommandListener>();
 			commandLogger = (null == reporter) ? new WebDriverCommandLogger() : reporter;
@@ -219,11 +230,35 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 
 	}
 
-	@Override
-	protected Response execute(String command) {
-		return super.execute(command);
+	protected Response execute(CommandPayload payload) {
+	    return execute(payload.getName(), payload.getParameters());
 	}
-
+	
+	private Response executeWithoutLog(CommandPayload payload) {
+		Response response = null;
+		try {
+			//super.execute(interceptedPayload);
+	        Field IMPL_LOOKUP = MethodHandles.Lookup.class.getDeclaredField("IMPL_LOOKUP");
+	        IMPL_LOOKUP.setAccessible(true);
+	        MethodHandles.Lookup lkp = (MethodHandles.Lookup) IMPL_LOOKUP.get(null);
+	        MethodHandle h1 = lkp.findSpecial(getClass().getSuperclass(), "execute", MethodType.methodType(Response.class,CommandPayload.class), getClass());
+			//Method m = getClass().getSuperclass().getDeclaredMethod("execute", CommandPayload.class);
+	        response = (Response) h1.invoke(this, payload);
+		} catch (Throwable e) {
+			response = super.execute(payload.getName(), payload.getParameters());
+		}
+		if (response == null) {
+	        return null;
+	    }
+		Object value = getQafElementConverter().apply(response.getValue());
+	    response.setValue(value);
+		return response;
+	}
+	private QAFElementConverter getQafElementConverter() {
+		if(null==qafElementConverter)
+			qafElementConverter = new QAFElementConverter(this);
+		return qafElementConverter;
+	}
 	@Override
 	protected Response execute(String driverCommand, Map<String, ?> parameters) {
 		CommandTracker commandTracker = new CommandTracker(driverCommand, parameters);
@@ -233,7 +268,7 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 			// already handled in before command?
 			if (commandTracker.getResponce() == null) {
 				commandTracker.setStartTime(System.currentTimeMillis());
-				commandTracker.setResponce(super.execute(commandTracker.getCommand(), commandTracker.getParameters()));
+				commandTracker.setResponce(executeWitoutLog(commandTracker.getCommand(), commandTracker.getParameters()));
 				commandTracker.setEndTime(System.currentTimeMillis());
 			}
 			afterCommand(this, commandTracker);
@@ -244,7 +279,7 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 		}
 		if (commandTracker.hasException()) {
 			if (commandTracker.retry) {
-				commandTracker.setResponce(super.execute(commandTracker.getCommand(), commandTracker.getParameters()));
+				commandTracker.setResponce(executeWitoutLog(commandTracker.getCommand(), commandTracker.getParameters()));
 				commandTracker.setException(null);
 				commandTracker.setEndTime(System.currentTimeMillis());
 			} else {
@@ -255,7 +290,7 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 	}
 
 	protected Response executeWitoutLog(String driverCommand, Map<String, ?> parameters) {
-		return super.execute(driverCommand, parameters);
+		return executeWithoutLog(new CommandPayload(driverCommand, parameters));
 	}
 
 	/*
@@ -359,45 +394,32 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 
 	}
 
-	@Override
-	public QAFExtendedWebElement findElementByClassName(String using) {
-		return (QAFExtendedWebElement) super.findElementByClassName(using);
-	}
-
-	@Override
-	public QAFExtendedWebElement findElementByCssSelector(String using) {
-		return (QAFExtendedWebElement) super.findElementByCssSelector(using);
-	}
-
-	@Override
-	public QAFExtendedWebElement findElementById(String using) {
-		return (QAFExtendedWebElement) super.findElementById(using);
-	}
-
-	@Override
-	public QAFExtendedWebElement findElementByLinkText(String using) {
-		return (QAFExtendedWebElement) super.findElementByLinkText(using);
-	}
-
-	@Override
-	public QAFExtendedWebElement findElementByName(String using) {
-		return (QAFExtendedWebElement) super.findElementByName(using);
-	}
-
-	@Override
-	public QAFExtendedWebElement findElementByPartialLinkText(String using) {
-		return (QAFExtendedWebElement) super.findElementByPartialLinkText(using);
-	}
-
-	@Override
-	public QAFExtendedWebElement findElementByTagName(String using) {
-		return (QAFExtendedWebElement) super.findElementByTagName(using);
-	}
-
-	@Override
-	public QAFExtendedWebElement findElementByXPath(String using) {
-		return (QAFExtendedWebElement) super.findElementByXPath(using);
-	}
+	/*
+	 * @Override public QAFExtendedWebElement findElementByClassName(String using) {
+	 * return (QAFExtendedWebElement) super.findElementByClassName(using); }
+	 * 
+	 * @Override public QAFExtendedWebElement findElementByCssSelector(String using)
+	 * { return (QAFExtendedWebElement) super.findElementByCssSelector(using); }
+	 * 
+	 * @Override public QAFExtendedWebElement findElementById(String using) { return
+	 * (QAFExtendedWebElement) super.findElementById(using); }
+	 * 
+	 * @Override public QAFExtendedWebElement findElementByLinkText(String using) {
+	 * return (QAFExtendedWebElement) super.findElementByLinkText(using); }
+	 * 
+	 * @Override public QAFExtendedWebElement findElementByName(String using) {
+	 * return (QAFExtendedWebElement) super.findElementByName(using); }
+	 * 
+	 * @Override public QAFExtendedWebElement findElementByPartialLinkText(String
+	 * using) { return (QAFExtendedWebElement)
+	 * super.findElementByPartialLinkText(using); }
+	 * 
+	 * @Override public QAFExtendedWebElement findElementByTagName(String using) {
+	 * return (QAFExtendedWebElement) super.findElementByTagName(using); }
+	 * 
+	 * @Override public QAFExtendedWebElement findElementByXPath(String using) {
+	 * return (QAFExtendedWebElement) super.findElementByXPath(using); }
+	 */
 
 	/**
 	 * Under evaluation only
@@ -613,7 +635,7 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 
 	@Override
 	public Object executeScript(String script, Object... args) {
-		if (!getCapabilities().isJavascriptEnabled()) {
+		if (!isJavascriptEnabled()) {
 			throw new UnsupportedOperationException(
 					"You must be using an underlying instance of WebDriver that supports executing javascript");
 		}
@@ -621,8 +643,8 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 		// Escape the quote marks
 		script = script.replaceAll("\"", "\\\"");
 
-		Iterable<Object> convertedArgs = Iterables.transform(Lists.newArrayList(args), new WebElementToJsonConverter());
-
+		List<Object> convertedArgs = Stream.of(args).map(new WebElementToJsonConverter()).collect(
+		        Collectors.toList());
 		Map<String, ?> params = ImmutableMap.of("script", script, "args", Lists.newArrayList(convertedArgs));
 
 		return execute(DriverCommand.EXECUTE_SCRIPT, params).getValue();
@@ -638,8 +660,8 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 		// Escape the quote marks
 		script = script.replaceAll("\"", "\\\"");
 
-		Iterable<Object> convertedArgs = Iterables.transform(Lists.newArrayList(args), new WebElementToJsonConverter());
-
+		List<Object> convertedArgs = Stream.of(args).map(new WebElementToJsonConverter()).collect(
+		        Collectors.toList());
 		Map<String, ?> params = ImmutableMap.of("script", script, "args", Lists.newArrayList(convertedArgs));
 
 		return execute(DriverCommand.EXECUTE_ASYNC_SCRIPT, params).getValue();
