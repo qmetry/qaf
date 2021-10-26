@@ -26,15 +26,7 @@
      - title: Resources
        folderitems:
          - title: JavaDoc
-           url: javadoc\index.html
-         - title: QAF 2.1.10 Docs
-           url: ../qaf-2.1.10/docs.html
-         - title: QAF 2.1.9 Docs
-           url: ../qaf-2.1.9/docs.html
-         - title: QAF 2.1.8 Docs
-           url: ../qaf-2.1.8/docs.html
-         - title: QAF 2.1.7b Docs
-           url: ../qaf-2.1.7b/docs.html
+           external_url: "https://javadoc.io/doc/com.qmetry/qaf/"
          - title: Older Version Docs
            url: ../latest/older_versions_docs.html
          - title: QAF users group

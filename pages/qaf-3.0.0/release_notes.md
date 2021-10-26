@@ -1,43 +1,10 @@
 ---
 title: Release Notes
-sidebar: qaf_latest-sidebar
+sidebar: qaf_3_0_0-sidebar
 
-permalink: latest/release_notes.html
-folder: latest
+permalink: qaf-3.0.0/release_notes.html
+folder: qaf-3.0.0
 ---
-## VER-3.0.1 Release Notes:
-
- - Closed [3.0.1 milestone](https://github.com/qmetry/qaf/milestone/9?closed=1)
- - Json reporter using `TestCaseResultUpdator` as default qaf reporting
- - Updated aspectj version to 1.9.5
- **New Features:** 
-  1. New listener QAFConfigurationListener
-    - [#350](https://github.com/qmetry/qaf/issues/350) Support to load properties from classpath 
-  2. [#370](https://github.com/qmetry/qaf/commit/54e87842f0ce7860d9696ae9c87429aed030b43d) support for WebDriver Manager 
-  3. [#374](https://github.com/qmetry/qaf/issues/374) Custom locator strategy Support to find element by js
-  4. [#15](https://github.com/qmetry/qaf/issues/15) Provides support for xlsx data provider Closes
-  5. New support libraries
-     - [qaf-support-angular](https://github.com/qmetry/qaf-support-angular)
-     - [qaf-support-galen](https://github.com/qmetry/qaf-support-galen)
-     - [qaf-support-flutter](https://github.com/qmetry/qaf-support-flutter) 
-  
- **Enhancements**
-  1. [#381](https://github.com/qmetry/qaf/issues/381) Provision for support libraries to add global step provider packages.
-  2. [#378](https://github.com/qmetry/qaf/issues/378) Alternative arrangements for JEP-372
-  3. code enhancements and behavior change for string matching in wait/assert/verify
-     - Updated StringMatcher with additional matchers from StringUtils.seleniumEquals
-     - updated StringUtils.seleniumEquals to use StringMatcher
-     - updated default string matching pattern from glob to exact
-     - property `stringmatcher.default.matcher` to set default string matcher used in wait/assert/verify, if not set used `exact` instead of `glob`.
-     - Added wait/assert/verify methods for window title and URL
-  4. [#174](https://github.com/qmetry/qaf/issues/174) Support of different version of TestNG (testng 6.10, 6.11, 7.0+)
- **Bug fixes**
-  1. [#361](https://github.com/qmetry/qaf/issues/361) Parallel suite execution reporting
-  2. [#359](https://github.com/qmetry/qaf/issues/359)  ResultUpdator throws RejectedExecutionException if there are multiple suites 
-  3. [#331](https://github.com/qmetry/qaf/issues/331) java.lang.NoSuchFieldException: modifiers on jdk12.0.2
-
- 
-
 ## VER-3.0.0 Release Notes:
 
  - Closed [3.0.0 milestone](https://github.com/qmetry/qaf/milestone/8?closed=1)

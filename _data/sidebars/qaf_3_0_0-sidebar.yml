@@ -3,7 +3,7 @@
 entries:
 - title: sidebar
   product: QMetry Automation Framework
-  version: 3.0.1
+  version: 3.0.0
   folders:
   - title:
     output: pdf
@@ -31,9 +31,9 @@ entries:
     - title: Release Notes
       url: release_notes.html
       output: web, pdf
-    - title: QAF 3.0.0 Docs
-      url: ../qaf-3.0.0/docs.html
-      output: web, pdf
+    - title: QAF latest Docs
+      url: ../latest/docs.html
+      output: web, pdf 
     - title: QAF 2.1.15 Docs
       url: ../qaf-2.1.15/docs.html
       output: web, pdf
