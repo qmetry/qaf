@@ -10,9 +10,11 @@ folder: latest
  - Closed [3.0.1 milestone](https://github.com/qmetry/qaf/milestone/9?closed=1)
  - Json reporter using `TestCaseResultUpdator` as default qaf reporting
  - Updated aspectj version to 1.9.5
+ 
  **New Features:** 
   1. New listener QAFConfigurationListener
-    - [#350](https://github.com/qmetry/qaf/issues/350) Support to load properties from classpath 
+    - [#350](https://github.com/qmetry/qaf/issues/350) Support to load properties from classpath
+     
   2. [#370](https://github.com/qmetry/qaf/commit/54e87842f0ce7860d9696ae9c87429aed030b43d) support for WebDriver Manager 
   3. [#374](https://github.com/qmetry/qaf/issues/374) Custom locator strategy Support to find element by js
   4. [#15](https://github.com/qmetry/qaf/issues/15) Provides support for xlsx data provider Closes
@@ -31,12 +33,11 @@ folder: latest
      - property `stringmatcher.default.matcher` to set default string matcher used in wait/assert/verify, if not set used `exact` instead of `glob`.
      - Added wait/assert/verify methods for window title and URL
   4. [#174](https://github.com/qmetry/qaf/issues/174) Support of different version of TestNG (testng 6.10, 6.11, 7.0+)
+ 
  **Bug fixes**
   1. [#361](https://github.com/qmetry/qaf/issues/361) Parallel suite execution reporting
   2. [#359](https://github.com/qmetry/qaf/issues/359)  ResultUpdator throws RejectedExecutionException if there are multiple suites 
   3. [#331](https://github.com/qmetry/qaf/issues/331) java.lang.NoSuchFieldException: modifiers on jdk12.0.2
-
- 
 
 ## VER-3.0.0 Release Notes:
 
