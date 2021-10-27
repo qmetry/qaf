@@ -251,7 +251,7 @@ entries:
       url: qaf_listeners.html
       output: web, pdf
 
-    - title: Custom Retry Analyzer
+    - title: Retry Analyzer
       url: custom_retry_analyzer.html
       output: web, pdf
 
