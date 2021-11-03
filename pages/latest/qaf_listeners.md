@@ -31,6 +31,9 @@ You can create listener by implementing appropriate listener interface of by ext
 | QAFWebElementCommandListener | QAFWebElementCommandAdapter | we.command.listeners or qaf.listeners | beforeCommand(QAFExtendedWebElement, CommandTracker)
 | | | | afterCommand(QAFExtendedWebElement, CommandTracker)
 | | | | onFailure(QAFExtendedWebElement, CommandTracker)
+| QAFConfigurationListener |  | qaf.listeners or as service | onLoad(PropertyUtil)
+| | | | onChange()
+
 
 > There is additional Adapter Class `QAFListenerAdapter` introduced from 2.1.9 that implements all of the qaf listeners. You can extend it, override required methods and register using `qaf.listeners` property.
 
@@ -199,5 +202,15 @@ To register listener set property **we.command.listeners**. For example to regis
 we.command.listeners= com.ispl.automation.sample.webdriver.SendKeysListener
 ```
 
+## Configuration Listener
 
+`QAFConfigurationListener` can be used to perform specific tasks after resource load or changed. Common use-case is to load addition resources from class path or programmatically. Listener can be registered using 'qaf.listeners' property or as service.
+
+`QAFConfigurationListener` defines following methods:
+
+```java
+void onLoad(PropertyUtil bundle)
+void onChange()
+
+```
 
