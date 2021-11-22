@@ -244,8 +244,13 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 	        MethodHandle h1 = lkp.findSpecial(getClass().getSuperclass(), "execute", MethodType.methodType(Response.class,CommandPayload.class), getClass());
 			//Method m = getClass().getSuperclass().getDeclaredMethod("execute", CommandPayload.class);
 	        response = (Response) h1.invoke(this, payload);
-		} catch (Throwable e) {
+		} catch (NoSuchMethodException | NoSuchFieldException | SecurityException e) {
 			response = super.execute(payload.getName(), payload.getParameters());
+		}catch (Throwable e) {
+			if (e instanceof RuntimeException) {
+				throw (RuntimeException)e;
+			}
+			throw new RuntimeException(e);
 		}
 		if (response == null) {
 	        return null;
@@ -621,11 +626,11 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 	 */
 
 	public QAFExtendedWebElement findElementByCustomStretegy(String stetegy, String loc) {
-		return (QAFExtendedWebElement) findElement(stetegy, loc);
+		return (QAFExtendedWebElement) execute(DriverCommand.FIND_ELEMENT, ImmutableMap.of("using",stetegy,"value",loc)).getValue();
 	}
-
+	@SuppressWarnings("unchecked")
 	public List<WebElement> findElementsByCustomStretegy(String stetegy, String loc) {
-		return findElements(stetegy, loc);
+		return (List<WebElement>) execute(DriverCommand.FIND_ELEMENTS, ImmutableMap.of("using",stetegy,"value",loc)).getValue();
 	}
 
 	@Override

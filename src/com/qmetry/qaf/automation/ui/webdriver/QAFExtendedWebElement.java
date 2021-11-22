@@ -1293,11 +1293,11 @@ public class QAFExtendedWebElement extends RemoteWebElement implements QAFWebEle
 	}
 
 	public QAFWebElement findElementByCustomStretegy(String strategy, String loc) {
-		return (QAFWebElement) findElement(strategy, loc);
+		return (QAFExtendedWebElement) execute(DriverCommand.FIND_CHILD_ELEMENT, ImmutableMap.of("using",strategy,"id",getId(),"value",loc)).getValue();
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<WebElement> findElementsByCustomStretegy(String strategy, String loc) {
-		return (List<WebElement>) (List<? extends WebElement>) findElements(strategy, loc);
+		return (List<WebElement>) (List<? extends WebElement>)execute(DriverCommand.FIND_CHILD_ELEMENTS, ImmutableMap.of("using",strategy,"id",getId(),"value",loc)).getValue();
 	}
 }
