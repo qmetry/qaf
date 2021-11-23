@@ -76,6 +76,7 @@ There are some methods that have implementation in **BaseTestPage** and can be o
 ```java	
 @Override
 public void waitForPageToLoad() {
+    super.waitForPageToLoad();
     //custom implementation
 }
 ```
@@ -164,7 +165,7 @@ public class HomePage extends WebDriverBaseTestPage<WebDriverTestPage>
 }
 ```
 
-### Page identifiers (since 2.1.14)(next release)
+### Page identifiers (since 2.1.14)
 
 You can annotate webelement with `@PageIdentifier` annotation. All element with `@PageIdentifier` Annotation will be considered as page identifier. It will be used by `waitForPageToLoad()` and `isPageActive()` to check page is active or to wait for to page load.
 
