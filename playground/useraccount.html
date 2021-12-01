@@ -10,14 +10,28 @@ th, td {
 	padding: 10px 50px 10px 20px;
 }
 
+td {
+	min-width: 200px;
+}
+
 th {
 	text-transform: capitalize;
+	background: #eed;
 }
 
 table {
 	border-collapse: collapse;
 	border: 1px solid #ddd;
-	margin-left: 50px;
+}
+
+#main * {
+	margin-top: 20px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#process-indicator {
+	display: table;
 }
 </style>
 <script
@@ -26,63 +40,71 @@ table {
 <script type="text/javascript">
 	$()
 			.ready(
-					function() {
-						var urlParams = new URLSearchParams(
-								window.location.search);
-						console.log(urlParams);
-						urlParams
-								.forEach(function(value, key) {
-									if (key.indexOf('password') >= 0) {
-										if (key.indexOf('password') <= 0) {
-											$("tbody")
-													.append(
-															$('<tr>')
-																	.append(
-																			$(
-																					'<th>')
-																					.append(
-																							key
-																									+ ":"))
-																	.append(
-																			$(
-																					'<td>')
-																					.append(
-																							"******")));
-										}
-									} else {
-										$("tbody")
-												.append(
-														$('<tr>')
-																.append(
-																		$(
-																				'<th>')
-																				.append(
-																						key
-																								+ ":"))
-																.append(
-																		$(
-																				'<td>')
-																				.append(
-																						value)));
-									}
+					setTimeout(
+							function() {
+								var urlParams = new URLSearchParams(
+										window.location.search);
+								if (urlParams.toString().length <= 0) {
+									$("tbody").append(
+											$('<tr>').append(
+													$('<th>').append(
+															"No Data Found")));
+								}
+								urlParams
+										.forEach(function(value, key) {
+											if (key.indexOf('password') >= 0) {
+												if (key.indexOf('password') <= 0) {
+													$("tbody")
+															.append(
+																	$('<tr>')
+																			.append(
+																					$(
+																							'<th>')
+																							.append(
+																									key
+																											+ ":"))
+																			.append(
+																					$(
+																							'<td>')
+																							.append(
+																									"******")));
+												}
+											} else {
+												$("tbody")
+														.append(
+																$('<tr>')
+																		.append(
+																				$(
+																						'<th>')
+																						.append(
+																								key
+																										+ ":"))
+																		.append(
+																				$(
+																						'<td>')
+																						.append(
+																								value)));
+											}
 
-								});
-					});
+										});
+								$('#process-indicator').hide();
+							}, 5000));
 </script>
-
 </head>
 <body>
-
-
 	<div id="main">
 		<table>
 			<caption>
-				<b>User Details</b>
+				<b>User&nbsp;Details</b>
 			</caption>
 			<tbody>
 
 			</tbody>
 		</table>
+		<div id="process-indicator">
+			Wait <img src="../latest/dashboard/images/progress-dots.gif"
+				alt="Loading" />
+		</div>
 	</div>
 
 </body>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Calculator</title>
+<style type="text/css">
+td {
+	text-align: center;
+	border: 1px solid #ddd;
+	padding: 10px 20px 10px 20px;
+	  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  color:gray;
+  box-shadow :7px 6px 28px 1px rgba(0, 0, 0, 0.1);
+  transition: all ease 0.3s;
+}
+td:hover {
+color:black;
+font-weight: bold;
+}
+td:active {
+  box-shadow: 0 3px 0 #999;
+  font-weight: normal;
+  
+}
+th {
+	text-align: right;
+	text-transform: capitalize;
+}
+#res{
+  box-shadow : 7px 6px 28px 1px rgba(0, 0, 0, 0.2);
+  border: 1px solid #aaa;
+  background-color: #f9f9f5;  
+}
+table {
+	border-collapse: collapse;
+	border: 1px solid #ddd;
+}
+
+#main *{
+	margin-left: auto;
+	margin-right: auto;
+}
+</style>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+	$().ready(
+					function() {
+						$('tbody td').click(function() {
+							var input = $(this).text();
+							var currVal= $('#res').val();
+							var op = new RegExp("[+,\\-,*,/,.,%]$");
+							var op2 = new RegExp("[+,\\-,.]$");
+
+							switch(input) {
+							case "C":
+								  $('#res').val("");
+							    break;
+							  case "D":
+							    $('#res').val(currVal.slice(0, -1));
+							    break;
+							  case "+-":
+							    break;
+							  case "=":
+								  $('#res').val(eval(currVal));
+								    break;
+							  case ".":
+								  if(!currVal || currVal.indexOf(".")>=0)
+								  break;
+							  case "-":
+								  if(!op2.test(currVal))
+									  $('#res').val(currVal + input);
+								  break;
+							  default:
+								  if((op.test(input))){
+									  if(!currVal || op.test(currVal))
+									  break;
+								  }
+								  $('#res').val(currVal + input);
+							} 
+					    });
+					});
+</script>
+<body>
+<div id="main">
+<table>
+<caption><b>Basic Calculator</b></caption>
+<thead><tr><th colspan="100%" ><input name="res" id="res" value=""  size="36" style="text-align: right;"></th></tr></thead>
+<tbody>
+<tr><td title="Clear">C</td><td title="Delete">D</td><td>%</td><td>+</td></tr>
+<tr><td>7</td><td>8</td><td>9</td><td>-</td></tr>
+<tr><td>4</td><td>5</td><td>6</td><td>/</td></tr>
+<tr><td>1</td><td>2</td><td>3</td><td>*</td></tr>
+<tr><td></td><td>0</td><td>.</td><td>=</td></tr>
+
+</tbody>
+</table>
+</div>
+</body>
+</html>
