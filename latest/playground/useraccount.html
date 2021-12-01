@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>User Details</title>
+<style type="text/css">
+th, td {
+	text-align: left;
+	border-bottom: 1px solid #ddd;
+	padding: 10px 50px 10px 20px;
+}
+
+th {
+	text-transform: capitalize;
+}
+
+table {
+	border-collapse: collapse;
+	border: 1px solid #ddd;
+	margin-left: 50px;
+}
+</style>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+	$()
+			.ready(
+					function() {
+						var urlParams = new URLSearchParams(
+								window.location.search);
+						console.log(urlParams);
+						urlParams
+								.forEach(function(value, key) {
+									if (key.indexOf('password') >= 0) {
+										if (key.indexOf('password') <= 0) {
+											$("tbody")
+													.append(
+															$('<tr>')
+																	.append(
+																			$(
+																					'<th>')
+																					.append(
+																							key
+																									+ ":"))
+																	.append(
+																			$(
+																					'<td>')
+																					.append(
+																							"******")));
+										}
+									} else {
+										$("tbody")
+												.append(
+														$('<tr>')
+																.append(
+																		$(
+																				'<th>')
+																				.append(
+																						key
+																								+ ":"))
+																.append(
+																		$(
+																				'<td>')
+																				.append(
+																						value)));
+									}
+
+								});
+					});
+</script>
+
+</head>
+<body>
+
+
+	<div id="main">
+		<table>
+			<caption>
+				<b>User Details</b>
+			</caption>
+			<tbody>
+
+			</tbody>
+		</table>
+	</div>
+
+</body>
+</html>
