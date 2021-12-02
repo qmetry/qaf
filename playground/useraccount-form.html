@@ -120,7 +120,7 @@ display: none;
 }
 
 form div {
-	margin-bottom: 10px;
+	margin-bottom: 20px;
 }
 
 .error {
@@ -132,8 +132,9 @@ label.error {
 	display: inline;
 }
 
-#signupForm {
+#signupForm, h1 {
 	width: 670px;
+	margin: 20px;
 }
 
 #signupForm label.error {
@@ -152,10 +153,10 @@ label.error {
 
 
 	<div id="main">
-
+<h1>New User Account</h1>
 		<form class="cmxform" id="signupForm" method="get" action="./useraccount.html">
 			<fieldset>
-				<legend>Validating a complete form</legend>
+				<legend>User Information</legend>
 				<p>
 					<label for="firstname">Firstname</label> <input id="firstname"
 						name="firstname" type="text">
@@ -191,6 +192,7 @@ label.error {
 					<label for="agree">Please agree to our policy</label> <input
 						type="checkbox" class="checkbox" id="agree" name="agree">
 				</p>
+				<br/>
 				<p>
 					<label for="newsletter">I'd like to receive the newsletter</label>
 					<input type="checkbox" class="checkbox" id="newsletter"
@@ -211,6 +213,7 @@ label.error {
 						two topics you'd like to receive.</label>
 				</fieldset>
 				<p>
+				<br/><br/>
 					<input class="submit" type="submit" value="Submit">
 				</p>
 			</fieldset>
