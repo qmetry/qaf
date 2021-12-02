@@ -71,7 +71,7 @@ table {
 								  $('#res').val(eval(currVal));
 								    break;
 							  case ".":
-								  if(!currVal || currVal.indexOf(".")>=0)
+								  if(!currVal || ((currVal || '').match(new RegExp("[.]","g")) || []).length>((currVal || '').match(new RegExp("[+,\\-,*,/,%]","g")) || []).length)
 								  break;
 							  case "-":
 								  if(!op2.test(currVal))
