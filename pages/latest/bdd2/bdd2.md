@@ -63,9 +63,9 @@ SCENARIO: Scenario Example
 Meta-value can string, number, boolean or list.
 
 ```
-	@TestID:12345
-	@enabled:true
-	@channel:['web','mobile']
+@TestID:12345
+@enabled:true
+@channel:['web','mobile']
 ```
 
 Meta data can be provided with following elements:
