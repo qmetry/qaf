@@ -14,8 +14,8 @@ BDD2 syntax is derived from QAF BDD, Jbehave and Gherkin. Following are features
   * Custom [Meta-Data](scenario-meta-data.html) that supports [meta-data filters](scenario_metadatata_filter_include_exclude_prop.html), [meta-data rules](meta-data-rules.html) and [formatter](scenario-meta-data.html#meta-data-formatter)
   * Parameter support in step argument
   * Data driven test using embedded or external test data
-  	 * External test data from external source (CSV, XML, JSON, EXCEL, DB)
-     * Embedded test data using Examples
+    * External test data from external source (CSV, XML, JSON, EXCEL, DB)
+    * Embedded test data using Examples
   * Background support
   * Compatible with QAF-geherkin or any other gherkin editor.
   * Supported by TestNG runner using [BDDTestFactory2](bdd-configuration.html#factory-class) and by cucumber runner using [QAF-cucumber](qaf_cucumber.html)
@@ -43,10 +43,12 @@ To break statement in multiple line you can use `_&` as line break.
 
 ## Meta-data 
 
+Scenario [metadata](scenario-meta-data.html) provides information to help categorize and manage scenarios. The meta-data are collected as part of the BDD parsing and made available for different uses, e.g. grouping scenario, Scenario selection, setting priority, setting data-provider. 
+
 Unlike BDD, in BDD2 meta-data are provided before scenario declaration  using `@` as key value pair separated with `:` sign. Meta-data not provided as key value pair will be considered as `groups`.
-* There are predefined meta-key available to use which are listed in [meta-data](scenario.html#meta-data).
+* There are predefined meta-key available to use which are listed [here](scenario-meta-data.html#pre-defined-meta-data-for-bdd).
 * You can define your custom meta-key to categorize scenarios as per AUT. You can choose whatever names are most appropriate for the information they are trying to convey.
-* The meta-data are collected as part of the scenario parsing and made available for different uses, e.g. Scenario selection, setting priority
+* Meta-data can be used for scenario selection by providing [meta-data filter](scenario_metadatata_filter_include_exclude_prop.html).
 
 ```
 @description:Data driven test that uses csv file to provide data
@@ -57,6 +59,22 @@ SCENARIO: Scenario Example
 	When i select 'grapes'
 	Then the color should be 'green'
 ```
+
+Meta-value can string, number, boolean or list.
+
+```
+	@TestID:12345
+	@enabled:true
+	@channel:['web','mobile']
+```
+
+Meta data can be provided with following elements:
+ * Feature
+ * Scenario
+ * Scenario Outline 
+ * Examples
+ 
+Meta data provided to feature will be inherited by each scenario or scenario outline.
 
 ## Data-driven Scenario
 You can iterate your scenario with set of test data by providing examples with scenario outline. You also can provide data from qaf data provider by providing @QAFDataProvider property as meta-data.Refer [make test data driven](maketest_data_driven.html), any of the @QAFDataProvider property you can set as meta-data.
