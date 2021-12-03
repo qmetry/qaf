@@ -1,5 +1,5 @@
 ---
-title: BDD2
+title: BDD2 meta-data
 sidebar: qaf_latest-sidebar
 permalink: latest/bdd2-meta-data.html
 summary: "Scenario metadata provides information to help manage a scenario.The meta-data are collected as part of the BDD parsing."
@@ -7,9 +7,9 @@ folder: latest
 tags: [bdd,scenario]
 ---
 ## Meta-data 
-Scenario metadata provides information to help manage. The meta-data are collected as part of the BDD parsing and made available for different uses, e.g. grouping scenario, setting data-provider. It can be used for scenario selection by providing [meta-data filter](scenario_metadatata_filter_include_exclude_prop.html).
+Scenario [metadata](scenario-meta-data.html) provides information to help manage. The meta-data are collected as part of the BDD parsing and made available for different uses, e.g. grouping scenario, setting data-provider. It can be used for scenario selection by providing [meta-data filter](scenario_metadatata_filter_include_exclude_prop.html).
 
-There are predefined meta-key available to use which are listed in [meta-data](scenario.html#meta-data). In addition to predefined meta-data, you can have your custom meta-key to categorize scenarios as per AUT. You can choose whatever names are most appropriate for the information they are trying to convey.
+There are predefined meta-key available to use which are listed in [here](scenario-meta-data.html#pre-defined-meta-data-for-bdd). In addition to predefined meta-key, you can have your custom meta-key to categorize scenarios as per AUT. You can choose whatever names are most appropriate for the information they are trying to convey.
 
 ```
 	@description:Data driven test that uses csv file to provide data
