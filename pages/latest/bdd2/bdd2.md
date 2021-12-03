@@ -20,26 +20,6 @@ BDD2 syntax is derived from QAF BDD, Jbehave and Gherkin. Following are features
   * Compatible with QAF-geherkin or any other gherkin editor.
   * Supported by TestNG runner using [BDDTestFactory2](bdd-configuration.html#factory-class) and by cucumber runner using [QAF-cucumber](qaf_cucumber.html)
 
-## Comment
-
-Comments can be placed any where in the bdd file. Comment can be single line or multiline. Single line comment starts with `#` or `!`.
-
-Multi-line comments start with `"""` and end with `"""`.Multiline comment in scenario or background logged in report as info message, however comments outside will not logged in report.
-
-```
- # this is example of single line comment
- # single line comment will be ignored by BDD parser
- ! this is also a comment
- 
- """
- This is multi line comment
- will be logged in report if it is inside background or scenario.
- """  
-
-```
-## line-break
-To break statement in multiple line you can use `_&` as line break.
-
 
 ## Meta-data 
 
@@ -79,7 +59,7 @@ Meta data provided to feature will be inherited by each scenario or scenario out
 ## Data-driven Scenario
 You can iterate your scenario with set of test data by providing examples with scenario outline. You also can provide data from qaf data provider by providing @QAFDataProvider property as meta-data.Refer [make test data driven](maketest_data_driven.html), any of the @QAFDataProvider property you can set as meta-data.
 
-Below example demonstrates data-driven feature  
+Below example demonstrates data-driven feature  using [csv data-provider](https://qmetry.github.io/qaf/latest/maketest_data_driven.html#in-built-data-providers)
 
 
 ```
@@ -104,6 +84,7 @@ banana,yellow
 ```
 
 Scenario outline with examples.
+
 ```
 @regression 
 @author:Chirag Jayswal
@@ -132,7 +113,8 @@ Scenario: Custom Data provider Example
 	Then the color should be '${color}'
 
 ```
-Above scenario will use custom data provider defined in class `CustomDataProvider`. It will add `regression`  group and `Chirag Jayswal` as custom meta-data `author`.
+
+Above scenario will use custom data provider defined in class `CustomDataProvider`. It will add `regression`  group and `Chirag Jayswal` as custom meta-data to specify `author`.
  
 ```java
 
@@ -164,3 +146,24 @@ public class CustomDataProvider {
 }
 
 ```
+
+## Comment
+
+Comments can be placed any where in the bdd file. Comment can be single line or multiline. Single line comment starts with `#` or `!`.
+
+Multi-line comments start with `"""` and end with `"""`.Multiline comment in scenario or background logged in report as info message, however comments outside will not logged in report.
+
+```
+ # this is example of single line comment
+ # single line comment will be ignored by BDD parser
+ ! this is also a comment
+ 
+ """
+ This is multi line comment
+ will be logged in report if it is inside background or scenario.
+ """  
+
+```
+## line-break
+To break statement in multiple line you can use `_&` as line break.
+
