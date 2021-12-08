@@ -35,7 +35,17 @@
 			.ready(
 					function() {
 						$( "#birthdate" ).datepicker({
-							maxDate: -5*365, minDate:new Date(1951, 1 - 1, 1), 
+							maxDate: -5*365, 
+							changeMonth: true, changeYear: true,
+							constrainInput: false
+							});
+						$( "#marriagedate" ).datepicker({
+							maxDate: -1, minDate:new Date(1951, 1 - 1, 1),
+							changeMonth: true, changeYear: true,
+							constrainInput: false
+							});
+						$( "#sbirthdate" ).datepicker({
+							maxDate: -18*365, minDate:new Date(1951, 1 - 1, 1),
 							changeMonth: true, changeYear: true,
 							constrainInput: false
 							});
@@ -115,7 +125,35 @@
 									("gray");
 							topicInputs.attr("disabled", !this.checked);
 						});
+						
+						var birthdate = $("#birthdate");
+						
+						var mstaus = $("#mstatus");
+						mstaus.attr("disabled", getAge(birthdate)<18);
+						var initalmstaus=mstaus.is(":checked");
+						
+						var minfo = $("#minfo");
+						minfo.toggle(initalmstaus);
+						var mstausInputs = minfo.find("input").attr("disabled",
+								!initalmstaus);
+						
+						birthdate.change(function() {
+							//var d = $( this ).datepicker("getDate");
+							var age = getAge(this);
+							mstaus.attr("disabled", age<18);
+							$("#minfo").toggle(!$(mstaus).is(':disabled') && mstaus.checked);
+							mstausInputs.attr("disabled", $("#minfo").is(":hidden"));
+						});
+						
+						mstaus.click(function() {
+							$("#minfo").toggle(!$(this).is(':disabled') && this.checked);
+							mstausInputs.attr("disabled", $("#minfo").is(":hidden"));
+						});
 					});
+	function getAge(input){
+		var d = $(input).datepicker("getDate") || new Date();
+		return Math.floor((new Date() - d) / (1000 * 60 * 60 * 24*365));
+	}
 </script>
 <style type="text/css">
 form label {
@@ -198,8 +236,19 @@ label.error {
 						type="email">
 				</p>
 				<p>
-					<label for="email">Date Of Birth</label> <input type="text" id="birthdate" name="birthdate" readonly="readonly">
+					<label for="birthdate">Date Of Birth</label> <input type="text" id="birthdate" name="birthdate" readonly="readonly">
 				</p>
+				<p>
+					<label for="mstatus">Please check if you are married</label> <input type="checkbox" id="mstatus" name="maritalstatus" >
+				</p>
+				<fieldset id="minfo">
+				<p>
+					<label for="sbirthdate">Spouse Date Of Birth</label> <input type="text" id="sbirthdate" name="spousebirthdate" readonly="readonly">
+				</p>
+				<p>
+					<label for="marriagedate">Date Of Marriage</label> <input type="text" id="marriagedate" name="marriagedate" readonly="readonly">
+				</p>
+				</fieldset>
 				<p>
 					<label for="agree">Please agree to our policy</label> <input
 						type="checkbox" class="checkbox" id="agree" name="agree">
