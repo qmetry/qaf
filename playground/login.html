@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="description"
+	content="Sample web form with validation for hand on test automation practice using Qmetry Automation Framework">
+<meta name="keywords"
+	content="Selenium, WebDriver, Infostretch, QMetry, QAF, Automation, Framework,TestNg, Testing, QA, Cucumber, BDD, KWD, ISFW, Gherkin, QAF"
+	itemprop="Selenium, WebDriver, Infostretch, QMetry, QAF, Automation, Framework,TestNg, Testing, QA, Cucumber, BDD, KWD, ISFW, Gherkin,QAF">
+<meta name="author" content="Chirag Jayswal">
+
+<title>User Login</title>
+
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script
+	src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+<link rel="stylesheet"
+	href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+<script>
+	(function(i, s, o, g, r, a, m) {
+		i['GoogleAnalyticsObject'] = r;
+		i[r] = i[r] || function() {
+			(i[r].q = i[r].q || []).push(arguments)
+		}, i[r].l = 1 * new Date();
+		a = s.createElement(o), m = s.getElementsByTagName(o)[0];
+		a.async = 1;
+		a.src = g;
+		m.parentNode.insertBefore(a, m)
+	})(window, document, 'script',
+			'https://www.google-analytics.com/analytics.js', 'ga');
+
+	ga('create', 'UA-83031490-1', 'auto');
+	ga('require', 'linkid');
+	ga('send', 'pageview');
+</script>
+<script type="text/javascript">
+ var messages = ["Login successful.","Internal server error.","Opps! Something went wrong, Try again.","System under maintainance, Try again later."];
+	$.validator.setDefaults({
+	submitHandler : function(form) {
+		//$('form *').prop('disabled', true);
+		$("#process-indicator").show();
+		$(".submit").attr("disabled", true);
+		$("#loginerror").hide();
+		
+		setTimeout(
+				function() {
+					$("#process-indicator").hide();
+					if($('#password').val() === $('#username').val()+"123#"){
+						$("#message").val( messages[Math.floor(Math.random()*messages.length)]);
+						$("#password").attr("disabled", true);
+						form.submit();
+					}else{
+						$("#loginerror").show();
+						$("#loginerror").html("Wrong username or password, please try again!...");
+						$(".submit").attr("disabled", false);
+					}
+				},3000);
+	} 
+	});
+
+	$().ready(function() {
+		$("#loginerror").hide();
+		$("#process-indicator").hide();
+
+		// validate signup form on keyup and submit
+		$("#signinForm").validate({
+			rules : {
+				username : "required",
+				password : "required",
+				agree : "required"
+			},
+			messages : {
+				username : "Please enter username",
+				password : "Please enter password"
+
+			}
+		});
+	});
+
+</script>
+<style type="text/css">
+form label {
+	display: inline-block;
+	width: 100px;
+}
+
+input:disabled {
+	border: none;
+}
+
+input.submit:disabled {
+	display: none;
+}
+
+form div {
+	margin-bottom: 20px;
+}
+
+.error {
+	color: red;
+	margin-left: 5px;
+}
+
+label.error {
+	display: inline;
+}
+
+#signinForm, h1 {
+	width: 670px;
+	margin: 20px;
+}
+
+#signupin label.error {
+	margin-left: 10px;
+	width: auto;
+	display: inline;
+}
+
+#process-indicator{
+display: inline;
+}
+</style>
+</head>
+<body>
+
+
+	<div id="main">
+		<div class="error" id="loginerror"></div>
+		
+		<form class="cmxform" id="signinForm" method="get"
+			action="./useraccount.html">
+			<fieldset>
+				<legend>Login</legend>
+				<input id="message"
+						name="message" type="hidden">
+				<p>
+					<label for="username">Username</label> <input id="username"
+						name="username" type="text">
+				</p>
+				<p>
+					<label for="password">Password</label> <input id="password"
+						name="password" type="password">
+				</p>
+				<p>
+					<br />
+					<br /> <input class="submit" type="submit" value="Login"><div id="process-indicator">
+			Wait <img src="../latest/dashboard/images/progress-dots.gif"
+				alt="Loading" />
+		</div>
+				</p>
+			</fieldset>
+		</form>
+</body>
+</html>
