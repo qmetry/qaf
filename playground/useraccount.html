@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="description" content="Sample web page for hand on test automation practice using Qmetry Automation Framework">
-<meta name="keywords" content="Selenium, WebDriver, Infostretch, QMetry, QAF, Automation, Framework,TestNg, Testing, QA, Cucumber, BDD, KWD, ISFW, Gherkin, QAF" itemprop="Selenium, WebDriver, Infostretch, QMetry, QAF, Automation, Framework,TestNg, Testing, QA, Cucumber, BDD, KWD, ISFW, Gherkin,QAF">
+<meta name="keywords" content="random, popup, Selenium, WebDriver, Infostretch, QMetry, QAF, Automation, Framework,TestNg, Testing, QA, Cucumber, BDD, KWD, ISFW, Gherkin, QAF" itemprop="Selenium, WebDriver, Infostretch, QMetry, QAF, Automation, Framework,TestNg, Testing, QA, Cucumber, BDD, KWD, ISFW, Gherkin,QAF">
 <meta name="author" content="Chirag Jayswal">
 
 <title>User Details</title>
@@ -37,8 +37,14 @@ table {
 #process-indicator {
 	display: table;
 }
+#dialog-message{
+display: none;
+}
 </style>
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -50,8 +56,18 @@ table {
   ga('send', 'pageview');
 </script>
 <script type="text/javascript">
-	$()
-			.ready(
+	$().ready(
+			function(){
+					if(Date.now()%2){
+						$( "#dialog-message" ).dialog({
+					        modal: true,
+					        buttons: {
+					          Ok: function() {
+					            $( this ).dialog( "close" );
+					          }
+					        }
+					      });
+				    }
 					setTimeout(
 							function() {
 								var urlParams = new URLSearchParams(
@@ -100,7 +116,8 @@ table {
 
 										});
 								$('#process-indicator').hide();
-							}, 5000));
+							}, 5000);
+					});
 </script>
 </head>
 <body>
@@ -118,6 +135,16 @@ table {
 				alt="Loading" />
 		</div>
 	</div>
+	
+	<div id="dialog-message" title="Random Popup!">
+  <p>
+    <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
+    Do you know how to deal with random unexpected pop-ups?
+  </p>
+  <p>
+    You can make your automation experience hassle free by implementing <a href="https://qmetry.github.io/qaf/latest/qaf_listeners.html">qaf listeners</a>.
+  </p>
+</div>
 
 </body>
 </html>
