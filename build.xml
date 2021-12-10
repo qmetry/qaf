@@ -79,7 +79,7 @@ For any inquiry or need additional information, please contact support-qaf@infos
 
 		<mkdir dir="${dist.dir}" />
 		<!-- All - core + testNG + step -->
-		<jar destfile="${dist.dir}/qaf.jar" basedir="${bin.dir}" excludes="org/testng/**,**/test/**,**/step/CommonStep.*" includes="**/*.*">
+		<jar destfile="${dist.dir}/qaf.jar" basedir="${bin.dir}" excludes="**/test/**,**/step/CommonStep.*" includes="**/*.*">
 			<metainf dir="." includes="LICENSE.txt,NOTICE.txt" />
 			<manifest>
 				<attribute name="Vendor" value="Infostretch Corp." />

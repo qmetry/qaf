@@ -62,7 +62,9 @@ public class TestNGScenario extends TestNGMethod {
 
 	public TestNGScenario(TestNGMethod testNGMethod) {
 		this(testNGMethod.getConstructorOrMethod().getMethod(), (IAnnotationFinder) ClassUtil.getField("m_annotationFinder", testNGMethod), testNGMethod.getXmlTest(), testNGMethod.getInstance());
-		setTestClass(testNGMethod.getTestClass());
+		if(null!=testNGMethod.getTestClass()) {
+			setTestClass(testNGMethod.getTestClass());
+		}
 	}
 	
 	public TestNGScenario(Method method, IAnnotationFinder finder, XmlTest xmlTest, Object instance) {
