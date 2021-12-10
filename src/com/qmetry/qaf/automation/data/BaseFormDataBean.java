@@ -214,7 +214,7 @@ public class BaseFormDataBean extends BaseDataBean {
 	}
 
 	protected boolean checkParent(String parent, String depVal) {
-		String parentval = String.valueOf(getBeanData(parent));
+		String parentval = String.valueOf((Object)getBeanData(parent));
 		if (depVal.equalsIgnoreCase(parentval) || (isExpr(depVal) && resolveExpr(depVal))) {
 			return true;
 		}
@@ -249,7 +249,7 @@ public class BaseFormDataBean extends BaseDataBean {
 		// print all the matches that we find
 		while (m.find()) {
 			String param = m.group(1);
-			String paramVal = getBeanData(m.group(1));
+			Object paramVal = getBeanData(m.group(1));
 			logger.info("parameter " + param + ": " + paramVal);
 			strExpr = strExpr.replaceAll("\\$\\{" + param + "\\}", String.valueOf(paramVal));
 		}
