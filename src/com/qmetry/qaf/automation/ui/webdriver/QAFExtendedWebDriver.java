@@ -26,7 +26,6 @@ import static org.openqa.selenium.remote.CapabilityType.SUPPORTS_JAVASCRIPT;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
-import java.lang.reflect.Field;
 import java.lang.reflect.Proxy;
 import java.net.URL;
 import java.util.Arrays;
@@ -85,7 +84,6 @@ import com.qmetry.qaf.automation.util.StringMatcher;
  * 
  * @author chirag
  */
-@SuppressWarnings("deprecation")
 public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDriver, QAFWebDriverCommandListener {
 	protected final Log logger = LogFactory.getLog(getClass());
 	private WebDriverCommandLogger commandLogger;
@@ -234,24 +232,28 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 	    return execute(payload.getName(), payload.getParameters());
 	}
 	
-	private Response executeWithoutLog(CommandPayload payload) {
-		Response response = null;
+	private Response executeSuper(CommandPayload payload) {
 		try {
-			//super.execute(interceptedPayload);
-	        Field IMPL_LOOKUP = MethodHandles.Lookup.class.getDeclaredField("IMPL_LOOKUP");
-	        IMPL_LOOKUP.setAccessible(true);
-	        MethodHandles.Lookup lkp = (MethodHandles.Lookup) IMPL_LOOKUP.get(null);
-	        MethodHandle h1 = lkp.findSpecial(getClass().getSuperclass(), "execute", MethodType.methodType(Response.class,CommandPayload.class), getClass());
-			//Method m = getClass().getSuperclass().getDeclaredMethod("execute", CommandPayload.class);
-	        response = (Response) h1.invoke(this, payload);
+	        MethodHandle h1 = MethodHandles.lookup().findSpecial(getClass().getSuperclass(), "execute", MethodType.methodType(Response.class,CommandPayload.class), getClass());
+	        return (Response) h1.invoke(this, payload);
+	        
 		} catch (NoSuchMethodException | NoSuchFieldException | SecurityException e) {
-			response = super.execute(payload.getName(), payload.getParameters());
+			return super.execute(payload.getName(), payload.getParameters());
 		}catch (Throwable e) {
 			if (e instanceof RuntimeException) {
 				throw (RuntimeException)e;
 			}
 			throw new RuntimeException(e);
 		}
+	}
+	
+	private Response executeWithoutLog(CommandPayload payload) {
+		// in order to compatibility with 3.x, compiled with 3.x. so method from 4.x super class will not be available. 
+		// Once min version set to 4.0 we don't need executeSuper method.
+
+		//Response response = super.execute(payload);
+		Response response = executeSuper(payload);
+		
 		if (response == null) {
 	        return null;
 	    }
