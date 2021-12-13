@@ -39,6 +39,7 @@ import com.qmetry.qaf.automation.ui.annotations.UiElement;
 import com.qmetry.qaf.automation.ui.annotations.UiElement.Type;
 import com.qmetry.qaf.automation.ui.webdriver.QAFExtendedWebElement;
 import com.qmetry.qaf.automation.util.ClassUtil;
+import com.qmetry.qaf.automation.util.JSONUtil;
 import com.qmetry.qaf.automation.util.StringUtil;
 
 /**
@@ -51,8 +52,8 @@ import com.qmetry.qaf.automation.util.StringUtil;
  * @author Chirag Jayswal.
  */
 public class BaseFormDataBean extends BaseDataBean {
-	private Field[] allFields;
-	protected final ElementInteractor interactor;
+	transient private Field[] allFields;
+	transient protected final ElementInteractor interactor;
 
 	public BaseFormDataBean() {
 		interactor = new ElementInteractor();
@@ -215,7 +216,7 @@ public class BaseFormDataBean extends BaseDataBean {
 
 	protected boolean checkParent(String parent, String depVal) {
 		String parentval = String.valueOf((Object)getBeanData(parent));
-		if (depVal.equalsIgnoreCase(parentval) || (isExpr(depVal) && resolveExpr(depVal))) {
+		if (depVal.equalsIgnoreCase(parentval) || resolveExpr(depVal)) {
 			return true;
 		}
 		return false;
@@ -254,7 +255,7 @@ public class BaseFormDataBean extends BaseDataBean {
 			strExpr = strExpr.replaceAll("\\$\\{" + param + "\\}", String.valueOf(paramVal));
 		}
 		try {
-			return (Boolean)StringUtil.eval(strExpr, new JSONObject(this).toMap());
+			return (Boolean)StringUtil.eval(strExpr, JSONUtil.toMap(JSONUtil.toString(this)));
 		} catch (ScriptException e) {
 			logger.error("Unable to evaluate dependency condition: " + strExpr, e);
 			throw new AutomationError("Unable to evaluate dependency condition: " + strExpr, e);
