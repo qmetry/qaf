@@ -32,6 +32,7 @@ Following are meta-data for test case used by QAF to specify data provider:
 |from|number|start index (base 1) for range filter (since 2.1.14)|
 |to|number|end index (base 1) for range filter (since 2.1.14)|
 
+
 ### parameters in meta-value
 You can use any property in value of meta-data for data provider. It will get resolved using configuration manager. In addition to  that following special  parameters will be available.
  * class - name of the java class
@@ -97,6 +98,12 @@ Wrong Username and Password,Admin,Admin,false,Invalid Username Or Password. Plea
 Wrong Username,admin,admin123,false,Invalid Username Or Password. Please Try Again.
 ```
 
+### Record Summary Field
+In test-data example above, you can observe that there is additional field named `recid`. You can add one of the following field in your record to provide information about the data row.
+
+   `recid` / `summary` / `tcid` / `testcaseid`
+
+If any of the above fields provided then value of that field will be appended in test case name in report.
 
 ### java
 ```java
