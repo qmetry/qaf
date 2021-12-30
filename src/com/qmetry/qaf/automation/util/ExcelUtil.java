@@ -218,8 +218,17 @@ public class ExcelUtil {
 					}
 				} else {
 					Map<String, Object> map = new LinkedHashMap<String, Object>();
-					for (int col = firstCol; col < (firstCol + cells.length); col++) {
-						map.put(colNames[col - firstCol], StringUtil.toObject(cells[col].getContents()));
+					for (int col = firstCol; col < (firstCol + colNames.length); col++) {
+						if(cells.length>col) {
+							String coldata = cells[col].getContents();
+							if(StringUtil.isNullOrEmpty(coldata)) {
+								map.put(colNames[col - firstCol], null);
+							}else {
+								map.put(colNames[col - firstCol], StringUtil.toObject(coldata));
+							}
+						}else {
+							map.put(colNames[col - firstCol], null);
+						}
 					}
 					retobj[row - (firstRow + 1)][0] = map;
 				}
@@ -287,11 +296,15 @@ public class ExcelUtil {
 				} else {
 					Map<String, Object> map = new LinkedHashMap<String, Object>();
 					for (int j = startCol + 1; j < endCol; j++, cj++) {
-						map.put(colNames[cj], StringUtil.toObject(sheet.getCell(j, i).getContents()));
+						String coldata = sheet.getCell(j, i).getContents();
+						if(StringUtil.isNullOrEmpty(coldata)) {
+							map.put(colNames[cj], null);
+						}else {
+							map.put(colNames[cj], StringUtil.toObject(coldata));
+						}
 					}
 					logger.debug("Record " + ci + ":" + map);
 					tabArray[ci++][0] = map;
-
 				}
 			}
 		} catch (Exception e) {

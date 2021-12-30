@@ -150,7 +150,7 @@ public class PoiExcelUtil {
                     }
                 } else {
                     Map<String, Object> map = new LinkedHashMap<String, Object>();
-                    for (int col = firstCol; col < row.getLastCellNum(); col++) {
+                    for (int col = firstCol; col < firstCol+colNames.length; col++) {
                         map.put(colNames[col - firstCol], getCellContent(row.getCell(col)));
                     }
                     retobj[rIndex - (firstRow + 1)][0] = map;
@@ -264,6 +264,9 @@ public class PoiExcelUtil {
         if (cell != null) {
             FormulaEvaluator evaluator = cell.getSheet().getWorkbook().getCreationHelper().createFormulaEvaluator();
             CellValue cellValue = evaluator.evaluate(cell);
+            if (cellValue == null) {
+                return null;
+            }
             switch (cellValue.getCellType()) {
                 case NUMERIC:
                     if (org.apache.poi.ss.usermodel.DateUtil.isCellDateFormatted(cell)) {
