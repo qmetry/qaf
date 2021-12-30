@@ -224,10 +224,14 @@ public class QAFTestNGListener {
 
 	protected void processResult(ITestResult tr, ITestContext context) {
 		QAFTestBase stb = TestBaseProvider.instance().get();
-
-		if ((stb.getVerificationErrors() > 0)
+		int varificationFailures = stb.getVerificationErrors();
+		if (varificationFailures > 0
 				&& (tr.getStatus() == ITestResult.SUCCESS)) {
 			setFailure(tr, context);
+			if(tr.getThrowable()==null ){
+				// Gradle runner internal listener is throwing null pointer exception!... 
+				tr.setThrowable(new AssertionError(varificationFailures + " verification failed."));
+			}
 		}
 
 		if (tr.getStatus() == ITestResult.FAILURE) {
