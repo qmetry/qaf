@@ -255,7 +255,7 @@ public class BaseFormDataBean extends BaseDataBean {
 			strExpr = strExpr.replaceAll("\\$\\{" + param + "\\}", String.valueOf(paramVal));
 		}
 		try {
-			return (Boolean)StringUtil.eval(strExpr, JSONUtil.toMap(JSONUtil.toString(this)));
+			return (Boolean)StringUtil.eval(strExpr, toMap());
 		} catch (ScriptException e) {
 			logger.error("Unable to evaluate dependency condition: " + strExpr, e);
 			throw new AutomationError("Unable to evaluate dependency condition: " + strExpr, e);

@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.StringTokenizer;
+import java.util.TreeMap;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
@@ -183,6 +184,20 @@ public abstract class BaseDataBean implements DataBean {
 		}
 
 		return sb.toString();
+	}
+	
+	public Map<String, Object> toMap(){
+		Map<String, Object> retMap = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+		Field[] flds = getFields();
+		for (Field fld : flds) {
+			try {
+				fld.setAccessible(true);
+				retMap.put(fld.getName(),fld.get(this));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return retMap;
 	}
 
 	public String toCSV(String csvNames) {
