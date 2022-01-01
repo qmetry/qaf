@@ -21,7 +21,7 @@
  ******************************************************************************/
 package com.qmetry.qaf.automation.ui.selenium.customcommands;
 
-import org.apache.commons.lang.StringUtils;
+import static org.apache.commons.lang.StringUtils.isNumeric;
 
 import com.qmetry.qaf.automation.ui.selenium.QAFCustomCommand;
 import com.qmetry.qaf.automation.ui.selenium.SeleniumCommandProcessor;
@@ -39,7 +39,7 @@ public class SetAttributeCommand implements QAFCustomCommand {
 		String elementLocator = args[0].substring(0, atSign).trim();
 		String attributeName = args[0].substring(atSign + 1).trim();
 		String value = args[1];
-		if (!(StringUtils.isNumeric(value) || "true".equals(value) || "false".equals(value) || value.startsWith("'")
+		if (!(isNumeric(value) || "true".equals(value) || "false".equals(value) || value.startsWith("'")
 				|| value.startsWith("\""))) {
 			value = "\"" + value + "\"";
 		}

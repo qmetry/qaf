@@ -23,6 +23,8 @@ package com.qmetry.qaf.automation.step;
 
 import static com.qmetry.qaf.automation.core.ConfigurationManager.getBundle;
 import static com.qmetry.qaf.automation.core.ConfigurationManager.getStepMapping;
+import static com.qmetry.qaf.automation.util.StringUtil.toCamelCaseIdentifier;
+import static org.apache.commons.lang.StringUtils.isBlank;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
 import java.util.ArrayList;
@@ -36,7 +38,6 @@ import java.util.regex.Pattern;
 import com.qmetry.qaf.automation.step.client.text.BDDDefinitionHelper;
 import com.qmetry.qaf.automation.step.client.text.BDDDefinitionHelper.BDDKeyword;
 import com.qmetry.qaf.automation.step.client.text.BDDDefinitionHelper.ParamType;
-import com.qmetry.qaf.automation.util.StringUtil;
 
 /**
  * A proxy step class facilitate to create non java custom steps. It is also a
@@ -207,7 +208,7 @@ public class StringTestStep extends BaseTestStep {
 	}
 
 	private static String removePrefix(String prefix, String s) {
-		if (StringUtil.isBlank(prefix))
+		if (isBlank(prefix))
 			return s;
 		return s.substring(prefix.length()).trim();
 	}
@@ -224,7 +225,7 @@ public class StringTestStep extends BaseTestStep {
 	}
 
 	public String getCodeSnippet() {
-		if (StringUtil.isBlank(codeSnippet)) {
+		if (isBlank(codeSnippet)) {
 			generateCodeSnippet();
 		}
 		return codeSnippet;
@@ -280,7 +281,6 @@ public class StringTestStep extends BaseTestStep {
 			}
 			actualArgs = arguments.toArray(new String[]{});
 		}
-		name = StringUtil
-				.toCamelCaseIdentifier(description.length() > 0 ? description : name);
+		name = toCamelCaseIdentifier(description.length() > 0 ? description : name);
 	}
 }

@@ -25,7 +25,6 @@ import java.io.File;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.LogFactoryImpl;
 
@@ -69,7 +68,7 @@ public class ExcelUtil {
 		Cell[] cells = s.getRow(getFirstRow(s, false));
 		for (int col = 0; col < l; col++) {
 			Cell cell = cells[col];
-			if (StringUtils.isNotBlank(cell.getContents())) {
+			if (StringUtil.isNotBlank(cell.getContents())) {
 				return col;
 			}
 		}
@@ -86,7 +85,7 @@ public class ExcelUtil {
 				return new Object[][] {};
 			}
 			workbook = Workbook.getWorkbook(f);
-			Sheet sheet = StringUtils.isNotBlank(sheetName) ? workbook.getSheet(sheetName) : workbook.getSheet(0);
+			Sheet sheet = StringUtil.isNotBlank(sheetName) ? workbook.getSheet(sheetName) : workbook.getSheet(0);
 			if (null == sheet) {
 				throw new RuntimeException("Worksheet " + sheetName + " not found in " + f.getAbsolutePath());
 			}
@@ -136,7 +135,7 @@ public class ExcelUtil {
 				return new String[][] {};
 			}
 			workbook = Workbook.getWorkbook(f);
-			Sheet sheet = StringUtils.isNotBlank(sheetName) ? workbook.getSheet(sheetName) : workbook.getSheet(0);
+			Sheet sheet = StringUtil.isNotBlank(sheetName) ? workbook.getSheet(sheetName) : workbook.getSheet(0);
 			if (null == sheet) {
 				throw new RuntimeException("Worksheet " + sheetName + " not found in " + f.getAbsolutePath());
 			}
@@ -195,7 +194,7 @@ public class ExcelUtil {
 				return new Object[][] {};
 			}
 			workbook = Workbook.getWorkbook(f);
-			Sheet sheet = StringUtils.isNotBlank(sheetName) ? workbook.getSheet(sheetName) : workbook.getSheet(0);
+			Sheet sheet = StringUtil.isNotBlank(sheetName) ? workbook.getSheet(sheetName) : workbook.getSheet(0);
 			if (null == sheet) {
 				throw new RuntimeException("Worksheet " + sheetName + " not found in " + f.getAbsolutePath());
 			}
@@ -258,7 +257,7 @@ public class ExcelUtil {
 				return new String[][] {};
 			}
 			workbook = Workbook.getWorkbook(f);
-			Sheet sheet = StringUtils.isNotBlank(sheetName) ? workbook.getSheet(sheetName) : workbook.getSheet(0);
+			Sheet sheet = StringUtil.isNotBlank(sheetName) ? workbook.getSheet(sheetName) : workbook.getSheet(0);
 			if (null == sheet) {
 				throw new RuntimeException("Worksheet " + sheetName + " not found in " + f.getAbsolutePath());
 			}

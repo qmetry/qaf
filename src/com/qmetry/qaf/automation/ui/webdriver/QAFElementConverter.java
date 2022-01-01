@@ -6,7 +6,7 @@ package com.qmetry.qaf.automation.ui.webdriver;
 import java.lang.reflect.Constructor;
 import java.util.Collection;
 
-import org.apache.commons.lang.StringUtils;
+import com.qmetry.qaf.automation.util.StringUtil;
 import org.openqa.selenium.remote.RemoteWebElement;
 
 import com.google.common.base.Function;
@@ -43,7 +43,7 @@ public class QAFElementConverter implements Function<Object, Object> {
 	
 	private QAFExtendedWebElement newRemoteWebElement() {
 		String elemImpl = ConfigurationManager.getBundle().getString("default.element.impl");
-		if(StringUtils.isBlank(elemImpl)){
+		if(StringUtil.isBlank(elemImpl)){
 			QAFExtendedWebElement toReturn = new QAFExtendedWebElement((QAFExtendedWebDriver) driver);
 			return toReturn;
 		}

@@ -29,7 +29,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONException;
@@ -62,6 +61,7 @@ import com.qmetry.qaf.automation.ui.webdriver.CommandTracker.Stage;
 import com.qmetry.qaf.automation.util.JSONUtil;
 import com.qmetry.qaf.automation.util.LocatorUtil;
 import com.qmetry.qaf.automation.util.StringMatcher;
+import com.qmetry.qaf.automation.util.StringUtil;
 
 /**
  * com.qmetry.qaf.automation.ui.webdriver.extended.QAFExtendedWebElement.java
@@ -180,7 +180,7 @@ public class QAFExtendedWebElement extends RemoteWebElement implements QAFWebEle
 	}
 
 	public By getBy() {
-		if ((null == by) && StringUtils.isNotBlank(locator)) {
+		if ((null == by) && StringUtil.isNotBlank(locator)) {
 			by = LocatorUtil.getBy(locator);
 		}
 
@@ -201,7 +201,7 @@ public class QAFExtendedWebElement extends RemoteWebElement implements QAFWebEle
 	 */
 	public String getDescription(String... label) {
 		return (label != null) && (label.length > 0) ? label[0]
-				: StringUtils.isBlank(description) ? this.toString() : description;
+				: StringUtil.isBlank(description) ? this.toString() : description;
 	}
 
 	public void setDescription(String description) {
@@ -350,7 +350,7 @@ public class QAFExtendedWebElement extends RemoteWebElement implements QAFWebEle
 	}
 
 	public boolean isPresent() {
-		if (StringUtils.isNotBlank(id) && id != "-1" && cacheable) {
+		if (StringUtil.isNotBlank(id) && id != "-1" && cacheable) {
 			return true;
 		}
 		try {
@@ -365,7 +365,7 @@ public class QAFExtendedWebElement extends RemoteWebElement implements QAFWebEle
 				eles = getWrappedDriver().findElements(getBy());
 			}
 			if ((eles != null) && (eles.size() > 0)) {
-				if (StringUtils.isBlank(id)) {
+				if (StringUtil.isBlank(id)) {
 					id = ((QAFExtendedWebElement) eles.get(0)).id;
 				}
 				return true;

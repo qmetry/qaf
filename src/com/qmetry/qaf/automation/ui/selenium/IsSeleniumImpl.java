@@ -23,7 +23,7 @@ package com.qmetry.qaf.automation.ui.selenium;
 
 import java.awt.Dimension;
 
-import org.apache.commons.lang.StringUtils;
+import com.qmetry.qaf.automation.util.StringUtil;
 
 import com.qmetry.qaf.automation.core.ConfigurationManager;
 import com.thoughtworks.selenium.CommandProcessor;
@@ -632,7 +632,7 @@ public class IsSeleniumImpl extends DefaultSelenium implements IsSelenium {
 		String elementLocator = attributeLocator.substring(0, atSign);
 		String attributeName = attributeLocator.substring(atSign + 1);
 
-		if (!(StringUtils.isNumeric(value) || "true".equals(value) || "false".equals(value) || value.startsWith("'")
+		if (!(StringUtil.isNumeric(value) || "true".equals(value) || "false".equals(value) || value.startsWith("'")
 				|| value.startsWith("\""))) {
 			value = "'" + value + "'";
 		}

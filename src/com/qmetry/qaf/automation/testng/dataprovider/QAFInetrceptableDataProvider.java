@@ -22,8 +22,8 @@
 package com.qmetry.qaf.automation.testng.dataprovider;
 
 import static com.qmetry.qaf.automation.core.ConfigurationManager.getBundle;
-import static org.apache.commons.lang.StringUtils.isBlank;
-import static org.apache.commons.lang.StringUtils.isNotBlank;
+import static com.qmetry.qaf.automation.util.StringUtil.isBlank;
+import static com.qmetry.qaf.automation.util.StringUtil.isNotBlank;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;

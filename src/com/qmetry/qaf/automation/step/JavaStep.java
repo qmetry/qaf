@@ -23,8 +23,8 @@ package com.qmetry.qaf.automation.step;
 
 import static com.qmetry.qaf.automation.core.ConfigurationManager.getBundle;
 import static com.qmetry.qaf.automation.util.ClassUtil.getAnnotation;
-import static org.apache.commons.lang.StringUtils.isBlank;
-import static org.apache.commons.lang.StringUtils.isNotBlank;
+import static com.qmetry.qaf.automation.util.StringUtil.isBlank;
+import static com.qmetry.qaf.automation.util.StringUtil.isNotBlank;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;

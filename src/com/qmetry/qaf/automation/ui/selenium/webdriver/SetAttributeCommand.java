@@ -21,7 +21,7 @@
  ******************************************************************************/
 package com.qmetry.qaf.automation.ui.selenium.webdriver;
 
-import org.apache.commons.lang.StringUtils;
+import com.qmetry.qaf.automation.util.StringUtil;
 import org.openqa.selenium.WebDriver;
 
 import com.qmetry.qaf.automation.ui.webdriver.QAFExtendedWebDriver;
@@ -48,7 +48,7 @@ public class SetAttributeCommand extends SeleneseCommand<Void> {
 		int atSign = attributeLocator.lastIndexOf("@");
 		String elementLocator = attributeLocator.substring(0, atSign);
 		String attributeName = attributeLocator.substring(atSign + 1);
-		if (!(StringUtils.isNumeric(value) || "true".equals(value) || "false".equals(value) || value.startsWith("'")
+		if (!(StringUtil.isNumeric(value) || "true".equals(value) || "false".equals(value) || value.startsWith("'")
 				|| value.startsWith("\""))) {
 			value = "\"" + value + "\"";
 		}

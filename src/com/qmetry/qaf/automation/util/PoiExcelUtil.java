@@ -22,7 +22,7 @@
 package com.qmetry.qaf.automation.util;
 
 import com.qmetry.qaf.automation.testng.DataProviderException;
-import org.apache.commons.lang.StringUtils;
+import com.qmetry.qaf.automation.util.StringUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.LogFactoryImpl;
 import org.apache.poi.ss.format.CellDateFormatter;
@@ -68,7 +68,7 @@ public class PoiExcelUtil {
         Row row = s.getRow(getFirstRow(s, false));
         for (int col = row.getFirstCellNum(); col < row.getLastCellNum(); col++) {
             Cell cell = row.getCell(col);
-            if (StringUtils.isNotBlank(getCellContentAsString(cell))) {
+            if (StringUtil.isNotBlank(getCellContentAsString(cell))) {
                 return col;
             }
         }
@@ -85,7 +85,7 @@ public class PoiExcelUtil {
                 return new Object[][]{};
             }
             workbook = new XSSFWorkbook(f);
-            Sheet sheet = StringUtils.isNotBlank(sheetName) ? workbook.getSheet(sheetName) : workbook.getSheetAt(0);
+            Sheet sheet = StringUtil.isNotBlank(sheetName) ? workbook.getSheet(sheetName) : workbook.getSheetAt(0);
             if (null == sheet) {
                 throw new RuntimeException("Worksheet " + sheetName + " not found in " + f.getAbsolutePath());
             }
@@ -128,7 +128,7 @@ public class PoiExcelUtil {
                 return new Object[][]{};
             }
             workbook = new XSSFWorkbook(f);
-            Sheet sheet = StringUtils.isNotBlank(sheetName) ? workbook.getSheet(sheetName) : workbook.getSheetAt(0);
+            Sheet sheet = StringUtil.isNotBlank(sheetName) ? workbook.getSheet(sheetName) : workbook.getSheetAt(0);
             if (null == sheet) {
                 throw new RuntimeException("Worksheet " + sheetName + " not found in " + f.getAbsolutePath());
             }
@@ -181,7 +181,7 @@ public class PoiExcelUtil {
                 return new String[][]{};
             }
             workbook = new XSSFWorkbook(f);
-            Sheet sheet = StringUtils.isNotBlank(sheetName) ? workbook.getSheet(sheetName) : workbook.getSheetAt(0);
+            Sheet sheet = StringUtil.isNotBlank(sheetName) ? workbook.getSheet(sheetName) : workbook.getSheetAt(0);
             if (null == sheet) {
                 throw new RuntimeException("Worksheet " + sheetName + " not found in " + f.getAbsolutePath());
             }

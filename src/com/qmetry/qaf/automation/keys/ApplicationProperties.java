@@ -26,7 +26,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
+import com.qmetry.qaf.automation.util.StringUtil;
 import org.testng.IRetryAnalyzer;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
@@ -718,7 +718,7 @@ public enum ApplicationProperties {
 	public boolean getBoolenVal(boolean... defaultVal) {
 		try {
 			String sVal = getStringVal().trim();
-			boolean val = StringUtils.isNumeric(sVal) ? (Integer.parseInt(sVal) != 0) : Boolean.parseBoolean(sVal);
+			boolean val = StringUtil.isNumeric(sVal) ? (Integer.parseInt(sVal) != 0) : Boolean.parseBoolean(sVal);
 			return val;
 		} catch (Exception e) {
 			// just ignore

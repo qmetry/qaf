@@ -21,7 +21,8 @@
  ******************************************************************************/
 package com.qmetry.qaf.automation.ui.selenium.webdriver;
 
-import org.apache.commons.lang.StringUtils;
+import static org.apache.commons.lang.StringUtils.isNumeric;
+
 import org.openqa.selenium.WebDriver;
 
 import com.thoughtworks.selenium.webdriven.ElementFinder;
@@ -47,7 +48,7 @@ public class GetCssPropertyCommand extends SeleneseCommand<String> {
 		int atSign = attributeLocator.lastIndexOf("@");
 		String elementLocator = attributeLocator.substring(0, atSign);
 		String property = attributeLocator.substring(atSign + 1);
-		if (!(StringUtils.isNumeric(value) || "true".equals(value) || "false".equals(value) || value.startsWith("'")
+		if (!(isNumeric(value) || "true".equals(value) || "false".equals(value) || value.startsWith("'")
 				|| value.startsWith("\""))) {
 			value = "'" + value + "'";
 		}

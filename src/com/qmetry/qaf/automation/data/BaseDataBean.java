@@ -40,7 +40,7 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 
 import org.apache.commons.lang.RandomStringUtils;
-import org.apache.commons.lang.StringUtils;
+import com.qmetry.qaf.automation.util.StringUtil;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.logging.Log;
@@ -437,7 +437,7 @@ public abstract class BaseDataBean implements DataBean {
 					field.setLong(this, Long.parseLong(val));
 
 				} else if (field.getType() == Boolean.TYPE) {
-					Boolean bval = StringUtils.isBlank(val) ? null
+					Boolean bval = StringUtil.isBlank(val) ? null
 							: NumberUtils.isNumber(val) ? (Integer.parseInt(val) != 0)
 									: Boolean.parseBoolean(val) || val.equalsIgnoreCase("T")
 											|| val.equalsIgnoreCase("Y") || val.equalsIgnoreCase("YES");
@@ -451,7 +451,7 @@ public abstract class BaseDataBean implements DataBean {
 					try {
 						dVal =
 
-								StringUtils.isBlank(val) ? null
+								StringUtil.isBlank(val) ? null
 										: NumberUtils.isNumber(val) ? DateUtil.getDate(Integer.parseInt(val))
 												: DateUtil.parseDate(val, "MM/dd/yyyy");
 					} catch (ParseException e) {

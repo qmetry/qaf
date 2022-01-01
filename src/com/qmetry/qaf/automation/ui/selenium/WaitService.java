@@ -21,7 +21,6 @@
  ******************************************************************************/
 package com.qmetry.qaf.automation.ui.selenium;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -96,7 +95,7 @@ public class WaitService {
 	}
 
 	public void waitForState(ReadyState state, String... timeout) {
-		String tout = (timeout != null) && (timeout.length > 0) && StringUtils.isNotEmpty(timeout[0]) ? timeout[0]
+		String tout = (timeout != null) && (timeout.length > 0) && StringUtil.isNotEmpty(timeout[0]) ? timeout[0]
 				: getDefaultPageWaitTime();
 		try {
 			waitForNotState(state, (Integer.parseInt(tout) / 5) + "");

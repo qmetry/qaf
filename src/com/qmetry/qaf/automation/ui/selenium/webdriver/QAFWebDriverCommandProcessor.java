@@ -24,7 +24,7 @@ package com.qmetry.qaf.automation.ui.selenium.webdriver;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
+import static com.qmetry.qaf.automation.util.StringUtil.*;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.remote.ScreenshotException;
 
@@ -130,7 +130,7 @@ public class QAFWebDriverCommandProcessor extends WebDriverCommandProcessor impl
 			ClassLoader loader = Thread.currentThread().getContextClassLoader();
 			for (String listenerClass : listenerClasses) {
 				try {
-					if (StringUtils.isEmpty(listenerClass)) {
+					if (isEmpty(listenerClass)) {
 						continue;
 					}
 					Class<SeleniumCommandListener> cls = (Class<SeleniumCommandListener>) loader

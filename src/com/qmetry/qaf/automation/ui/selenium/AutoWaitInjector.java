@@ -21,7 +21,7 @@
  ******************************************************************************/
 package com.qmetry.qaf.automation.ui.selenium;
 
-import org.apache.commons.lang.StringUtils;
+import com.qmetry.qaf.automation.util.StringUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.LogFactoryImpl;
 
@@ -66,7 +66,7 @@ public class AutoWaitInjector implements SeleniumCommandListener {
 		boolean isWaitInvolved = StackTraceUtils.isWaitInvolved();
 
 		if (!ApplicationProperties.SKIP_AUTO_WAIT.getBoolenVal(false) && (null != commandTracker.getArgs())
-				&& (commandTracker.getArgs().length > 0) && StringUtils.isNotBlank(commandTracker.getArgs()[0])
+				&& (commandTracker.getArgs().length > 0) && StringUtil.isNotBlank(commandTracker.getArgs()[0])
 				&& !exclude(commandTracker.getCommand()) && include(commandTracker.getCommand())// !skip(commandName)
 				&& !isWaitInvolved) {
 			final String loc = commandTracker.getArgs()[0];
@@ -88,7 +88,7 @@ public class AutoWaitInjector implements SeleniumCommandListener {
 					new Wait() {
 						@Override
 						public boolean until() {
-							return StringUtils.isNotBlank(proc.getString("getSelectedIndex", new String[] { loc, }));
+							return StringUtil.isNotBlank(proc.getString("getSelectedIndex", new String[] { loc, }));
 						}
 					}.wait("Wait time out before Select" + commandTracker.getCommand(),
 							WaitService.getDefaultPageWaitTimeNum());

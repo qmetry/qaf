@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
+import com.qmetry.qaf.automation.util.StringUtil;
 
 import com.qmetry.qaf.automation.ui.selenium.customcommands.GetCssPropertyCommand;
 import com.qmetry.qaf.automation.ui.selenium.customcommands.SetAttributeCommand;
@@ -136,7 +136,7 @@ public class SeleniumCommandProcessor extends HttpCommandProcessor implements QA
 			ClassLoader loader = Thread.currentThread().getContextClassLoader();
 			for (String listenerClass : listenerClasses) {
 				try {
-					if (StringUtils.isEmpty(listenerClass)) {
+					if (StringUtil.isEmpty(listenerClass)) {
 						continue;
 					}
 					Class<SeleniumCommandListener> cls = (Class<SeleniumCommandListener>) loader

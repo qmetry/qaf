@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.lang.StringUtils;
+import com.qmetry.qaf.automation.util.StringUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.LogFactoryImpl;
 import org.openqa.selenium.WebDriverException;
@@ -121,7 +121,7 @@ public class QAFTestBase {
 		}
 
 		public String[] setIfEmpty(String val, String... args) {
-			if (StringUtils.isBlank(getFrom(args))) {
+			if (StringUtil.isBlank(getFrom(args))) {
 
 				return set(val, args);
 			}
