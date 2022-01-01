@@ -37,7 +37,8 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.apache.commons.configuration.Configuration;
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.impl.LogFactoryImpl;
 
 import com.qmetry.qaf.automation.core.ConfigurationManager;
 
@@ -52,7 +53,7 @@ public class DatabaseUtil {
 	public static final String DB_DRIVER_CLASS = "db.driver.class";
 	public static final String DB_USER = "db.user";
 	public static final String DB_PWD = "db.pwd";
-	private static Logger log = Logger.getLogger(DatabaseUtil.class);
+    private static final Log log = LogFactoryImpl.getLog(DatabaseUtil.class);
 
 	/**
 	 * {@link PreparedStatement#close() close PreparedStatement} if not null ignoring exception if any
