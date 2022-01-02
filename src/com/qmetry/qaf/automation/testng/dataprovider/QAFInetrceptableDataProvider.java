@@ -57,7 +57,6 @@ import com.qmetry.qaf.automation.testng.dataprovider.QAFDataProvider.params;
 import com.qmetry.qaf.automation.util.CSVUtil;
 import com.qmetry.qaf.automation.util.ClassUtil;
 import com.qmetry.qaf.automation.util.DatabaseUtil;
-import com.qmetry.qaf.automation.util.ExcelUtil;
 import com.qmetry.qaf.automation.util.JSONUtil;
 import com.qmetry.qaf.automation.util.ListUtils;
 import com.qmetry.qaf.automation.util.PoiExcelUtil;
@@ -312,14 +311,14 @@ public class QAFInetrceptableDataProvider {
 				List<Object[]> mapData = DataProviderUtil.getDataSetAsMap(key, file);
 				return mapData.toArray(new Object[][] {});
 			}
-			if (file.endsWith("xls")) {
+			/*if (file.endsWith("xls")) {
 				if (isNotBlank(key)) {
 					return ExcelUtil.getTableDataAsMap(file, ((String) metadata.get(params.KEY.name())),
 							(String) metadata.get(params.SHEETNAME.name()));
 				}
 				return ExcelUtil.getExcelDataAsMap(file, (String) metadata.get(params.SHEETNAME.name()));
-			}
-			if (file.endsWith("xlsx")) {
+			}*/
+			if (file.endsWith("xlsx") || file.endsWith("xls")) {
 				if (isNotBlank(key)) {
 					return PoiExcelUtil.getTableDataAsMap(file, ((String) metadata.get(params.KEY.name())),
 							(String) metadata.get(params.SHEETNAME.name()));

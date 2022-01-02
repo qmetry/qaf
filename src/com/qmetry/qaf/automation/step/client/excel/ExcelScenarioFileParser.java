@@ -27,7 +27,7 @@ import java.util.List;
 
 import com.qmetry.qaf.automation.step.client.AbstractScenarioFileParser;
 import com.qmetry.qaf.automation.step.client.Scenario;
-import com.qmetry.qaf.automation.util.ExcelUtil;
+import com.qmetry.qaf.automation.util.PoiExcelUtil;
 
 import jxl.Workbook;
 
@@ -45,7 +45,7 @@ public class ExcelScenarioFileParser extends AbstractScenarioFileParser {
 			String[] sheets = workbook.getSheetNames();
 			for (int sheet = 0; sheet < workbook.getNumberOfSheets(); sheet++) {
 				String reference = scenarioFile.getPath() + ":" + sheets[sheet];
-				Object[][] rows = ExcelUtil.getExcelData(scenarioFile.getAbsolutePath(), false, sheets[sheet]);
+				Object[][] rows = PoiExcelUtil.getExcelData(scenarioFile.getAbsolutePath(), false, sheets[sheet]);
 				processStatements(rows, reference, scenarios);
 			}
 		} catch (Exception e) {

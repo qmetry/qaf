@@ -21,21 +21,38 @@
  ******************************************************************************/
 package com.qmetry.qaf.automation.util;
 
-import com.qmetry.qaf.automation.testng.DataProviderException;
-import com.qmetry.qaf.automation.util.StringUtil;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.impl.LogFactoryImpl;
-import org.apache.poi.ss.format.CellDateFormatter;
-import org.apache.poi.ss.usermodel.DateUtil;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.impl.LogFactoryImpl;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.format.CellDateFormatter;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellValue;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Row.MissingCellPolicy;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import com.qmetry.qaf.automation.testng.DataProviderException;
+
 public class PoiExcelUtil {
+    private static final Log logger = LogFactoryImpl.getLog(PoiExcelUtil.class);
+
     private static int getFirstRow(Sheet s, boolean skipHeaderRow) {
         int row = s.getFirstRowNum();
         for (; row < s.getLastRowNum(); row++) {
@@ -64,7 +81,7 @@ public class PoiExcelUtil {
     }
 
     private static int getFirstCol(Sheet s) {
-        int l = s.getLeftCol();
+       // int l = s.getLeftCol();
         Row row = s.getRow(getFirstRow(s, false));
         for (int col = row.getFirstCellNum(); col < row.getLastCellNum(); col++) {
             Cell cell = row.getCell(col);
@@ -80,11 +97,11 @@ public class PoiExcelUtil {
         Workbook workbook = null;
         try {
             File f = new File(file);
-            if (!f.exists() || !f.canRead()) {
+            workbook = getWorkbook(f);
+            if (workbook==null) {
                 logger.error(" Can not read file " + f.getAbsolutePath() + " Returning empty dataset1");
                 return new Object[][]{};
             }
-            workbook = new XSSFWorkbook(f);
             Sheet sheet = StringUtil.isNotBlank(sheetName) ? workbook.getSheet(sheetName) : workbook.getSheetAt(0);
             if (null == sheet) {
                 throw new RuntimeException("Worksheet " + sheetName + " not found in " + f.getAbsolutePath());
@@ -116,18 +133,18 @@ public class PoiExcelUtil {
         return retobj;
     }
 
-    private static final Log logger = LogFactoryImpl.getLog(ExcelUtil.class);
 
     public static Object[][] getExcelDataAsMap(String file, String sheetName) {
-        Object[][] retobj = null;
+        List<Object[]> retobj = null;
         Workbook workbook = null;
         try {
             File f = new File(file);
-            if (!f.exists() || !f.canRead()) {
+            workbook = getWorkbook(f);
+            if (workbook==null) {
                 logger.error(" Can not read file " + f.getAbsolutePath() + " Returning empty dataset1");
                 return new Object[][]{};
             }
-            workbook = new XSSFWorkbook(f);
+
             Sheet sheet = StringUtil.isNotBlank(sheetName) ? workbook.getSheet(sheetName) : workbook.getSheetAt(0);
             if (null == sheet) {
                 throw new RuntimeException("Worksheet " + sheetName + " not found in " + f.getAbsolutePath());
@@ -140,10 +157,15 @@ public class PoiExcelUtil {
             String[] colNames = new String[colsCnt - firstCol];
             logger.info("Rows : " + lastRow);
             logger.info("Columns : " + colsCnt);
-            retobj = new Object[lastRow - firstRow][1]; // skipped header
+            retobj = new LinkedList<Object[]>();//new Object[lastRow - firstRow][1]; // skipped header
             // row
             for (int rIndex = firstRow; rIndex <= lastRow; rIndex++) {
                 Row row = sheet.getRow(rIndex);
+                if(row==null) {
+                	//break when encounter empty row
+            		break;
+                }
+                
                 if (rIndex == firstRow) {
                     for (int col = firstCol; col < row.getLastCellNum(); col++) {
                         colNames[col - firstCol] = getCellContentAsString(row.getCell(col));
@@ -151,9 +173,10 @@ public class PoiExcelUtil {
                 } else {
                     Map<String, Object> map = new LinkedHashMap<String, Object>();
                     for (int col = firstCol; col < firstCol+colNames.length; col++) {
-                        map.put(colNames[col - firstCol], getCellContent(row.getCell(col)));
+                    	Cell cell = row.getCell(col, MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                        map.put(colNames[col - firstCol], getCellContent(cell));
                     }
-                    retobj[rIndex - (firstRow + 1)][0] = map;
+                    retobj.add(new Object[]{map});
                 }
             }
 
@@ -167,8 +190,19 @@ public class PoiExcelUtil {
                 // skip exception
             }
         }
-        return retobj;
+        return retobj.toArray(new Object[][] {});
 
+    }
+    
+    @SuppressWarnings("resource")
+	private static Workbook getWorkbook(File f) throws FileNotFoundException, IOException, InvalidFormatException {
+        if (!f.exists() || !f.canRead()) {
+            return null;
+        }
+        if(FileUtil.getExtention(f.getAbsolutePath()).toLowerCase().endsWith("xls")) {
+        	return new HSSFWorkbook(new FileInputStream(f));
+        }
+        return new XSSFWorkbook(f);
     }
 
     public static Object[][] getTableDataAsMap(String xlFilePath, String tableName, String sheetName) {
@@ -176,11 +210,12 @@ public class PoiExcelUtil {
         Workbook workbook = null;
         try {
             File f = new File(xlFilePath);
-            if (!f.exists() || !f.canRead()) {
+        	workbook = getWorkbook(f);
+            if (workbook==null) {
                 logger.error(" Can not read file " + f.getAbsolutePath() + " Returning empty dataset1");
                 return new String[][]{};
             }
-            workbook = new XSSFWorkbook(f);
+            
             Sheet sheet = StringUtil.isNotBlank(sheetName) ? workbook.getSheet(sheetName) : workbook.getSheetAt(0);
             if (null == sheet) {
                 throw new RuntimeException("Worksheet " + sheetName + " not found in " + f.getAbsolutePath());
@@ -262,7 +297,18 @@ public class PoiExcelUtil {
 
     public static Object getCellContent(Cell cell) {
         if (cell != null) {
+        	CellStyle colStyle = cell.getSheet().getColumnStyle(cell.getColumnIndex());
+        	CellStyle cellStyle = cell.getCellStyle();
+        	String format = colStyle!=null?colStyle.getDataFormatString():cellStyle.getDataFormatString();
+
             FormulaEvaluator evaluator = cell.getSheet().getWorkbook().getCreationHelper().createFormulaEvaluator();
+            if("@".equalsIgnoreCase(format)) {
+				// formatAsString or getStringValue returns numeric value as double to string,
+				// for instance 1 as String value of 1.0 instead of 1
+            	String val = new DataFormatter().formatCellValue(cell,evaluator,null);
+            	//for string type, return null (empty cell) as empty string.
+            	return null==val?"":val;
+            }
             CellValue cellValue = evaluator.evaluate(cell);
             if (cellValue == null) {
                 return null;
