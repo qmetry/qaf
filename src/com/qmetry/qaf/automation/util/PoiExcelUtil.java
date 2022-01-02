@@ -22,8 +22,6 @@
 package com.qmetry.qaf.automation.util;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -33,8 +31,7 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.LogFactoryImpl;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.hssf.usermodel.HSSFWorkbookFactory;
 import org.apache.poi.ss.format.CellDateFormatter;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -46,7 +43,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Row.MissingCellPolicy;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbookFactory;
 
 import com.qmetry.qaf.automation.testng.DataProviderException;
 
@@ -194,15 +191,16 @@ public class PoiExcelUtil {
 
     }
     
-    @SuppressWarnings("resource")
-	private static Workbook getWorkbook(File f) throws FileNotFoundException, IOException, InvalidFormatException {
+	private static Workbook getWorkbook(File f) throws IOException {
         if (!f.exists() || !f.canRead()) {
             return null;
         }
+        //open workbook in read-only mode to avoid writing back changes when the document is closed.
+       
         if(FileUtil.getExtention(f.getAbsolutePath()).toLowerCase().endsWith("xls")) {
-        	return new HSSFWorkbook(new FileInputStream(f));
+        	return HSSFWorkbookFactory.create(f, null, true);
         }
-        return new XSSFWorkbook(f);
+        return XSSFWorkbookFactory.createWorkbook(f, true);
     }
 
     public static Object[][] getTableDataAsMap(String xlFilePath, String tableName, String sheetName) {
