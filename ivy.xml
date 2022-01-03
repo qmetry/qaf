@@ -82,18 +82,15 @@ SOFTWARE.
 		</dependency>
 		<dependency org="javax.xml.bind" name="jaxb-api" rev="2.3.1"  conf="test->default"/>
 		<!-- excel -->
-		<dependency org="net.sourceforge.jexcelapi" name="jxl" rev="2.6.12" conf="compile->default">
-			<artifact name="jxl" type="jar"></artifact>
-		</dependency>
-		<dependency org="org.apache.poi" name="poi" rev="4.1.2" conf="provided->default"/>
-		<dependency org="org.apache.poi" name="poi-ooxml" rev="4.1.2" conf="provided->default"/>
+		<dependency org="org.apache.poi" name="poi" rev="5.0.0" conf="compile->default"/>
+		<dependency org="org.apache.poi" name="poi-ooxml-lite" rev="5.0.0" conf="compile->default"/>
+		<dependency org="org.apache.poi" name="poi-ooxml" rev="5.0.0" conf="compile->default" transitive="false"/>
 
 		<dependency org="commons-codec" name="commons-codec" rev="1.8" conf="compile->default"/>
 		<dependency org="commons-configuration" name="commons-configuration"
 			rev="1.7" conf="compile->default"/>
-		<dependency org="commons-lang" name="commons-lang" rev="2.6" conf="compile->default"/>
 
-		<dependency org="commons-io" name="commons-io" rev="2.5" conf="compile->default"/>
+		<dependency org="commons-io" name="commons-io" rev="2.11.0" conf="compile->default"/>
 		<dependency org="com.google.code.gson" name="gson" rev="2.8.5" conf="compile->default">
 			<artifact name="gson" type="jar"></artifact>
 		</dependency>
@@ -108,8 +105,7 @@ SOFTWARE.
 		<dependency org="com.google.inject" name="guice" rev="3.0" conf="compile->default"/>
 		
 		<dependency org="io.github.lukehutch" name="fast-classpath-scanner" rev="2.0.6"   conf="provided->default" />
-		<dependency org="velocity" name="velocity-dep" rev="1.4"
-			conf="compile->default" />
+		<dependency org="velocity" name="velocity-dep" rev="1.4" conf="compile->default" />
 
 		<!-- min rev 3.0.0 -->
 		<dependency org="org.seleniumhq.selenium" name="selenium-remote-driver"
@@ -123,16 +119,6 @@ SOFTWARE.
 			<exclude org="org.testng"/>
 		</dependency>
         	
-		
-		<!-- ws 
-		<dependency org="xmlunit" name="xmlunit" rev="1.4" />
-
-		<dependency org="org.xmlmatchers" name="xml-matchers" rev="0.10" />
-
-		<dependency org="com.jayway.jsonpath" name="json-path" rev="0.8.1" />
-		<dependency org="com.jayway.jsonpath" name="json-path-assert"
-			rev="0.8.1" />
-		-->
 		<dependency org="org.codehaus.groovy" name="groovy-all"
 			rev="2.1.9"  conf="provided->default" />
 		<dependency org="info.cukes" name="cucumber-java" rev="1.2.4"  conf="provided->default"/>
@@ -143,11 +129,12 @@ SOFTWARE.
 		<!-- Java EXpression Language (jexl) - implementation of dynamic and scripting features as alternative arrangements for script engine JEP-372 JDK-8236933 -->
 		<dependency org="org.apache.commons" name="commons-jexl3" rev="3.2.1"  conf="compile->default"/>
 		
-		<!-- https://mvnrepository.com/artifact/io.github.bonigarcia/webdrivermanager -->
-		<dependency org="org.slf4j" name="slf4j-log4j12" rev="1.7.30"  conf="compile->default"/>
+		<!-- https://mvnrepository.com/artifact/io.github.bonigarcia/webdrivermanager 
+		<dependency org="org.slf4j" name="slf4j-log4j12" rev="1.7.30"  conf="compile->default"/> -->
 		<dependency org="io.github.bonigarcia" name="webdrivermanager" rev="4.4.3"  conf="compile->default"/>
 		
 		<!--  https://github.com/SeleniumHQ/selenium/issues/3118 -->
 		<exclude org="com.codeborne"/>
+		
 	</dependencies>
 </ivy-module>

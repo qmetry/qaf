@@ -31,7 +31,6 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.LogFactoryImpl;
-import org.apache.poi.hssf.usermodel.HSSFWorkbookFactory;
 import org.apache.poi.ss.format.CellDateFormatter;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -43,8 +42,9 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Row.MissingCellPolicy;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbookFactory;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 
+import com.qmetry.qaf.automation.core.AutomationError;
 import com.qmetry.qaf.automation.testng.DataProviderException;
 
 public class PoiExcelUtil {
@@ -87,6 +87,21 @@ public class PoiExcelUtil {
             }
         }
         return 0;
+    }
+    
+    public static List<String> getSheetNames(File f){
+    	if (!f.exists() || !f.canRead()) {
+            throw new AutomationError("File not" + (f.exists()? " readable " : " found ") +f.getAbsolutePath());
+        }
+    	List<String> names = new LinkedList<String>();
+    	try (Workbook workbook = getWorkbook(f)){
+			if (workbook!=null) {
+				workbook.iterator().forEachRemaining(s->names.add(s.getSheetName()));
+			}
+		} catch (IOException e) {
+			throw new AutomationError(e);
+		}
+        return names;
     }
 
     public static Object[][] getExcelData(String file, boolean headerRow, String sheetName) {
@@ -191,16 +206,13 @@ public class PoiExcelUtil {
 
     }
     
-	private static Workbook getWorkbook(File f) throws IOException {
+	public static Workbook getWorkbook(File f) throws IOException {
         if (!f.exists() || !f.canRead()) {
             return null;
         }
         //open workbook in read-only mode to avoid writing back changes when the document is closed.
        
-        if(FileUtil.getExtention(f.getAbsolutePath()).toLowerCase().endsWith("xls")) {
-        	return HSSFWorkbookFactory.create(f, null, true);
-        }
-        return XSSFWorkbookFactory.createWorkbook(f, true);
+        return WorkbookFactory.create(f, null, true);
     }
 
     public static Object[][] getTableDataAsMap(String xlFilePath, String tableName, String sheetName) {
