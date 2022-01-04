@@ -16,16 +16,31 @@ env.resource=resources/common; resources/web
 
 in example above, all resources (properties provided using properties file or xml file) from `resources/common` and `resources/web` directories will be loaded.
 
+## Accessing properties
 
-## System properties
+### In Java
+To access any properties in code you can use `getBundle()` method of `ConfigurationManager`.
 
-Any property with `system` prefix will be added into system properties. For example:
+```java
+import static com.qmetry.qaf.automation.core.ConfigurationManager.getBundle();
+
+...
+
+String myString = getBundle().getString("my.stringprop");
+int myInt = getBundle().getInt("my.intprop");
 
 ```
-system.webdriver.gecko.driver=/drivers/geckodriver
+
+
+### In BDD
+
+To access any properties in BDD file, you can provide parameter in step call or meta-data. For example:
+
+```
+Given user login with '${admin.user.name}' and '${admin.user.pwd}'
 ```
 
-this will set system property `webdriver.gecko.driver`.
+
 
 ## Parameter Interpolation
 Parameters (like ${token}) in property value(s) are automatically resolved when you retrieve property. Here is an example (properties file in this example, but xml configuration file work the same way)
@@ -34,7 +49,9 @@ Parameters (like ${token}) in property value(s) are automatically resolved when 
 env.name=sit
 env.resources=resources/common;resources/${env.name}
 ```
-The general syntax of a parameter is ${prefix:name}. The prefix tells Configuration manager that the parameter is to be evaluated in a certain context. The context is the current configuration instance if the prefix is missing. The following other prefix names are supported by default: 
+The general syntax of a parameter is ${prefix:name}. The prefix tells Configuration manager that the parameter is to be evaluated in a certain context. The context is the current configuration instance if the prefix is missing. 
+
+The following other prefix names are supported by default: 
 
 | Prefix | Description | 
 |-------|---------|
@@ -68,27 +85,13 @@ target=${<%a%>.b} #in this case where a=c it should be ${c.b} results in cb
 start.date=${expr:com.qmetry.qaf.automation.util.DateUtil.getDate(1, 'MM/dd/yyyy')} #tomorrow in MM/dd/yyyy format
 start.date=${expr:com.qmetry.qaf.automation.util.DateUtil.getDate(<%rnd:9%>, 'MM/dd/yyyy')} #random date from 10 days from today in MM/dd/yyyy format
 ```
-## Accessing properties
 
-### In Java
-To access any properties in code you can use `getBundle()` method of `ConfigurationManager`.
+## Define System properties
 
-```java
-import static com.qmetry.qaf.automation.core.ConfigurationManager.getBundle();
-
-...
-
-String myString = getBundle().getString("my.stringprop");
-int myInt = getBundle().getInt("my.intprop");
+Usually, system properties passed at the time of program execution. However if you want to set system property through properties file you can use `system` prefix. Any property with `system` prefix will be added into system properties. For example:
 
 ```
-
-### In BDD
-
-To access any properties in BDD file, you can provide parameter in step call or meta-data. For example:
-
-```
-Given user login with '${admin.user.name}' and '${admin.user.pwd}'
+system.webdriver.gecko.driver=/drivers/geckodriver
 ```
 
-
+this will set system property `webdriver.gecko.driver`.
