@@ -6,9 +6,16 @@ folder: latest
 tags: [getting_started]
 ---
 
-QAF has configuration manager that loads configuration provided using xml or properties file. It expects `application.properties` available under `resources` directory under project root. If `application.properties` not provided under default location, you can specify location using system property named `application.properties.file`.  You can provide [properties used by the framework](properties_list.html) or your test code.
+QAF has configuration manager that loads configuration provided using xml or properties file. It expects `application.properties` available under `resources` directory under project root. If `application.properties` not provided under default location, you can specify location using system property named `application.properties.file`.  Refer list of [properties used by the framework](properties_list.html). QAF supports both `properties` files and `xml` files. To provide properties you can use either `properties` or `xml` file
 
-To load other resource, `env.resource` prope
+To load additional resource for your project, set `env.resource` property. For example:
+
+```
+env.resource=resources/common; resources/web
+```
+
+in example above, all resources (properties provided using properties file or xml file) from `resources/common` and `resources/web` directories will be loaded.
+
 
 ## System properties
 
