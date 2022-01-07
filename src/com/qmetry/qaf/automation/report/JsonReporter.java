@@ -79,8 +79,10 @@ public class JsonReporter implements TestCaseResultUpdator {
 				StatusCounter.of(suiteName).withFile(suitReportDir));
 		StatusCounter testStatusCounter = getStatusCounter(testSetStatusCounters,
 				StatusCounter.of(testName).withFile(testReportDir));
-		suiteStatusCounter.add(result.getStatus());
-		testStatusCounter.add(result.getStatus());
+		if (!result.willRetry()) {
+			suiteStatusCounter.add(result.getStatus());
+			testStatusCounter.add(result.getStatus());
+		}
 
 		// suite meta-info
 		updateSuiteMetaData(result, suiteStatusCounter, testStatusCounter);
