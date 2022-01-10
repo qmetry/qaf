@@ -127,7 +127,7 @@ public class QAFTestStepArgumentFormatterImpl implements QAFTestStepArgumentForm
 									map.put(key, lst.get(i));
 									lom.add(map);
 								}
-								if(paramType.isArray() || paramType.isAssignableFrom(Collection.class) || lom.size()>1) {
+								if(paramType.isArray() || paramType.isAssignableFrom(Collection.class)|| ClassUtil.isAssignableFrom(paramType,Collection.class) || lom.size()>1) {
 									strVal = gson.toJson(lom);
 								}else {
 									strVal = gson.toJson(lom.get(0));

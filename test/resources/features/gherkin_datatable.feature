@@ -12,6 +12,10 @@ And system with following users:
 |name|
 |auser|
 |test|
+#list of map with one key and one entry #401
+And system with following users:
+|name|
+|auser|
 
 @bug
 @feature:303
