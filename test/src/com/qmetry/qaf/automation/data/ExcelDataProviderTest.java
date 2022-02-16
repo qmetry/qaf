@@ -78,7 +78,7 @@ public class ExcelDataProviderTest {
 
     @Test(description = "Excel data provider with datatable")
     public void excelDataWithDataTable() {
-        for (int j = 1; j <= 2; j++) {
+        for (int j = 1; j <= 5; j++) {
             Object[][] actualResult = PoiExcelUtil.getTableDataAsMap("resources/testdata.xlsx", "Data" + j, "DataTable");
             Validator.assertThat("Rows:", actualResult.length, Matchers.equalTo(4));
             for (int k = 0; k < actualResult.length; k++) {

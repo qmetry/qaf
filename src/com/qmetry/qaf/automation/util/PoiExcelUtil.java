@@ -232,7 +232,11 @@ public class PoiExcelUtil {
             }
 
             int startRow, startCol, endRow, endCol, ci, cj;
-            Cell tableStart = findCell(sheet, tableName, sheet.getLeftCol(), sheet.getFirstRowNum());
+            
+            //always start from first col of the row, sheet.getLeftCol() cause issues sometimes because it
+            //returns the left col in the visible view when the sheet is first viewed after opening it in a viewer
+            //for example sheet scrolled to right and then closed workbook
+            Cell tableStart = findCell(sheet, tableName, 0, sheet.getFirstRowNum());
             if (null == tableStart) {
                 throw new RuntimeException(
                         "Lable " + tableName + " for starting data range not found in sheet " + sheet.getSheetName());
@@ -293,7 +297,8 @@ public class PoiExcelUtil {
             Row row = sheet.getRow(j);
             if (row != null) {
                 //Iterate columns
-                firstCol = row.getFirstCellNum() > firstCol ? row.getFirstCellNum() : firstCol;
+            	//Fix: #404 use supplied first column instead of first cell
+                //firstCol = row.getFirstCellNum() > firstCol ? row.getFirstCellNum() : firstCol;
                 for (int k = firstCol; k <= row.getLastCellNum(); k++) {
                     Cell cell = row.getCell(k);
                     if (cell != null && getCellContentAsString(cell).equals(searchText)) {
@@ -302,7 +307,23 @@ public class PoiExcelUtil {
                 }
             }
         }
-        return null;
+        return null;//findCellFallback(sheet, searchText, firstRow);
+    }
+    
+    private static Cell findCellFallback(Sheet sheet, String searchText, int firstRow) {
+    	for (int j = firstRow; j <= sheet.getLastRowNum(); j++) {
+            Row row = sheet.getRow(j);
+            if (row != null) {
+                //Iterate columns
+                for (int k = row.getFirstCellNum(); k <= row.getLastCellNum(); k++) {
+                    Cell cell = row.getCell(k);
+                    if (cell != null && getCellContentAsString(cell).equals(searchText)) {
+                        return cell;
+                    }
+                }
+            }
+        }
+        return null; 
     }
 
     public static Object getCellContent(Cell cell) {
