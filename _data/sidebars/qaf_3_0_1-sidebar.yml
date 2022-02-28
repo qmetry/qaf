@@ -31,8 +31,8 @@ entries:
     - title: Release Notes
       url: release_notes.html
       output: web, pdf
-    - title: QAF 3.0.1 Docs
-      url: ../qaf-3.0.1/docs.html
+    - title: QAF latest Docs
+      url: ../latest/docs.html
       output: web, pdf
     - title: QAF 3.0.0 Docs
       url: ../qaf-3.0.0/docs.html

@@ -1,41 +1,10 @@
 ---
 title: Release Notes
-sidebar: qaf_latest-sidebar
+sidebar: qaf_3_0_1-sidebar
 
-permalink: latest/release_notes.html
-folder: latest
+permalink: qaf-3.0.1/release_notes.html
+folder: qaf-3.0.1
 ---
-## VER-3.1.0 Release Notes:
-
- - Closed [3.1.0 milestone](https://github.com/qmetry/qaf/milestone/11?closed=1)
- - Removed jxl dependency, xls files will be handled using poi. log4j 1.x was one of the dependency from jxl. By removing this dependency now log4j also will not get resolved. User can add any library of their choice for logging.
- - Removed commons-lang dependency, will be resolved by commons-io
- - Updated commons-io version from 2.5 to 2.11.0
- - Removed slf4j-log4j12 dependency. Now log4j is not required or resolved, removing this dependency.
- - Changed minimum supported selenium version to 3.6.0
- - Removed deprecated interfaces from QAFWebDriver interface
-
- **New Features:** 
-   1. [#388](https://github.com/qmetry/qaf/issues/388) Selenium 4 support
-
- **Enhancements**
-   1. Updated poi version from 4.1.2 to 5.0.0
-   2. Updated commons-io version from 2.5 to 2.11.0
-   3. Excel data provider: 
-       - Used same implementation for xls and xlsx, removed old implementation ExcelUtil 
-       - For cell with string (Text or @) format, considering empty cell value as empty string. Null for others including no format (General)
-   4. Form data bean:  support objects in depending value expression parameter resolution
-   
- **Bug fixes**
-   1. [#386](https://github.com/qmetry/qaf/issues/386) PoiExcelUtil NullPointerException when there is no content in cell
-   2. [#393](https://github.com/qmetry/qaf/issues/393) FormDataBean with dependsOnField throws ClassCastException
-   3. [#394](https://github.com/qmetry/qaf/issues/394) java.lang.NoClassDefFoundError: org/testng/IAnnotationTransformer2
-   4. [#395](https://github.com/qmetry/qaf/issues/395) Gradle listener is throwing nullpointer exceptions
-   5. [#399](https://github.com/qmetry/qaf/issues/399) Report total count retry count in test count
-   6. [#401](https://github.com/qmetry/qaf/issues/401) Step call issue for list of map with one key and one entry
-   7. [#404](https://github.com/qmetry/qaf/issues/404) PoiExcelUtil RuntimeException for data table
-
-
 ## VER-3.0.1 Release Notes:
 
  - Closed [3.0.1 milestone](https://github.com/qmetry/qaf/milestone/9?closed=1)
