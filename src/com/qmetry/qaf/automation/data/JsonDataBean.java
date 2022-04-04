@@ -27,7 +27,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -47,7 +46,6 @@ import java.util.stream.Stream;
 
 import javax.script.ScriptException;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.lang.text.StrSubstitutor;
 
@@ -166,6 +164,17 @@ public class JsonDataBean {
 				Object[] dataset = fieldParams.containsKey("dataset") ? fieldParams.getStringArray("dataset")
 						: field.dataset;
 				field._dataGenerator = new ListDataSelector(master, dataset);
+			}
+			if(StringUtil.isNotBlank(field.prefix) ||StringUtil.isNotBlank(field.suffix)) {
+				if(StringUtil.isBlank(field.formatVal)) {
+					field.formatVal="_value";
+				}
+				if(StringUtil.isNotBlank(field.prefix)){
+					field.formatVal = "'"+field.prefix+"'+"+field.formatVal;
+				}
+				if (StringUtil.isNotBlank(field.suffix)){
+					field.formatVal =field.formatVal + "+'"+field.suffix+"'";
+				}
 			}
 		}
 
@@ -436,6 +445,8 @@ public class JsonDataBean {
 		private String name;
 		private String type = "char";
 		private String format;
+		private String prefix;
+		private String suffix;
 		private int min;
 		private int max;
 		private int length = 10;
@@ -466,18 +477,6 @@ public class JsonDataBean {
 		public default List<String> getErrorMessage() {
 			return Collections.emptyList();
 		};
-
-		public default void setOptions(Map<String, Object> options) {
-			try {
-				if (null != options)
-					BeanUtils.populate(this, options);
-				if (getErrorMessage().size() > 0) {
-					throw new AssertionError(StringUtil.join(getErrorMessage(), '\n'));
-				}
-			} catch (IllegalAccessException | InvocationTargetException e) {
-				throw new RuntimeException(e);
-			}
-		}
 	}
 
 	private static class ExprCollector implements Colloector {
