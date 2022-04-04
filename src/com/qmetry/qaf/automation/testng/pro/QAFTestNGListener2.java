@@ -26,6 +26,8 @@ import static com.qmetry.qaf.automation.core.ConfigurationManager.getBundle;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -181,15 +183,32 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 	@SuppressWarnings("unchecked")
 	private void deployResult(ITestResult tr) {
 		try {
-			if (ResultUpdator.getResultUpdatorsCnt()>0 && (tr.getMethod() instanceof TestNGScenario) && ((tr.getStatus() == ITestResult.FAILURE)
+			if (ResultUpdator.getResultUpdatorsCnt()>0 && ((tr.getStatus() == ITestResult.FAILURE)
 					|| (tr.getStatus() == ITestResult.SUCCESS || tr.getStatus() == ITestResult.SKIP))) {
 
 				TestCaseRunResult.Status status = tr.getStatus() == ITestResult.SUCCESS ? TestCaseRunResult.Status.PASS
 						: tr.getStatus() == ITestResult.FAILURE ? TestCaseRunResult.Status.FAIL
 								: TestCaseRunResult.Status.SKIPPED;
 
-				TestNGScenario scenario = (TestNGScenario) tr.getMethod();
-				Map<String, Object> params = new HashMap<String, Object>(scenario.getMetaData());
+				Map<String, Object> params = new HashMap<String, Object>();	
+				Map<String, Object> metadata;
+				String clsName;
+				Collection<String> steps;
+
+				if(tr.getMethod() instanceof TestNGScenario) {
+					TestNGScenario scenario = (TestNGScenario) tr.getMethod();
+					metadata = scenario.getMetaData();
+					params.putAll(metadata);
+					clsName= scenario.getClassOrFileName();
+					steps = scenario.getSteps();
+
+				}else {
+					metadata = new HashMap<String, Object>();
+					metadata.put("name",tr.getName());
+					clsName=tr.getMethod().getRealClass().getName();
+					steps = Collections.emptyList();
+				}
+				
 				params.put("duration", tr.getEndMillis() - tr.getStartMillis());
 
 				Map<String, Object> executionInfo = new HashMap<String, Object>();
@@ -212,13 +231,13 @@ public class QAFTestNGListener2 extends QAFTestNGListener
 				if(retryCount>0) {
 					executionInfo.put("retryCount", retryCount);
 				}
-				TestCaseRunResult testCaseRunResult = new TestCaseRunResult(status, scenario.getMetaData(),
-						tr.getParameters(), executionInfo, scenario.getSteps(), tr.getStartMillis(),willRetry,scenario.isTest() );
-				testCaseRunResult.setClassName(scenario.getClassOrFileName());
-				if (scenario.getGroups() != null && scenario.getGroups().length > 0) {
-					testCaseRunResult.getMetaData().put("groups", scenario.getGroups());
+				TestCaseRunResult testCaseRunResult = new TestCaseRunResult(status, metadata,
+						tr.getParameters(), executionInfo, steps, tr.getStartMillis(),willRetry,tr.getMethod().isTest() );
+				testCaseRunResult.setClassName(clsName);
+				if (tr.getMethod().getGroups() != null && tr.getMethod().getGroups().length > 0) {
+					testCaseRunResult.getMetaData().put("groups", tr.getMethod().getGroups());
 				}
-				testCaseRunResult.getMetaData().put("description",scenario.getDescription());
+				testCaseRunResult.getMetaData().put("description",tr.getMethod().getDescription());
 				testCaseRunResult.setThrowable(tr.getThrowable());
 				ResultUpdator.updateResult(testCaseRunResult);
 			}
