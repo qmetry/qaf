@@ -119,10 +119,10 @@ public class JsonDataBean {
 		;
 		classByName.put("int", Integer.class);
 		classByName.put("integer", Integer.class);
-		classByName.put("short", Integer.class);
-		classByName.put("long", Integer.class);
-		classByName.put("float", Integer.class);
-		classByName.put("double", Integer.class);
+		classByName.put("short", Short.class);
+		classByName.put("long", Long.class);
+		classByName.put("float", Float.class);
+		classByName.put("double", Double.class);
 
 		for (Field field : fields) {
 			Configuration fieldParams = params.subset(field.name);
@@ -381,6 +381,7 @@ public class JsonDataBean {
 
 		ListDataSelector(Map<String, Master> master, Object... values) {
 			this.values = values;
+			this.master=master;
 			needToResolve = false;
 			if (values != null && values.length == 1) {
 				if (values[0].toString().indexOf("${") < 0) {
@@ -626,5 +627,18 @@ public class JsonDataBean {
 
 	private interface Formatter {
 		String format(Map<String, Object> data);
+	}
+	
+	public static void main(String[] args) throws IOException, ScriptException {
+		String file = getBundle().getString("struct", "");
+		int samples = getBundle().getInt("samples", 10);
+
+		if (StringUtil.isBlank(file)) {
+			throw new IOException(
+					"required datagen schema file. You can provide \"-Ddatagen.schema.file=<filepath>\"");
+		}
+		JsonDataBean bean = JsonDataBean.get(file);
+		bean.setSamples(samples);
+		bean.generateData();
 	}
 }
