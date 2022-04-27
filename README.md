@@ -12,7 +12,19 @@
   for web, mobileweb, mobile native and rest web-service functional test automation
   
   <a href="https://qmetry.github.io/qaf/" target="_blank">Online documentation</a> | <a href="https://github.com/qmetry/qaf-step-by-step-tutorial/wiki" target="_blank">Step-By-Step-Tutorial</a>
-
+<h3>Support libraries:</h3>
+<ul type="1">
+	<li><a href="https://github.com/qmetry/qaf-support" target="_blank">qaf-support</a> - steps for web and mobile web</li>
+	<li><a href="https://github.com/qmetry/qaf-support-mobile" target="_blank">qaf-support-mobile</a> - steps for and mobile native</li>
+	<li><a href="https://github.com/qmetry/qaf-support-ws" target="_blank">qaf-support-ws</a> - request call repository support and steps for web services</li>
+	<li><a href="https://github.com/qmetry/qaf-support-openapi" target="_blank">qaf-support-openapi</a> - auto generate request call repository and bdd from open api specification</li>
+	<li><a href="https://github.com/qmetry/qaf-support-elasticsearch" target="_blank">qaf-support-elasticsearch</a> - elasticsearch integration for cross execution dashboard</li>
+	<li><a href="https://github.com/qmetry/qaf-support-angular" target="_blank">qaf-support-angular</a> - custom locator stretegies specific to angularjs</li>
+	<li><a href="https://github.com/qmetry/qaf-support-aem" target="_blank">qaf-support-aem</a> - aem support</li>
+	<li><a href="https://github.com/qmetry/qaf-support-galen" target="_blank">qaf-support-galen</a> - galen framework support</li>
+	<li><a href="https://github.com/qmetry/qaf-support-flutter" target="_blank">qaf-support-flutter</a> - flutter native app support</li>
+	<li><a href="https://github.com/qmetry/qaf-cucumber" target="_blank">qaf-cucumber</a> - cucumber step with QAF BDD2 and/or cucumber runner support</li>
+</ul>
 
 <h3>Powerful Automation Platform for Test Authoring, Test Execution and Execution Analysis</h3>
 
@@ -84,3 +96,5 @@ QMetry Automation Framework provides a powerful and versatile platform to author
 		<li>Enabling testing across multiple platforms with or without
 			selenium grid</li>
 	</ul>
+
+ 
