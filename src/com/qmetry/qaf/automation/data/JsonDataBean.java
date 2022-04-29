@@ -630,12 +630,12 @@ public class JsonDataBean {
 	}
 	
 	public static void main(String[] args) throws IOException, ScriptException {
-		String file = getBundle().getString("struct", "");
-		int samples = getBundle().getInt("samples", 10);
+		String file = getBundle().getString("schema", getBundle().getString("datagen.schema", ""));
+		int samples = getBundle().getInt("samples", getBundle().getInt("datagen.samples", 10));
 
 		if (StringUtil.isBlank(file)) {
 			throw new IOException(
-					"required datagen schema file. You can provide \"-Ddatagen.schema.file=<filepath>\"");
+					"required datagen schema file. You can provide \"-Dschema=<filepath>\" or \"-Ddatagen.schema=<filepath>\"");
 		}
 		JsonDataBean bean = JsonDataBean.get(file);
 		bean.setSamples(samples);
