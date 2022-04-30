@@ -23,6 +23,7 @@ package com.qmetry.qaf.automation.ui.webdriver;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Collections;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -70,6 +71,9 @@ public class ByJS extends By {
 					context);
 		} else {
 			res = ((JavascriptExecutor) context).executeScript(script);
+		}
+		if(null==res) {
+			return Collections.emptyList();
 		}
 		if(List.class.isAssignableFrom(res.getClass())) {
 			return (List<WebElement>) res;
