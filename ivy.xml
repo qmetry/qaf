@@ -133,6 +133,10 @@ SOFTWARE.
 		<dependency org="org.slf4j" name="slf4j-log4j12" rev="1.7.30"  conf="compile->default"/> -->
 		<dependency org="io.github.bonigarcia" name="webdrivermanager" rev="4.4.3"  conf="compile->default"/>
 		
+		<!-- emailable report -->
+		<!-- https://mvnrepository.com/artifact/com.sun.mail/jakarta.mail -->
+		<dependency org="com.sun.mail" name="jakarta.mail" rev="2.0.1"  conf="compile->default"/>
+		
 		<!--  https://github.com/SeleniumHQ/selenium/issues/3118 -->
 		<exclude org="com.codeborne"/>
 		
