@@ -95,7 +95,11 @@ SOFTWARE.
 			<artifact name="gson" type="jar"></artifact>
 		</dependency>
 
-
+		<!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+		<dependency org="com.google.guava" name="guava" rev="31.1-jre" conf="compile->default">
+			<artifact name="guava" type="jar"></artifact>
+		</dependency>
+		
 		<!-- <dependency org="org.easytesting" name="fest-reflect" rev="1.4.1" /> -->
 		<dependency org="org.testng" name="testng" rev="6.10" conf="compile->default">
 			<artifact name="testng" type="jar"></artifact>

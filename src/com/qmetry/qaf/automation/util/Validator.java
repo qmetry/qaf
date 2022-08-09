@@ -27,6 +27,7 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.StringDescription;
 import org.testng.SkipException;
+import com.google.common.collect.MapDifference;
 
 import com.qmetry.qaf.automation.core.MessageTypes;
 
@@ -109,6 +110,40 @@ public class Validator {
 			String successMsg) {
 		if (!verifyFalse(condition, failMessage, successMsg)) {
 			throw new AssertionError(failMessage);
+		}
+	}
+	
+	public static boolean verifyJsonContains(String actualJsonStr, String expectedJsonStr) {
+		
+		MapDifference<String, Object> res = JsonCompareUtil.jsonCompare(actualJsonStr, expectedJsonStr, false);
+	
+		String failureMsg = String.format("Diff:%s, Expected but Not Found: %s", res.entriesDiffering(), res.entriesOnlyOnLeft());
+		String successMsg = String.format("Found Expected: %s", res.entriesInCommon());
+	
+		return Validator.verifyTrue(res.entriesOnlyOnLeft().isEmpty() && res.entriesDiffering().isEmpty(),failureMsg,
+				successMsg);
+	}
+
+	public static void assertJsonContains(String actualJsonStr, String expectedJsonStr) {
+		if (!verifyJsonContains(actualJsonStr, expectedJsonStr)) {
+			throw new AssertionError("Actual json doesn't contains expected json");
+		}
+	}
+
+	public static boolean verifyJsonMatches(String actualJsonStr, String expectedJsonStr) {
+		
+		MapDifference<String, Object> res = JsonCompareUtil.jsonCompare(actualJsonStr, expectedJsonStr, true);
+	
+		String failureMsg = String.format("Diff:%s, Expected but Not Found: %s", res.entriesDiffering(), res.entriesOnlyOnLeft());
+		String successMsg = String.format("Found Expected: %s", res.entriesInCommon());
+	
+		return Validator.verifyTrue(res.entriesOnlyOnLeft().isEmpty() && res.entriesDiffering().isEmpty(),failureMsg,
+				successMsg);
+	}
+
+	public static void assertJsonMatches(String actualJsonStr, String expectedJsonStr) {
+		if (!verifyJsonMatches(actualJsonStr, expectedJsonStr)) {
+			throw new AssertionError("Actual json doesn't matches expected json");
 		}
 	}
 }

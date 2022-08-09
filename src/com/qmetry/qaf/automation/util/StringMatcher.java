@@ -88,7 +88,7 @@ public abstract class StringMatcher {
 		return null;
 	}
 
-	private static StringMatcher getMatcherOrNull(String stringWithMatcher) {
+	public static StringMatcher getMatcherOrNull(String stringWithMatcher) {
 		if (stringWithMatcher.indexOf(":") > 0) {
 
 			try {
