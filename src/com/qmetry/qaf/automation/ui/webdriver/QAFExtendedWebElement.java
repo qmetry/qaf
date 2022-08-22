@@ -350,28 +350,28 @@ public class QAFExtendedWebElement extends RemoteWebElement implements QAFWebEle
 	}
 
 	public boolean isPresent() {
-		if (StringUtil.isNotBlank(id) && id != "-1" && cacheable) {
+		if (cacheable && StringUtil.isNotBlank(id) && id != "-1") {
 			return true;
 		}
 		try {
-			List<WebElement> eles = null;
+			WebElement ele = null;
 			if ((parentElement != null)) {
 				if (!parentElement.isPresent()) {
 					return false;
 				}
-				eles = parentElement.findElements(getBy());
+				ele = parentElement.findElement(getBy());
 
 			} else {
-				eles = getWrappedDriver().findElements(getBy());
+				ele = getWrappedDriver().findElement(getBy());
 			}
-			if ((eles != null) && (eles.size() > 0)) {
+			if (ele != null) {
 				if (StringUtil.isBlank(id)) {
-					id = ((QAFExtendedWebElement) eles.get(0)).id;
+					id = ((QAFExtendedWebElement) ele).getId();
 				}
 				return true;
 			}
 			return false;
-		} catch (WebDriverException e) {
+		} catch (Exception e) {
 			return false;
 		}
 	}
