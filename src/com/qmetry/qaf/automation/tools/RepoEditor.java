@@ -55,9 +55,13 @@ public class RepoEditor {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		final HttpServer server = createServer();
+		int port = ConfigurationManager.getBundle().getInt("repoeditor.server.port",2612);
+		final HttpServer server = createServer(port);
 		try {
 			server.start();
+			System.out.println("server started on port: " + port);
+			System.out.println("type \"exit\" to stop server.");
+
 			try (Scanner s = new Scanner(System.in)) {
 				s.next("exit");
 			}
@@ -68,8 +72,8 @@ public class RepoEditor {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static HttpServer createServer() {
-			HttpServer server =  ServerBootstrap.bootstrap().setListenerPort(8080).register("/", (req, res, c) -> {
+	private static HttpServer createServer(int port) {
+			HttpServer server =  ServerBootstrap.bootstrap().setListenerPort(port).register("/", (req, res, c) -> {
 				res.setEntity(new FileEntity(new File("dashboard.htm"), ContentType.TEXT_HTML));
 			}).register("/browse", (req, res, c) -> {
 				res.setEntity(new StringEntity(browse("."), ContentType.TEXT_HTML));
