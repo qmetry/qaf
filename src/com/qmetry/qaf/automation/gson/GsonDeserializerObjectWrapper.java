@@ -65,16 +65,21 @@ public class GsonDeserializerObjectWrapper implements JsonDeserializer<ObjectWra
 	private Object read(JsonElement in, Type typeOfT) {
 		
 		if (in.isJsonArray()) {
+			Class<?> cls = ClassUtil.getClass(typeOfT).getComponentType();
+			if(null!=cls && cls.isPrimitive()) {
+				return context.deserialize(in, typeOfT);
+			}
+			
 			JsonArray arr = in.getAsJsonArray();
-
 			boolean isArray = isArray(typeOfT);
+			
 			Collection<Object> list = isArray ? new ArrayList<Object>()
 					: context.deserialize(new JsonArray(0), typeOfT);
 			for (JsonElement anArr : arr) {
 				((Collection<Object>) list).add(read(anArr, getTypeArguments(typeOfT, 0)));
 			}
 			if (isArray) {
-				return toArray((List<Object>) list);
+				return toArray((List<Object>) list, cls);
 			}
 			try {
 				return ClassUtil.getClass(typeOfT).cast(list);
@@ -124,10 +129,23 @@ public class GsonDeserializerObjectWrapper implements JsonDeserializer<ObjectWra
 	}
 
 	@SuppressWarnings("unchecked")
-	private <T> T[] toArray(List<T> list) {
-		Class<?> clazz = list.get(0).getClass(); // check for size and null before
-		T[] array = (T[]) java.lang.reflect.Array.newInstance(clazz, list.size());
-		return list.toArray(array);
+	private <T> T[] toArray(List<T> list, Class<?> t) {
+		if(null==list) {
+			return null;
+		}
+		try {
+			T[] objArray = (T[]) java.lang.reflect.Array.newInstance(t, list.size());
+			return list.toArray(objArray);
+		} catch (ClassCastException e1) {
+			try {
+				Class<?> clazz = list.get(0).getClass();
+				T[] array = (T[]) java.lang.reflect.Array.newInstance(clazz, list.size());
+				return list.toArray(array);
+			} catch (ArrayStoreException | IndexOutOfBoundsException e) {
+				T[] objArray = (T[]) java.lang.reflect.Array.newInstance(Object.class, list.size());
+				return list.toArray(objArray);
+			}
+		}
 	}
 
 	private boolean isArray(Type typeOfT) {

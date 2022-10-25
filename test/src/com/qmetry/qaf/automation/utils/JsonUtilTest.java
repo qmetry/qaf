@@ -101,6 +101,11 @@ public class JsonUtilTest {
 		Validator.assertThat(s, Matchers.arrayWithSize(3));
 		System.out.println("Short: " + s[0]);
 		Validator.assertThat(s[0], Matchers.instanceOf(Short.class));
+		
+		json= "[1,'a']";
+		Object[] rargs = JSONUtil.toObject(json , Object[].class);
+		Validator.assertThat(rargs[0], Matchers.instanceOf(Long.class));
+		Validator.assertThat(rargs[1], Matchers.instanceOf(String.class));
 
 		json = "{'name':'a','price':2.10,'id':1,'description':'item-1'}";
 

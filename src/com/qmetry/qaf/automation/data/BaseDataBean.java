@@ -58,7 +58,6 @@ import com.qmetry.qaf.automation.util.DateUtil;
 import com.qmetry.qaf.automation.util.JSONUtil;
 import com.qmetry.qaf.automation.util.RandomStringGenerator.RandomizerTypes;
 import com.qmetry.qaf.automation.util.Randomizer;
-import com.qmetry.qaf.automation.util.StringUtil;
 
 /**
  * com.qmetry.qaf.automation.data.BaseDataBean.java
@@ -246,7 +245,7 @@ public abstract class BaseDataBean implements DataBean {
 	 */
 	public void fillData(Map<String, Object> map) {
 		for (String key : map.keySet()) {
-			fillData(key, String.valueOf(map.get(key)));
+			fillData(key, JSONUtil.toString(map.get(key)));
 		}
 	}
 
@@ -276,7 +275,15 @@ public abstract class BaseDataBean implements DataBean {
 			Field field = field2;
 			if (field.getName().equalsIgnoreCase(fieldName)) {
 				if (!(Modifier.isFinal(field.getModifiers()))) {
-					setField(field, value);
+					try {
+						setField(field, value);
+					} catch (Exception e) {
+						try {
+							field.set(this, JSONUtil.toObject(value, field.getType()));
+						} catch (IllegalArgumentException | IllegalAccessException e1) {
+							e1.printStackTrace();
+						}
+					}
 				}
 				return;
 			}
@@ -456,8 +463,11 @@ public abstract class BaseDataBean implements DataBean {
 												: DateUtil.parseDate(val, "MM/dd/yyyy");
 					} catch (ParseException e) {
 						logger.error("Expected date in MM/dd/yyyy format.", e);
+						dVal=JSONUtil.toObject(val, Date.class);
 					}
 					field.set(this, dVal);
+				}else {
+					field.set(this, JSONUtil.toObject(val, field.getType()));
 				}
 			}
 		} catch (IllegalArgumentException e) {
