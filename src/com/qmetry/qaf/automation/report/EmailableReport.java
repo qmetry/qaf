@@ -245,7 +245,7 @@ public class EmailableReport implements TestCaseResultUpdator {
 			params.put("app-logo", "data:image/png;base64," + appLogoBase64);
 			params.put("qaf-logo", "data:image/png;base64," + qafLogoBase64);
 
-			try (InputStream inputStream = getClass().getResourceAsStream("emailablereport_tmpl.htm")) {
+			try (InputStream inputStream = getClass().getResourceAsStream("emailablereport_tmpl-inline.htm")) {
 				String templ = IOUtils.toString(inputStream, "utf-8");
 				String report = StrSubstitutor.replace(templ, params);
 
