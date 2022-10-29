@@ -270,9 +270,14 @@ public class JSONUtil {
 			ObjectWrapper val = gson.fromJson(s, ObjectWrapper.class);
 			return val.getObject();// gson.fromJson(s,t);
 		} catch (JsonSyntaxException e) {
-			if (e.getCause() instanceof MalformedJsonException) {
-				ObjectWrapper val = gson.fromJson("\"" + StringEscapeUtils.escapeJava(s) + "\"", ObjectWrapper.class);
-				return val.getObject();
+			//exception behavior changed from gson 2.10 so check if exception for type is string or object 
+			if (t.getTypeName().equalsIgnoreCase(Object.class.getName())||t.getTypeName().equalsIgnoreCase(String.class.getName())) {
+				try {
+					ObjectWrapper val = gson.fromJson("\"" + StringEscapeUtils.escapeJava(s) + "\"", ObjectWrapper.class);
+					return val.getObject();
+				} catch (Exception e1) {
+					//throw original exception.
+				}
 			}
 			throw e;
 		}catch (JsonIOException e) {

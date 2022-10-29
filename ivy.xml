@@ -91,7 +91,7 @@ SOFTWARE.
 			rev="1.7" conf="compile->default"/>
 
 		<dependency org="commons-io" name="commons-io" rev="2.11.0" conf="compile->default"/>
-		<dependency org="com.google.code.gson" name="gson" rev="2.8.5" conf="compile->default">
+		<dependency org="com.google.code.gson" name="gson" rev="2.9.0" conf="compile->default">
 			<artifact name="gson" type="jar"></artifact>
 		</dependency>
 
