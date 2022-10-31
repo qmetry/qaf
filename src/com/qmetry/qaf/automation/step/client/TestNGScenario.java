@@ -21,7 +21,6 @@
  ******************************************************************************/
 package com.qmetry.qaf.automation.step.client;
 
-import static com.qmetry.qaf.automation.data.MetaDataScanner.formatMetaData;
 import static com.qmetry.qaf.automation.data.MetaDataScanner.getMetadata;
 
 import java.lang.reflect.Method;
@@ -42,6 +41,7 @@ import org.testng.xml.XmlSuite.ParallelMode;
 import org.testng.xml.XmlTest;
 
 import com.qmetry.qaf.automation.step.TestStep;
+import com.qmetry.qaf.automation.step.TestStepCompositer;
 import com.qmetry.qaf.automation.util.ClassUtil;
 import com.qmetry.qaf.automation.util.StringUtil;
 
@@ -56,7 +56,9 @@ public class TestNGScenario extends TestNGMethod {
 	 * 
 	 */
 	private static final long serialVersionUID = 6225163528424712337L;
-	private Scenario scenario;
+	//private Scenario scenario;
+	private TestStepCompositer testStepCompositer;
+
 	private Map<String, Object> metadata;
 	private String qualifiledName;
 
@@ -74,7 +76,8 @@ public class TestNGScenario extends TestNGMethod {
 
 	private void init(Object instance) {
 		if (Scenario.class.isAssignableFrom(getRealClass())) {
-			scenario = (Scenario) instance;
+			Scenario scenario = (Scenario) instance;
+			testStepCompositer=scenario;
 			if (scenario.getPriority() < 1000 || !getXmlTest().getParallel().isParallel()
 					|| getXmlTest().getParallel().equals(ParallelMode.TESTS)) {
 				setPriority(scenario.getPriority());
@@ -94,24 +97,38 @@ public class TestNGScenario extends TestNGMethod {
 			metadata = getMetadata(getConstructorOrMethod().getMethod(), true);
 			qualifiledName = getRealClass().getName() + "." + getMethodName();
 		}
-		metadata.put("name", getMethodName());
+		if(!metadata.containsKey("name")) {
+			metadata.put("name", getMethodName());
+		}
 		metadata.put("sign", getSignature());
 
 		//formatMetaData(metadata);
 	}
 
+	//package access
+	void setTestStepCompositer(TestStepCompositer testStepCompositer) {
+		this.testStepCompositer = testStepCompositer;
+	}
+	
+	private Scenario getScenario() {
+		if (Scenario.class.isAssignableFrom(getRealClass())) {
+			return  (Scenario) testStepCompositer;
+		}
+		return null;
+	}
+	
 	@Override
 	public String getMethodName() {
-		return scenario != null ? scenario.getTestName() : super.getMethodName();
+		return getScenario() != null ? getScenario().getTestName() : super.getMethodName();
 	}
 
 	@Override
 	public String getSignature() {
-		return scenario != null ? computeSign() : super.getSignature();
+		return getScenario() != null ? computeSign() : super.getSignature();
 	}
 
 	private String computeSign() {
-		StringBuilder result = new StringBuilder(scenario.getSignature());
+		StringBuilder result = new StringBuilder(getScenario().getSignature());
 
 		result.append("[pri:").append(getPriority()).append(", instance:").append(getInstance()).append("]");
 		return result.toString();
@@ -133,9 +150,9 @@ public class TestNGScenario extends TestNGMethod {
 	}
 
 	public Collection<String> getSteps() {
-		if (scenario != null) {
+		if (testStepCompositer != null) {
 			List<String> steps = new ArrayList<String>();
-			for (TestStep step : scenario.getSteps()) {
+			for (TestStep step : testStepCompositer.getSteps()) {
 				steps.add(step.getDescription());
 			}
 			return steps;
@@ -144,9 +161,9 @@ public class TestNGScenario extends TestNGMethod {
 	}
 	
 	public String getClassOrFileName(){
-		if (scenario != null) {
-			if (StringUtil.isNotBlank(scenario.getFileName())) {
-				return scenario.getFileName();
+		if (getScenario() != null) {
+			if (StringUtil.isNotBlank(getScenario().getFileName())) {
+				return getScenario().getFileName();
 			}
 		}
 		return getRealClass().getName();

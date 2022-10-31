@@ -29,11 +29,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.testng.ITestResult;
+
 import com.qmetry.qaf.automation.core.CheckpointResultBean;
 import com.qmetry.qaf.automation.core.LoggingBean;
 import com.qmetry.qaf.automation.core.MessageTypes;
 import com.qmetry.qaf.automation.core.QAFTestBase;
 import com.qmetry.qaf.automation.core.TestBaseProvider;
+import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.step.BaseTestStep;
 import com.qmetry.qaf.automation.step.StepExecutionTracker;
 import com.qmetry.qaf.automation.step.TestStep;
@@ -191,6 +194,8 @@ public class RuntimeScenarioFactory {
 		}
 
 		public void execute() {
+			ITestResult tr = (ITestResult) ApplicationProperties.CURRENT_TEST_RESULT.getObject();
+			((TestNGScenario)tr.getMethod()).setTestStepCompositer(this);
 			int executionIndx = 0;
 			try {
 				for (executionIndx = 0; executionIndx < steps.size();) {

@@ -184,7 +184,9 @@ public class JsonReporter implements TestCaseResultUpdator {
 		methodInfo.setResult(result.getStatus().toQAF());
 		
 		Map<String, Object> metaData = result.getMetaData();
-		metaData.put("name", result.getName());
+		if(!metaData.containsKey("name")) {
+			metaData.put("name", result.getName());
+		}
 		metaData.put("resultFileName", methodResultFile);
 		formatMetaData(metaData);
 		methodInfo.setMetaData(metaData);

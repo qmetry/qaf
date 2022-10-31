@@ -40,6 +40,7 @@ import com.qmetry.qaf.automation.integration.TestCaseResultUpdator;
 import com.qmetry.qaf.automation.integration.TestCaseRunResult;
 import com.qmetry.qaf.automation.testng.dataprovider.QAFDataProvider;
 import com.qmetry.qaf.automation.testng.dataprovider.QAFDataProvider.params;
+import com.qmetry.qaf.automation.tools.Bdd2Generator;
 import com.qmetry.qaf.automation.util.FileUtil;
 import com.qmetry.qaf.automation.util.JSONUtil;
 import com.qmetry.qaf.automation.util.StringUtil;
@@ -58,7 +59,8 @@ import com.qmetry.qaf.automation.util.StringUtil;
 public class BDDGenerator implements TestCaseResultUpdator {
 	public static final String REPORT_DIR = getBundle().getString("bddgenerator.dest", "auto_generated/features");
 	private static String LAST_TEST_NAME;
-	private static int testCnt = 0, featureCnt = 0, scenarioCnt = 0;
+	private static int testCnt = 0, /*featureCnt = 0,*/ scenarioCnt = 0;
+	private static List<String> featureFiles = new ArrayList<String>();
 
 	@Override
 	public String getToolName() {
@@ -71,7 +73,7 @@ public class BDDGenerator implements TestCaseResultUpdator {
 		if (testCnt == 0) {
 			FileUtil.deleteQuietly(new File(REPORT_DIR));
 		}
-		String storyfileName = tr.getClassName().replace(".feature", "").replace(".bdd", "").replace('.', '/');
+		String storyfileName = (String) tr.getMetaData().getOrDefault("destFile", tr.getClassName().replace(".feature", "").replace(".bdd", "").replace('.', '/'));
 		testCnt++;
 		try {
 			File feature = new File(REPORT_DIR , storyfileName + ".feature");
@@ -81,7 +83,8 @@ public class BDDGenerator implements TestCaseResultUpdator {
 			if (!feature.exists()) {
 				String header = "Feature: " + featureName;
 				FileUtil.write(feature, header, StandardCharsets.UTF_8, true);
-				featureCnt++;
+				featureFiles.add(feature.getPath());
+				//featureCnt++;
 			}
 
 			StringBuffer scenario = new StringBuffer();
@@ -120,8 +123,12 @@ public class BDDGenerator implements TestCaseResultUpdator {
 
 	@Override
 	public void beforeShutDown() {
-		System.out.printf("\nGenerated %d scenarios and %d feature files from %d TestCases under %s.\n", scenarioCnt, featureCnt,
+		System.out.printf("\nGenerated %d scenarios and %d feature files from %d TestCases under %s.\n", scenarioCnt, featureFiles.size(),
 				testCnt, REPORT_DIR);
+		
+		for(String file: featureFiles) {
+			Bdd2Generator.createBDD2Files(new File(file));
+		}
 	}
 
 	private void addExampleHeader(StringBuffer data, Map<String, Object> testData) {
@@ -141,14 +148,18 @@ public class BDDGenerator implements TestCaseResultUpdator {
 		}
 		return o;
 	}
-	@SuppressWarnings("unchecked")
 	private void addMetadata(StringBuffer data, TestCaseRunResult tr) {
 		data.append("\n\n");
-		List<String> exclude = new ArrayList<String>(Arrays.asList("sign", "name","lineNo","Feature","reference"));
+		List<String> exclude = new ArrayList<String>(Arrays.asList("sign", "name","lineNo","Feature","reference","resultFileName","destFile"));
 		for (params param : QAFDataProvider.params.values()) {
 			exclude.add(param.name());
 		}
-		for (Entry<String, Object> kv : tr.getMetaData().entrySet()) {
+		addMetadata(data, tr.getMetaData(),exclude);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static void addMetadata(StringBuffer data, Map<String, Object> metadata, List<String> exclude) {
+		for (Entry<String, Object> kv : metadata.entrySet()) {
 			if (!exclude.stream().anyMatch(kv.getKey()::equalsIgnoreCase) && kv.getValue() != null
 					&& StringUtil.isNotBlank(kv.getValue().toString()))
 				if (kv.getKey().equalsIgnoreCase("groups")) {
@@ -174,7 +185,7 @@ public class BDDGenerator implements TestCaseResultUpdator {
 	private void addSecanrio(StringBuffer data, TestCaseRunResult tr) {
 		scenarioCnt++;
 		addMetadata(data, tr);
-		data.append("\nScenario: ").append(tr.getName());
+		data.append("\nScenario: ").append(tr.getName().replace('_', ' '));
 		if (null == tr.getSteps() || tr.getSteps().isEmpty()) {
 			for (CheckpointResultBean chkpoint : tr.getCheckPoints()) {
 				data.append("\n    ").append(chkpoint.getMessage());
@@ -185,4 +196,6 @@ public class BDDGenerator implements TestCaseResultUpdator {
 			}
 		}
 	}
+	
+	
 }

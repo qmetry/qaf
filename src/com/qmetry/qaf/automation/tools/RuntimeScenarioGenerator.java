@@ -64,7 +64,6 @@ public class RuntimeScenarioGenerator {
 		List<Scenario> scenarios = new ArrayList<Scenario>();
 		bddParser.parse(bddFile.getPath(), scenarios);
 		String className = StringUtil.toTitleCaseIdentifier(bddFile.getName().replace(".feature", ""));
-		String dest = "auto_generated/" + bddFile.getParent();
 
 		Map<String, Object> classMetaData = new HashMap<String, Object>();
 
@@ -75,11 +74,15 @@ public class RuntimeScenarioGenerator {
 				classMetaData.entrySet().retainAll(iter.next().getMetadata().entrySet());
 			}
 		}
+		String pkg = (String) classMetaData.getOrDefault("package", bddFile.getParent().replace('/', '.'));
+		String dest = "auto_generated/" + pkg.replace('.', '/');
+
 		classMetaData.remove("reference");
+		classMetaData.remove("package");
 
 		List<String> statements = new ArrayList<String>();
 
-		statements.add("package " + bddFile.getParent().replace('/', '.') + ";");
+		statements.add("package " + pkg + ";");
 		statements.add("import static com.qmetry.qaf.automation.step.client.RuntimeScenarioFactory.scenario;");
 		statements.add("import java.util.Map;");
 		statements.add("import org.testng.annotations.Test;");
@@ -101,6 +104,7 @@ public class RuntimeScenarioGenerator {
 				scenario.getMetadata().entrySet().removeAll(classMetaData.entrySet());
 				scenario.getMetadata().remove("lineno");
 				scenario.getMetadata().remove("reference");
+				scenario.getMetadata().remove("resultFileName");
 				Object JSON_DATA_TABLE = scenario.getMetadata().remove("JSON_DATA_TABLE");
 				if (null != JSON_DATA_TABLE) {
 					scenario.getMetadata().put("dataFile", generateDataFile(dest,
@@ -114,7 +118,7 @@ public class RuntimeScenarioGenerator {
 			// start method
 			statements.add(String.format("public void %s(%s){", scenario.getTestName().replace(' ', '_'),
 					(scenario instanceof DataDrivenScenario) ? "Map<String, Object> data" : ""));
-			statements.add(String.format("\tscenario().", JSONUtil.toString(classMetaData)));
+			statements.add("\tscenario().");
 
 			for (TestStep step : scenario.getSteps()) {
 				String desc = step.getDescription().replace('"', '\'');
