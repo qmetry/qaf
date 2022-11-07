@@ -602,7 +602,7 @@ public class RepoEditor {
 		Gson gson = new GsonBuilder().disableHtmlEscaping().serializeNulls().create();
 		String fileContent = null;
 		if(file.endsWith("wsc")) {
-			fileContent = data.get(0).entrySet().stream().map((e) -> e.getKey() +"=" + gson.toJson(e.getValue())).collect(Collectors.joining("\n"));
+			fileContent = data.get(0).entrySet().stream().map((e) -> e.getKey() +"=" + gson.toJson(e.getValue()).replace("\\", "\\\\")).collect(Collectors.joining("\n"));
 		}else if(file.endsWith(".loc")) {
 			fileContent = data.stream().map(e->e.remove("key").toString()+"="+gson.toJson(e)).collect(Collectors.joining("\n"));
 		}
