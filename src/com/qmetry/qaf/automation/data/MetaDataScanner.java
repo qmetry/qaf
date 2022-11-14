@@ -40,6 +40,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.ConfigurationConverter;
 import org.apache.commons.lang.text.StrSubstitutor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.LogFactoryImpl;
@@ -183,6 +184,38 @@ public class MetaDataScanner {
 		return getBundle().getString(parameter);
 	}
 
+	@SuppressWarnings("unchecked")
+	public static Map<String, Object> getSubset(ITestNGMethod method, String parameter) {
+		if(null==method) {
+			return ConfigurationConverter.getMap(getBundle().subset(parameter));
+		}
+		return getSubset(method.getXmlTest(), parameter);
+	}
+	public static Map<String, Object> getSubset(ITestContext context, String parameter) {
+		return getSubset(context.getCurrentXmlTest(), parameter);
+	}
+	public static Map<String, Object> getSubset(XmlTest xmlTest, String parameter) {
+			@SuppressWarnings("unchecked")
+			Map<String, Object> subset = ConfigurationConverter.getMap(getBundle().subset(parameter));
+
+			if (null != xmlTest) {
+				Map<String, String> ctx = xmlTest.getAllParameters();
+				ctx.keySet().removeAll(System.getProperties().keySet());
+
+				String prefix = parameter + ".";
+				// ctx.keySet().removeIf(e->!e.startsWith(prefix));
+				for (Entry<String, String> e : ctx.entrySet()) {
+					if (e.getKey().startsWith(prefix)) {
+						Object val = e.getValue();
+						if (e.getValue().indexOf(';') > 0) {
+							val = Arrays.asList(e.getValue().split(";"));
+						}
+						subset.put(e.getKey().replace(prefix, ""), val);
+					}
+				}
+			}
+			return subset;
+	}
 	public static boolean hasDP(Map<String, Object> metadata) {
 		if (null == metadata) {
 			return false;
@@ -291,15 +324,31 @@ public class MetaDataScanner {
 	private static boolean applyMetafilter(ITestNGMethod imethod, Map<String, Object> scenarioMetadata) {
 		String includeStr = getParameter(imethod, "include");
 		String excludeStr = getParameter(imethod, "exclude");
-		if (StringUtil.isBlank(includeStr) && StringUtil.isBlank(excludeStr)) {
+		Map<String, Object> includeSubset = getSubset(imethod, "include");
+		Map<String, Object> excludeSubset = getSubset(imethod, "exclude");
+
+		if (StringUtil.isBlank(includeStr) && StringUtil.isBlank(excludeStr) && includeSubset.isEmpty() && excludeSubset.isEmpty()) {
 			// no need to process as no include/exclude filter provided
 			return true;
 		}
 
 		Gson gson = new GsonBuilder().create();
+		
 
 		Map<String, Object> includeMeta = gson.fromJson(includeStr, Map.class);
 		Map<String, Object> excludeMeta = gson.fromJson(excludeStr, Map.class);
+		
+		//higher priority on individual include entry
+		if (includeMeta != null) {
+			includeMeta.putAll(includeSubset);
+		} else {
+			includeMeta = includeSubset;
+		}
+		if (excludeMeta != null) {
+			excludeMeta.putAll(excludeSubset);
+		} else {
+			excludeMeta = excludeSubset;
+		}
 
 		return MetaDataScanner.includeMethod(scenarioMetadata, includeMeta, excludeMeta);
 	}
