@@ -31,6 +31,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.lang.text.StrBuilder;
 
 import com.qmetry.qaf.automation.core.ConfigurationManager;
@@ -63,6 +65,19 @@ public class PostmanCollectionsImporter {
 		List<String> wsc = new ArrayList<String>();
 		for (Map<String, Object> item : items) {
 			recordRequests(item, wsc);
+		}
+		List<Map<String, Object>> variables = (List<Map<String, Object>>) collection.get("variable");
+		
+		Map<String, List<Map<String, Object>>> variablesByType = variables.stream().collect(Collectors.groupingBy(v->(String)v.get("type")));
+		for(String type : variablesByType.keySet()) {
+			PropertiesConfiguration propertiesConfiguration = new PropertiesConfiguration();
+			//propertiesConfiguration.setEncoding(getString(ApplicationProperties.LOCALE_CHAR_ENCODING.key, "UTF-8"));
+			variablesByType.get(type).forEach(m->propertiesConfiguration.setProperty((String)m.get("key"), m.get("value")));
+			try {
+				propertiesConfiguration.save("resources/auto_generated/"+ StringUtil.toCamelCaseIdentifier(type) + ".properties");
+			} catch (ConfigurationException e) {
+				e.printStackTrace();
+			}
 		}
 		FileUtil.writeLines(new File("resources/auto_generated", StringUtil.toCamelCaseIdentifier(name) + ".wsc"), wsc);
 	}

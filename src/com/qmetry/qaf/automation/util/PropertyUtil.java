@@ -43,6 +43,7 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.MapConfiguration;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -206,7 +207,15 @@ public class PropertyUtil extends XMLConfiguration {
 		try {
 			if (file.getName().endsWith("xml") || file.getName().contains(".xml.")) {
 				load(new FileInputStream(file));
-			} else {
+			} else if(file.getName().endsWith(".wscj") || file.getName().contains(".locj")) {
+				@SuppressWarnings("unchecked")
+				Map<String,Object> props = JSONUtil.getJsonObjectFromFile(file.getPath(), Map.class);
+				props.entrySet().forEach(e->{
+					String val= JSONUtil.toString(e.getValue());e.setValue(val);
+					});
+				addAll(props);
+			}
+			else {
 				loadProperties(new FileInputStream(file));
 			}
 			return true;
@@ -398,5 +407,134 @@ public class PropertyUtil extends XMLConfiguration {
 			}
 		};
 		HttpsURLConnection.setDefaultHostnameVerifier(hostnameVerifier);
+	}
+	
+	/**
+	 * @param p
+	 * @param fileOrDir
+	 */
+	public void addBundle( String fileOrDir) {
+		String localResources = getString("local.reasources",
+				getString("env.local.resources", "resources"));
+		fileOrDir = getSubstitutor().replace(fileOrDir);
+		File resourceFile = new File(fileOrDir);
+		String[] locals = getStringArray(ApplicationProperties.LOAD_LOCALES.key);
+		/**
+		 * will reload existing properties value(if any) if the last loaded
+		 * dir/file is not the current one. case: suit-1 default, suit-2 :
+		 * s2-local, suit-3: default Here after suit-2 you need to reload
+		 * default.
+		 */
+		if (!localResources.equalsIgnoreCase(resourceFile.getAbsolutePath())) {
+			addProperty("local.reasources", resourceFile.getAbsolutePath());
+			if (resourceFile.exists()) {
+				if (resourceFile.isDirectory()) {
+					boolean loadSubDirs = getBoolean("resources.load.subdirs", true);
+					File[] propFiles = FileUtil.listFilesAsArray(resourceFile,
+							".properties", StringComparator.Suffix, loadSubDirs);
+					logger.info("Resource dir: " + resourceFile.getAbsolutePath()
+							+ ". Found property files to load: " + propFiles.length);
+					File[] locFiles = FileUtil.listFilesAsArray(resourceFile, ".loc",
+							StringComparator.Suffix, loadSubDirs);
+					File[] wscFiles = FileUtil.listFilesAsArray(resourceFile, ".wsc",
+							StringComparator.Suffix, loadSubDirs);
+					File[] wscjFiles = FileUtil.listFilesAsArray(resourceFile, ".wscj",
+							StringComparator.Suffix, loadSubDirs);
+					File[] locjFiles = FileUtil.listFilesAsArray(resourceFile, ".locj",
+							StringComparator.Suffix, loadSubDirs);
+					PropertyUtil p1 = new PropertyUtil();
+					p1.load(propFiles);
+					p1.load(locFiles);
+					p1.load(wscFiles);
+					p1.load(locjFiles);
+					p1.load(wscjFiles);
+					copy(p1);
+
+					propFiles = FileUtil.listFilesAsArray(resourceFile, ".xml",
+							StringComparator.Suffix, loadSubDirs);
+					logger.info("Resource dir: " + resourceFile.getAbsolutePath()
+							+ ". Found property files to load: " + propFiles.length);
+
+					p1 = new PropertyUtil();
+					p1.load(propFiles);
+					copy(p1);
+
+				} else {
+					try {
+						if (fileOrDir.endsWith(".properties")
+								|| fileOrDir.endsWith(".xml")
+								|| fileOrDir.endsWith(".loc")
+								|| fileOrDir.endsWith(".wsc")
+								|| fileOrDir.endsWith(".locj")
+								|| fileOrDir.endsWith(".wscj")) {
+							load(new File[]{resourceFile});
+						}
+					} catch (Exception e) {
+						logger.error(
+								"Unable to load " + resourceFile.getAbsolutePath() + "!",
+								e);
+					}
+				}
+				// add locals if any
+				if (null != locals && locals.length > 0
+						&& (locals.length == 1 || StringUtil.isBlank(getString(
+								ApplicationProperties.DEFAULT_LOCALE.key, "")))) {
+					setProperty(ApplicationProperties.DEFAULT_LOCALE.key, locals[0]);
+				}
+				for (String local : locals) {
+					logger.info("loading local: " + local);
+					addLocal(local, fileOrDir);
+				}
+
+			} else {
+				logger.error(resourceFile.getAbsolutePath() + " not exist!");
+			}
+		}
+	}
+	
+	public void addLocal(String local, String fileOrDir) {
+		String defaultLocal = getString(ApplicationProperties.DEFAULT_LOCALE.key, "");//
+		File resourceFile = new File(fileOrDir);
+		/**
+		 * will reload existing properties value(if any) if the last loaded
+		 * dir/file is not the current one. case: suit-1 default, suit-2 :
+		 * s2-local, suit-3: default Here after suit-2 you need to reload
+		 * default.
+		 */
+		boolean loadSubDirs = getBoolean("resources.load.subdirs", true);
+
+		if (resourceFile.exists()) {
+			PropertyUtil p1 = new PropertyUtil();
+			p1.setEncoding(
+					getString(ApplicationProperties.LOCALE_CHAR_ENCODING.key, "UTF-8"));
+			if (resourceFile.isDirectory()) {
+				File[] propFiles = FileUtil.listFilesAsArray(resourceFile, "." + local,
+						StringComparator.Suffix, loadSubDirs);
+				p1.load(propFiles);
+
+			} else {
+				try {
+					if (fileOrDir.endsWith(local)) {
+						p1.load(fileOrDir);
+					}
+				} catch (Exception e) {
+					logger.error("Unable to load " + resourceFile.getAbsolutePath() + "!",
+							e);
+				}
+			}
+			if (local.equalsIgnoreCase(defaultLocal)) {
+				copy(p1);
+			} else {
+				Iterator<?> keyIter = p1.getKeys();
+				Configuration localSet = subset(local);
+				while (keyIter.hasNext()) {
+					String key = (String) keyIter.next();
+					localSet.addProperty(key, p1.getObject(key));
+				}
+			}
+
+		} else {
+			logger.error(resourceFile.getAbsolutePath() + " not exist!");
+		}
 	}
 }

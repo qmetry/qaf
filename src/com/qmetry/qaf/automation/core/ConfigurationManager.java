@@ -43,7 +43,6 @@ import java.util.jar.Manifest;
 import javax.script.ScriptException;
 
 import org.apache.commons.configuration.AbstractConfiguration;
-import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.event.ConfigurationEvent;
 import org.apache.commons.configuration.event.ConfigurationListener;
 import org.apache.commons.configuration.interpol.ConfigurationInterpolator;
@@ -59,9 +58,7 @@ import com.qmetry.qaf.automation.step.client.ScenarioFactory;
 import com.qmetry.qaf.automation.step.client.csv.KwdTestFactory;
 import com.qmetry.qaf.automation.step.client.excel.ExcelTestFactory;
 import com.qmetry.qaf.automation.step.client.text.BDDTestFactory;
-import com.qmetry.qaf.automation.util.FileUtil;
 import com.qmetry.qaf.automation.util.PropertyUtil;
-import com.qmetry.qaf.automation.util.StringComparator;
 import com.qmetry.qaf.automation.util.StringMatcher;
 import com.qmetry.qaf.automation.util.StringUtil;
 
@@ -173,7 +170,7 @@ public class ConfigurationManager {
 					log.info("ISFW build info: " + p.getProperty("isfw.build.info"));
 					String[] resources = p.getStringArray("env.resources", "resources");
 					for (String resource : resources) {
-						addBundle(p, resource);
+						p.addBundle(resource);
 					}
 					//p.setProperty("execute.initialValuelisteners", true);
 					executeOnLoadListeners(p);
@@ -201,128 +198,7 @@ public class ConfigurationManager {
 	 * @param fileOrDir
 	 */
 	public static void addBundle(String fileOrDir) {
-		ConfigurationManager.addBundle(getBundle(), fileOrDir);
-	}
-
-	/**
-	 * @param p
-	 * @param fileOrDir
-	 */
-	private static void addBundle(PropertyUtil p, String fileOrDir) {
-		String localResources = p.getString("local.reasources",
-				p.getString("env.local.resources", "resources"));
-		fileOrDir = p.getSubstitutor().replace(fileOrDir);
-		File resourceFile = new File(fileOrDir);
-		String[] locals = p.getStringArray(ApplicationProperties.LOAD_LOCALES.key);
-		/**
-		 * will reload existing properties value(if any) if the last loaded
-		 * dir/file is not the current one. case: suit-1 default, suit-2 :
-		 * s2-local, suit-3: default Here after suit-2 you need to reload
-		 * default.
-		 */
-		if (!localResources.equalsIgnoreCase(resourceFile.getAbsolutePath())) {
-			p.addProperty("local.reasources", resourceFile.getAbsolutePath());
-			if (resourceFile.exists()) {
-				if (resourceFile.isDirectory()) {
-					boolean loadSubDirs = p.getBoolean("resources.load.subdirs", true);
-					File[] propFiles = FileUtil.listFilesAsArray(resourceFile,
-							".properties", StringComparator.Suffix, loadSubDirs);
-					log.info("Resource dir: " + resourceFile.getAbsolutePath()
-							+ ". Found property files to load: " + propFiles.length);
-					File[] locFiles = FileUtil.listFilesAsArray(resourceFile, ".loc",
-							StringComparator.Suffix, loadSubDirs);
-					File[] wscFiles = FileUtil.listFilesAsArray(resourceFile, ".wsc",
-							StringComparator.Suffix, loadSubDirs);
-					PropertyUtil p1 = new PropertyUtil();
-					p1.load(propFiles);
-					p1.load(locFiles);
-					p1.load(wscFiles);
-					p.copy(p1);
-
-					propFiles = FileUtil.listFilesAsArray(resourceFile, ".xml",
-							StringComparator.Suffix, loadSubDirs);
-					log.info("Resource dir: " + resourceFile.getAbsolutePath()
-							+ ". Found property files to load: " + propFiles.length);
-
-					p1 = new PropertyUtil();
-					p1.load(propFiles);
-					p.copy(p1);
-
-				} else {
-					try {
-						if (fileOrDir.endsWith(".properties")
-								|| fileOrDir.endsWith(".xml")
-								|| fileOrDir.endsWith(".loc")
-								|| fileOrDir.endsWith(".wsc")) {
-							p.load(new File[]{resourceFile});
-						}
-					} catch (Exception e) {
-						log.error(
-								"Unable to load " + resourceFile.getAbsolutePath() + "!",
-								e);
-					}
-				}
-				// add locals if any
-				if (null != locals && locals.length > 0
-						&& (locals.length == 1 || StringUtil.isBlank(p.getString(
-								ApplicationProperties.DEFAULT_LOCALE.key, "")))) {
-					p.setProperty(ApplicationProperties.DEFAULT_LOCALE.key, locals[0]);
-				}
-				for (String local : locals) {
-					log.info("loading local: " + local);
-					addLocal(p, local, fileOrDir);
-				}
-
-			} else {
-				log.error(resourceFile.getAbsolutePath() + " not exist!");
-			}
-		}
-	}
-
-	private static void addLocal(PropertyUtil p, String local, String fileOrDir) {
-		String defaultLocal = p.getString(ApplicationProperties.DEFAULT_LOCALE.key, "");//
-		File resourceFile = new File(fileOrDir);
-		/**
-		 * will reload existing properties value(if any) if the last loaded
-		 * dir/file is not the current one. case: suit-1 default, suit-2 :
-		 * s2-local, suit-3: default Here after suit-2 you need to reload
-		 * default.
-		 */
-		boolean loadSubDirs = p.getBoolean("resources.load.subdirs", true);
-
-		if (resourceFile.exists()) {
-			PropertyUtil p1 = new PropertyUtil();
-			p1.setEncoding(
-					p.getString(ApplicationProperties.LOCALE_CHAR_ENCODING.key, "UTF-8"));
-			if (resourceFile.isDirectory()) {
-				File[] propFiles = FileUtil.listFilesAsArray(resourceFile, "." + local,
-						StringComparator.Suffix, loadSubDirs);
-				p1.load(propFiles);
-
-			} else {
-				try {
-					if (fileOrDir.endsWith(local)) {
-						p1.load(fileOrDir);
-					}
-				} catch (Exception e) {
-					log.error("Unable to load " + resourceFile.getAbsolutePath() + "!",
-							e);
-				}
-			}
-			if (local.equalsIgnoreCase(defaultLocal)) {
-				p.copy(p1);
-			} else {
-				Iterator<?> keyIter = p1.getKeys();
-				Configuration localSet = p.subset(local);
-				while (keyIter.hasNext()) {
-					String key = (String) keyIter.next();
-					localSet.addProperty(key, p1.getObject(key));
-				}
-			}
-
-		} else {
-			log.error(resourceFile.getAbsolutePath() + " not exist!");
-		}
+		getBundle().addBundle(fileOrDir);
 	}
 
 	public static void addAll(Map<String, ?> props) {
@@ -503,7 +379,7 @@ public class ConfigurationManager {
 							getBundle().getStringArray("env.resources", "resources");
 					for (String resource : resources) {
 						String fileOrDir = getBundle().getSubstitutor().replace(resource);
-						addLocal(getBundle(), (String) event.getPropertyValue(),
+						getBundle().addLocal((String) event.getPropertyValue(),
 								fileOrDir);
 					}
 					executeOnChangeListeners();

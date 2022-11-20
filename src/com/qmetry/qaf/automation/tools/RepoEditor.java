@@ -21,6 +21,8 @@
  ******************************************************************************/
 package com.qmetry.qaf.automation.tools;
 
+import static com.qmetry.qaf.automation.core.ConfigurationManager.getBundle;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -43,22 +45,30 @@ import java.util.stream.Collectors;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.io.IOUtils;
+import org.apache.hc.core5.http.ClassicHttpRequest;
+import org.apache.hc.core5.http.ClassicHttpResponse;
 import org.apache.hc.core5.http.ContentType;
+import org.apache.hc.core5.http.HttpException;
 import org.apache.hc.core5.http.HttpRequest;
 import org.apache.hc.core5.http.impl.bootstrap.HttpServer;
 import org.apache.hc.core5.http.impl.bootstrap.ServerBootstrap;
+import org.apache.hc.core5.http.io.HttpRequestHandler;
 import org.apache.hc.core5.http.io.entity.FileEntity;
 import org.apache.hc.core5.http.io.entity.StringEntity;
+import org.apache.hc.core5.http.protocol.HttpContext;
 import org.json.JSONObject;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.qmetry.qaf.automation.core.ConfigurationManager;
+import com.qmetry.qaf.automation.core.QAFTestBase;
+import com.qmetry.qaf.automation.core.TestBaseProvider;
 import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.step.StepNotFoundException;
 import com.qmetry.qaf.automation.step.StringTestStep;
 import com.qmetry.qaf.automation.util.FileUtil;
 import com.qmetry.qaf.automation.util.JSONUtil;
+import com.qmetry.qaf.automation.util.PropertyUtil;
 import com.qmetry.qaf.automation.util.StringUtil;
 import com.qmetry.qaf.automation.ws.Response;
 import com.qmetry.qaf.automation.ws.rest.RestTestBase;
@@ -68,14 +78,17 @@ import com.qmetry.qaf.automation.ws.rest.RestTestBase;
  *
  */
 public class RepoEditor {
-
+	//use same instance for HTTP server
+	private	static final PropertyUtil QAF_CONTEXT = getBundle();
+	private static final QAFTestBase QAF_TESTBASE = TestBaseProvider.instance().get();
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		int port = ConfigurationManager.getBundle().getInt("repoeditor.server.port",2612);
+		int port = QAF_CONTEXT.getInt("repoeditor.server.port",2612);
 		final HttpServer server = createServer(port);
 		try {
+			
 			server.start();
 			System.out.println("server started on port: " + port);
 			System.out.println("type \"exit\" to stop server.");
@@ -95,35 +108,9 @@ public class RepoEditor {
 				res.setEntity(new FileEntity(new File("dashboard.htm"), ContentType.TEXT_HTML));
 			}).register("/browse", (req, res, c) -> {
 				res.setEntity(new StringEntity(browse("."), ContentType.TEXT_HTML));
-			}).register("/executeRequest", (req, res, ctx) -> {
-				try {
-					String reqCall = IOUtils.toString(req.getEntity().getContent(), StandardCharsets.UTF_8);
-					Object[] args = JSONUtil.toObject(reqCall, Object[].class);
-					StringTestStep.execute("userRequestsWithData", args);
-					Response result = new RestTestBase().getResponse();
-					String resStr = new JSONObject(result).toString();
-					res.setEntity(new StringEntity(resStr, ContentType.APPLICATION_JSON));
-				} catch (StepNotFoundException se) {
-					res.setEntity(new StringEntity("ERROR: Add qaf-support-ws library dependency!...",
-							ContentType.TEXT_PLAIN));
-				} catch (Throwable t) {
-					t.printStackTrace();
-					res.setEntity(new StringEntity(t.getMessage(), ContentType.TEXT_PLAIN));
-				}
-			}).register("/executeStep", (req, res, ctx) -> {
-				Map<String, Object> responseToreturn = new HashMap<String, Object>();
-				try {
-					String reqCall = IOUtils.toString(req.getEntity().getContent(), StandardCharsets.UTF_8);
-					Map<String, Object> reqMap = JSONUtil.toMap(reqCall);
-					
-					Object result = StringTestStep.execute(reqMap.get("step").toString(), ((List<Object>)reqMap.get("args")).toArray(new Object[] {}));
-					responseToreturn.put("result", result);
-				}catch (Throwable t) {
-					t.printStackTrace();
-					responseToreturn.put("error", t.getMessage());
-				}
-				res.setEntity(new StringEntity(JSONUtil.toString(responseToreturn), ContentType.APPLICATION_JSON));
-			}).register("/repo-editor", (req, res, ctx) -> {
+			}).register("/executeRequest", handleExecuteRequest)
+			.register("/executeStep",handleExecuteStep)
+			.register("/repo-editor", (req, res, ctx) -> {
 				try {
 					Map<String, String> queryParams = getQueryParams(req);
 					System.out.println(queryParams);
@@ -131,7 +118,7 @@ public class RepoEditor {
 					if (!queryParams.isEmpty()) {
 						switch (queryParams.getOrDefault("operation", "")) {
 						case "get_prop":
-							res.setEntity(new StringEntity(ConfigurationManager.getBundle().getString(queryParams.getOrDefault("name",""),""),
+							res.setEntity(new StringEntity(QAF_CONTEXT.getString(queryParams.getOrDefault("name",""),""),
 									ContentType.APPLICATION_JSON));
 						case "get_node":
 							res.setEntity(new StringEntity(JSONUtil.toString(getNodes(queryParams.get("id"))),
@@ -140,7 +127,7 @@ public class RepoEditor {
 						case "get_wsc_content":
 							Map<String, Object> wsc = getWSCNodeContent(queryParams.get("path"), queryParams.get("name"));
 							if(wsc.containsKey("reference")) {
-								wsc.put("refObj",JSONUtil.toObject(ConfigurationManager.getBundle().getString(wsc.get("reference").toString(),"{}")));
+								wsc.put("refObj",JSONUtil.toObject(QAF_CONTEXT.getString(wsc.get("reference").toString(),"{}")));
 							}
 							res.setEntity(new StringEntity(
 									JSONUtil.toString(wsc ),
@@ -174,12 +161,13 @@ public class RepoEditor {
 							String data = IOUtils.toString(req.getEntity().getContent(), StandardCharsets.UTF_8);
 							saveContent(JSONUtil.toObject(data, List.class), queryParams.get("path"));
 							break;
+						
+						case "load_resource":
+							QAF_CONTEXT.addBundle(queryParams.get("path"));
+							break;
 						case "save_file":
 							String fileContent = IOUtils.toString(req.getEntity().getContent(), StandardCharsets.UTF_8);
 							FileUtil.writeStringToFile(new File( queryParams.get("path")), fileContent, ApplicationProperties.LOCALE_CHAR_ENCODING.getStringVal("UTF-8"));
-							break;
-						case "load_file":
-							ConfigurationManager.getBundle().load(new String[] {queryParams.get("path")});
 							break;
 						case "move_node":
 							res.setEntity(new StringEntity(JSONUtil.toString(moveNode(queryParams)),
@@ -197,10 +185,20 @@ public class RepoEditor {
 							res.setEntity(new StringEntity(JSONUtil.toString(create(queryParams)),
 									ContentType.APPLICATION_JSON));
 							break;
+						case "duplicate_node":
+							res.setEntity(new StringEntity(JSONUtil.toString(duplicate(queryParams)),
+									ContentType.APPLICATION_JSON));
+							break;
 						case "delete_node":
 							delete(queryParams);
 							break;
+						case "step_list":
+							List<String> steps = ConfigurationManager.getStepMapping().values().stream().map(t->t.getDescription()).collect(Collectors.toList());
+							res.setEntity(new StringEntity(JSONUtil.toString(steps),
+									ContentType.APPLICATION_JSON));
+							break;
 						default:
+							res.setCode(404);
 							break;
 						}
 					} else {
@@ -387,6 +385,27 @@ public class RepoEditor {
 		}
 	}
 
+	private static Map<String, String> duplicate(Map<String, String> queryParams) throws IOException {
+		String id = queryParams.get("path").replace('#', '/');
+		File target = new File(id);
+		
+		if (target.exists()) {
+			File dest = new File(target.getParentFile(),generateFileName(target.getParentFile(), target.getName()));
+			FileUtil.copyFile(target, dest );
+			id=dest.getPath();
+		} else if (target.getParent().endsWith(".wsc")) {
+			Map<String, Object> fileContent = getWSCFile(target.getParent());
+			String key = generateKeyName(target.getName());
+			Object val = fileContent.get(target.getName());
+			fileContent.put(key, val);
+			saveWSCFile(fileContent, target.getParent());
+			id = target.getParent() + "#" + key;
+		}
+		queryParams.clear();
+		queryParams.put("id", id);
+		return queryParams;
+	}
+	
 	private static void saveWsc(Map<String, Object> content, Map<String, String> queryParams) throws IOException {
 		String path = queryParams.get("path");
 		if (StringUtil.isNotBlank(queryParams.get("name"))) {
@@ -450,23 +469,18 @@ public class RepoEditor {
 			}
 			Map<String, Object> fileContent = getWSCFile(parent.getPath());
 			if (StringUtil.isNotBlank(name)) {
-				name=name.replace(' ', '.');
-				int cnt=2;
-				if(ConfigurationManager.getBundle().containsKey(name)) {
-					while(ConfigurationManager.getBundle().containsKey(name + cnt)) {cnt++;};
-					name=name+cnt;
-				}
+				name=generateKeyName(name);
 				fileContent.put(name, JSONUtil.toObject("{}"));
-				//ConfigurationManager.getBundle().setProperty(name,"");
+				//QAF_CONTEXT.setProperty(name,"");
 				saveWSCFile(fileContent, parent.getPath());
 			}
 			id=id+"#"+name;
 		} else {
-			File file = new File(parent,name);
+			File file = new File(parent,generateFolderName(parent,name));
 			if(type.equalsIgnoreCase("folder")) {
 				if(file.exists()) {
 					int cnt=2;
-					while(new File(name + cnt).exists()) {cnt++;};
+					while(new File(parent,name + cnt).exists()) {cnt++;};
 					name=name+cnt;
 				}
 				file = new File(parent,name);
@@ -481,6 +495,45 @@ public class RepoEditor {
 		queryParams.put("text", name);
 
 		return queryParams;
+	}
+	
+	private static String generateKeyName(String name) {
+		if (StringUtil.isNotBlank(name)) {
+			name=name.replace(' ', '.');
+			int cnt=2;
+			if(QAF_CONTEXT.containsKey(name)) {
+				while(QAF_CONTEXT.containsKey(name + cnt)) {cnt++;};
+				name=name+cnt;
+			}
+		}
+		return name;
+	}
+	private static String generateFolderName(File parent, String name) {
+		if (StringUtil.isNotBlank(name)) {
+			File file = new File(parent,name);
+			if(file.exists()) {
+				int cnt=2;
+				while(new File(parent,name + cnt).exists()) {cnt++;};
+				name=name+cnt;
+			}
+		}
+		return name;
+	}
+	private static String generateFileName(File parent,String fileName) {
+		int i = fileName.lastIndexOf('.');
+		String extension = "";
+		String name = fileName;
+		if (i >= 0) {
+			name=fileName.substring(0,i);
+			extension="."+fileName.substring(i + 1);
+		}
+		File file = new File(parent,fileName);
+		if(file.exists()) {
+			int cnt=2;
+			while(new File(parent,name + cnt +extension).exists()) {cnt++;};
+			name=name+cnt;
+		}
+		return name+extension;
 	}
 
 	private static Object[] getNodes(String id) {
@@ -529,7 +582,7 @@ public class RepoEditor {
 				}).toArray();
 			}
 			//".wsc",".loc",".proto","json", "properties", "xml","txt", "csv"
-			String[] allowedTypes = ConfigurationManager.getBundle().getStringArray("repoeditor.filetypes", ".wsc",".loc",".proto");
+			String[] allowedTypes = QAF_CONTEXT.getStringArray("repoeditor.filetypes", ".wsc",".loc",".proto","properties",".wscj");
 			Object[] nodes = Files.list(parent.toPath())
 					.filter(p -> p.toFile().isDirectory() || StringUtil.endsWithAny(p.toString(), allowedTypes))
 					.map(p -> {
@@ -605,20 +658,89 @@ public class RepoEditor {
 			fileContent = data.get(0).entrySet().stream().map((e) -> e.getKey() +"=" + gson.toJson(e.getValue()).replace("\\", "\\\\")).collect(Collectors.joining("\n"));
 		}else if(file.endsWith(".loc")) {
 			fileContent = data.stream().map(e->e.remove("key").toString()+"="+gson.toJson(e)).collect(Collectors.joining("\n"));
+		}else {
+			fileContent=gson.toJson(data);
 		}
 		
 		if(null!=fileContent) {
 			FileUtil.writeStringToFile(new File(file), fileContent, ApplicationProperties.LOCALE_CHAR_ENCODING.getStringVal("UTF-8"));
 		}
 		//to keep track added/updated wsc and properties
-		ConfigurationManager.addBundle(file);
-		
+		QAF_CONTEXT.load(new String[] {file});
 	}
 	
 	private static void saveWSCFile(Map<String, Object> data,String file) throws IOException{
 		List<Map<String, Object>> fileContent = new LinkedList<Map<String, Object>>();
 		fileContent.add(data);
 		saveContent(fileContent,file);
+	}
+	
+	private static QAFRequestHandler handleExecuteRequest = (req, res, ctx) -> {
+		try {
+			String reqCall = IOUtils.toString(req.getEntity().getContent(), StandardCharsets.UTF_8);
+			Object[] args = JSONUtil.toObject(reqCall, Object[].class);
+			//String[] postSteps = JSONUtil.toObject(reqCall, String[].class);
+
+			StringTestStep.execute("userRequestsWithData", args);
+			Response result = new RestTestBase().getResponse();
+			String resStr = new JSONObject(result).toString();
+			res.setEntity(new StringEntity(resStr, ContentType.APPLICATION_JSON));
+		} catch (StepNotFoundException se) {
+			res.setEntity(new StringEntity("ERROR: Add qaf-support-ws library dependency!...",
+					ContentType.TEXT_PLAIN));
+		} catch (Throwable t) {
+			t.printStackTrace();
+			res.setEntity(new StringEntity(t.getMessage(), ContentType.TEXT_PLAIN));
+		}
+	};
+	
+	@SuppressWarnings("unchecked")
+	private static QAFRequestHandler handleExecuteStep = (req, res, ctx) -> {
+		Map<String, Object> responseToreturn = new HashMap<String, Object>();
+		try {
+			TestBaseProvider.instance().get().claerAssertionsLog();
+			String reqCall = IOUtils.toString(req.getEntity().getContent(), StandardCharsets.UTF_8);
+			Map<String, Object> reqMap = JSONUtil.toMap(reqCall);
+			
+			Object result = StringTestStep.execute(reqMap.get("step").toString(), ((List<Object>)reqMap.get("args")).toArray(new Object[] {}));
+			try {
+				responseToreturn.put("result", JSONObject.valueToString(result));
+			} catch (Exception e) {
+				e.printStackTrace();
+				responseToreturn.put("result", result.toString());
+			}
+			responseToreturn.put("checkPoints", TestBaseProvider.instance().get().getCheckPointResults());
+			responseToreturn.put("seleniumLog", TestBaseProvider.instance().get().getLog());
+
+		}catch (AssertionError t) {
+			responseToreturn.put("checkPoints", TestBaseProvider.instance().get().getCheckPointResults());
+			responseToreturn.put("seleniumLog", TestBaseProvider.instance().get().getLog());
+		}
+		catch (Throwable t) {
+			t.printStackTrace();
+			responseToreturn.put("error", t.getMessage());
+		}
+		String resStr = "";
+		try {
+			resStr=JSONUtil.toString(responseToreturn);
+		}catch (Throwable t) {
+			t.printStackTrace();
+			resStr = new JSONObject(responseToreturn).toString();
+		}
+		res.setEntity(new StringEntity(resStr, ContentType.APPLICATION_JSON));
+	};
+	
+	interface QAFRequestHandler extends HttpRequestHandler {
+		
+		@Override
+		public default void handle(ClassicHttpRequest request, ClassicHttpResponse response, HttpContext context)
+				throws HttpException, IOException {
+					ConfigurationManager.setBundle(QAF_CONTEXT);
+					TestBaseProvider.instance().set(QAF_TESTBASE);
+					execute(request, response, context);
+		}
+		
+		abstract void execute(ClassicHttpRequest request, ClassicHttpResponse response, HttpContext context) throws HttpException, IOException;
 	}
 	
 }
