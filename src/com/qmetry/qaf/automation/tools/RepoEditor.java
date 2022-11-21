@@ -657,7 +657,7 @@ public class RepoEditor {
 		if(file.endsWith("wsc")) {
 			fileContent = data.get(0).entrySet().stream().map((e) -> e.getKey() +"=" + gson.toJson(e.getValue()).replace("\\", "\\\\")).collect(Collectors.joining("\n"));
 		}else if(file.endsWith(".loc")) {
-			fileContent = data.stream().map(e->e.remove("key").toString()+"="+gson.toJson(e)).collect(Collectors.joining("\n"));
+			fileContent = data.stream().map(e->e.remove("key").toString()+"="+gson.toJson(e).replace("\\", "\\\\")).collect(Collectors.joining("\n"));
 		}else {
 			fileContent=gson.toJson(data);
 		}
