@@ -705,7 +705,7 @@ public class RepoEditor {
 		else if(file.endsWith(".loc")) {
 			fileContent = data.stream().map(e->e.remove("key").toString()+"="+gson.toJson(e).replace("\\", "\\\\")).collect(Collectors.joining("\n"));
 		}else if(file.endsWith(".locj")) {
-			JSONUtil.writeJsonObjectToFile(file,data.stream().collect(Collectors.toMap(s->s.remove("key"), s->s)));
+			JSONUtil.writeJsonObjectToFile(file,data.stream().filter(s->s.get("key")!=null).collect(Collectors.toMap(s->s.remove("key"), s->s)));
 		}else {
 			fileContent=gson.toJson(data);
 		}
