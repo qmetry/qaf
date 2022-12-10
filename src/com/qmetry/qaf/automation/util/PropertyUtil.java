@@ -210,10 +210,12 @@ public class PropertyUtil extends XMLConfiguration {
 			} else if(file.getName().endsWith(".wscj") || file.getName().contains(".locj")) {
 				@SuppressWarnings("unchecked")
 				Map<String,Object> props = JSONUtil.getJsonObjectFromFile(file.getPath(), Map.class);
-				props.entrySet().forEach(e->{
-					String val= JSONUtil.toString(e.getValue());e.setValue(val);
-					});
-				addAll(props);
+				if(null!=props && !props.isEmpty()) {
+					props.entrySet().forEach(e->{
+						String val= JSONUtil.toString(e.getValue());e.setValue(val);
+						});
+					addAll(props);
+				}
 			}
 			else {
 				loadProperties(new FileInputStream(file));

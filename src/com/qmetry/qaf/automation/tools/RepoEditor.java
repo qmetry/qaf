@@ -39,6 +39,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
@@ -69,6 +70,7 @@ import com.qmetry.qaf.automation.step.StringTestStep;
 import com.qmetry.qaf.automation.util.FileUtil;
 import com.qmetry.qaf.automation.util.JSONUtil;
 import com.qmetry.qaf.automation.util.PropertyUtil;
+import com.qmetry.qaf.automation.util.StringMatcher;
 import com.qmetry.qaf.automation.util.StringUtil;
 import com.qmetry.qaf.automation.ws.Response;
 import com.qmetry.qaf.automation.ws.rest.RestTestBase;
@@ -345,8 +347,8 @@ public class RepoEditor {
 		String id = queryParams.get("parent") + "/" + nodeName;
 
 		if (oldParent.isFile()) {
-			if (parent.getName().endsWith(".wsc") || parent.getParent().contains(".wsc")) {
-				if (parent.getParent().contains(".wsc")) {
+			if (isWSC(parent.getName()) || isWSC(parent.getParent())) {
+				if (isWSC(parent.getParent())) {
 					parent = parent.getParentFile();
 				}
 				// move wsc
@@ -372,13 +374,22 @@ public class RepoEditor {
 		queryParams.put("id", id);
 		return queryParams;
 	}
+	
+	private static boolean isWSC(String fileName) {
+		if(null==fileName) return false;
+		return StringMatcher.like(".*\\.wsc(j)?$").match(fileName) ;
+	}
+	private static boolean isLOC(String fileName) {
+		if(null==fileName) return false;
+		return StringMatcher.like(".*\\.loc(j)?$").match(fileName) ;
+	}
 
 	private static void delete(Map<String, String> queryParams) throws IOException {
 		String id = queryParams.get("id").replace('#', '/');
 		File target = new File(id);
 		if (target.exists()) {
 			FileUtil.deleteQuietly(target);
-		} else if (target.getParent().endsWith(".wsc")) {
+		} else if (isWSC(target.getParent())) {
 			Map<String, Object> fileContent = getWSCFile(target.getParent());
 			fileContent.remove(target.getName());
 			saveWSCFile(fileContent, target.getParent());
@@ -393,7 +404,7 @@ public class RepoEditor {
 			File dest = new File(target.getParentFile(),generateFileName(target.getParentFile(), target.getName()));
 			FileUtil.copyFile(target, dest );
 			id=dest.getPath();
-		} else if (target.getParent().endsWith(".wsc")) {
+		} else if (isWSC(target.getParent())) {
 			Map<String, Object> fileContent = getWSCFile(target.getParent());
 			String key = generateKeyName(target.getName());
 			Object val = fileContent.get(target.getName());
@@ -423,7 +434,7 @@ public class RepoEditor {
 		File file = new File(id);
 		File parent = file.getParentFile();
 
-		if (parent.getName().endsWith("wsc")) {
+		if (isWSC(parent.getName())) {
 			file = parent;
 
 			if (!file.exists()) {
@@ -443,15 +454,25 @@ public class RepoEditor {
 
 		} else {
 			if (StringUtil.isNotBlank(old)) {
+
 				File oldFile = new File(parent, old);
 				File newFile = new File(parent, newName);
-
-				if(oldFile.exists()) {
-				oldFile.renameTo(newFile);
+				if (!FileUtil.getExtention(newName).equalsIgnoreCase(FileUtil.getExtention(old)) && (isWSC(newName) || isLOC(newName))) {
+					try {
+						List<Map<String, Object>> content = getContent(oldFile.getPath());
+						saveContent(content, newFile.getPath());
+						oldFile.delete();
+					} catch (Exception e) {
+						throw new RuntimeException("Unable to change file type: " + e.getMessage());
+					}
 				}else {
-					FileUtil.checkCreateDir(parent.getParent());
+					if (oldFile.exists()) {
+						oldFile.renameTo(newFile);
+					} else {
+						FileUtil.checkCreateDir(parent.getParent());
+					}
 				}
-				id=newFile.getPath();
+				id = newFile.getPath();
 			}
 		}
 		queryParams.clear();
@@ -463,7 +484,7 @@ public class RepoEditor {
 		String id = queryParams.get("id");
 		String name = queryParams.get("text");
 		File parent = new File(queryParams.get("id"));
-		if (parent.getName().endsWith("wsc")) {
+		if (isWSC(parent.getName())) {
 			if (!parent.exists()) {
 				FileUtil.checkCreateDir(parent.getParent());
 			}
@@ -554,7 +575,7 @@ public class RepoEditor {
 				return new Object[] { rootNode };
 			}
 			File parent = new File(id);
-			if (parent.getName().endsWith(".wsc")) {
+			if (isWSC(parent.getName())) {
 				Map<String, Object> fileContent = new LinkedHashMap<String, Object>();
 				if (parent.exists()) {
 					fileContent = getWSCFile(parent.getPath());//JSONUtil.getJsonObjectFromFile(parent.getPath(), Map.class);
@@ -582,7 +603,7 @@ public class RepoEditor {
 				}).toArray();
 			}
 			//".wsc",".loc",".proto","json", "properties", "xml","txt", "csv"
-			String[] allowedTypes = QAF_CONTEXT.getStringArray("repoeditor.filetypes", ".wsc",".loc",".proto","properties",".wscj");
+			String[] allowedTypes = QAF_CONTEXT.getStringArray("repoeditor.filetypes", ".wsc",".loc",".proto","properties",".locj",".wscj");
 			Object[] nodes = Files.list(parent.toPath())
 					.filter(p -> p.toFile().isDirectory() || StringUtil.endsWithAny(p.toString(), allowedTypes))
 					.map(p -> {
@@ -595,7 +616,7 @@ public class RepoEditor {
 						} else {
 							String type = FileUtil.getExtention(p.toString());
 							node.put("type", "file-"+type);
-							node.put("children", "wscproto".indexOf(type)>=0);
+							node.put("children", "wscjproto".indexOf(type)>=0);
 						}
 						return node;
 					}).toArray();
@@ -609,6 +630,28 @@ public class RepoEditor {
 	private static List<Map<String, Object>> getContent(String file) {
 		List<Map<String, Object>> fileContent = new LinkedList<Map<String, Object>>();
 
+		if(file.endsWith(".wscj")) {
+			Map<String, Object> content = JSONUtil.getJsonObjectFromFile(file, Map.class);
+			if(null==content)
+				content = new LinkedHashMap<>();
+
+			fileContent.add(content);
+			return fileContent;
+		}
+		if(file.endsWith(".locj")) {
+			Map<String, Map<String, Object>> content = JSONUtil.getJsonObjectFromFile(file, Map.class);
+			if(null==content)content = new LinkedHashMap<String, Map<String, Object>> ();
+			
+			Iterator<Entry<String, Map<String, Object>>> entries = content.entrySet().iterator();
+			while(entries.hasNext()) {
+				Entry<String, Map<String, Object>> entry = entries.next();
+				Map<String, Object> loc = new LinkedHashMap<>();
+				loc.put("key", entry.getKey());
+				loc.putAll(entry.getValue());
+				fileContent.add(loc);
+			}
+			return fileContent;
+		}
 		try {
 			PropertiesConfiguration propertiesConfiguration = new PropertiesConfiguration();
 			propertiesConfiguration.setEncoding(ApplicationProperties.LOCALE_CHAR_ENCODING.getStringVal("UTF-8"));
@@ -617,13 +660,13 @@ public class RepoEditor {
 			
 			Iterator<String> iter = propertiesConfiguration.getKeys();
 			if(file.endsWith(".wsc")) {
-				Map<String, Object> contenct = new LinkedHashMap<>();
+				Map<String, Object> content = new LinkedHashMap<>();
 				while(iter.hasNext()) {
 					String key = iter.next();
 					String value = propertiesConfiguration.getString(key);
-					contenct.put(key, JSONUtil.toObject(value));
+					content.put(key, JSONUtil.toObject(value));
 				}
-				fileContent.add(contenct);
+				fileContent.add(content);
 			}
 			if(file.endsWith(".loc")) {
 				while(iter.hasNext()) {
@@ -654,10 +697,15 @@ public class RepoEditor {
 	private static void saveContent(List<Map<String, Object>> data, String file) throws IOException {
 		Gson gson = new GsonBuilder().disableHtmlEscaping().serializeNulls().create();
 		String fileContent = null;
-		if(file.endsWith("wsc")) {
+		if(file.endsWith(".wscj")) {
+			JSONUtil.writeJsonObjectToFile(file, data.get(0));
+		}else if(file.endsWith(".wsc")) {
 			fileContent = data.get(0).entrySet().stream().map((e) -> e.getKey() +"=" + gson.toJson(e.getValue()).replace("\\", "\\\\")).collect(Collectors.joining("\n"));
-		}else if(file.endsWith(".loc")) {
+		}
+		else if(file.endsWith(".loc")) {
 			fileContent = data.stream().map(e->e.remove("key").toString()+"="+gson.toJson(e).replace("\\", "\\\\")).collect(Collectors.joining("\n"));
+		}else if(file.endsWith(".locj")) {
+			JSONUtil.writeJsonObjectToFile(file,data.stream().collect(Collectors.toMap(s->s.remove("key"), s->s)));
 		}else {
 			fileContent=gson.toJson(data);
 		}
@@ -704,7 +752,7 @@ public class RepoEditor {
 			
 			Object result = StringTestStep.execute(reqMap.get("step").toString(), ((List<Object>)reqMap.get("args")).toArray(new Object[] {}));
 			try {
-				responseToreturn.put("result", JSONObject.valueToString(result));
+				responseToreturn.put("result",JSONUtil.toObject(JSONObject.valueToString(result)));
 			} catch (Exception e) {
 				e.printStackTrace();
 				responseToreturn.put("result", result.toString());
