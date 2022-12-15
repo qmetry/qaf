@@ -25,8 +25,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -62,27 +64,32 @@ public class PostmanCollectionsImporter {
 
 		List<Map<String, Object>> items = (List<Map<String, Object>>) collection.get("item");
 		String name = (String) ((Map<String, Object>) collection.get("info")).get("name");
-		List<String> wsc = new ArrayList<String>();
+		Map<String, Object> wsc = new LinkedHashMap<String, Object>();
 		for (Map<String, Object> item : items) {
 			recordRequests(item, wsc);
 		}
 		List<Map<String, Object>> variables = (List<Map<String, Object>>) collection.get("variable");
 		
-		Map<String, List<Map<String, Object>>> variablesByType = variables.stream().collect(Collectors.groupingBy(v->(String)v.get("type")));
+		Map<String, List<Map<String, Object>>> variablesByType = null==variables? Collections.emptyMap(): variables.stream().collect(Collectors.groupingBy(v->(String)v.get("type")));
 		for(String type : variablesByType.keySet()) {
 			PropertiesConfiguration propertiesConfiguration = new PropertiesConfiguration();
 			//propertiesConfiguration.setEncoding(getString(ApplicationProperties.LOCALE_CHAR_ENCODING.key, "UTF-8"));
 			variablesByType.get(type).forEach(m->propertiesConfiguration.setProperty((String)m.get("key"), m.get("value")));
 			try {
-				propertiesConfiguration.save("resources/auto_generated/"+ StringUtil.toCamelCaseIdentifier(type) + ".properties");
+				String propFile = "resources/auto_generated/" + StringUtil.toCamelCaseIdentifier(type) + ".properties";
+				propertiesConfiguration.save(propFile);
+				System.out.println("Generated file: " + propFile);
 			} catch (ConfigurationException e) {
 				e.printStackTrace();
 			}
 		}
-		FileUtil.writeLines(new File("resources/auto_generated", StringUtil.toCamelCaseIdentifier(name) + ".wsc"), wsc);
+		//FileUtil.writeLines(new File("resources/auto_generated", StringUtil.toCamelCaseIdentifier(name) + ".wsc"), wsc);
+		String wscjFile = "resources/auto_generated/" + StringUtil.toCamelCaseIdentifier(name) + ".wscj";
+		JSONUtil.writeJsonObjectToFile(wscjFile, wsc);
+		System.out.println("Generated file: " + wscjFile);
 	}
 
-	private static void recordRequests(Map<String, Object> item, List<String> wsc) {
+	private static void recordRequests(Map<String, Object> item, Map<String, Object> wsc) {
 		if (item.containsKey("request")) {
 			// record request
 
@@ -90,23 +97,22 @@ public class PostmanCollectionsImporter {
 			if (name.charAt(0) == '.')
 				name = name.substring(1);
 
-			Map<String, Object> reqcall = new HashMap<String, Object>();
+			Map<String, Object> reqcall = new LinkedHashMap<String, Object>();
 
 			Object reqObj = item.get("request");
 			if (reqObj instanceof Map) {
 				Map<String, Object> req = (Map<String, Object>) reqObj;
+				parseUrl(reqcall, req.get("url"));
 				reqcall.put("method", req.get("method"));
 				reqcall.put("headers", toMap((List<Map<String, Object>>) req.get("header")));
-				parseUrl(reqcall, req.get("url"));
 				addAuthHeader(reqcall, (Map<String, Object>) req.get("auth"));
 				addBody(reqcall, req.get("body"));
 				name = name + "." + req.get("method");
 			} else {
 				parseUrl(reqcall, reqObj);
 			}
-
-			wsc.add(name.toLowerCase() + "=" + JSONUtil.toString(reqcall).replace("\\", "\\\\"));
-
+			wsc.put(name.toLowerCase(), reqcall);
+			//wsc.add(name.toLowerCase() + "=" + JSONUtil.toString(reqcall).replace("\\", "\\\\"));
 		} else {
 			List<Map<String, Object>> items = (List<Map<String, Object>>) item.get("item");
 			for (Map<String, Object> _item : items) {
@@ -162,6 +168,9 @@ public class PostmanCollectionsImporter {
 	}
 
 	private static String getUrl(Object pathObj) {
+		if (null == pathObj) {
+			return null;
+		}
 		List<String> path = (pathObj instanceof List) ? (List<String>) pathObj
 				: Arrays.asList(pathObj.toString().split("/"));
 		if (null == path || path.size() < 1) {
