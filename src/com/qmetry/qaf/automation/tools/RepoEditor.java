@@ -65,6 +65,7 @@ import com.qmetry.qaf.automation.core.ConfigurationManager;
 import com.qmetry.qaf.automation.core.QAFTestBase;
 import com.qmetry.qaf.automation.core.TestBaseProvider;
 import com.qmetry.qaf.automation.keys.ApplicationProperties;
+import com.qmetry.qaf.automation.step.JavaStepFinder;
 import com.qmetry.qaf.automation.step.StepNotFoundException;
 import com.qmetry.qaf.automation.step.StringTestStep;
 import com.qmetry.qaf.automation.util.FileUtil;
@@ -94,7 +95,7 @@ public class RepoEditor {
 			server.start();
 			System.out.println("server started on port: " + port);
 			System.out.println("type \"exit\" to stop server.");
-
+			JavaStepFinder.GLOBAL_STEPS_PACKAGES.add("com.qmetry.qaf.automation.tools");
 			try (Scanner s = new Scanner(System.in)) {
 				s.next("exit");
 			}
