@@ -27,11 +27,12 @@ import java.util.Iterator;
 
 import org.apache.commons.configuration.Configuration;
 
+import com.qmetry.qaf.automation.util.JSONUtil;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
+import com.sun.jersey.client.apache.ApacheHttpClient;
 import com.sun.jersey.multipart.impl.MultiPartWriter;
-
 /**
  * @author chirag.jayswal
  */
@@ -42,12 +43,15 @@ public class DefaultRestClient extends RestClientFactory {
 	public DefaultRestClient() {
 		ClientConfig config = new DefaultClientConfig();
 		config.getClasses().add(MultiPartWriter.class);
-		client = Client.create(config);
+		if(getBundle().getBoolean("rest.client.useApacheHttpClient", true)) {
+			client = ApacheHttpClient.create(config);
+		}else {
+			client = Client.create(config);
+		}
 	}
 
 	public DefaultRestClient(Client client) {
 		this.client = client;
-
 	}
 
 	/*
@@ -61,8 +65,8 @@ public class DefaultRestClient extends RestClientFactory {
 
 		while (iter.hasNext()) {
 			String prop = (String) iter.next();
-			client.getProperties().put(REST_CLIENT_PROP_PREFIX + prop,
-					props.getString(prop));
+			client.getProperties().put(REST_CLIENT_PROP_PREFIX+ "." + prop,
+					JSONUtil.toObject(props.getString(prop)));
 		}
 		return client;
 	}
