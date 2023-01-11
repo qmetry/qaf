@@ -38,6 +38,8 @@ import java.util.Set;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.LogFactoryImpl;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.qmetry.qaf.automation.core.CheckpointResultBean;
 import com.qmetry.qaf.automation.core.LoggingBean;
 import com.qmetry.qaf.automation.integration.TestCaseResultUpdator;
@@ -79,7 +81,7 @@ public class JsonReporter implements TestCaseResultUpdator {
 				StatusCounter.of(suiteName).withFile(suitReportDir));
 		StatusCounter testStatusCounter = getStatusCounter(testSetStatusCounters,
 				StatusCounter.of(testName).withFile(testReportDir));
-		if (!result.willRetry()) {
+		if (result.isTest() && !result.willRetry()) {
 			suiteStatusCounter.add(result.getStatus());
 			testStatusCounter.add(result.getStatus());
 		}
@@ -178,7 +180,8 @@ public class JsonReporter implements TestCaseResultUpdator {
 		MethodInfo methodInfo = new MethodInfo();
 		methodInfo.setStartTime(result.getStarttime());
 		methodInfo.setDuration(result.getEndtime() - result.getStarttime());
-		methodInfo.setArgs(result.getTestData().toArray());
+		Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+		methodInfo.setArgs(result.getTestData().stream().map(e->gson.toJsonTree(e)).toArray());
 		methodInfo.setIndex(index);
 		methodInfo.setType(result.isTest() ? "test" : "config");
 		methodInfo.setResult(result.getStatus().toQAF());
