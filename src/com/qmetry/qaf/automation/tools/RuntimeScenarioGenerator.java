@@ -34,6 +34,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.qmetry.qaf.automation.core.ConfigurationManager;
 import com.qmetry.qaf.automation.step.TestStep;
 import com.qmetry.qaf.automation.step.client.DataDrivenScenario;
@@ -48,9 +51,16 @@ import com.qmetry.qaf.automation.util.StringUtil;
  * @author chirag.jayswal
  */
 public class RuntimeScenarioGenerator {
+	private final static Log logger = LogFactory.getLog(RuntimeScenarioGenerator.class);
 
 	public static void main(String[] args) {
-		File file = new File(ConfigurationManager.getBundle().getString("scenario.file.loc", "scenarios"));
+		String source = ConfigurationManager.getBundle().getString("scenario.file.loc", "scenarios");
+		RuntimeScenarioGenerator runtimeScenarioGenerator = new RuntimeScenarioGenerator();
+		runtimeScenarioGenerator.generateRuntimeScenarios(source);
+	}
+	
+	public void generateRuntimeScenarios(String source) {
+		File file = new File(source);
 		if (file.isDirectory()) {
 			FileUtil.getFiles(file, "feature", true).forEach((f) -> createTestClass(f));
 		} else {
@@ -58,7 +68,7 @@ public class RuntimeScenarioGenerator {
 		}
 	}
 
-	public static void createTestClass(File bddFile) {
+	protected void createTestClass(File bddFile) {
 
 		BDDFileParser2 bddParser = new BDDFileParser2();
 		List<Scenario> scenarios = new ArrayList<Scenario>();
@@ -74,7 +84,7 @@ public class RuntimeScenarioGenerator {
 				classMetaData.entrySet().retainAll(iter.next().getMetadata().entrySet());
 			}
 		}
-		String pkg = (String) classMetaData.getOrDefault("package", bddFile.getParent().replace('/', '.'));
+		String pkg = generatePkgName(classMetaData, bddFile);
 		String dest = "auto_generated/" + pkg.replace('.', '/');
 
 		classMetaData.remove("reference");
@@ -96,59 +106,71 @@ public class RuntimeScenarioGenerator {
 		if (!classMetaData.isEmpty())
 			statements.add(String.format("@MetaData(\"%s\")", JSONUtil.toString(classMetaData).replace('"', '\'')));
 		// start class
-		statements.add(String.format("public class %s extends WebDriverTestCase {", className));
-
+		addClassName(className, statements);
 		for (Scenario scenario : scenarios) {
-			if (null != scenario.getMetadata() && !scenario.getMetadata().isEmpty()) {
-
-				scenario.getMetadata().entrySet().removeAll(classMetaData.entrySet());
-				scenario.getMetadata().remove("lineno");
-				scenario.getMetadata().remove("reference");
-				scenario.getMetadata().remove("resultFileName");
-				Object JSON_DATA_TABLE = scenario.getMetadata().remove("JSON_DATA_TABLE");
-				if (null != JSON_DATA_TABLE) {
-					scenario.getMetadata().put("dataFile", generateDataFile(dest,
-							StringUtil.toTitleCaseIdentifier(scenario.getTestName()), (String) JSON_DATA_TABLE));
-				}
-				statements.add(String.format("@MetaData(\"%s\")",
-						JSONUtil.toString(scenario.getMetadata()).replace('"', '\'')));
-			}
-
-			statements.add("@Test");
-			// start method
-			statements.add(String.format("public void %s(%s){", scenario.getTestName().replace(' ', '_'),
-					(scenario instanceof DataDrivenScenario) ? "Map<String, Object> data" : ""));
-			statements.add("\tscenario().");
-
-			for (TestStep step : scenario.getSteps()) {
-				String desc = step.getDescription().replace('"', '\'');
-				String keyword = BDDKeyword.getKeywordFrom(step.getDescription());
-				if (isBlank(keyword)) {
-					keyword = "step";
-				} else {
-					desc = desc.substring(keyword.length()).trim();
-				}
-				statements.add(
-						String.format("\t\t%s (\"%s\",()->{\n\t\t\tthrow new NotYetImplementedException();\n\t\t}).",
-								keyword.toLowerCase(), desc));
-			}
-			statements.add("\t\texecute();");
-
-			// end method
-			statements.add("\t}");
+			addScenario(scenario, statements, classMetaData, dest);
 		}
 		// end class
 		statements.add("}");
 
 		try {
 			FileUtil.checkCreateDir(dest);
-			FileUtil.writeLines(new File(dest, className + ".java"), statements);
+			File outPutFile = new File(dest, className + ".java");
+			FileUtil.writeLines(outPutFile, statements);
+			logger.info("Generated file: " + outPutFile + " from " + bddFile);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
 	}
+	
+	protected String generatePkgName(Map<String, Object> classMetaData, File bddFile) {
+		return (String) classMetaData.getOrDefault("package", bddFile.getParent().replace('/', '.'));
+	}
 
+	protected void addClassName(String className, List<String> statements) {
+		statements.add(String.format("public class %s extends WebDriverTestCase {", className));
+	}
+	protected void addScenario(Scenario scenario, List<String> statements, Map<String, Object> classMetaData, String dest) {
+		if (null != scenario.getMetadata() && !scenario.getMetadata().isEmpty()) {
+
+			scenario.getMetadata().entrySet().removeAll(classMetaData.entrySet());
+			scenario.getMetadata().remove("lineno");
+			scenario.getMetadata().remove("reference");
+			scenario.getMetadata().remove("resultFileName");
+			Object JSON_DATA_TABLE = scenario.getMetadata().remove("JSON_DATA_TABLE");
+			if (null != JSON_DATA_TABLE) {
+				scenario.getMetadata().put("dataFile", generateDataFile(dest,
+						StringUtil.toTitleCaseIdentifier(scenario.getTestName()), (String) JSON_DATA_TABLE));
+			}
+			statements.add(String.format("@MetaData(\"%s\")",
+					JSONUtil.toString(scenario.getMetadata()).replace('"', '\'')));
+		}
+
+		statements.add("@Test");
+		// start method
+		statements.add(String.format("public void %s(%s){", scenario.getTestName().replace(' ', '_'),
+				(scenario instanceof DataDrivenScenario) ? "Map<String, Object> data" : ""));
+		statements.add("\tscenario().");
+
+		for (TestStep step : scenario.getSteps()) {
+			String desc = step.getDescription().replace('"', '\'');
+			String keyword = BDDKeyword.getKeywordFrom(step.getDescription());
+			if (isBlank(keyword)) {
+				keyword = "step";
+			} else {
+				desc = desc.substring(keyword.length()).trim();
+			}
+			statements.add(
+					String.format("\t\t%s (\"%s\",()->{\n\t\t\tthrow new NotYetImplementedException();\n\t\t}).",
+							keyword.toLowerCase(), desc));
+		}
+		statements.add("\t\texecute();");
+
+		// end method
+		statements.add("\t}");
+	}
+	
 	@SuppressWarnings("unchecked")
 	private static Collection<String> jsonArrayToCSV(String json) {
 		Collection<String> csvdata = new ArrayList<String>();
@@ -164,7 +186,7 @@ public class RuntimeScenarioGenerator {
 		return csvdata;
 	}
 
-	private static String generateDataFile(String dest, String name, String JSON_DATA_TABLE) {
+	protected String generateDataFile(String dest, String name, String JSON_DATA_TABLE) {
 		String type = ConfigurationManager.getBundle().getString("runtimescenario.datafile.type", "json");
 		switch (type.toLowerCase()) {
 		case "txt":
