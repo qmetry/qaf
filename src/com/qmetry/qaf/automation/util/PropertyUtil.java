@@ -212,7 +212,7 @@ public class PropertyUtil extends XMLConfiguration {
 				Map<String,Object> props = JSONUtil.getJsonObjectFromFile(file.getPath(), Map.class);
 				if(null!=props && !props.isEmpty()) {
 					props.entrySet().forEach(e->{
-						String val= JSONUtil.toString(e.getValue());e.setValue(val);
+						String val= JSONUtil.toString(e.getValue()).replace("\\", "\\\\");e.setValue(val);
 						});
 					addAll(props);
 				}
