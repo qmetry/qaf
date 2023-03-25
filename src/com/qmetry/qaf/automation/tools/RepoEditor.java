@@ -88,6 +88,7 @@ public class RepoEditor {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		System.setProperty(ApplicationProperties.DRY_RUN_MODE.key,"false");
 		int port = QAF_CONTEXT.getInt("repoeditor.server.port",2612);
 		final HttpServer server = createServer(port);
 		try {
