@@ -248,6 +248,6 @@ public class DynamicWait<T>{ //implements Wait<T> {
 	}
 	
 	public static long duration(long time, TimeUnit unit){
-		return unit.convert(time, MILLISECONDS);
+		return MILLISECONDS.convert(time, unit);
 	}
 }
