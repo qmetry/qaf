@@ -1,8 +1,8 @@
 ---
-title: "Web Element Related Pages"
-tagName: webelement
+title: "Web services Related Pages"
+tagName: webservice
 search: exclude
-permalink: latest/tag_webelement.html
+permalink: latest/tag_webservice.html
 sidebar: qaf_latest-sidebar
 folder: latest
 ---

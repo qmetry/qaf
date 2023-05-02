@@ -1,45 +1,10 @@
 ---
 title: Release Notes
-sidebar: qaf_latest-sidebar
+sidebar: qaf_3_1_0-sidebar
 
-permalink: latest/release_notes.html
-folder: latest
+permalink: qaf-3.1.0/release_notes.html
+folder: qaf-3.1.0
 ---
-## VER-3.2.0 Release Notes:
-
- - Closed [3.2.0 milestone](https://github.com/qmetry/qaf/milestone/12?closed=1)
-
-
-  **New Features:**
-   1. [Repository editor](repo_editor.html) UI and back end server
-   2. [#411](https://github.com/qmetry/qaf/issues/411) [Data generator](testdata_generator.html) to generate set of data in specified format
-   3. [#421](https://github.com/qmetry/qaf/issues/421) Emailable report Feature
-   4. [#423](https://github.com/qmetry/qaf/issues/423) JSON compare util
-   5. Added Utility to generate java runtime scenario code from feature file 
-   6. Added PostmanCollectionsImporter to import postman collection
-   7. Added support for wscj and locj file, josn representation for locator and web services call repository
-   8. Added `Bdd2Generator` that can be used to convert scenarios written in `bdd` format to `bdd2` format
-   9. New support libraries for GRPC
-   	  - [qaf-support-grpc](https://github.com/qmetry/qaf-support-grpc)
-   
-  **Enhancements**
-  
-   1. [#426](https://github.com/qmetry/qaf/issues/426) QAFExtendedWebElement isPresent() method enhancement
-   2. [ws#12](https://github.com/qmetry/qaf-support-ws/issues/12) Used ApacheHttpClient as default http client to support custom methods including `PATCH`
-   3. Support of individual meta-data filter as subset of include/exclude property. Usage: `include.metakey=metaval1;metaval2`
-   4. Updated gson version to 2.9.0. Updated code to support latest version (2.10) of gson.
-   5. Changed parameter resolver [order for parameter resolution](https://github.com/qmetry/qaf-support-ws/commit/876d58f5e252e89579f6d6c98917617599bc5c50) in request call
- 
-  **Bug fixes**
-
-   1. [#410](https://github.com/qmetry/qaf/issues/410) Fixed Configuration methods not reported in dashboard
-   2. Fixed duration conversation issue in dynamic wait
-   3. [#429](https://github.com/qmetry/qaf/issues/429) JSONUtil.toObject throws ArrayStoreException
-   4. [#436](https://github.com/qmetry/qaf/issues/436) Unable to write : com.qmetry.qaf.automation.testng.report.ClassInfo in file
-   5. Fixed null pointer exception if element not found
-   6. [ws#17](https://github.com/qmetry/qaf-support-ws/issues/17) fixed fillData with map argument not populating map fields
-
-
 ## VER-3.1.0 Release Notes:
 
  - Closed [3.1.0 milestone](https://github.com/qmetry/qaf/milestone/11?closed=1)

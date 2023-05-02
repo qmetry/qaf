@@ -1,9 +1,9 @@
 ---
 title: Web Services Testing
-sidebar: qaf_latest-sidebar
-permalink: latest/web_services.html
-folder: latest
-tags: [java, webservice]
+sidebar: qaf_3_1_0-sidebar
+permalink: qaf-3.1.0/web_services.html
+folder: qaf-3.1.0
+tags: [java]
 ---
 For advance usage please refer [qaf-suport-ws](https://github.com/qmetry/qaf-support-ws/wiki).
 

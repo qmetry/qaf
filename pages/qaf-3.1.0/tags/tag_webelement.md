@@ -1,10 +1,10 @@
 ---
 title: "Web Element Related Pages"
-tagName: webelement
+tagName: WebElement
 search: exclude
-permalink: latest/tag_webelement.html
-sidebar: qaf_latest-sidebar
-folder: latest
+permalink: qaf-3.1.0/tag_webelement.html
+sidebar: qaf_3_1_0-sidebar
+folder: qaf-3.1.0
 ---
 {% include taglogic.html %}
 

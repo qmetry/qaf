@@ -1,9 +1,9 @@
 ---
 title: Locator Repository
-sidebar: qaf_latest-sidebar
-permalink: latest/locator_repository.html
-folder: latest
-tags: [selenium,locator,java, webdriver, webelement]
+sidebar: qaf_3_1_0-sidebar
+permalink: qaf-3.1.0/locator_repository.html
+folder: qaf-3.1.0
+tags: [Selenium,locator,java, webdriver, webelement]
 ---
 
 QMetry Automation Framework provides concept called **“Locator Repository”** which can be used to abstract your element locator outside the code. Moreover, you can have separate locator repositories per environment/platform and you can configure at runtime to load environment specific locator repository. 

@@ -1,9 +1,9 @@
 ---
 title: Locating Elements
-sidebar: qaf_latest-sidebar
-permalink: latest/locating_elements.html
-folder: latest
-tags: [selenium, locator, java, webdriver, webelement]
+sidebar: qaf_3_1_0-sidebar
+permalink: qaf-3.1.0/locating_elements.html
+folder: qaf-3.1.0
+tags: [Selenium, locator, java, webdriver, webelement]
 ---
 
 ## Locating Elements
