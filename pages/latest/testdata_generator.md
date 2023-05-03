@@ -57,7 +57,7 @@ Below are supported `type` for collector:
 ||append|Boolean value to append if file exist |
 ||seperator|Optional column seperator |
 ||outputFormat|Optional format for e|
-|db|sql|sql statement with field names. INSERT INTO table_name (column1, column2, column3) VALUES (fldName1, fldName2, fldName3)|
+|db|sql|sql statement with field names. INSERT INTO table_name (column1, column2, column3) VALUES ("${fldName1str}", ${fldName2}, ${fldName3})|
 ||prefix|optional database connection prefix|
 |json|file|file path|
 |expr|call|expression|
