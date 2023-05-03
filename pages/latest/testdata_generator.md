@@ -95,7 +95,86 @@ Below are supported `type` for collector:
 
 #### Example Schema File: 
 
-`mrn-data-schema.json`
+Example - 1 `appointments_structure.json` will call api for each record in generated data.
+ 
+```
+{
+	"samples": 10,
+	"master": {},
+	"fields": [
+		{
+			"name": "_id",
+			"formatVal": "java.util.UUID.randomUUID()"
+		},
+		{
+			"name": "mrn",
+			"dataset": [
+				"aaa"
+			]
+		},
+		{
+			"name": "provider",
+			"dataset": [
+				"Dr Henry Godin",
+				"Dr Jackson Myers",
+				"Dr Henry Myers"
+			]
+		},
+		{
+			"name": "appointmentDate",
+			"type": "date",
+			"min": 0,
+			"max": 10,
+			"formatVal": "com.qmetry.qaf.automation.util.DateUtil.getFormatedDate(_value, 'MM/dd/yyyy')"
+		},
+		{
+			"name": "appointmentTime",
+			"min": 6,
+			"max": 12,
+			"formatVal": "_value.intValue() +'pm'"
+		},
+		{
+			"name": "appointmentDuration",
+			"dataset": [
+				"30",
+				"60"
+			]
+		},
+		{
+			"name": "appointmentRecurrence",
+			"type": "date",
+			"min": 10,
+			"max": 15,
+			"formatVal": "com.qmetry.qaf.automation.util.DateUtil.getFormatedDate(_value, 'MM/dd/yyyy')"
+		}
+	],
+	"collectors": [
+		{
+			"type": "file",
+			"options": {
+				"file": "auto-appointment-data.log",
+				"seperator": ",",
+				"headers": true,
+				"append": false
+			}
+		},
+		{
+			"type": "expr",
+			"options": {
+				"call": "com.qmetry.qaf.automation.step.WsStep.userRequests('oai.appointments.req.post',_record)"
+			}
+		},
+		{
+			"type": "expr",
+			"disabled":true,
+			"options": {
+				"call": "java.lang.System.out.println(_record)"
+			}
+		}
+	]
+}
+```
+Example - 2 `mrn-data-schema.json`
 
 ```json
 {
@@ -172,63 +251,6 @@ Below are supported `type` for collector:
 }
 ```
 
-Example 2:
-
-```
-{
-	"samples": 10,
-	"master": {},
-	"fields": [
-		{
-			"name": "_id",
-			"formatVal": "java.util.UUID.randomUUID()"
-		},
-		{
-			"name": "mrn",
-			"dataset": [
-				"aaa"
-			]
-		},
-		{
-			"name": "provider",
-			"dataset": [
-				"Dr Henry Godin",
-				"Dr Jackson Myers",
-				"Dr Henry Myers"
-			]
-		},
-		{
-			"name": "appointmentDate",
-			"type": "date",
-			"min": 0,
-			"max": 10,
-			"formatVal": "com.qmetry.qaf.automation.util.DateUtil.getFormatedDate(_value, 'MM/dd/yyyy')"
-		},
-		{
-			"name": "appointmentTime",
-			"min": 6,
-			"max": 12,
-			"formatVal": "_value.intValue() +'pm'"
-		},
-		{
-			"name": "appointmentDuration",
-			"dataset": [
-				"30",
-				"60"
-			]
-		},
-		{
-			"name": "appointmentRecurrence",
-			"type": "date",
-			"min": 10,
-			"max": 15,
-			"formatVal": "com.qmetry.qaf.automation.util.DateUtil.getFormatedDate(_value, 'MM/dd/yyyy')"
-		}
-	],
-
-}
-
-```
 
 Example:3
 
@@ -299,4 +321,50 @@ Example:3
 	]
 }
 
+```
+
+### Usage
+Example:
+
+```
+public static void generateAppointMents(String mrn) throws ScriptException {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("mrn.dataset", new Object[] { mrn });
+
+		Reporter.log("Generating upcoming appointments for MRN " + mrn);
+
+		params.put("appointmentDate.min", 1);
+		params.put("appointmentDate.max", 10);
+
+		JsonDataBean bean = JsonDataBean.get("resources/data/appointments_structure.json", params);
+
+		bean.setSamples(5);
+		bean.generateData();
+
+		Reporter.log("Generating past appointments for MRN " + mrn);
+
+		params.put("collectors.file.options.append", true);
+		params.put("collectors.file.options.headers", false);
+		params.put("appointmentDate.min", -10);
+		params.put("appointmentDate.max", -1);
+
+		bean = JsonDataBean.get("resources/data/appointments_structure.json", params);
+
+		bean.setSamples(5);
+		bean.generateData();
+	}
+```
+
+Another example of setting collector:
+
+```
+		JsonDataBean bean = JsonDataBean.get("resources/data/env_struct.json");
+
+		bean.setSamples(5);
+		bean.removeAllCollectors();
+		JsonCollector jsonCollector = new JsonCollector();
+		bean.addCollector(jsonCollector );
+		bean.generateData();
+		//get generated data from collector to use it in your code
+		System.out.println(jsonCollector.getDataset());
 ```
