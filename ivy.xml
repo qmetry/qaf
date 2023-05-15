@@ -144,6 +144,13 @@ SOFTWARE.
 		<!-- https://mvnrepository.com/artifact/com.sun.mail/jakarta.mail -->
 		<dependency org="com.sun.mail" name="jakarta.mail" rev="2.0.1"  conf="compile->default"/>
 		
+		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
+		<dependency org="org.apache.logging.log4j" name="log4j-api" rev="2.20.0" />
+		
+		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-compress -->
+		<dependency org="org.apache.commons" name="commons-compress" rev="1.23.0" conf="compile->default"/>
+		
+		
 		<!--  https://github.com/SeleniumHQ/selenium/issues/3118 -->
 		<exclude org="com.codeborne"/>
 		
