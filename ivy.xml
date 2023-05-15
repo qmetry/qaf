@@ -139,7 +139,7 @@ SOFTWARE.
 		
 		<!-- repo-editor -->
 		<!-- https://mvnrepository.com/artifact/org.apache.httpcomponents.core5/httpcore5 -->
-		<dependency org="org.apache.httpcomponents.core5" name="httpcore5" rev="5.2.1"/>
+		<dependency org="org.apache.httpcomponents.core5" name="httpcore5" rev="5.2.1" conf="compile->default"/>
 		<!-- emailable report -->
 		<!-- https://mvnrepository.com/artifact/com.sun.mail/jakarta.mail -->
 		<dependency org="com.sun.mail" name="jakarta.mail" rev="2.0.1"  conf="compile->default"/>
