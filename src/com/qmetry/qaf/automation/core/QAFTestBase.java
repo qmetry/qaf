@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import com.qmetry.qaf.automation.util.StringUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.LogFactoryImpl;
 import org.openqa.selenium.WebDriverException;
@@ -454,11 +453,11 @@ public class QAFTestBase {
 		this.reportDir = reportDir;
 	}
 
-	@Override
+	//@Override
 	protected void finalize() throws Throwable {
 		logger.debug("Unloading TestBase, cleaning up...");
 		tearDown();
-		super.finalize();
+		//super.finalize();
 	}
 
 	private void init() {
@@ -537,7 +536,7 @@ public class QAFTestBase {
 	}
 
 	private String[] initStbArgs(String... args) {
-		args = STBArgs.browser_str.setIfEmpty(getBrowser(), args);
+		args = STBArgs.browser_str.setIfEmpty(getDriverName(), args);
 		return STBArgs.browser_str.setIfEmpty(
 				ApplicationProperties.DRIVER_NAME.getStringVal(STBArgs.browser_str.defaultVal),
 				STBArgs.base_url.setIfEmpty(

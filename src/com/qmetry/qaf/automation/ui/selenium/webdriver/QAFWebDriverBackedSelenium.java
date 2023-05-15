@@ -21,7 +21,7 @@
  ******************************************************************************/
 package com.qmetry.qaf.automation.ui.selenium.webdriver;
 
-import org.openqa.selenium.internal.WrapsDriver;
+import org.openqa.selenium.WrapsDriver;
 
 import com.qmetry.qaf.automation.ui.selenium.IsSeleniumImpl;
 import com.qmetry.qaf.automation.ui.webdriver.QAFExtendedWebDriver;
@@ -29,7 +29,7 @@ import com.thoughtworks.selenium.CommandProcessor;
 
 /**
  * com.qmetry.qaf.automation.ui.selenium.ISWebDriverBackedSelenium.java
- * 
+ * @deprecated
  * @author chirag
  */
 public class QAFWebDriverBackedSelenium extends IsSeleniumImpl implements WrapsDriver {
@@ -47,7 +47,7 @@ public class QAFWebDriverBackedSelenium extends IsSeleniumImpl implements WrapsD
 	/**
 	 * @param commandProcessor
 	 */
-	public QAFWebDriverBackedSelenium(com.thoughtworks.selenium.CommandProcessor commandProcessor) {
+	public QAFWebDriverBackedSelenium(CommandProcessor commandProcessor) {
 		super(commandProcessor);
 	}
 

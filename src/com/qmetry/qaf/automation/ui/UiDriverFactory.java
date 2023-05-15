@@ -49,8 +49,6 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.ie.InternetExplorerOptions;
-import org.openqa.selenium.opera.OperaOptions;
-import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.safari.SafariOptions;
 
@@ -68,7 +66,7 @@ import com.qmetry.qaf.automation.ui.webdriver.QAFExtendedWebDriver;
 import com.qmetry.qaf.automation.ui.webdriver.QAFWebDriverCommandListener;
 import com.qmetry.qaf.automation.util.StringUtil;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
+//import io.github.bonigarcia.wdm.WebDriverManager;
 
 /**
  * com.qmetry.qaf.automation.ui.UiDriverFactory.java
@@ -282,9 +280,7 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 		edge(new EdgeOptions(), EdgeDriver.class),
 
 		firefox(new FirefoxOptions(), FirefoxDriver.class), iexplorer(new InternetExplorerOptions(),
-				InternetExplorerDriver.class), chrome(new ChromeOptions(), ChromeDriver.class), opera(
-						new OperaOptions(),
-						"com.opera.core.systems.OperaDriver"), android(new DesiredCapabilities("android", "", Platform.ANDROID),
+				InternetExplorerDriver.class), chrome(new ChromeOptions(), ChromeDriver.class),  android(new DesiredCapabilities("android", "", Platform.ANDROID),
 								"org.openqa.selenium.android.AndroidDriver"), iphone(
 										new DesiredCapabilities("iPhone", "", Platform.MAC),
 										"org.openqa.selenium.iphone.IPhoneDriver"), ipad(
@@ -314,8 +310,8 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 
 		private Browsers(Capabilities desiredCapabilities) {
 			this.desiredCapabilities = new DesiredCapabilities(desiredCapabilities.asMap());
-			this.desiredCapabilities.setCapability(CapabilityType.SUPPORTS_JAVASCRIPT,true);
-			this.desiredCapabilities.setCapability(CapabilityType.TAKES_SCREENSHOT, true);
+			//this.desiredCapabilities.setCapability(CapabilityType.SUPPORTS_JAVASCRIPT,true);
+			//this.desiredCapabilities.setCapability(CapabilityType.TAKES_SCREENSHOT, true);
 			//this.desiredCapabilities.setCapability(CapabilityType.SUPPORTS_FINDING_BY_CSS, true);
 
 		}
@@ -422,7 +418,7 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 					return new QAFExtendedWebDriver(ChromeDriverHelper.getService().getUrl(), desiredCapabilities,
 							reporter);
 				}*/
-				setUpDriverExecutable(driverCls);
+				//setUpDriverExecutable(driverCls);
 				WebDriver driver = getDriverObj(driverCls, desiredCapabilities, urlstr);// driverCls.newInstance();
 				return new QAFExtendedWebDriver(driver, reporter);
 			} catch (Throwable e) {
@@ -433,7 +429,7 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 			}
 		}
 		
-		private static void setUpDriverExecutable(Class<? extends WebDriver> driverClass) {
+		/*private static void setUpDriverExecutable(Class<? extends WebDriver> driverClass) {
 			try {
 				if (ConfigurationManager.getBundle().getBoolean("manage.driver.executable", true)) {
 					logger.info(
@@ -448,7 +444,7 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 						"Unable to setup driver executable: "+e.getMessage());
 
 			}
-		}
+		}*/
 
 		private QAFExtendedWebDriver getDriver(String url, WebDriverCommandLogger reporter) {
 			Capabilities desiredCapabilities = getDesiredCapabilities();
