@@ -138,8 +138,9 @@ SOFTWARE.
 		<dependency org="io.github.bonigarcia" name="webdrivermanager" rev="4.4.3"  conf="compile->default"/> -->
 		
 		<!-- repo-editor -->
-		<!-- https://mvnrepository.com/artifact/org.apache.httpcomponents.core5/httpcore5 -->
-		<dependency org="org.apache.httpcomponents.core5" name="httpcore5" rev="5.2.1" conf="compile->default"/>
+		<!-- https://mvnrepository.com/artifact/org.apache.httpcomponents.client5/httpclient5 -->
+		<dependency org="org.apache.httpcomponents.client5" name="httpclient5" rev="5.2.1" conf="compile->default"/>
+
 		<!-- emailable report -->
 		<!-- https://mvnrepository.com/artifact/com.sun.mail/jakarta.mail -->
 		<dependency org="com.sun.mail" name="jakarta.mail" rev="2.0.1"  conf="compile->default"/>
