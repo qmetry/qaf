@@ -66,7 +66,7 @@ import com.qmetry.qaf.automation.ui.webdriver.QAFExtendedWebDriver;
 import com.qmetry.qaf.automation.ui.webdriver.QAFWebDriverCommandListener;
 import com.qmetry.qaf.automation.util.StringUtil;
 
-//import io.github.bonigarcia.wdm.WebDriverManager;
+import io.github.bonigarcia.wdm.WebDriverManager;
 
 /**
  * com.qmetry.qaf.automation.ui.UiDriverFactory.java
@@ -418,7 +418,7 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 					return new QAFExtendedWebDriver(ChromeDriverHelper.getService().getUrl(), desiredCapabilities,
 							reporter);
 				}*/
-				//setUpDriverExecutable(driverCls);
+				setUpDriverExecutable(driverCls);
 				WebDriver driver = getDriverObj(driverCls, desiredCapabilities, urlstr);// driverCls.newInstance();
 				return new QAFExtendedWebDriver(driver, reporter);
 			} catch (Throwable e) {
@@ -429,7 +429,7 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 			}
 		}
 		
-		/*private static void setUpDriverExecutable(Class<? extends WebDriver> driverClass) {
+		private static void setUpDriverExecutable(Class<? extends WebDriver> driverClass) {
 			try {
 				if (ConfigurationManager.getBundle().getBoolean("manage.driver.executable", true)) {
 					logger.info(
@@ -444,7 +444,7 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 						"Unable to setup driver executable: "+e.getMessage());
 
 			}
-		}*/
+		}
 
 		private QAFExtendedWebDriver getDriver(String url, WebDriverCommandLogger reporter) {
 			Capabilities desiredCapabilities = getDesiredCapabilities();
