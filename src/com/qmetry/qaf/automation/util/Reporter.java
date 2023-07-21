@@ -21,9 +21,14 @@
  ******************************************************************************/
 package com.qmetry.qaf.automation.util;
 
+import static com.qmetry.qaf.automation.core.ConfigurationManager.getBundle;
 import static com.qmetry.qaf.automation.core.TestBaseProvider.instance;
 
+import org.testng.ITestResult;
+
 import com.qmetry.qaf.automation.core.MessageTypes;
+import com.qmetry.qaf.automation.keys.ApplicationProperties;
+import com.qmetry.qaf.automation.step.client.TestNGScenario;
 
 /**
  * This class provides utility methods to log message in report.
@@ -71,6 +76,19 @@ public class Reporter {
 	// @QAFTestStep
 	public static void logWithScreenShot(String msg) {
 		logWithScreenShot(msg, MessageTypes.Info);
+	}
+	
+	/**
+	 * Add meta-data to current test case. Useful to link cloud session, video etc.
+	 * @param key
+	 * @param val
+	 */
+	public static void addMetadata(String key, String val) {
+		ITestResult tr = (ITestResult) getBundle().getProperty(ApplicationProperties.CURRENT_TEST_RESULT.key);
+		
+		if(null!=tr && tr.getMethod() instanceof TestNGScenario) {
+			((TestNGScenario) tr.getMethod()).getMetaData().put(key, val);
+		}
 	}
 
 }
