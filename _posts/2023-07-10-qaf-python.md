@@ -1,7 +1,7 @@
 ---
 title:  "📢 Announcing QAF in python - Elevating Your Test Automation with Python!"
 published: true
-permalink: latest/qaf-gherkin-client.html
+permalink: latest/news-qaf-python.html
 summary: "Announcing QAF in python"
 tags: [news, BDD2]
 sidebar: qaf_latest-sidebar
