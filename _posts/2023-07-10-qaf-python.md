@@ -19,7 +19,7 @@ We are thrilled to unveil QAF in Python, the latest addition to the QAF family, 
 
 🌐 **Web, Mobile, API, and E2E Testing**: QAF supports a wide range of testing needs, including web, mobile, API, and end-to-end (E2E) testing. Embrace the flexibility to handle diverse testing scenarios with ease.
 
-🌟 **Advanced BDD2 Features**: With BDD2 support, experience a new level of behavior-driven testing. Utilize custom metadata to categorize and manage scenarios efficiently, and prioritize tests based on specific criteria.
+🌟 **Advanced BDD2 Features**: With [BDD2](https://qmetry.github.io/qaf/latest/bdd2.html) support, experience a new level of behavior-driven testing. Utilize custom metadata to categorize and manage scenarios efficiently, and prioritize tests based on specific criteria.
 
 💼 **Custom Metadata**: Categorize and manage your scenarios with custom metadata, enhancing the organization of your test suites. Prioritize and select scenarios effortlessly based on specific criteria.
 
