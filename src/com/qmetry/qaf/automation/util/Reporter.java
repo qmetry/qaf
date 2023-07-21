@@ -89,7 +89,9 @@ public class Reporter {
 	}
 	
 	/**
-	 * Add meta-data to test case. Useful to link cloud session, video etc.
+	 * Add meta-data to current test case. Useful to link cloud session, video etc.
+	 * 
+	 * @param tr
 	 * @param key
 	 * @param val
 	 */
