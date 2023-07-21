@@ -85,7 +85,15 @@ public class Reporter {
 	 */
 	public static void addMetadata(String key, String val) {
 		ITestResult tr = (ITestResult) getBundle().getProperty(ApplicationProperties.CURRENT_TEST_RESULT.key);
-		
+		addMetadata(tr, key, val);
+	}
+	
+	/**
+	 * Add meta-data to test case. Useful to link cloud session, video etc.
+	 * @param key
+	 * @param val
+	 */
+	public static void addMetadata(ITestResult tr, String key, String val) {		
 		if(null!=tr && tr.getMethod() instanceof TestNGScenario) {
 			((TestNGScenario) tr.getMethod()).getMetaData().put(key, val);
 		}
