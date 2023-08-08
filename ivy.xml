@@ -96,7 +96,7 @@ SOFTWARE.
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
-		<dependency org="com.google.guava" name="guava" rev="31.1-jre" conf="compile->default">
+		<dependency org="com.google.guava" name="guava" rev="32.1.2-jre" conf="compile->default">
 			<artifact name="guava" type="jar"></artifact>
 		</dependency>
 		
