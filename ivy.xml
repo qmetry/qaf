@@ -135,7 +135,7 @@ SOFTWARE.
 		
 		<!-- https://mvnrepository.com/artifact/io.github.bonigarcia/webdrivermanager 
 		<dependency org="org.slf4j" name="slf4j-log4j12" rev="1.7.30"  conf="compile->default"/>  -->
-		<dependency org="io.github.bonigarcia" name="webdrivermanager" rev="4.4.3"  conf="compile->default"/>
+		<dependency org="io.github.bonigarcia" name="webdrivermanager" rev="latest.integration"  conf="compile->default"/>
 		
 		<!-- repo-editor -->
 		<!-- https://mvnrepository.com/artifact/org.apache.httpcomponents.core5/httpcore5 -->
