@@ -9,7 +9,7 @@ folder: latest
 
 **1. Appium server**
 
-To install and setting up appium server please follow [appium quickstart](http://appium.io/docs/en/2.0/quickstart/)
+To install and setting up appium server please follow this link : [http://appium.io/slate/en/master/?java#](http://appium.io/slate/en/master/?java#)
    
 **2. Appium Server Configuration**
 
