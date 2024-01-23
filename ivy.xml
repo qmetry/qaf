@@ -127,7 +127,7 @@ SOFTWARE.
 			rev="2.1.9"  conf="provided->default" />
 		<dependency org="info.cukes" name="cucumber-java" rev="1.2.4"  conf="provided->default"/>
 
-		<dependency org="org.json" name="json" rev="20230227" conf="compile->default"/>
+		<dependency org="org.json" name="json" rev="20231013" conf="compile->default"/>
 		<dependency org="javax.mail" name="mail" rev="1.4.7"/>
 		
 		<!-- Java EXpression Language (jexl) - implementation of dynamic and scripting features as alternative arrangements for script engine JEP-372 JDK-8236933 -->
@@ -148,7 +148,7 @@ SOFTWARE.
 		<dependency org="org.apache.logging.log4j" name="log4j-api" rev="2.20.0" />
 		
 		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-compress -->
-		<dependency org="org.apache.commons" name="commons-compress" rev="1.23.0" conf="compile->default"/>
+		<dependency org="org.apache.commons" name="commons-compress" rev="1.25.0" conf="compile->default"/>
 		
 		
 		<!--  https://github.com/SeleniumHQ/selenium/issues/3118 -->
