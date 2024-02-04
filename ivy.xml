@@ -96,7 +96,7 @@ SOFTWARE.
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
-		<dependency org="com.google.guava" name="guava" rev="31.1-jre" conf="compile->default">
+		<dependency org="com.google.guava" name="guava" rev="32.1.2-jre" conf="compile->default">
 			<artifact name="guava" type="jar"></artifact>
 		</dependency>
 		
@@ -113,13 +113,13 @@ SOFTWARE.
 
 		<!-- min rev 3.0.0 -->
 		<dependency org="org.seleniumhq.selenium" name="selenium-remote-driver"
-			rev="3.6.0" conf="compile->default"/>
+			rev="4.0.0" conf="compile->default"/>
 		<dependency org="org.seleniumhq.selenium" name="selenium-java"
-			rev="3.6.0" conf="compile->default">
+			rev="4.0.0" conf="compile->default">
 			<exclude org="com.codeborne"/>
 		</dependency>
 		<!-- -->
-		<dependency org="org.seleniumhq.selenium" name="selenium-leg-rc" rev="3.6.0">
+		<dependency org="org.seleniumhq.selenium" name="selenium-leg-rc" rev="4.0.0">
 			<exclude org="org.testng"/>
 		</dependency>
         	
@@ -127,19 +127,29 @@ SOFTWARE.
 			rev="2.1.9"  conf="provided->default" />
 		<dependency org="info.cukes" name="cucumber-java" rev="1.2.4"  conf="provided->default"/>
 
-		<dependency org="org.json" name="json" rev="20180813" conf="compile->default"/>
+		<dependency org="org.json" name="json" rev="20231013" conf="compile->default"/>
 		<dependency org="javax.mail" name="mail" rev="1.4.7"/>
 		
 		<!-- Java EXpression Language (jexl) - implementation of dynamic and scripting features as alternative arrangements for script engine JEP-372 JDK-8236933 -->
 		<dependency org="org.apache.commons" name="commons-jexl3" rev="3.2.1"  conf="compile->default"/>
 		
 		<!-- https://mvnrepository.com/artifact/io.github.bonigarcia/webdrivermanager 
-		<dependency org="org.slf4j" name="slf4j-log4j12" rev="1.7.30"  conf="compile->default"/> -->
-		<dependency org="io.github.bonigarcia" name="webdrivermanager" rev="4.4.3"  conf="compile->default"/>
+		<dependency org="org.slf4j" name="slf4j-log4j12" rev="1.7.30"  conf="compile->default"/>  -->
+		<dependency org="io.github.bonigarcia" name="webdrivermanager" rev="latest.integration"  conf="compile->default"/>
 		
+		<!-- repo-editor -->
+		<!-- https://mvnrepository.com/artifact/org.apache.httpcomponents.core5/httpcore5 -->
+		<dependency org="org.apache.httpcomponents.core5" name="httpcore5" rev="5.2.1" conf="compile->default"/>
 		<!-- emailable report -->
 		<!-- https://mvnrepository.com/artifact/com.sun.mail/jakarta.mail -->
 		<dependency org="com.sun.mail" name="jakarta.mail" rev="2.0.1"  conf="compile->default"/>
+		
+		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
+		<dependency org="org.apache.logging.log4j" name="log4j-api" rev="2.20.0" />
+		
+		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-compress -->
+		<dependency org="org.apache.commons" name="commons-compress" rev="1.25.0" conf="compile->default"/>
+		
 		
 		<!--  https://github.com/SeleniumHQ/selenium/issues/3118 -->
 		<exclude org="com.codeborne"/>

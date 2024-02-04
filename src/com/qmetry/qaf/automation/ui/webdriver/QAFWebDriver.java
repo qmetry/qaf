@@ -28,24 +28,24 @@ import org.openqa.selenium.HasCapabilities;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.interactions.HasInputDevices;
-import org.openqa.selenium.interactions.Keyboard;
-import org.openqa.selenium.interactions.Mouse;
-import org.openqa.selenium.interactions.TouchScreen;
-import org.openqa.selenium.internal.FindsByClassName;
-import org.openqa.selenium.internal.FindsByCssSelector;
-import org.openqa.selenium.internal.FindsById;
-import org.openqa.selenium.internal.FindsByLinkText;
-import org.openqa.selenium.internal.FindsByName;
-import org.openqa.selenium.internal.FindsByTagName;
-import org.openqa.selenium.internal.FindsByXPath;
+//import org.openqa.selenium.interactions.HasInputDevices;
+//import org.openqa.selenium.interactions.Keyboard;
+//import org.openqa.selenium.interactions.Mouse;
+//import org.openqa.selenium.interactions.TouchScreen;
+//import org.openqa.selenium.internal.FindsByClassName;
+//import org.openqa.selenium.internal.FindsByCssSelector;
+//import org.openqa.selenium.internal.FindsById;
+//import org.openqa.selenium.internal.FindsByLinkText;
+//import org.openqa.selenium.internal.FindsByName;
+//import org.openqa.selenium.internal.FindsByTagName;
+//import org.openqa.selenium.internal.FindsByXPath;
 
 import com.qmetry.qaf.automation.ui.JsToolkit;
 import com.qmetry.qaf.automation.ui.UiDriver;
 import com.qmetry.qaf.automation.util.StringMatcher;
 
-public interface QAFWebDriver extends UiDriver, WebDriver, TakesScreenshot, JavascriptExecutor, FindsByCustomStretegy, 
-		 HasInputDevices, HasCapabilities {
+public interface QAFWebDriver extends UiDriver, WebDriver, TakesScreenshot, JavascriptExecutor, FindsByCustomStretegy, HasCapabilities{
+		// HasInputDevices, HasCapabilities {
 
 	public QAFWebElement findElement(By by);
 
@@ -55,11 +55,11 @@ public interface QAFWebDriver extends UiDriver, WebDriver, TakesScreenshot, Java
 
 	public List<QAFWebElement> findElements(String locator);
 
-	public Mouse getMouse();
-
-	public Keyboard getKeyboard();
-
-	public TouchScreen getTouchScreen();
+//	public Mouse getMouse();
+//
+//	public Keyboard getKeyboard();
+//
+//	public TouchScreen getTouchScreen();
 	
 	
 	public void waitForAjax(JsToolkit toolkit, long... timeout);

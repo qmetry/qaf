@@ -21,6 +21,7 @@
  ******************************************************************************/
 package com.qmetry.qaf.automation.util;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -487,6 +488,8 @@ public class StringUtil extends StringUtils {
 		if (null == val || JSONObject.NULL == val) {
 			return null;
 		}
+		if(val instanceof BigDecimal)
+			return ((BigDecimal) val).doubleValue();
 		return val;
 	}
 

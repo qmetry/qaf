@@ -21,7 +21,7 @@
  ******************************************************************************/
 package com.qmetry.qaf.automation.ui.webdriver;
 
-import static org.openqa.selenium.remote.CapabilityType.SUPPORTS_JAVASCRIPT;
+//import static org.openqa.selenium.remote.CapabilityType.SUPPORTS_JAVASCRIPT;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
@@ -33,8 +33,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+//import java.util.stream.Collectors;
+//import java.util.stream.Stream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -43,27 +43,26 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
-import org.openqa.selenium.Rotatable;
+//import org.openqa.selenium.Rotatable;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.TouchScreen;
+//import org.openqa.selenium.interactions.TouchScreen;
 import org.openqa.selenium.remote.Augmenter;
-import org.openqa.selenium.remote.CapabilityType;
+//import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.CommandExecutor;
 import org.openqa.selenium.remote.CommandPayload;
 import org.openqa.selenium.remote.DriverCommand;
-import org.openqa.selenium.remote.RemoteTouchScreen;
+//import org.openqa.selenium.remote.RemoteTouchScreen;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.Response;
 import org.openqa.selenium.remote.ScreenshotException;
-import org.openqa.selenium.remote.internal.WebElementToJsonConverter;
 //import org.openqa.selenium.remote.internal.WebElementToJsonConverter;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
+//import com.google.common.collect.Lists;
 import com.qmetry.qaf.automation.core.ConfigurationManager;
 import com.qmetry.qaf.automation.core.MessageTypes;
 import com.qmetry.qaf.automation.core.QAFListener;
@@ -305,7 +304,7 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 	 * 
 	 * @see org.openqa.selenium.TakesScreenshot#getScreenshotAs(org.openqa.selenium
 	 * .OutputType)
-	 */
+	 
 	@Override
 	public <X> X getScreenshotAs(OutputType<X> target) throws WebDriverException {
 		Object takeScreenshot = getCapabilities().getCapability(CapabilityType.TAKES_SCREENSHOT);
@@ -314,7 +313,7 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 			return target.convertFromBase64Png(base64Str);
 		}
 		return null;
-	}
+	}*/
 
 	public <T> T extractScreenShot(WebDriverException e, OutputType<T> target) {
 		if (e.getCause() instanceof ScreenshotException) {
@@ -482,10 +481,10 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 				+ "headID.appendChild(newScript);");
 	}
 
-	@Override
-	public TouchScreen getTouchScreen() {
-		return new RemoteTouchScreen(getExecuteMethod());
-	}
+//	@Override
+//	public TouchScreen getTouchScreen() {
+//		return new RemoteTouchScreen(getExecuteMethod());
+//	}
 
 	@Override
 	public String takeScreenShot() {
@@ -635,12 +634,13 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 		return (List<WebElement>) execute(DriverCommand.FIND_ELEMENTS, ImmutableMap.of("using",stetegy,"value",loc)).getValue();
 	}
 
-	@Override
+	//@Override
 	public void stop() {
 		quit();
 	}
 
-	@Override
+	//Fixed null pointer exception with 4.0.0-beta-1 https://github.com/SeleniumHQ/selenium/commit/d16ecd2a32a1270b9b31f69358ee964e572b7d57
+	/*@Override
 	public Object executeScript(String script, Object... args) {
 		if (!isJavascriptEnabled()) {
 			throw new UnsupportedOperationException(
@@ -677,6 +677,6 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 	boolean isJavascriptEnabled() {
 		return ((null == getCapabilities().getCapability(SUPPORTS_JAVASCRIPT))
 				|| getCapabilities().is(SUPPORTS_JAVASCRIPT));
-	}
+	}*/
 
 }

@@ -49,8 +49,6 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.ie.InternetExplorerOptions;
-import org.openqa.selenium.opera.OperaOptions;
-import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.safari.SafariOptions;
 
@@ -114,7 +112,7 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 	 * @param driverName
 	 * @return
 	 */
-	public static DesiredCapabilities getDesiredCapabilities(String driverName) {
+	public static Capabilities getDesiredCapabilities(String driverName) {
 		return Browsers.getBrowser(driverName).getDesiredCapabilities();
 	}
 
@@ -238,13 +236,15 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 	}
 
 	private static WebDriver getDriverObj(Class<? extends WebDriver> of, Capabilities capabilities, String urlStr) {
+		Class<? extends Capabilities> capParamType = capabilities instanceof DesiredCapabilities? Capabilities.class:capabilities.getClass();
+
 		try {
 			//give it first try
-			Constructor<? extends WebDriver> constructor = of.getConstructor(URL.class, Capabilities.class);
+			Constructor<? extends WebDriver> constructor = of.getConstructor(URL.class, capParamType);
 			return constructor.newInstance(new URL(urlStr), capabilities);
 		} catch (Exception ex) {
 			try {
-				Constructor<? extends WebDriver> constructor = of.getConstructor(Capabilities.class);
+				Constructor<? extends WebDriver> constructor = of.getConstructor(capParamType);
 				return constructor.newInstance(capabilities);
 			} catch (Exception e) {
 				if (e.getCause() != null && e.getCause() instanceof WebDriverException) {
@@ -255,7 +255,7 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 				} catch (Exception e1) {
 					try {
 						//give it another try
-						Constructor<? extends WebDriver> constructor = of.getConstructor(URL.class, Capabilities.class);
+						Constructor<? extends WebDriver> constructor = of.getConstructor(URL.class, capParamType);
 
 						return constructor.newInstance(new URL(urlStr), capabilities);
 					} catch (InvocationTargetException e2) {
@@ -282,9 +282,7 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 		edge(new EdgeOptions(), EdgeDriver.class),
 
 		firefox(new FirefoxOptions(), FirefoxDriver.class), iexplorer(new InternetExplorerOptions(),
-				InternetExplorerDriver.class), chrome(new ChromeOptions(), ChromeDriver.class), opera(
-						new OperaOptions(),
-						"com.opera.core.systems.OperaDriver"), android(new DesiredCapabilities("android", "", Platform.ANDROID),
+				InternetExplorerDriver.class), chrome(new ChromeOptions(), ChromeDriver.class),  android(new DesiredCapabilities("android", "", Platform.ANDROID),
 								"org.openqa.selenium.android.AndroidDriver"), iphone(
 										new DesiredCapabilities("iPhone", "", Platform.MAC),
 										"org.openqa.selenium.iphone.IPhoneDriver"), ipad(
@@ -307,15 +305,16 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 		 */
 		other(new DesiredCapabilities());
 
-		private DesiredCapabilities desiredCapabilities;
+		private Capabilities desiredCapabilities;
 
 		private Class<? extends WebDriver> driverCls = null;
 		private String browserName = name();
 
 		private Browsers(Capabilities desiredCapabilities) {
-			this.desiredCapabilities = new DesiredCapabilities(desiredCapabilities.asMap());
-			this.desiredCapabilities.setCapability(CapabilityType.SUPPORTS_JAVASCRIPT,true);
-			this.desiredCapabilities.setCapability(CapabilityType.TAKES_SCREENSHOT, true);
+			this.desiredCapabilities = desiredCapabilities;
+					//new DesiredCapabilities(desiredCapabilities.asMap());
+			//this.desiredCapabilities.setCapability(CapabilityType.SUPPORTS_JAVASCRIPT,true);
+			//this.desiredCapabilities.setCapability(CapabilityType.TAKES_SCREENSHOT, true);
 			//this.desiredCapabilities.setCapability(CapabilityType.SUPPORTS_FINDING_BY_CSS, true);
 
 		}
@@ -343,7 +342,7 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 		}
 
 		@SuppressWarnings("unchecked")
-		private DesiredCapabilities getDesiredCapabilities() {
+		private Capabilities getDesiredCapabilities() {
 			Map<String, Object> capabilities = new HashMap<String, Object>(desiredCapabilities.asMap());
 			Gson gson = new GsonBuilder().create();
 
@@ -392,7 +391,7 @@ public class UiDriverFactory implements DriverFactory<UiDriver> {
 					capabilities.put(key, ConfigurationManager.getBundle().getSubstitutor().replace(value));
 				}
 			}
-			return new DesiredCapabilities(capabilities);
+			return desiredCapabilities.merge(new DesiredCapabilities(capabilities));//new DesiredCapabilities(capabilities);
 		}
 
 		private static Browsers getBrowser(String name) {
