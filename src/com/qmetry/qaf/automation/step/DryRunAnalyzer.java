@@ -29,7 +29,6 @@ import java.util.Set;
 import com.qmetry.qaf.automation.core.MessageTypes;
 import com.qmetry.qaf.automation.core.TestBaseProvider;
 import com.qmetry.qaf.automation.keys.ApplicationProperties;
-import com.qmetry.qaf.automation.step.client.CustomStep;
 import com.qmetry.qaf.automation.util.Reporter;
 
 /**

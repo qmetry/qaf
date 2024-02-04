@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package com.qmetry.qaf.automation.step.client;
+package com.qmetry.qaf.automation.step;
 
 import static com.qmetry.qaf.automation.core.ConfigurationManager.getBundle;
 
@@ -38,12 +38,6 @@ import com.qmetry.qaf.automation.core.MessageTypes;
 import com.qmetry.qaf.automation.core.QAFTestBase;
 import com.qmetry.qaf.automation.core.TestBaseProvider;
 import com.qmetry.qaf.automation.step.BDDStepMatcherFactory.DefaultBDDStepMatcher;
-import com.qmetry.qaf.automation.step.BaseTestStep;
-import com.qmetry.qaf.automation.step.StepExecutionTracker;
-import com.qmetry.qaf.automation.step.StepInvocationException;
-import com.qmetry.qaf.automation.step.StringTestStep;
-import com.qmetry.qaf.automation.step.TestStep;
-import com.qmetry.qaf.automation.step.TestStepCompositer;
 import com.qmetry.qaf.automation.step.client.text.BDDDefinitionHelper;
 import com.qmetry.qaf.automation.step.client.text.BDDDefinitionHelper.ParamType;
 

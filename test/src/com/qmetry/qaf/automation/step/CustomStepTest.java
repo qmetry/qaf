@@ -32,7 +32,6 @@ import org.testng.annotations.Test;
 import com.qmetry.qaf.automation.core.ConfigurationManager;
 import com.qmetry.qaf.automation.step.StringTestStep;
 import com.qmetry.qaf.automation.step.TestStep;
-import com.qmetry.qaf.automation.step.client.CustomStep;
 import com.qmetry.qaf.automation.util.Validator;
 
 /**

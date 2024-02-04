@@ -38,6 +38,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.qmetry.qaf.automation.gson.GsonObjectDeserializer;
+import com.qmetry.qaf.automation.step.CustomStep;
 import com.qmetry.qaf.automation.step.StringTestStep;
 import com.qmetry.qaf.automation.step.TestStep;
 import com.qmetry.qaf.automation.util.FileUtil;
