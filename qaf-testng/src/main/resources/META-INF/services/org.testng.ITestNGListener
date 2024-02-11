@@ -1,0 +1,6 @@
+com.qmetry.qaf.automation.testng.pro.QAFAnnotationTransformer2
+com.qmetry.qaf.automation.testng.pro.QAFInvokedMethodListener2
+com.qmetry.qaf.automation.testng.pro.QAFMethodInterceptor
+com.qmetry.qaf.automation.testng.pro.QAFResultListener
+com.qmetry.qaf.automation.testng.pro.QAFSuiteListener
+com.qmetry.qaf.automation.testng.pro.QAFExecutionListener

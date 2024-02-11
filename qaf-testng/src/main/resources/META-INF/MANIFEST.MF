@@ -1,0 +1,10 @@
+Vendor: Infostretch Corp.
+Built-By: ${user.name}
+Build-Java: ${java.version}
+Build-OS: ${os.name}
+Name: Build-Info
+qaf-Build-Time: ${maven.build.timestamp}
+qaf-Build-Label: ${project.version}
+qaf-Version: ${project.artifact.selectedVersion.majorVersion}
+qaf-Revision: ${project.artifact.selectedVersion.minorVersion}
+qaf-Type: plugin

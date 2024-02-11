@@ -1,0 +1,42 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.qmetry</groupId>
+		<artifactId>qaf-parent</artifactId>
+		<version>4.0.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>qaf-core</artifactId>
+	<description>Functional test automation framework for web, mobile-web, mobile native and web-service</description>
+	<scm>
+		<connection>scm:git:git://github.com/qmetry/qaf.git</connection>
+		<developerConnection>scm:git:git@github.com:qmetry/qaf.git</developerConnection>
+		<url>https://github.com/qmetry/qaf</url>
+	</scm>
+	<issueManagement>
+		<system>GitHub Issues</system>
+		<url>https://github.com/qmetry/qaf/issues</url>
+	</issueManagement>
+	<properties>
+		<qaf.type>core</qaf.type>
+		<skip.it>true</skip.it>
+	</properties>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>2.3.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-core</artifactId>
+			<version>2.3.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-impl</artifactId>
+			<version>2.3.0</version>
+		</dependency>
+	</dependencies>
+</project>

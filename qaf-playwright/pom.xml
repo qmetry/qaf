@@ -1,0 +1,31 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.qmetry</groupId>
+		<artifactId>qaf-parent</artifactId>
+		<version>4.0.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>qaf-playwright</artifactId>
+	<properties>
+		<qaf.type>plugin</qaf.type>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>com.qmetry</groupId>
+			<artifactId>qaf-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.qmetry</groupId>
+			<artifactId>qaf-testng</artifactId>
+			<version>${project.version}</version>
+			<optional>true</optional>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.microsoft.playwright/playwright -->
+		<dependency>
+			<groupId>com.microsoft.playwright</groupId>
+			<artifactId>playwright</artifactId>
+			<version>1.41.1</version>
+		</dependency>
+	</dependencies>
+</project>
