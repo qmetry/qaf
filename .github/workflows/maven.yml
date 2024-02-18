@@ -52,7 +52,7 @@ jobs:
         --no-transfer-progress \
         --batch-mode \
         -Dgpg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }} \
-        clean verify deploy --file pom.xml
+        clean verify deploy
      
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
