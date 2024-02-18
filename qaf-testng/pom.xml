@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>com.qmetry</groupId>
 		<artifactId>qaf-parent</artifactId>
-		<version>4.0.0-SNAPSHOT</version>
+		<version>${version-num}</version>
 	</parent>
 	<artifactId>qaf-testng</artifactId>
 	<properties>

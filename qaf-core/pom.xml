@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>com.qmetry</groupId>
 		<artifactId>qaf-parent</artifactId>
-		<version>4.0.0-SNAPSHOT</version>
+		<version>${version-num}</version>
 	</parent>
 	<artifactId>qaf-core</artifactId>
 	<description>Functional test automation framework for web, mobile-web, mobile native and web-service</description>

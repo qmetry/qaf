@@ -3,8 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.qmetry</groupId>
 	<artifactId>qaf-parent</artifactId>
-	<version>4.0.0-SNAPSHOT</version>
+	<version>${version-num}</version>
 	<packaging>pom</packaging>
+	<name>QMetry Automation Framework</name>
+	<url>https://github.com/qmetry/qaf</url>
+	<description>Functional test automation framework for web, mobile-web, mobile native and web-service</description>
 	<licenses>
 		<license>
 			<name>MIT License</name>
@@ -24,13 +27,21 @@
 		<name>QMetry</name>
 		<url>https://github.com/qmetry</url>
 	</organization>
+	<scm>
+		<connection>scm:git:git://github.com/qmetry/qaf.git</connection>
+		<developerConnection>scm:git:git@github.com:qmetry/qaf.git</developerConnection>
+		<url>https://github.com/qmetry/qaf</url>
+	</scm>
+	<issueManagement>
+		<system>GitHub Issues</system>
+		<url>https://github.com/qmetry/qaf/issues</url>
+	</issueManagement>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<version-num>4.1</version-num>
-		<build-num>0-SNAPSHOT</build-num>
+		<version-num>4.0.0-SNAPSHOT</version-num>
 		<skip.it>true</skip.it>
 	</properties>
 
@@ -390,11 +401,17 @@
 									<qaf-Type>${qaf.type}</qaf-Type>
 								</manifestEntries>
 							</manifestSection>
-
 						</manifestSections>
 					</archive>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
+	<distributionManagement>
+		<repository>
+			<id>ossrh</id>
+			<name>Central Repository OSSRH</name>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
+	</distributionManagement>
 </project>
