@@ -46,7 +46,7 @@ jobs:
         --no-transfer-progress \
         --batch-mode \
         -Dgpg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }} \
-        clean verify deploy
+        clean verify --batch-mode deploy
       env:
         MAVEN_USERNAME: ${{ secrets.SONATYPE_USER }}
         MAVEN_PASSWORD: ${{ secrets.SONATYPE_SEC }}     
