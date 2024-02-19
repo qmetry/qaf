@@ -5,7 +5,7 @@
 	<artifactId>qaf-parent</artifactId>
 	<version>${version-num}</version>
 	<packaging>pom</packaging>
-	<name>QMetry Automation Framework</name>
+	<name>qaf-parent</name>
 	<url>https://github.com/qmetry/qaf</url>
 	<description>Functional test automation framework for web, mobile-web, mobile native and web-service</description>
 	<licenses>
@@ -415,7 +415,7 @@
 		</repository>
 		<snapshotRepository>
 			<uniqueVersion>false</uniqueVersion>
-			<id>ossrhsnapshot</id>
+			<id>ossrh</id>
 			<name>Central Repository OSSRH Snapshots</name>
 			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 		</snapshotRepository>
