@@ -414,6 +414,7 @@
 			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 		</repository>
 		<snapshotRepository>
+			<uniqueVersion>false</uniqueVersion>
 			<id>ossrhsnapshot</id>
 			<name>Central Repository OSSRH Snapshots</name>
 			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
