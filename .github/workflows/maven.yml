@@ -31,8 +31,8 @@ jobs:
         java-version: '8'
         distribution: 'temurin'
         server-id: ossrhsnapshot
-        server-username: MAVEN_USERNAME
-        server-password: MAVEN_PASSWORD
+        #server-username: MAVEN_USERNAME
+        #server-password: MAVEN_PASSWORD
     - id: install-secret-key
       name: Install gpg secret key
       run: |
