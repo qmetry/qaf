@@ -345,7 +345,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
 				<version>3.2.5</version>
-				
+
 
 				<configuration>
 					<skip>${skip.it}</skip>
@@ -413,5 +413,10 @@
 			<name>Central Repository OSSRH</name>
 			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 		</repository>
+		<snapshotRepository>
+			<id>ossrhsnapshot</id>
+			<name>Central Repository OSSRH Snapshots</name>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
 	</distributionManagement>
 </project>
