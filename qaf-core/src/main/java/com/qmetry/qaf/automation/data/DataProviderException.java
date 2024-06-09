@@ -21,8 +21,6 @@
  ******************************************************************************/
 package com.qmetry.qaf.automation.data;
 
-import org.testng.SkipException;
-
 import com.qmetry.qaf.automation.core.AutomationError;
 
 /**

@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>com.qmetry</groupId>
 		<artifactId>qaf-parent</artifactId>
-		<version>${version-num}</version>
+		<version>${revision}</version>
 	</parent>
 	<artifactId>qaf-playwright</artifactId>
 	<properties>

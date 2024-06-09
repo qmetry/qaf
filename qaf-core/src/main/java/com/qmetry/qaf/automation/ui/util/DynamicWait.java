@@ -192,7 +192,8 @@ public class DynamicWait<T>{ //implements Wait<T> {
 				return e;
 			}
 		}
-		throw Throwables.propagate(e);
+		Throwables.throwIfUnchecked(e);
+	    throw new RuntimeException(e);
 	}
 
 	/**
