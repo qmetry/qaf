@@ -7,15 +7,7 @@
 	</parent>
 	<artifactId>qaf-core</artifactId>
 	<description>Functional test automation framework for web, mobile-web, mobile native and web-service</description>
-	<scm>
-		<connection>scm:git:git://github.com/qmetry/qaf.git</connection>
-		<developerConnection>scm:git:git@github.com:qmetry/qaf.git</developerConnection>
-		<url>https://github.com/qmetry/qaf</url>
-	</scm>
-	<issueManagement>
-		<system>GitHub Issues</system>
-		<url>https://github.com/qmetry/qaf/issues</url>
-	</issueManagement>
+
 	<properties>
 		<qaf.type>core</qaf.type>
 		<skip.it>true</skip.it>

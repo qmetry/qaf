@@ -5,6 +5,8 @@
 		<artifactId>qaf-parent</artifactId>
 		<version>${revision}</version>
 	</parent>
+	<version>${revision}</version>
+
 	<artifactId>qaf-ws</artifactId>
 	<properties>
 		<qaf.type>plugin</qaf.type>
