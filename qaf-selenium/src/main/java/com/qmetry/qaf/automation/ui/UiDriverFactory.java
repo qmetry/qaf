@@ -375,9 +375,9 @@ public class UiDriverFactory<D extends UiDriver> implements DriverFactory<D> {
 			config = ConfigurationManager.getBundle().subset(driverCapKey);
 			capabilities.putAll(new ConfigurationMap(config));
 
-			Object driverclass = capabilities.get(ApplicationProperties.CAPABILITY_NAME_DRIVER_CLASS.key);
+			Object driverclass = capabilities.remove(ApplicationProperties.CAPABILITY_NAME_DRIVER_CLASS.key);
 			if (null == driverclass) {// backward compatibility only
-				driverclass = capabilities.get("driver.class");
+				driverclass = capabilities.remove("driver.class");
 			}
 			if (null != driverclass) {
 				try {
