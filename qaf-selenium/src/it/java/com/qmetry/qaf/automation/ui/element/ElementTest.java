@@ -42,10 +42,8 @@ public class ElementTest{
 	@Test(groups="ui-driver")
 	public void defaultElemetnTest() {
 		getBundle().setProperty("default.element.impl", UiElement.class.getCanonicalName());
-		getBundle().setProperty("system.webdriver.gecko.driver", "C:/Users/chirag/Downloads/geckodriver-v0.18.0-win64/geckodriver.exe");
-		getBundle().setProperty("system.webdriver.chrome.driver", "C:/Users/chirag/Downloads/chromedriver_win32/chromedriver.exe");
-
-		getBundle().setProperty("driver.name", "chromeDriver");
+		
+		//getBundle().setProperty("driver.name", "chromeDriver");
 
 		System.out.println(UiElement.class.getCanonicalName());
 		
