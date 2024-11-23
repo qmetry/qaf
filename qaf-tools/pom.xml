@@ -1,14 +1,15 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.qmetry</groupId>
 		<artifactId>qaf-parent</artifactId>
 		<version>${revision}</version>
 	</parent>
-	<artifactId>qaf</artifactId>
-	<packaging>pom</packaging>
+	<artifactId>qaf-tools</artifactId>
 	<properties>
-		<qaf.type>bundle</qaf.type>
+		<qaf.type>plugin</qaf.type>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -23,17 +24,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.qmetry</groupId>
-			<artifactId>qaf-testng</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.qmetry</groupId>
 			<artifactId>qaf-selenium</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.qmetry</groupId>
-			<artifactId>qaf-tools</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>

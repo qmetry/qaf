@@ -48,12 +48,13 @@
 	</properties>
 
 	<modules>
-		<module>qaf</module>
 		<module>qaf-core</module>
 		<module>qaf-testng</module>
 		<module>qaf-ws</module>
 		<module>qaf-selenium</module>
 		<module>qaf-playwright</module>
+		<module>qaf-tools</module>
+		<module>qaf</module>
 	</modules>
 
 	<dependencies>

@@ -269,7 +269,8 @@ public class PlaywrightDriverFactory implements DriverFactory<PlaywrightDriver> 
 
 	@Override
 	public void loadDriverResouces(String name) {
-		// TODO Auto-generated method stub
+		Browsers browser = Browsers.getBrowser(name);
+		loadDriverResouces(browser);
 		
 	}
 

@@ -8,6 +8,7 @@
 	<artifactId>qaf-selenium</artifactId>
 	<properties>
 		<qaf.type>plugin</qaf.type>
+		<skip.it>false</skip.it>
 	</properties>
 	<dependencies>
 		<dependency>
