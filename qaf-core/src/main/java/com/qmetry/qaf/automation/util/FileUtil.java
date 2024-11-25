@@ -42,6 +42,7 @@ import javax.imageio.ImageIO;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.LocaleUtils;
 
 public class FileUtil extends FileUtils {
 	private static int counter = -1; /* Protected by tmpFileLock */
@@ -302,4 +303,12 @@ public class FileUtil extends FileUtils {
 		return baseFolder.toURI().relativize(fileOrFolder.toURI()).getPath();
 	}
 
+	public static boolean isLocale(String name) {
+		String ext = getExtention(name);
+		try {
+			return StringUtil.isNotBlank(ext) && LocaleUtils.toLocale(ext).toString().equalsIgnoreCase(ext);
+		} catch (Exception e) {
+			return false;
+		}
+	}
 }

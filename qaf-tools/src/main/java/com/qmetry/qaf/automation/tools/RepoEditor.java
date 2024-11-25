@@ -32,6 +32,7 @@ import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -151,7 +152,7 @@ public class RepoEditor {
 							break;
 						case "get_content":
 							res.setEntity(new StringEntity(
-										JSONUtil.toString(getContent(queryParams.get("path"))),
+										JSONUtil.toString(getContent(queryParams.get("path"),Boolean.getBoolean(queryParams.getOrDefault("multi","false")))),
 										ContentType.APPLICATION_JSON));
 							break;
 						case "save_wsc":
@@ -163,7 +164,7 @@ public class RepoEditor {
 							break;
 						case "save_loc":
 							String data = IOUtils.toString(req.getEntity().getContent(), StandardCharsets.UTF_8);
-							saveContent(JSONUtil.toObject(data, List.class), queryParams.get("path"));
+							saveContent(JSONUtil.toObject(data, List.class), queryParams.get("path"), Boolean.getBoolean(queryParams.getOrDefault("multi","false")));
 							break;
 						
 						case "load_resource":
@@ -461,8 +462,8 @@ public class RepoEditor {
 				File newFile = new File(parent, newName);
 				if (!FileUtil.getExtention(newName).equalsIgnoreCase(FileUtil.getExtention(old)) && (isWSC(newName) || isLOC(newName))) {
 					try {
-						List<Map<String, Object>> content = getContent(oldFile.getPath());
-						saveContent(content, newFile.getPath());
+						Collection<Map<String, Object>> content = getContent(oldFile.getPath(), false);
+						saveContent(content, newFile.getPath(),false);
 						oldFile.delete();
 					} catch (Exception e) {
 						throw new RuntimeException("Unable to change file type: " + e.getMessage());
@@ -605,9 +606,9 @@ public class RepoEditor {
 				}).toArray();
 			}
 			//".wsc",".loc",".proto","json", "properties", "xml","txt", "csv"
-			String[] allowedTypes = QAF_CONTEXT.getStringArray("repoeditor.filetypes", ".wsc",".loc",".proto","properties",".locj",".wscj");
+			String[] allowedTypes = QAF_CONTEXT.getStringArray("repoeditor.filetypes", ".wsc",".loc",".proto","properties",".locj",".wscj", ".bdd", ".bdl", ".feature");
 			Object[] nodes = Files.list(parent.toPath())
-					.filter(p -> p.toFile().isDirectory() || StringUtil.endsWithAny(p.toString(), allowedTypes))
+					.filter(p -> p.toFile().isDirectory() || StringUtil.endsWithAny(p.toString(), allowedTypes) || FileUtil.isLocale(p.toString()))
 					.map(p -> {
 						Map<String, Object> node = new HashMap<String, Object>();
 						node.put("text", p.toFile().getName());
@@ -629,9 +630,11 @@ public class RepoEditor {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static List<Map<String, Object>> getContent(String file) {
+	private static Collection<Map<String, Object>> getContent(String file, boolean isMulti) {
 		List<Map<String, Object>> fileContent = new LinkedList<Map<String, Object>>();
-
+		if(isMulti) {
+			return MultiPropertiesEditorHelper.getContent(file);
+		}
 		if(file.endsWith(".wscj")) {
 			Map<String, Object> content = JSONUtil.getJsonObjectFromFile(file, Map.class);
 			if(null==content)
@@ -692,17 +695,21 @@ public class RepoEditor {
 		return fileContent;
 	}
 	private static Map<String, Object> getWSCFile(String file){
-		List<Map<String, Object>> content = getContent(file);
-		return content.isEmpty()?JSONUtil.toMap("{}"):content.get(0);
+		Collection<Map<String, Object>> content = getContent(file,false);
+		return content.isEmpty()?JSONUtil.toMap("{}"):content.iterator().next();
 	}
 	
-	private static void saveContent(List<Map<String, Object>> data, String file) throws IOException {
+	private static void saveContent(Collection<Map<String, Object>> data, String file, boolean isMulti) throws IOException {
+		if(isMulti) {
+			File f = new File(file);
+			MultiPropertiesEditorHelper.saveContent(data, f.getName(), f.getParent());
+		}
 		Gson gson = new GsonBuilder().disableHtmlEscaping().serializeNulls().create();
 		String fileContent = null;
 		if(file.endsWith(".wscj")) {
-			JSONUtil.writeJsonObjectToFile(file, data.get(0));
+			JSONUtil.writeJsonObjectToFile(file, data.iterator().next());
 		}else if(file.endsWith(".wsc")) {
-			fileContent = data.get(0).entrySet().stream().map((e) -> e.getKey() +"=" + gson.toJson(e.getValue()).replace("\\", "\\\\")).collect(Collectors.joining("\n"));
+			fileContent = data.iterator().next().entrySet().stream().map((e) -> e.getKey() +"=" + gson.toJson(e.getValue()).replace("\\", "\\\\")).collect(Collectors.joining("\n"));
 		}
 		else if(file.endsWith(".loc")) {
 			fileContent = data.stream().map(e->e.remove("key").toString()+"="+gson.toJson(e).replace("\\", "\\\\")).collect(Collectors.joining("\n"));
@@ -714,15 +721,15 @@ public class RepoEditor {
 		
 		if(null!=fileContent) {
 			FileUtil.writeStringToFile(new File(file), fileContent, ApplicationProperties.LOCALE_CHAR_ENCODING.getStringVal("UTF-8"));
+			//to keep track added/updated wsc and properties
+			QAF_CONTEXT.load(new String[] {file});
 		}
-		//to keep track added/updated wsc and properties
-		QAF_CONTEXT.load(new String[] {file});
 	}
 	
 	private static void saveWSCFile(Map<String, Object> data,String file) throws IOException{
 		List<Map<String, Object>> fileContent = new LinkedList<Map<String, Object>>();
 		fileContent.add(data);
-		saveContent(fileContent,file);
+		saveContent(fileContent, file, false);
 	}
 	
 	private static QAFRequestHandler handleExecuteRequest = (req, res, ctx) -> {
