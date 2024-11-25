@@ -7,7 +7,6 @@ import static com.qmetry.qaf.automation.util.FileUtil.isLocale;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -67,9 +66,9 @@ public class MultiPropertiesEditorHelper {
 	}
 	
 	public static void saveContent(Collection<Map<String, Object>> data, String path) {
-		Path filePath = Path.of(path);
-		String name = filePath.getFileName().toString();
-		String parent = filePath.getParent().toString();
+		File file = new File(path);
+		String name = file.getName();
+		String parent = file.getParent();
 		saveContent(data, name, parent);
 	}
 
