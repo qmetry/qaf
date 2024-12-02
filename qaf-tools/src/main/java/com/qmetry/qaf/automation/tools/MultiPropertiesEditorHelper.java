@@ -122,7 +122,7 @@ public class MultiPropertiesEditorHelper {
 				if(StringUtil.isNotBlank(encoding)) {
 					StringWriter sw = new StringWriter();
 					p.save(sw);
-					try(Writer out = new FileWriter(p.getFile(), Charset.forName(encoding))){
+					try(Writer out = new FileWriter(p.getFile(), false)){
 					String tranStr = StringEscapeUtils.unescapeJava( sw.toString());
 					//StringEscapeUtils.unescapeJava(out , sw.toString());
 					out.write(tranStr);
