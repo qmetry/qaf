@@ -21,7 +21,6 @@
  ******************************************************************************/
 package com.qmetry.qaf.automation.step;
 
-import org.testng.SkipException;
 
 import com.qmetry.qaf.automation.core.QAFListener;
 

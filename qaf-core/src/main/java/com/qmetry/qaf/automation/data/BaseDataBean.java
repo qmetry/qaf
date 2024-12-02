@@ -47,8 +47,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.testng.SkipException;
+//import org.testng.SkipException;
 
+import com.qmetry.qaf.automation.core.AutomationError;
 import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.util.ClassUtil;
 import com.qmetry.qaf.automation.util.DatabaseUtil;
@@ -106,7 +107,7 @@ public abstract class BaseDataBean implements DataBean {
 			}
 
 		}
-		throw new SkipException(
+		throw new AutomationError(
 				"Unable to fill data with unknown object. It must be either Map or String: valid json / property key / sql statement."
 						+ obj);
 

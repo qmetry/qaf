@@ -26,10 +26,11 @@ import static com.qmetry.qaf.automation.util.Reporter.log;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.StringDescription;
-import org.testng.SkipException;
+//import org.testng.SkipException;
 import com.google.common.collect.MapDifference;
 
 import com.qmetry.qaf.automation.core.MessageTypes;
+import com.qmetry.qaf.automation.core.SkipTestException;
 
 /**
  * com.qmetry.qaf.automation.util.Validator.java
@@ -70,7 +71,7 @@ public class Validator {
 
 	public static <T> void givenThat(String reason, T actual, Matcher<? super T> matcher) {
 		if (!verifyThat(reason, actual, matcher)) {
-			throw new SkipException("Precondition not satisfied");
+			throw new SkipTestException("Precondition not satisfied");
 		}
 	}
 

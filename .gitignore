@@ -14,3 +14,4 @@
 **/test-results/
 **/target
 **/secret.txt
+**/.flattened-*.xml

@@ -715,5 +715,15 @@ public final class ClassUtil {
 		}
 
 	}
+	
+	public static boolean isPresent(String className) {
+	    try {
+	        Class.forName(className, false, ClassLoader.getSystemClassLoader());
+	        return true;
+	    } catch (Throwable ex) {
+	        // Class or one of its dependencies is not present...
+	        return false;
+	    }
+	}
 
 }

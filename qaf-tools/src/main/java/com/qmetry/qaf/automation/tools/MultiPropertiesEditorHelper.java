@@ -5,7 +5,11 @@ import static com.qmetry.qaf.automation.util.FileUtil.getExtention;
 import static com.qmetry.qaf.automation.util.FileUtil.isLocale;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.HashMap;
@@ -14,8 +18,10 @@ import java.util.Map;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.lang.StringEscapeUtils;
 
 import com.google.common.io.Files;
+import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.util.StringUtil;
 
 public class MultiPropertiesEditorHelper {
@@ -43,20 +49,29 @@ public class MultiPropertiesEditorHelper {
 		for(File file: files) {
 			try {
 				PropertiesConfiguration p = new PropertiesConfiguration();
-				p.setEncoding(StandardCharsets.UTF_8.name());
+				p.setEncoding(
+						ApplicationProperties.LOCALE_CHAR_ENCODING.getStringVal(StandardCharsets.UTF_8.toString()));
 				p.load(file);
 				
 				String colName = getExtention(file.getName());
 				p.getKeys().forEachRemaining((k)->{
 					Map<String, Object> entry = entries.get(k);
 					if(null == entry) {
-						entry = new HashMap<String, Object>();
+						entry = new LinkedHashMap<String, Object>();
 						entry.put("key", (String)k);
 						entries.put((String)k, entry);
 					}
-					entry.put(colName, p.getString((String)k));
+					String val = StringEscapeUtils.escapeHtml(p.getString((String)k));
+					entry.put(colName, val);
 				});
-
+				//add blank row
+				Map<String, Object> entry = entries.get("");
+				if(null == entry) {
+					entry = new LinkedHashMap<String, Object>();
+					entry.put("key", "");
+					entries.put("", entry);
+				}
+				entry.put(colName, "");
 			} catch (Exception e) {
 				System.err.println("Unable to read " + file + e.getMessage());
 			} 
@@ -67,14 +82,13 @@ public class MultiPropertiesEditorHelper {
 	
 	public static void saveContent(Collection<Map<String, Object>> data, String path) {
 		File file = new File(path);
-		String name = file.getName();
+		String name = Files.getNameWithoutExtension(file.getName());
 		String parent = file.getParent();
 		saveContent(data, name, parent);
 	}
 
-	public static void saveContent(Collection<Map<String, Object>> data, String name, String parent) {
-		Map<String, PropertiesConfiguration> properties = new HashMap<String, PropertiesConfiguration>();
-		
+	private static void saveContent(Collection<Map<String, Object>> data, String name, String parent) {
+		Map<String, PropertiesConfiguration> properties = new HashMap<String, PropertiesConfiguration>();		
 		data.iterator().forEachRemaining(entry -> {
 			String key = (String) entry.remove("key");
 			if (StringUtil.isNotBlank(key)) {
@@ -87,7 +101,8 @@ public class MultiPropertiesEditorHelper {
 							File target = new File(parent, String.join(".", name, colName));
 							target.createNewFile();
 							p = new PropertiesConfiguration();
-							p.setEncoding(StandardCharsets.UTF_8.toString());
+							p.setEncoding(
+									ApplicationProperties.LOCALE_CHAR_ENCODING.getStringVal(StandardCharsets.UTF_8.toString()));				
 							p.load(target);
 							p.setFile(target);
 							properties.put(colName, p);
@@ -103,9 +118,21 @@ public class MultiPropertiesEditorHelper {
 		
 		properties.values().forEach(p->{
 			try {
-				p.save();
-				//p.save
-			} catch (ConfigurationException e2) {
+				String encoding = ApplicationProperties.LOCALE_CHAR_ENCODING.getStringVal();
+				if(StringUtil.isNotBlank(encoding)) {
+					StringWriter sw = new StringWriter();
+					p.save(sw);
+					try(Writer out = new FileWriter(p.getFile(), Charset.forName(encoding))){
+					String tranStr = StringEscapeUtils.unescapeJava( sw.toString());
+					//StringEscapeUtils.unescapeJava(out , sw.toString());
+					out.write(tranStr);
+					out.flush();
+					}
+				}else {
+					//save unicode;
+					p.save();
+				}
+			} catch (ConfigurationException | IOException e2) {
 				throw new RuntimeException(e2);
 			}
 		});
@@ -116,17 +143,12 @@ public class MultiPropertiesEditorHelper {
 		if(!locale || !isLocale(name) ) return new File[] {};
 		
 		File f = new File(name);
-		f.getParentFile().listFiles((dir,fname)->{
+		return f.getParentFile().listFiles((dir,fname)->{
 			return (!locale || isLocale(fname)) && Files.getNameWithoutExtension(fname).equalsIgnoreCase(Files.getNameWithoutExtension(name));
 		});
-		return null;
 	}
 	
 	public static File[] getFiles(String name) {
 		return getFiles(name, isLocale(name));
 	}
-	
-	
-
-	
 }

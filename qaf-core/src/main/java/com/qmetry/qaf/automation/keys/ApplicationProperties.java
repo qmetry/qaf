@@ -27,9 +27,9 @@ import java.util.Collections;
 import java.util.List;
 
 import com.qmetry.qaf.automation.util.StringUtil;
-import org.testng.IRetryAnalyzer;
-import org.testng.ITestContext;
-import org.testng.ITestResult;
+//import org.testng.IRetryAnalyzer;
+//import org.testng.ITestContext;
+//import org.testng.ITestResult;
 
 import com.qmetry.qaf.automation.core.ConfigurationManager;
 import com.qmetry.qaf.automation.core.QAFListener;
@@ -104,7 +104,7 @@ public enum ApplicationProperties {
 
 	/**
 	 * <b>key</b>: <code> tng.context </code><br/>
-	 * <b>value</b>: {@link ITestContext} object for current running
+	 * <b>value</b>: {@link org.testng.ITestContext} object for current running
 	 * thread/test-case.
 	 * 
 	 */
@@ -123,7 +123,7 @@ public enum ApplicationProperties {
 	CURRENT_TEST_DESCRIPTION("current.testcase.desc"),
 	/**
 	 * <b>key</b>: <code> current.testcase.result </code><br/>
-	 * <b>value</b>: {@link ITestResult} object for the current running test
+	 * <b>value</b>: {@link org.testng.ITestResult} object for the current running test
 	 * case.
 	 * 
 	 * @since 2.1.9
@@ -526,7 +526,7 @@ public enum ApplicationProperties {
 	/**
 	 * <b>key</b>: <code>retry.analyzer</code><br/>
 	 * <b>value</b>: fully qualified class name that implements
-	 * {@link IRetryAnalyzer}. Provide this property to use your custom retry
+	 * {@link org.testng.IRetryAnalyzer}. Provide this property to use your custom retry
 	 * analyzer.
 	 */
 	RETRY_ANALYZER("retry.analyzer"),
@@ -661,6 +661,7 @@ public enum ApplicationProperties {
 	 * @since 2.1.15
 	 * 
 	 */
+	SCENARIO_FILE_LOC("scenario.file.loc"),
 	METADATA_RULES("metadata.rules"),
 	/**
 	 * <p>

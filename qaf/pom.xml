@@ -14,27 +14,27 @@
 		<dependency>
 			<groupId>com.qmetry</groupId>
 			<artifactId>qaf-core</artifactId>
-			<version>${project.version}</version>
+			<version>${revision}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.qmetry</groupId>
 			<artifactId>qaf-ws</artifactId>
-			<version>${project.version}</version>
+			<version>${revision}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.qmetry</groupId>
 			<artifactId>qaf-testng</artifactId>
-			<version>${project.version}</version>
+			<version>${revision}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.qmetry</groupId>
 			<artifactId>qaf-selenium</artifactId>
-			<version>${project.version}</version>
+			<version>${revision}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.qmetry</groupId>
 			<artifactId>qaf-tools</artifactId>
-			<version>${project.version}</version>
+			<version>${revision}</version>
 		</dependency>
 	</dependencies>
 </project>

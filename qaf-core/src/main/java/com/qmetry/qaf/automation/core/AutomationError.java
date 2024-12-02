@@ -21,7 +21,7 @@
  ******************************************************************************/
 package com.qmetry.qaf.automation.core;
 
-import org.testng.SkipException;
+//import org.testng.SkipException;
 
 /**
  * To indicate automation error,not an AUT failure so that the test case can be
@@ -29,7 +29,7 @@ import org.testng.SkipException;
  * 
  * @author chirag
  */
-public class AutomationError extends SkipException {
+public class AutomationError extends SkipTestException {
 	/**
 	 * 
 	 */

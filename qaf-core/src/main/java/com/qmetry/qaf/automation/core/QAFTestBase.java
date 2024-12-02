@@ -39,6 +39,7 @@ import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.ui.UiDriver;
 import com.qmetry.qaf.automation.ui.util.DynamicWait;
 import com.qmetry.qaf.automation.ui.util.ExpectedCondition;
+import com.qmetry.qaf.automation.util.ClassUtil;
 import com.qmetry.qaf.automation.util.FileUtil;
 import com.qmetry.qaf.automation.util.PropertyUtil;
 import com.qmetry.qaf.automation.util.StringMatcher;
@@ -406,14 +407,16 @@ public class QAFTestBase {
 
 	public PropertyUtil getContext() {
 		try {
-			ITestResult tr = Reporter.getCurrentTestResult();
-			if (null != tr) {
-				PropertyUtil contextFromTr = (PropertyUtil) Reporter.getCurrentTestResult().getAttribute(CONTEXT);
-				if (null == contextFromTr) {
-					Reporter.getCurrentTestResult().setAttribute(CONTEXT, context);
-					return context;
+			if(ClassUtil.isPresent("org.testng.ITestResult")){
+				org.testng.ITestResult tr = org.testng.Reporter.getCurrentTestResult();
+				if (null != tr) {
+					PropertyUtil contextFromTr = (PropertyUtil) org.testng.Reporter.getCurrentTestResult().getAttribute(CONTEXT);
+					if (null == contextFromTr) {
+						org.testng.Reporter.getCurrentTestResult().setAttribute(CONTEXT, context);
+						return context;
+					}
+					return contextFromTr;
 				}
-				return contextFromTr;
 			}
 		} catch (Exception e) {
 			// ignore - none TestNG implementation

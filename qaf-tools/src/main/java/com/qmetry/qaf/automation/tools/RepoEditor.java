@@ -152,7 +152,7 @@ public class RepoEditor {
 							break;
 						case "get_content":
 							res.setEntity(new StringEntity(
-										JSONUtil.toString(getContent(queryParams.get("path"),Boolean.getBoolean(queryParams.getOrDefault("multi","false")))),
+										JSONUtil.toString(getContent(queryParams.get("path"),Boolean.valueOf(queryParams.getOrDefault("multi","false")))),
 										ContentType.APPLICATION_JSON));
 							break;
 						case "save_wsc":
@@ -164,7 +164,7 @@ public class RepoEditor {
 							break;
 						case "save_loc":
 							String data = IOUtils.toString(req.getEntity().getContent(), StandardCharsets.UTF_8);
-							saveContent(JSONUtil.toObject(data, List.class), queryParams.get("path"), Boolean.getBoolean(queryParams.getOrDefault("multi","false")));
+							saveContent(JSONUtil.toObject(data, List.class), queryParams.get("path"), Boolean.valueOf(queryParams.getOrDefault("multi","false")));
 							break;
 						
 						case "load_resource":
@@ -575,7 +575,13 @@ public class RepoEditor {
 				rootNode.put("id", "resources");
 				rootNode.put("type", "folder");
 				rootNode.put("children", getNodes("resources"));
-				return new Object[] { rootNode };
+				String bddLoc = ApplicationProperties.SCENARIO_FILE_LOC.getStringVal("scenarios");
+				Map<String, Object> bddNode = new HashMap<String, Object>();
+				bddNode.put("text", bddLoc);
+				bddNode.put("id", bddLoc);
+				bddNode.put("type", "folder");
+				bddNode.put("children", getNodes(bddLoc));
+				return new Object[] { rootNode, bddNode };
 			}
 			File parent = new File(id);
 			if (isWSC(parent.getName())) {
@@ -616,6 +622,9 @@ public class RepoEditor {
 						if (p.toFile().isDirectory()) {
 							node.put("children", true);
 							node.put("type", "folder");
+						}else if (FileUtil.isLocale(p.toString())) {
+							node.put("children", false);
+							node.put("type", "file-locale");
 						} else {
 							String type = FileUtil.getExtention(p.toString());
 							node.put("type", "file-"+type);
@@ -701,8 +710,8 @@ public class RepoEditor {
 	
 	private static void saveContent(Collection<Map<String, Object>> data, String file, boolean isMulti) throws IOException {
 		if(isMulti) {
-			File f = new File(file);
-			MultiPropertiesEditorHelper.saveContent(data, f.getName(), f.getParent());
+			MultiPropertiesEditorHelper.saveContent(data, file);
+			return;
 		}
 		Gson gson = new GsonBuilder().disableHtmlEscaping().serializeNulls().create();
 		String fileContent = null;

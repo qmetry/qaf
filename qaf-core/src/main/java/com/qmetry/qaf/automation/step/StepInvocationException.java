@@ -21,8 +21,9 @@
  ******************************************************************************/
 package com.qmetry.qaf.automation.step;
 
-import org.testng.SkipException;
+//import org.testng.SkipException;
 
+import com.qmetry.qaf.automation.core.SkipTestException;
 import com.qmetry.qaf.automation.util.StackTraceUtils;
 import com.qmetry.qaf.automation.util.StringUtil;
 
@@ -31,7 +32,7 @@ import com.qmetry.qaf.automation.util.StringUtil;
  * 
  * @author chirag.jayswal
  */
-public class StepInvocationException extends SkipException {
+public class StepInvocationException extends SkipTestException {
 
 	private static final long serialVersionUID = 5737290921256174216L;
 	private boolean isSkip = false;
@@ -66,8 +67,8 @@ public class StepInvocationException extends SkipException {
 	 */
 	public StepInvocationException(TestStep step, Throwable cause) {
 		this(step, cause, false);
-		if (cause instanceof SkipException) {
-			isSkip = ((SkipException) cause).isSkip();
+		if (cause instanceof SkipTestException) {
+			isSkip = ((SkipTestException) cause).isSkip();
 		}
 	}
 

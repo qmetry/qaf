@@ -170,7 +170,7 @@ public abstract class AbstractTestPage<P extends TestPage<D>, D extends UiDriver
 			Class<P> class1 = (Class<P>) ((ParameterizedType) this.getClass().getGenericSuperclass())
 					.getActualTypeArguments()[0];
 			if (!class1.isInterface()) {
-				parent = class1.newInstance();
+				parent = class1.getDeclaredConstructor().newInstance();
 			}
 		} catch (Exception e) {
 			logger.warn("Unable to init parent class" + e.getMessage());
@@ -206,7 +206,7 @@ public abstract class AbstractTestPage<P extends TestPage<D>, D extends UiDriver
 		return this.parent;
 	}
 
-	abstract protected void initWebElements();
+	protected void initWebElements() {};
 	
 
 	public void assertActive() {

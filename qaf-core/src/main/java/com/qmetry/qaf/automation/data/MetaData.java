@@ -28,8 +28,6 @@ import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import org.testng.annotations.Test;
-
 /**
  * This annotation should be used with {@link Test} annotation to provide
  * additional test meta-data. This annotation enables to provide custom

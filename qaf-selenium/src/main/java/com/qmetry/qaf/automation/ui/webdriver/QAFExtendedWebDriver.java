@@ -247,11 +247,13 @@ public class QAFExtendedWebDriver extends RemoteWebDriver implements QAFWebDrive
 	}
 	
 	private Response executeWithoutLog(CommandPayload payload) {
+		//min version is now 4.0.0
+		Response response = super.execute(payload);
+		
 		// in order to compatibility with 3.x, compiled with 3.x. so method from 4.x super class will not be available. 
 		// Once min version set to 4.0 we don't need executeSuper method.
 
-		//Response response = super.execute(payload);
-		Response response = executeSuper(payload);
+		//Response response = executeSuper(payload);
 		
 		if (response == null) {
 	        return null;

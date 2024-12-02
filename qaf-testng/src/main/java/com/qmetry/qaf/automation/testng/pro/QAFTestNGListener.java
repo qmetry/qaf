@@ -47,6 +47,7 @@ import org.testng.ISuiteResult;
 import org.testng.ITestContext;
 import org.testng.ITestNGMethod;
 import org.testng.ITestResult;
+import org.testng.SkipException;
 import org.testng.annotations.IConfigurationAnnotation;
 import org.testng.annotations.IDataProviderAnnotation;
 import org.testng.annotations.IFactoryAnnotation;
@@ -61,6 +62,7 @@ import org.testng.xml.XmlTest;
 import com.qmetry.qaf.automation.core.ConfigurationManager;
 import com.qmetry.qaf.automation.core.HtmlCheckpointResultFormatter;
 import com.qmetry.qaf.automation.core.QAFTestBase;
+import com.qmetry.qaf.automation.core.SkipTestException;
 import com.qmetry.qaf.automation.core.TestBaseProvider;
 import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.step.client.Scenario;
@@ -232,6 +234,11 @@ public class QAFTestNGListener {
 				// Gradle runner internal listener is throwing null pointer exception!... 
 				tr.setThrowable(new AssertionError(varificationFailures + " verification failed."));
 			}
+		}
+		if(tr.getThrowable() != null && tr.getThrowable() instanceof SkipTestException) {
+			SkipTestException ste = (SkipTestException)tr.getThrowable();
+			tr.setThrowable(new SkipException(ste.getMessage(), ste.getSelfOrCause()));
+			setSkip(tr, context);
 		}
 
 		if (tr.getStatus() == ITestResult.FAILURE) {

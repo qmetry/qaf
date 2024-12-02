@@ -46,12 +46,13 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.remote.Response;
 //import org.openqa.selenium.remote.internal.JsonToWebElementConverter;
-import org.testng.SkipException;
+//import org.testng.SkipException;
 
 import com.google.common.collect.ImmutableMap;
 import com.qmetry.qaf.automation.core.ConfigurationManager;
 import com.qmetry.qaf.automation.core.MessageTypes;
 import com.qmetry.qaf.automation.core.QAFListener;
+import com.qmetry.qaf.automation.core.SkipTestException;
 import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.ui.WebDriverCommandLogger;
 import com.qmetry.qaf.automation.ui.WebDriverTestBase;
@@ -1083,13 +1084,13 @@ public class QAFExtendedWebElement extends RemoteWebElement implements QAFWebEle
 	// preconditions
 	public void givenPresent() {
 		if (!verifyPresent()) {
-			throw new SkipException("Precondition failed:" + getDescription() + " should be present");
+			throw new SkipTestException("Precondition failed:" + getDescription() + " should be present");
 		}
 	}
 
 	public void givenNotPresent(String... label) {
 		if (!verifyNotPresent(label)) {
-			throw new SkipException("Precondition failed:"
+			throw new SkipTestException("Precondition failed:"
 					+ WebDriverCommandLogger.getMsgForElementOp("notpresent", false, getDescription(label)));
 		}
 	}

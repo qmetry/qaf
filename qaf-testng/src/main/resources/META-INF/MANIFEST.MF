@@ -1,4 +1,3 @@
-Vendor: Infostretch Corp.
 Built-By: ${user.name}
 Build-Java: ${java.version}
 Build-OS: ${os.name}

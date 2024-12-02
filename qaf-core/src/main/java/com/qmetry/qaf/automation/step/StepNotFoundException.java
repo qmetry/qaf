@@ -23,8 +23,9 @@ package com.qmetry.qaf.automation.step;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.LogFactoryImpl;
-import org.testng.SkipException;
+//import org.testng.SkipException;
 
+import com.qmetry.qaf.automation.core.SkipTestException;
 import com.qmetry.qaf.automation.keys.ApplicationProperties;
 import com.qmetry.qaf.automation.util.StackTraceUtils;
 
@@ -33,7 +34,7 @@ import com.qmetry.qaf.automation.util.StackTraceUtils;
  * 
  * @author chirag.jayswal
  */
-public class StepNotFoundException extends SkipException {
+public class StepNotFoundException extends SkipTestException {
 
 	private static final long serialVersionUID = -6115930100096312628L;
 	private static final Log logger = LogFactoryImpl.getLog(StepNotFoundException.class);
